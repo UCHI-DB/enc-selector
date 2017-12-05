@@ -58,14 +58,14 @@ class HashJoinTest {
 
     val col1data = tempTable.getColumns()(1).getData
     assertEquals(8, col1data.size)
-    assertEquals("John", col1data(0).asInstanceOf[Binary].toString)
-    assertEquals("John", col1data(1).asInstanceOf[Binary].toString)
-    assertEquals("John", col1data(2).asInstanceOf[Binary].toString)
-    assertEquals("Maria", col1data(3).asInstanceOf[Binary].toString)
-    assertEquals("Maria", col1data(4).asInstanceOf[Binary].toString)
-    assertEquals("Tanaka", col1data(5).asInstanceOf[Binary].toString)
-    assertEquals("Tanaka", col1data(6).asInstanceOf[Binary].toString)
-    assertEquals("Tanaka", col1data(7).asInstanceOf[Binary].toString)
+    assertEquals("John", col1data(0).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("John", col1data(1).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("John", col1data(2).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("Maria", col1data(3).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("Maria", col1data(4).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("Tanaka", col1data(5).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("Tanaka", col1data(6).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("Tanaka", col1data(7).asInstanceOf[Binary].toStringUsingUTF8)
 
     val col2data = tempTable.getColumns()(2).getData
     assertEquals(8, col2data.size)
@@ -80,13 +80,13 @@ class HashJoinTest {
 
     val col3data = tempTable.getColumns()(3).getData
     assertEquals(8, col3data.size)
-    assertEquals("1342 E Mod Ave", col3data(0).asInstanceOf[Binary].toString)
-    assertEquals("3414 W Donne St.", col3data(1).asInstanceOf[Binary].toString)
-    assertEquals("442 E Keep Rd.", col3data(2).asInstanceOf[Binary].toString)
-    assertEquals("4251 Main Street", col3data(3).asInstanceOf[Binary].toString)
-    assertEquals("313 Mary Street", col3data(4).asInstanceOf[Binary].toString)
-    assertEquals("1111 Keeway Ave.", col3data(5).asInstanceOf[Binary].toString)
-    assertEquals("24 W Rosad Blvd.", col3data(6).asInstanceOf[Binary].toString)
-    assertEquals("424 E Keemay Ave.", col3data(7).asInstanceOf[Binary].toString)
+    assertEquals("1342 E Mod Ave", col3data(0).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("3414 W Donne St.", col3data(1).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("442 E Keep Rd.", col3data(2).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("4251 Main Street", col3data(3).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("313 Mary Street", col3data(4).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("1111 Keeway Ave.", col3data(5).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("24 W Rosad Blvd.", col3data(6).asInstanceOf[Binary].toStringUsingUTF8)
+    assertEquals("424 E Keemay Ave.", col3data(7).asInstanceOf[Binary].toStringUsingUTF8)
   }
 }
