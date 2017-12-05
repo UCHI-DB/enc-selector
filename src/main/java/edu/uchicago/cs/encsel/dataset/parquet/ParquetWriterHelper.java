@@ -105,15 +105,17 @@ public class ParquetWriterHelper {
         }
     }
 
-    public static void write(URI input, MessageType schema, URI output, boolean useDict, String split) throws IOException {
+    public static void write(URI input, MessageType schema, URI output, String split) throws IOException {
         File outfile = new File(output);
         if (outfile.exists())
             outfile.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output), schema, useDict);
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildForTable(new Path(output), schema);
 
-        String line;
+        // Skip header line
+        String line = reader.readLine();
+
         while ((line = reader.readLine()) != null) {
             String[] dataArray = line.trim().split(split);
             List<String> data = Arrays.asList(dataArray);

@@ -47,6 +47,9 @@ import edu.uchicago.cs.encsel.model.FloatEncoding;
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
 
+/**
+ * This Factory is intended for single column encoding.
+ */
 public class AdaptiveValuesWriterFactory implements ValuesWriterFactory {
 
 	private ParquetProperties parquetProperties;

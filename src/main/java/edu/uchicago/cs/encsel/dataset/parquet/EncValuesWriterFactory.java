@@ -20,12 +20,8 @@
  *     Hao Jiang - initial API and implementation
  *
  */
-package org.apache.parquet.column.values.factory;
+package edu.uchicago.cs.encsel.dataset.parquet;
 
-import edu.uchicago.cs.encsel.model.FloatEncoding;
-import edu.uchicago.cs.encsel.model.IntEncoding;
-import edu.uchicago.cs.encsel.model.LongEncoding;
-import edu.uchicago.cs.encsel.model.StringEncoding;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.Encoding;
 import org.apache.parquet.column.ParquetProperties;
@@ -34,22 +30,20 @@ import org.apache.parquet.column.values.bitpacking.BitPackingValuesWriter;
 import org.apache.parquet.column.values.bitpacking.ByteBitPackingValuesWriter;
 import org.apache.parquet.column.values.bitpacking.Packer;
 import org.apache.parquet.column.values.delta.DeltaBinaryPackingValuesWriterForInteger;
-import org.apache.parquet.column.values.delta.DeltaBinaryPackingValuesWriterForLong;
 import org.apache.parquet.column.values.deltalengthbytearray.DeltaLengthByteArrayValuesWriter;
 import org.apache.parquet.column.values.deltastrings.DeltaByteArrayWriter;
 import org.apache.parquet.column.values.dictionary.DictionaryValuesWriter;
+import org.apache.parquet.column.values.factory.DefaultValuesWriterFactory;
 import org.apache.parquet.column.values.factory.ValuesWriterFactory;
-import org.apache.parquet.column.values.plain.FixedLenByteArrayPlainValuesWriter;
 import org.apache.parquet.column.values.plain.PlainValuesWriter;
 import org.apache.parquet.column.values.rle.RunLengthBitPackingHybridValuesWriter;
-import org.apache.parquet.schema.EncColumnDescriptor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.apache.parquet.column.Encoding.PLAIN;
 import static org.apache.parquet.column.Encoding.RLE_DICTIONARY;
 
+/**
+ * This Factory reads information from ThreadLocal to choose encodings
+ */
 public class EncValuesWriterFactory implements ValuesWriterFactory {
 
     private ParquetProperties parquetProperties;
@@ -71,16 +65,12 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
 
     @Override
     public ValuesWriter newValuesWriter(ColumnDescriptor descriptor) {
-        if(!(descriptor instanceof EncColumnDescriptor)) {
-            return delegate.newValuesWriter(descriptor);
-        }
-        EncColumnDescriptor ecd = (EncColumnDescriptor)descriptor;
-        Encoding enc = ecd.getEncoding();
-        if(null == enc) {
+        Encoding enc = EncContext.encoding.get().get(descriptor.toString());
+        if (null == enc) {
             return delegate.newValuesWriter(descriptor);
         }
         if (enc.usesDictionary()) {
-            return dictionaryWriter(ecd, parquetProperties, getEncodingForDictionaryPage(),
+            return dictionaryWriter(descriptor, parquetProperties, getEncodingForDictionaryPage(),
                     getEncodingForDataPage());
         }
 
@@ -88,19 +78,19 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
             case BOOLEAN:
                 return getBooleanValuesWriter();
             case FIXED_LEN_BYTE_ARRAY:
-                return getFixedLenByteArrayValuesWriter(ecd);
+                return getFixedLenByteArrayValuesWriter(descriptor);
             case BINARY:
-                return getBinaryValuesWriter(ecd);
+                return getBinaryValuesWriter(descriptor, enc);
             case INT32:
-                return getInt32ValuesWriter(ecd);
+                return getInt32ValuesWriter(descriptor, enc);
             case INT64:
-                return getInt64ValuesWriter(ecd);
+                return getInt64ValuesWriter(descriptor);
             case INT96:
-                return getInt96ValuesWriter(ecd);
+                return getInt96ValuesWriter(descriptor);
             case DOUBLE:
-                return getDoubleValuesWriter(ecd);
+                return getDoubleValuesWriter(descriptor);
             case FLOAT:
-                return getFloatValuesWriter(ecd);
+                return getFloatValuesWriter(descriptor);
             default:
                 throw new IllegalArgumentException("Unknown type " + descriptor.getType());
         }
@@ -108,17 +98,14 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
 
     private ValuesWriter getBooleanValuesWriter() {
         // no dictionary encoding for boolean
-        return new RunLengthBitPackingHybridValuesWriter(1, parquetProperties.getInitialSlabSize(),
-                parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+        return new RunLengthBitPackingHybridValuesWriter(1, parquetProperties.getInitialSlabSize(), parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
     }
 
-    private ValuesWriter getFixedLenByteArrayValuesWriter(EncColumnDescriptor path) {
-        return new DeltaByteArrayWriter(parquetProperties.getInitialSlabSize(),
-                parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+    private ValuesWriter getFixedLenByteArrayValuesWriter(ColumnDescriptor path) {
+        return delegate.newValuesWriter(path);
     }
 
-    private ValuesWriter getBinaryValuesWriter(EncColumnDescriptor path) {
-        Encoding enc = path.getEncoding();
+    private ValuesWriter getBinaryValuesWriter(ColumnDescriptor path, Encoding enc) {
         switch (enc) {
             case DELTA_BYTE_ARRAY:
                 return new DeltaByteArrayWriter(parquetProperties.getInitialSlabSize(),
@@ -135,9 +122,8 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
 
     }
 
-    private ValuesWriter getInt32ValuesWriter(EncColumnDescriptor path) {
-        Encoding enc = path.getEncoding();
-        Object[] params = path.getEncodingParams();
+    private ValuesWriter getInt32ValuesWriter(ColumnDescriptor path, Encoding enc) {
+        Object[] params = EncContext.context.get().get(path.toString());
         int intBitLength = Integer.valueOf(params[0].toString());
         int intBound = Integer.valueOf(params[0].toString());
         switch (enc) {
@@ -162,63 +148,23 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
         }
     }
 
-    private ValuesWriter getInt64ValuesWriter(EncColumnDescriptor path) {
-        Encoding enc = path.getEncoding();
-        switch (enc) {
-        /*case RLE:
-			if (es.longBitLength > 32)
-				throw new IllegalArgumentException("RLE for long does not support over 32 bit length");
-			return new RunLengthBitPackingHybridValuesWriter(es.longBitLength, parquetProperties.getInitialSlabSize(),
-					parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-					*/
-		/*case BP:
-			if (es.longBitLength <= 8) {
-				return new BitPackingValuesWriter((int) es.longBound(), parquetProperties.getInitialSlabSize(),
-						parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-			} else if (es.longBitLength <= 32) {
-				return new ByteBitPackingValuesWriter((int) es.longBound(), Packer.BIG_ENDIAN);
-			} else {
-				throw new IllegalArgumentException("BP for long does not support over 32 bit length");
-			}*/
-            case DELTA_BINARY_PACKED:
-                return new DeltaBinaryPackingValuesWriterForLong(parquetProperties.getInitialSlabSize(),
-                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-            case PLAIN:
-                return new PlainValuesWriter(parquetProperties.getInitialSlabSize(),
-                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-            default:
-                throw new IllegalArgumentException("Unsupported type " + path.getType());
-        }
+    private ValuesWriter getInt64ValuesWriter(ColumnDescriptor path) {
+        return delegate.newValuesWriter(path);
     }
 
-    private ValuesWriter getInt96ValuesWriter(EncColumnDescriptor path) {
-        return new FixedLenByteArrayPlainValuesWriter(12, parquetProperties.getInitialSlabSize(),
-                parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+    private ValuesWriter getInt96ValuesWriter(ColumnDescriptor path) {
+        return delegate.newValuesWriter(path);
     }
 
-    private ValuesWriter getDoubleValuesWriter(EncColumnDescriptor path) {
-        Encoding enc = path.getEncoding();
-        switch (enc) {
-            case PLAIN:
-                return new PlainValuesWriter(parquetProperties.getInitialSlabSize(),
-                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-            default:
-                throw new IllegalArgumentException("Unsupported type " + path.getType());
-        }
+    private ValuesWriter getDoubleValuesWriter(ColumnDescriptor path) {
+        return delegate.newValuesWriter(path);
     }
 
-    private ValuesWriter getFloatValuesWriter(EncColumnDescriptor path) {
-        Encoding enc = path.getEncoding();
-        switch (enc) {
-            case PLAIN:
-                return new PlainValuesWriter(parquetProperties.getInitialSlabSize(),
-                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-            default:
-                throw new IllegalArgumentException("Unsupported type " + path.getType());
-        }
+    private ValuesWriter getFloatValuesWriter(ColumnDescriptor path) {
+        return delegate.newValuesWriter(path);
     }
 
-    static DictionaryValuesWriter dictionaryWriter(EncColumnDescriptor path, ParquetProperties properties,
+    static DictionaryValuesWriter dictionaryWriter(ColumnDescriptor path, ParquetProperties properties,
                                                    Encoding dictPageEncoding, Encoding dataPageEncoding) {
         switch (path.getType()) {
             case BOOLEAN:
