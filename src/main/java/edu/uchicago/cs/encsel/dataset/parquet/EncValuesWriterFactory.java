@@ -125,7 +125,7 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
     private ValuesWriter getInt32ValuesWriter(ColumnDescriptor path, Encoding enc) {
         Object[] params = EncContext.context.get().get(path.toString());
         int intBitLength = Integer.valueOf(params[0].toString());
-        int intBound = Integer.valueOf(params[0].toString());
+        int intBound = Integer.valueOf(params[1].toString());
         switch (enc) {
             case RLE:
                 return new RunLengthBitPackingHybridValuesWriter(intBitLength, parquetProperties.getInitialSlabSize(),
