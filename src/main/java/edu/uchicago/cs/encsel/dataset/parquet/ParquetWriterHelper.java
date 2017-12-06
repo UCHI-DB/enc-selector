@@ -105,7 +105,7 @@ public class ParquetWriterHelper {
         }
     }
 
-    public static void write(URI input, MessageType schema, URI output, String split) throws IOException {
+    public static void write(URI input, MessageType schema, URI output, String split, boolean skipHeader) throws IOException {
         File outfile = new File(output);
         if (outfile.exists())
             outfile.delete();
@@ -114,7 +114,7 @@ public class ParquetWriterHelper {
         ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildForTable(new Path(output), schema);
 
         // Skip header line
-        String line = reader.readLine();
+        String line = skipHeader ? reader.readLine() : null;
 
         while ((line = reader.readLine()) != null) {
             String[] dataArray = line.trim().split(split);

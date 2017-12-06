@@ -16,7 +16,7 @@ object LoadTPCH extends App {
     ParquetWriterHelper.write(
       new File("%s%s%s".format(folder, schema.getName, inputsuffix)).toURI,
       schema,
-      new File("%s%s%s".format(folder, schema.getName, outputsuffix)).toURI, "\\|")
+      new File("%s%s%s".format(folder, schema.getName, outputsuffix)).toURI, "\\|",false)
   })
 
 }

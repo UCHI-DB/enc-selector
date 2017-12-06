@@ -29,8 +29,8 @@ import edu.uchicago.cs.encsel.dataset.parquet.ParquetWriterHelper
 object SourceGen extends App {
 
   ParquetWriterHelper.write(new File("src/test/resource/query/contact_source").toURI,
-    TestSchemas.contactSchema, new File("src/test/resource/query/contact").toURI,  ",")
+    TestSchemas.contactSchema, new File("src/test/resource/query/contact").toURI,  ",",false)
 
   ParquetWriterHelper.write(new File("src/test/resource/query/person_source").toURI,
-    TestSchemas.personSchema, new File("src/test/resource/query/person").toURI, ",")
+    TestSchemas.personSchema, new File("src/test/resource/query/person").toURI, ",",false)
 }

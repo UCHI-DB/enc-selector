@@ -90,7 +90,7 @@ object ParquetEncoder extends App {
 
   // Invoke Parquet Writer
   // TODO user CSV parser to parse file
-  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",")
+  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",",false)
 
   def parquetStringEncoding(enc: Int): Encoding = {
     IntEncoding.values()(enc) match {

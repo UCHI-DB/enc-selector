@@ -51,6 +51,7 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
     @Override
     public void initialize(ParquetProperties parquetProperties) {
         this.parquetProperties = parquetProperties;
+        this.delegate.initialize(parquetProperties);
     }
 
     private Encoding getEncodingForDataPage() {
