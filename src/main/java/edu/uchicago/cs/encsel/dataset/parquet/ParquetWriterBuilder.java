@@ -34,7 +34,6 @@ import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.ParquetWriter.Builder;
 import org.apache.parquet.hadoop.api.WriteSupport;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
-import org.apache.parquet.schema.EncMessageType;
 import org.apache.parquet.schema.MessageType;
 
 public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBuilder> {
@@ -55,7 +54,7 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
 		getEncodingPropertiesBuilder().withValuesWriterFactory(new AdaptiveValuesWriterFactory());
 	}
 
-	public ParquetWriterBuilder(Path file, EncMessageType schema, ValuesWriterFactory factory) {
+	public ParquetWriterBuilder(Path file, MessageType schema, ValuesWriterFactory factory) {
 		super(file);
 		writeSupport = new StringWriteSupport(schema);
 		try {
@@ -94,4 +93,14 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
 				.withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
 				.withDictionaryPageSize(500 * ParquetWriter.DEFAULT_PAGE_SIZE).build();
 	}
+
+    public static ParquetWriter<List<String>> buildForTable(Path file, MessageType schema)
+            throws IOException {
+        ParquetWriterBuilder builder = new ParquetWriterBuilder(file, schema, new EncValuesWriterFactory());
+
+        return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
+                .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
+                .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
+                .withDictionaryPageSize(500 * ParquetWriter.DEFAULT_PAGE_SIZE).build();
+    }
 }

@@ -117,6 +117,7 @@ class HashJoin extends Join {
             }
             case None => {}
           }
+          hashKeyReader.consume()
         }
 
         // Based on bitmap, write remaining columns
