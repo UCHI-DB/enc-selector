@@ -3,7 +3,7 @@ package edu.uchicago.cs.encsel.app.encoding
 import java.io.File
 import java.util
 
-import edu.uchicago.cs.encsel.classify.nn.{NNIntPredictor, NNStringPredictor}
+import edu.uchicago.cs.encsel.classify.nn.NNPredictor
 import edu.uchicago.cs.encsel.dataset.column.ColumnReaderFactory
 import edu.uchicago.cs.encsel.dataset.feature.{Features, Filter}
 import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, ParquetWriterHelper}
@@ -20,7 +20,13 @@ object ParquetEncoder extends App {
   val schemaFile = new File(args(1)).toURI
   val outputFile = new File(args(2)).toURI
 
-  val modelFolder = args(3)
+  val intModel = args(3)
+  val stringModel = args(4)
+
+  val sizeLimit = args.length match {
+    case ge6 if ge6 >= 6 => args(5).toInt
+    case _ => 1000000 // Default 1M
+  }
 
   val schema = Schema.fromParquetFile(schemaFile)
   val parquetSchema = SchemaParser.toParquetSchema(schema)
@@ -29,19 +35,32 @@ object ParquetEncoder extends App {
   val columnReader = ColumnReaderFactory.getColumnReader(inputFile)
   val columns = columnReader.readColumn(inputFile, schema)
 
+  val intNumFeature = 17
+  val stringNumFeature = 17
+
+
+  // See <code>edu.uchicago.cs.encsel.dataset.feature.Features
+  val validFeatureIndex = Array(2, 3, 4, 5, 6, 8, 9, 10,
+    11, 13, 15, 16, 18, 20,
+    21, 23, 25, 26, 28, 30, 31)
+
   // Initialize predictor
-  val intPredictor = new NNIntPredictor(new File(modelFolder))
-  val stringPredictor = new NNStringPredictor(new File(modelFolder))
+  val intPredictor = new NNPredictor(intModel, intNumFeature)
+  val stringPredictor = new NNPredictor(stringModel, stringNumFeature)
 
   // For each column, extract features and run encoding selector
   val colEncodings = columns.map(col => {
     col.dataType match {
       case DataType.INTEGER => {
-        val features = Features.extract(col, Filter.sizeFilter(1000000), "temp_").map(_.value).toArray
+        val allFeatures = Features.extract(col, Filter.sizeFilter(sizeLimit), "temp_")
+          .map(_.value).toArray
+        val features = validFeatureIndex.map(allFeatures(_))
         intPredictor.predict(features)
       }
       case DataType.STRING => {
-        val features = Features.extract(col, Filter.sizeFilter(1000000), "temp_").map(_.value).toArray
+        val allFeatures = Features.extract(col, Filter.sizeFilter(sizeLimit), "temp_")
+          .map(_.value).toArray
+        val features = validFeatureIndex.map(allFeatures(_))
         stringPredictor.predict(features)
       }
       case _ => {
@@ -73,7 +92,7 @@ object ParquetEncoder extends App {
   })
 
   // Invoke Parquet Writer
-  // TODO user CSV parser to parse file
+  // TODO use CSV parser to parse file
   ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",", false)
 
   def parquetStringEncoding(enc: Int): Encoding = {
