@@ -3,13 +3,12 @@ package edu.uchicago.cs.encsel.app.encoding
 import java.io.File
 import java.util
 
-import edu.uchicago.cs.encsel.classify.EncSelNNGraph
+import edu.uchicago.cs.encsel.classify.nn.{NNIntPredictor, NNStringPredictor}
 import edu.uchicago.cs.encsel.dataset.column.ColumnReaderFactory
 import edu.uchicago.cs.encsel.dataset.feature.{Features, Filter}
 import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.dataset.schema.Schema
 import edu.uchicago.cs.encsel.model.{DataType, IntEncoding, StringEncoding}
-import edu.uchicago.cs.ndnn.FileStore
 import org.apache.parquet.column.Encoding
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 
@@ -21,8 +20,7 @@ object ParquetEncoder extends App {
   val schemaFile = new File(args(1)).toURI
   val outputFile = new File(args(2)).toURI
 
-  val intModelFile = args(3)
-  val stringModelFile = args(4)
+  val modelFolder = args(3)
 
   val schema = Schema.fromParquetFile(schemaFile)
   val parquetSchema = SchemaParser.toParquetSchema(schema)
@@ -31,34 +29,20 @@ object ParquetEncoder extends App {
   val columnReader = ColumnReaderFactory.getColumnReader(inputFile)
   val columns = columnReader.readColumn(inputFile, schema)
 
-  // Initialize classifier
-  val intGraph = new EncSelNNGraph(17, 5)
-  intGraph.load(new FileStore(intModelFile).load)
-  val stringGraph = new EncSelNNGraph(11, 4)
-  stringGraph.load(new FileStore(stringModelFile).load)
+  // Initialize predictor
+  val intPredictor = new NNIntPredictor(new File(modelFolder))
+  val stringPredictor = new NNStringPredictor(new File(modelFolder))
 
   // For each column, extract features and run encoding selector
   val colEncodings = columns.map(col => {
     col.dataType match {
       case DataType.INTEGER => {
-        val features = Features.extract(col, Filter.sizeFilter(1000000), "temp_")
-        intGraph.getInputs.zip(features).foreach(pair => {
-          val input = pair._1
-          val feature = pair._2
-          input.set(feature.value)
-        })
-        intGraph.forward()
-        intGraph.getOutput.getValue.getInt(0)
+        val features = Features.extract(col, Filter.sizeFilter(1000000), "temp_").map(_.value).toArray
+        intPredictor.predict(features)
       }
       case DataType.STRING => {
-        val features = Features.extract(col, Filter.sizeFilter(1000000), "temp_")
-        stringGraph.getInputs.zip(features).foreach(pair => {
-          val input = pair._1
-          val feature = pair._2
-          input.set(feature.value)
-        })
-        stringGraph.forward()
-        stringGraph.getOutput.getValue.getInt(0)
+        val features = Features.extract(col, Filter.sizeFilter(1000000), "temp_").map(_.value).toArray
+        stringPredictor.predict(features)
       }
       case _ => {
         -1
@@ -78,7 +62,7 @@ object ParquetEncoder extends App {
     coldesc.getType match {
       case PrimitiveTypeName.INT32 => {
         encodingMap.put(coldesc.toString, parquetIntEncoding(encoding))
-        // TODO Determine bit size for integer, here hardcode as a sample
+        // TODO Determine bit size for integer, here hard code as a sample
         contextMap.put(coldesc.toString, Array[AnyRef]("16", "1024"))
       }
       case PrimitiveTypeName.BINARY => {
@@ -90,7 +74,7 @@ object ParquetEncoder extends App {
 
   // Invoke Parquet Writer
   // TODO user CSV parser to parse file
-  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",",false)
+  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",", false)
 
   def parquetStringEncoding(enc: Int): Encoding = {
     IntEncoding.values()(enc) match {

@@ -23,33 +23,35 @@
 
 package edu.uchicago.cs.encsel.classify
 
-import edu.uchicago.cs.ndnn._
+import java.nio.{ByteBuffer, ByteOrder, FloatBuffer}
 
-/**
-  * Created by harper on 4/21/17.
-  */
-object EncSelNNGraph {
-  val hiddenDim = 800
-}
+import org.tensorflow.{SavedModelBundle, Tensor, TensorFlow}
 
-class EncSelNNGraph(numFeature: Int, numClass: Int)
-  extends Graph(Xavier, new Adam(0.01, 0.99, 0.9, 0.999, -1), new SoftMaxLogLoss) {
+import scala.collection.JavaConversions._
 
-  val x = input("x")
+object MnistLoadModel extends App {
 
-  {
-    val w = param("w", Array(numFeature, EncSelNNGraph.hiddenDim))
-    val b = param("b", Array(EncSelNNGraph.hiddenDim))(Zero)
-    val map = param("map", Array(EncSelNNGraph.hiddenDim, numClass))
-    val mapb = param("mapb", Array(numClass))(Zero)
+  val savedModel = SavedModelBundle.load("/home/harper/mnistmodel", "serve")
 
-    val wx = new DotMul(x, w)
-    val wxab = new Add(wx, b)
-    val sigmoid = new Tanh(wxab)
-    val mapped = new DotMul(sigmoid, map)
-    val offset = new Add(mapped, mapb)
-    val softmax = new SoftMax(offset)
+  val data = makeFloatBuffer(Array.fill[Float](28 * 28)(0))
 
-    output(softmax)
+  val input = Tensor.create(Array(1L, 784), data)
+
+//  savedModel.graph().operations().foreach(o => println(o.name()))
+
+  val result = savedModel.session().runner().fetch("accuracy/prediction").feed("x", input).run()
+
+  val lbuffer = ByteBuffer.allocateDirect(8).order(ByteOrder.nativeOrder()).asLongBuffer()
+  result(0).writeTo(lbuffer)
+  println(lbuffer.get(0))
+
+
+  def makeFloatBuffer(arr: Array[Float]): FloatBuffer = {
+    val bb = ByteBuffer.allocateDirect(arr.length * 4)
+    bb.order(ByteOrder.nativeOrder)
+    val fb = bb.asFloatBuffer
+    fb.put(arr)
+    fb.position(0)
+    fb
   }
 }

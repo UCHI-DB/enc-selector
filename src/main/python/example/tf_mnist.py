@@ -93,27 +93,55 @@ with tf.name_scope("sgd"):
     train_step = tf.train.AdamOptimizer(1e-3).minimize(cross_entropy)
 
 with tf.name_scope("accuracy"):
-    correct_prediction = tf.equal(tf.argmax(layer2_out, 1), label)
+    prediction = tf.argmax(layer2_out, 1, name="prediction")
+    correct_prediction = tf.equal(prediction, label)
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
+with tf.name_scope("summary"):
+    tf.summary.histogram('b1', b1)
+    tf.summary.histogram('w1', w1)
+    tf.summary.histogram('w2', w2)
+    tf.summary.histogram('b2', b2)
+    tf.summary.scalar('accuracy', accuracy)
+
+merged = tf.summary.merge_all()
 
 train_writer = tf.summary.FileWriter("/home/harper/tftemp")
 train_writer.add_graph(tf.get_default_graph())
+builder = tf.saved_model.builder.SavedModelBuilder("/home/harper/mnistmodel")
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
-    for i in range(10000):
+    for i in range(5000):
         batch = mnist.train.next_batch(50)
         if batch is None:
             break
         if i % 100 == 0:
-            train_accuracy = accuracy.eval(feed_dict={x: batch[0], label: batch[1]})
+            train_accuracy, merged_summary = sess.run([accuracy, merged], feed_dict={x: batch[0], label: batch[1]})
+            train_writer.add_summary(merged_summary, i)
             print('step %d, training accuracy %g' % (i, train_accuracy))
             print(
                 'test accuracy %g' % accuracy.eval(feed_dict={x: mnist.test.data, label: mnist.test.label}))
-        train_step.run(feed_dict={x: batch[0], label: batch[1]})
-
+        _, merged_summary = sess.run([train_step, merged], feed_dict={x: batch[0], label: batch[1]})
+        train_writer.add_summary(merged_summary, i)
     print(
         'test accuracy %g' % accuracy.eval(feed_dict={x: mnist.test.data, label: mnist.test.label}))
 
+    # Build Signature to save to model
+    signature = tf.saved_model.signature_def_utils.build_signature_def(
+        inputs={
+            'input': tf.saved_model.utils.build_tensor_info(x)
+        },
+        outputs={
+            'output': tf.saved_model.utils.build_tensor_info(prediction)
+        },
+        method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME
+    )
+    builder.add_meta_graph_and_variables(sess,
+                                         [tf.saved_model.tag_constants.SERVING],
+                                         signature_def_map={
+                                             tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY:
+                                                 signature})
+builder.save()
 train_writer.close()
