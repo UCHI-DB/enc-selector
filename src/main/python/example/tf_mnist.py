@@ -1,17 +1,17 @@
+import collections
 import io
 
 import numpy as np
 import tensorflow as tf
-import collections
 
-hidden_dim = 200
+hidden_dim = 1000
 input_size = 28 * 28
 output_size = 10
 
-train_data_file = "/home/harper/dataset/mnist/"
-train_label_file = "/home/harper/dataset/mnist/"
-test_data_file = "/home/harper/dataset/mnist/"
-test_label_file = "/home/harper/dataset/mnist/"
+train_data_file = "/home/harper/dataset/mnist/train-images.idx3-ubyte"
+train_label_file = "/home/harper/dataset/mnist/train-labels.idx1-ubyte"
+test_data_file = "/home/harper/dataset/mnist/t10k-images.idx3-ubyte"
+test_label_file = "/home/harper/dataset/mnist/t10k-labels.idx1-ubyte"
 
 Datasets = collections.namedtuple("Datasets", ['train', 'test'])
 
@@ -20,23 +20,30 @@ class Dataset(object):
     def __init__(self, data, label):
         self.data = data
         self.label = label
-        perm = np.random.permutation(len(label))
+        self.size = self.data.shape[0]
+        perm = np.random.permutation(self.size)
         self.data = self.data[perm]
         self.label = self.label[perm]
 
         self.start = 0
 
     def next_batch(self, batch_size):
+        if self.start == self.size:
+            perm = np.random.permutation(self.size)
+            self.data = self.data[perm]
+            self.label = self.label[perm]
+            self.start = 0
         start = self.start
-        end = start + batch_size
+        end = min(start + batch_size, self.size)
+        self.start = end
         return [self.data[start:end], self.label[start:end]]
 
 
 def read_data(file):
-    with io.open(file, 'r') as stream:
+    with io.open(file, 'rb') as stream:
         magic = stream.read(4)
 
-        num_record = stream.read(4)
+        num_record = np.frombuffer(stream.read(4), np.dtype(np.uint32).newbyteorder(">"))[0]
 
         raw = stream.read(input_size * num_record)
         flat = np.frombuffer(raw, np.uint8).astype(np.float32) / 255
@@ -45,42 +52,45 @@ def read_data(file):
 
 
 def read_label(file):
-    with io.open(file, 'r') as stream:
+    with io.open(file, 'rb') as stream:
         magic = stream.read(4)
-        num_record = stream.read(4)
+        num_record = np.frombuffer(stream.read(4), np.dtype(np.uint32).newbyteorder(">"))[0]
         raw = stream.read(num_record)
-        return np.frombuffer(raw, np.uint8)
+        return np.frombuffer(raw, np.uint8).astype(np.int32)
 
 
 def read_datasets():
     train_data = read_data(train_data_file)
     train_label = read_label(train_label_file)
     test_data = read_data(test_data_file)
-    test_label = read_data(test_label_file)
+    test_label = read_label(test_label_file)
 
     return Datasets(train=Dataset(train_data, train_label),
                     test=Dataset(test_data, test_label))
 
 
+mnist = read_datasets()
+
 x = tf.placeholder(tf.float32, [None, input_size], name="x")
-label = tf.placeholder(tf.float32, [None, 1], name="label")
+label = tf.placeholder(tf.int64, [None], name="label")
 
 with tf.name_scope("layer1"):
-    w1 = tf.Variable(tf.truncated_normal([input_size, hidden_dim], stddev=0.1), name="w1")
+    w1 = tf.Variable(tf.truncated_normal([input_size, hidden_dim], stddev=0.01), name="w1")
     b1 = tf.Variable(tf.zeros([hidden_dim]), name="b1")
-    layer1_out = tf.sigmoid(tf.matmul(x, w1) + b1, "l1o")
+    layer1_out = tf.nn.relu(tf.matmul(x, w1) + b1, "l1o")
 
 with tf.name_scope("layer2"):
-    w2 = tf.Variable(tf.truncated_normal([hidden_dim, output_size], stddev=0.1), name="w2")
+    w2 = tf.Variable(tf.truncated_normal([hidden_dim, output_size], stddev=0.01), name="w2")
     b2 = tf.Variable(tf.zeros([output_size]), name="b2")
-    layer2_out = tf.sigmoid(tf.matmul(layer1_out, w2) + b2, "l2o")
+    layer2_out = tf.matmul(layer1_out, w2) + b2
 with tf.name_scope("loss"):
-    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=layer2_out, name="cross_entropy")
+    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=label, logits=layer2_out,
+                                                                   name="cross_entropy")
 
 cross_entropy = tf.reduce_mean(cross_entropy)
 
 with tf.name_scope("sgd"):
-    train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+    train_step = tf.train.AdamOptimizer(1e-3).minimize(cross_entropy)
 
 with tf.name_scope("accuracy"):
     correct_prediction = tf.equal(tf.argmax(layer2_out, 1), label)
@@ -89,19 +99,21 @@ with tf.name_scope("accuracy"):
 train_writer = tf.summary.FileWriter("/home/harper/tftemp")
 train_writer.add_graph(tf.get_default_graph())
 
-mnist = read_datasets()
-
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
-    for i in range(2000):
+    for i in range(10000):
         batch = mnist.train.next_batch(50)
+        if batch is None:
+            break
         if i % 100 == 0:
             train_accuracy = accuracy.eval(feed_dict={x: batch[0], label: batch[1]})
             print('step %d, training accuracy %g' % (i, train_accuracy))
+            print(
+                'test accuracy %g' % accuracy.eval(feed_dict={x: mnist.test.data, label: mnist.test.label}))
         train_step.run(feed_dict={x: batch[0], label: batch[1]})
 
     print(
-        'test accuracy %g' % accuracy.eval(feed_dict={x: mnist.test.images, label: mnist.test.labels}))
+        'test accuracy %g' % accuracy.eval(feed_dict={x: mnist.test.data, label: mnist.test.label}))
 
 train_writer.close()
