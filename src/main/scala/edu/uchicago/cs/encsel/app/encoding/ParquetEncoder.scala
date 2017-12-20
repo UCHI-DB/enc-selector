@@ -35,18 +35,14 @@ object ParquetEncoder extends App {
   val columnReader = ColumnReaderFactory.getColumnReader(inputFile)
   val columns = columnReader.readColumn(inputFile, schema)
 
-  val intNumFeature = 17
-  val stringNumFeature = 17
-
-
   // See <code>edu.uchicago.cs.encsel.dataset.feature.Features
   val validFeatureIndex = Array(2, 3, 4, 5, 6, 8, 9, 10,
     11, 13, 15, 16, 18, 20,
-    21, 23, 25, 26, 28, 30, 31)
+    21, 23, 25, 26, 28)
 
   // Initialize predictor
-  val intPredictor = new NNPredictor(intModel, intNumFeature)
-  val stringPredictor = new NNPredictor(stringModel, stringNumFeature)
+  val intPredictor = new NNPredictor(intModel, validFeatureIndex.length)
+  val stringPredictor = new NNPredictor(stringModel, validFeatureIndex.length)
 
   // For each column, extract features and run encoding selector
   val colEncodings = columns.map(col => {

@@ -55,7 +55,6 @@ class VColumnPredicate(predicate: Any => Boolean, colIndex: Int) extends ColumnP
     for (i <- 0L until column.getTotalValueCount) {
       bitmap.set(i, test())
     }
-
     bitmap
   }
 

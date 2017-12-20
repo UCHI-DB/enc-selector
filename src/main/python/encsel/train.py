@@ -1,9 +1,11 @@
 import sys
+import numpy as np
 import tensorflow as tf
-from tensorflow.contrib.learn.python.learn.datasets.base import load_csv_with_header
+from tensorflow.contrib.learn.python.learn.datasets.base import load_csv_without_header
+
 from encsel.dataset import DataSet
 
-num_feature = 21;
+num_feature = 19;
 hidden_dim = 1000;
 
 
@@ -38,7 +40,7 @@ def build_graph(num_class):
 
 
 def train(data_file, model_path, num_class):
-    ds = load_csv_with_header(data_file, tf.int32, tf.float32, 22);
+    ds = load_csv_without_header(data_file, np.int32, np.float32, 19);
     dataset = DataSet(ds.data, ds.target)
 
     x, label, train_step, accuracy, prediction = build_graph(num_class)
@@ -48,13 +50,13 @@ def train(data_file, model_path, num_class):
         sess.run(tf.global_variables_initializer())
 
         for i in range(5000):
-            batch = dataset.train.next_batch(50)
+            batch = dataset.next_batch(50)
             if batch is None:
                 break
             if i % 100 == 0:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0], label: batch[1]})
                 print('step %d, training accuracy %g' % (i, train_accuracy))
-            train_step.eval(feed_dict={x: batch[0], label: batch[1]})
+            train_step.run(feed_dict={x: batch[0], label: batch[1]})
 
         # Build Signature to save to model
         signature = tf.saved_model.signature_def_utils.build_signature_def(
@@ -81,12 +83,16 @@ def print_usage():
 
 def main():
     if len(sys.argv) != 4:
-        print_usage();
-    data_file = sys.argv[1];
-    model_path = sys.argv[2];
-    num_class = int(sys.argv[3]);
-    train(data_file, model_path, num_class);
+        print_usage()
+    data_file = sys.argv[1]
+    model_path = sys.argv[2]
+    num_class = int(sys.argv[3])
+    train(data_file, model_path, num_class)
+
+
+def main2():
+    train("/home/harper/enc_workspace/string_train.csv", '/home/harper/enc_workspace/string_model/', 4)
 
 
 if __name__ == "__main__":
-    main()
+    main2()
