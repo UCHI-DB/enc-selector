@@ -48,11 +48,11 @@ public class RowTempTable extends GroupConverter implements TempTable {
                 index.put(new ColumnKey(schema.getColumns().get(i).getPath()), i);
             }
         }
+        current = new Row(converters.length);
     }
 
     @Override
     public void start() {
-        current = new Row(converters.length);
         records.add(current);
     }
 
@@ -67,6 +67,7 @@ public class RowTempTable extends GroupConverter implements TempTable {
 
     @Override
     public void end() {
+        current = new Row(converters.length);
     }
 
     public Row getCurrentRecord() {

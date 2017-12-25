@@ -22,6 +22,20 @@
 
 package edu.uchicago.cs.encsel.query.operator
 
+import java.io.File
+
+import org.junit.Test
+
 class VerticalSelectTest {
 
+  @Test
+  def testSelectNotInPredicate:Unit = {
+    val input = new File("src/test/resource/query_select")
+//    new VerticalSelect().select()
+  }
+
+  @Test
+  def testSelectInPredicate:Unit = {
+
+  }
 }

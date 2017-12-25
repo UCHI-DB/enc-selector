@@ -6,7 +6,7 @@ import edu.uchicago.cs.encsel.dataset.parquet.ParquetWriterHelper
 
 object LoadTPCH extends App {
 
-//  val folder = "/home/harper/TPCH/"
+  //  val folder = "/home/harper/TPCH/"
   val folder = args(0)
   val inputsuffix = ".tbl"
   val outputsuffix = ".parquet"
@@ -16,7 +16,12 @@ object LoadTPCH extends App {
     ParquetWriterHelper.write(
       new File("%s%s%s".format(folder, schema.getName, inputsuffix)).toURI,
       schema,
-      new File("%s%s%s".format(folder, schema.getName, outputsuffix)).toURI, "\\|",false)
+      new File("%s%s%s".format(folder, schema.getName, outputsuffix)).toURI, "\\|", false)
   })
 
+}
+
+object LoadTPCHTest extends App {
+  ParquetWriterHelper.write(new File("/home/harper/TPCH/customer_100").toURI, TPCHSchema.customerSchema,
+    new File("/home/harper/TPCH/customer_100.parquet").toURI, "\\|", false)
 }

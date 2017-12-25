@@ -13,8 +13,10 @@ import scala.collection.JavaConversions._
 
 object Performance {
 
+  val TPCH_FOLDER = "/home/harper/TPCH"
+
   def genInt(schema: MessageType, outputFolder: String, index: Int): Unit = {
-    val inputFile = new File("/Users/harper/TPCH/lineitem.tbl").toURI
+    val inputFile = new File(TPCH_FOLDER + "/lineitem.tbl").toURI
 
     // Encode lineitem.line_number with different encodings
     intEncodings.foreach(intEncoding => {
@@ -26,7 +28,7 @@ object Performance {
   }
 
   def genString(schema: MessageType, outputFolder: String, index: Int): Unit = {
-    val inputFile = new File("/Users/harper/TPCH/lineitem.tbl").toURI
+    val inputFile = new File(TPCH_FOLDER + "/lineitem.tbl").toURI
 
     // Encode lineitem.part_key with different encodings
     // Encode lineitem.line_number with different encodings

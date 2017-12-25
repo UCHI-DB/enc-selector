@@ -29,8 +29,8 @@ import java.lang.management.ManagementFactory
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
-import edu.uchicago.cs.encsel.query.HColumnPredicate
-import edu.uchicago.cs.encsel.query.operator.VerticalSelect
+import edu.uchicago.cs.encsel.query.{HColumnPredicate, VColumnPredicate}
+import edu.uchicago.cs.encsel.query.operator.{HorizontalSelect, VerticalSelect}
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 import org.apache.parquet.schema.Type.Repetition
 import org.apache.parquet.schema.{MessageType, PrimitiveType}
@@ -46,7 +46,7 @@ object ScanTimeUsage extends FeatureExtractor {
   def extract(col: Column, prefix: String): Iterable[Feature] = {
 
     val select = new VerticalSelect();
-    val predicate = new HColumnPredicate((data) => true, 0)
+    val predicate = new VColumnPredicate((data) => true, 0)
     val timembean = ManagementFactory.getThreadMXBean;
 
     col.dataType match {
@@ -71,6 +71,7 @@ object ScanTimeUsage extends FeatureExtractor {
             )
           } catch {
             case e: Exception => {
+              e.printStackTrace()
               Iterable[Feature]()
             }
           }

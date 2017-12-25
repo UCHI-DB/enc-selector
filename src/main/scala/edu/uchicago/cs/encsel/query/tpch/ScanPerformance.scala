@@ -1,10 +1,9 @@
 package edu.uchicago.cs.encsel.query.tpch
 
-import java.io.File
 import java.util
 
-import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, ParquetWriterHelper}
-import Performance._
+import edu.uchicago.cs.encsel.dataset.parquet.EncContext
+import edu.uchicago.cs.encsel.query.tpch.Performance._
 import org.apache.parquet.column.Encoding
 
 import scala.collection.JavaConversions._
@@ -30,11 +29,11 @@ object ScanGenData extends App {
   context.put(schema.getColumns()(1).toString, Array("18", "200000"))
   context.put(schema.getColumns()(3).toString, Array("3", "7"))
 
-  genInt(schema, "/Users/harper/TPCH/scan_lineitem_partkey", 1)
-  genInt(schema,"/Users/harper/TPCH/scan_lineitem_linenum",3)
-  genString(schema,"/Users/harper/TPCH/scan_lineitem_si", 13)
-  genString(schema,"/Users/harper/TPCH/scan_lineitem_sm", 14)
-  genString(schema,"/Users/harper/TPCH/scan_lineitem_comment", 15)
+  genInt(schema, Performance.TPCH_FOLDER + "/scan_lineitem_partkey", 1)
+  genInt(schema, Performance.TPCH_FOLDER + "/scan_lineitem_linenum", 3)
+  genString(schema, Performance.TPCH_FOLDER + "/scan_lineitem_si", 13)
+  genString(schema, Performance.TPCH_FOLDER + "/scan_lineitem_sm", 14)
+  genString(schema, Performance.TPCH_FOLDER + "/scan_lineitem_comment", 15)
 
 }
 
@@ -49,10 +48,10 @@ object ScanPerformanceTest extends App {
   context.put(schema.getColumns()(1).toString, Array("18", "200000"))
   context.put(schema.getColumns()(3).toString, Array("3", "7"))
 
-  scan(schema, "/Users/harper/TPCH/scan_lineitem_partkey", 1, (data: Any) => data.toString.toInt > 1250)
-  scan(schema, "/Users/harper/TPCH/scan_lineitem_linenum", 3, (data: Any) => data.toString.toInt < 3)
+  scan(schema, Performance.TPCH_FOLDER + "/scan_lineitem_partkey", 1, (data: Any) => data.toString.toInt > 1250)
+  scan(schema, Performance.TPCH_FOLDER + "/scan_lineitem_linenum", 3, (data: Any) => data.toString.toInt < 3)
 
-  scan(schema, "/Users/harper/TPCH/scan_lineitem_si", 13, (data: Any) => true)
-  scan(schema, "/Users/harper/TPCH/scan_lineitem_sm", 14, (data: Any) => true)
-  scan(schema, "/Users/harper/TPCH/scan_lineitem_comment", 15, (data: Any) => true)
+  scan(schema, Performance.TPCH_FOLDER + "/scan_lineitem_si", 13, (data: Any) => true)
+  scan(schema, Performance.TPCH_FOLDER + "/scan_lineitem_sm", 14, (data: Any) => true)
+  scan(schema, Performance.TPCH_FOLDER + "/scan_lineitem_comment", 15, (data: Any) => true)
 }

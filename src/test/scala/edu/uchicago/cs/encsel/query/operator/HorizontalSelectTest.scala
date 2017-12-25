@@ -22,6 +22,46 @@
 
 package edu.uchicago.cs.encsel.query.operator
 
+import java.io.File
+
+import edu.uchicago.cs.encsel.query.HColumnPredicate
+import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
+import org.apache.parquet.io.api.Binary
+import org.junit.Assert._
+import org.junit.Test
+
+import scala.collection.JavaConversions._
+
 class HorizontalSelectTest {
 
+  @Test
+  def testSelectInPredicate: Unit = {
+
+    val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
+    val predicate = new HColumnPredicate((data) => data.toString.toInt >= 90, 0)
+    val temptable = new HorizontalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(0, 1, 2))
+
+    assertEquals(11, temptable.getRecords.size)
+
+    (0 to 10).foreach(i => {
+      var record = temptable.getRecords()(i)
+      assertEquals(3, record.getData.length)
+      assertEquals(i + 90, record.getData()(0).toString.toInt)
+    })
+  }
+
+  @Test
+  def testSelectNotInPredicate: Unit = {
+    val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
+    val predicate = new HColumnPredicate((data) => data.toString.toInt >= 90, 0)
+    val temptable = new HorizontalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(1, 2, 5, 7))
+
+    assertEquals(11, temptable.getRecords.size)
+
+    (0 to 10).foreach(i => {
+      var record = temptable.getRecords()(i)
+      assertEquals(4, record.getData.length)
+      assertEquals("Customer#000000%03d".format(i + 90), record.getData()(0).asInstanceOf[Binary].toStringUsingUTF8)
+    })
+  }
 }
