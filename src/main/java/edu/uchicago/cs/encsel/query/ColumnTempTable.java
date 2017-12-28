@@ -32,13 +32,13 @@ import java.util.Map;
 
 public class ColumnTempTable extends GroupConverter implements TempTable {
 
-    private MessageType schema;
+    protected MessageType schema;
 
-    private ColumnPrimitiveConverter[] converters;
+    protected ColumnPrimitiveConverter[] converters;
 
-    private Column[] columns;
+    protected Column[] columns;
 
-    private Map<ColumnKey, Integer> pathMaps;
+    protected Map<ColumnKey, Integer> pathMaps;
 
     public ColumnTempTable(MessageType schema) {
         this.schema = schema;

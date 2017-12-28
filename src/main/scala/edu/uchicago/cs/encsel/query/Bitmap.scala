@@ -40,7 +40,10 @@ class Bitmap(val length: Long) {
     val li = (index / 64).toInt;
     val offset = index % 64;
 
-    data.update(li, data(li) | (1L << offset));
+    data.update(li, data(li) | ((value match {
+      case true => 1L
+      case false => 0L
+    }) << offset));
   }
 
   def test(index: Long) = {

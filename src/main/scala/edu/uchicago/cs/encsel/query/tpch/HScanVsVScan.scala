@@ -14,28 +14,15 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package edu.uchicago.cs.encsel.query.operator
+package edu.uchicago.cs.encsel.query.tpch
 
-import java.io.File
+object HScanVsVScan extends App {
 
-import org.junit.Test
-
-class VerticalSelectTest {
-
-  @Test
-  def testSelectNotInPredicate:Unit = {
-    val input = new File("src/test/resource/query_select")
-//    new VerticalSelect().select()
-  }
-
-  @Test
-  def testSelectInPredicate:Unit = {
-
-  }
 }

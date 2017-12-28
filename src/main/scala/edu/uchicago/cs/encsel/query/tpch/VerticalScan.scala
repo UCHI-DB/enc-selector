@@ -2,9 +2,18 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.query.{RowTempTable, VColumnPredicate}
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
+import edu.uchicago.cs.encsel.query.{Column, ColumnTempTable, RowTempTable, VColumnPredicate}
+import org.apache.parquet.schema.MessageType
 
+class NostoreColumn extends Column {
+  override def add(data: scala.Any): Unit = {}
+}
+
+class NostoreColumnTempTable(schema: MessageType) extends ColumnTempTable(schema) {
+  for (i <- 0 until converters.length)
+    columns(i) = new NostoreColumn()
+}
 
 object VerticalScan extends App {
 
@@ -23,7 +32,9 @@ object VerticalScan extends App {
     val predicate = new VColumnPredicate((value: Any) => value.asInstanceOf[Double] < threshold, colIndex)
     val start = System.currentTimeMillis()
 
-    new VerticalSelect().select(file, predicate, schema, Array(0, 1, 2, 3, 4))
+    new VerticalSelect() {
+      override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
+    }.select(file, predicate, schema, Array(0, 1, 2, 3, 4))
 
     System.currentTimeMillis() - start
   }

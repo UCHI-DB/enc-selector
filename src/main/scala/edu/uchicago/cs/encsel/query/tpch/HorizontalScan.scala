@@ -2,8 +2,9 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.query.{HColumnPredicate, RowTempTable}
 import edu.uchicago.cs.encsel.query.operator.HorizontalSelect
+import edu.uchicago.cs.encsel.query.{HColumnPredicate, RowTempTable}
+import org.apache.parquet.schema.MessageType
 
 object HorizontalScan extends App {
   val schema = TPCHSchema.lineitemSchema
@@ -22,7 +23,15 @@ object HorizontalScan extends App {
     val predicate = new HColumnPredicate((value: Any) => value.asInstanceOf[Double] < threshold, colIndex)
     val start = System.currentTimeMillis()
 
-    new HorizontalSelect().select(file, predicate, schema, Array(0, 1, 2, 3, 4))
+    new HorizontalSelect() {
+      override def createRecorder(schema: MessageType) = {
+        new RowTempTable(schema) {
+          override def start(): Unit = {}
+
+          override def end(): Unit = {}
+        }
+      }
+    }.select(file, predicate, schema, Array(0, 1, 2, 3, 4))
 
     System.currentTimeMillis() - start
   }

@@ -41,6 +41,24 @@ import scala.collection.JavaConversions._
 trait Select {
   def select(input: URI, p: Predicate, schema: MessageType,
              projectIndices: Array[Int]): TempTable
+
+  def columnMapping(p: Predicate, schema: MessageType, projectIndices: Array[Int]):
+  (Map[Int, Int], Map[Int, Int], Iterable[Int]) = {
+    val projectSchema = SchemaUtils.project(schema, projectIndices)
+
+    val predictSet = p.leaves.map(_.colIndex).toSet
+    val projectMap = projectIndices.zipWithIndex.map(i => i._1 -> i._2).toMap
+
+    val allColumnSet = predictSet.union(projectMap.keySet)
+
+    val columnMap = allColumnSet.toList.sorted.zipWithIndex.map(f => f._1 -> f._2).toMap
+
+    val nonPredictIndices = columnMap.filter(e => {
+      !predictSet.contains(e._1)
+    }).map(_._2).toList.sorted
+
+    return (columnMap, projectMap, nonPredictIndices)
+  }
 }
 
 class ColumnTempTablePipe(val table: ColumnTempTable, val index: Int) extends PredicatePipe {
@@ -99,22 +117,12 @@ class RowTempTablePipe(val table: RowTempTable, val index: Int) extends Predicat
 
 class VerticalSelect extends Select {
   override def select(input: URI, p: Predicate, schema: MessageType,
-                      projectIndices: Array[Int]): TempTable = {
+                      projectIndices: Array[Int]): ColumnTempTable = {
 
     val vp = p.asInstanceOf[VPredicate]
-    val recorder = new ColumnTempTable(SchemaUtils.project(schema, projectIndices))
+    val recorder = createRecorder(SchemaUtils.project(schema, projectIndices))
 
-    val predictSet = vp.leaves.map(_.colIndex).toSet
-    val projectMap = projectIndices.zipWithIndex.map(i => i._1 -> i._2).toMap
-
-    val allColumnSet = predictSet.union(projectMap.keySet)
-
-    val columnMap = allColumnSet.zipWithIndex.map(f => f._1 -> f._2).toMap
-
-    val nonProjectIndices = columnMap.filter(e => {
-      !predictSet.contains(e._1)
-    }).map(_._2).toList.sorted
-
+    val (columnMap, projectMap, nonPredictIndices) = columnMapping(p, schema, projectIndices)
 
     ParquetReaderHelper.read(input, new ReaderProcessor {
       override def processFooter(footer: Footer): Unit = {}
@@ -141,7 +149,7 @@ class VerticalSelect extends Select {
 
         val bitmap = vp.bitmap
 
-        nonProjectIndices.map(columns(_)).foreach(col => {
+        nonPredictIndices.map(columns(_)).foreach(col => {
           for (count <- 0L until rowGroup.getRowCount) {
             if (bitmap.test(count)) {
               col.writeCurrentValueToConverter()
@@ -156,6 +164,8 @@ class VerticalSelect extends Select {
 
     return recorder
   }
+
+  def createRecorder(schema: MessageType) = new ColumnTempTable(schema);
 }
 
 class HorizontalSelect extends Select {
@@ -164,18 +174,9 @@ class HorizontalSelect extends Select {
 
     val hp = p.asInstanceOf[HPredicate]
     val projectSchema = SchemaUtils.project(schema, projectIndices)
-    val recorder = new RowTempTable(projectSchema)
+    val recorder = createRecorder(projectSchema)
 
-    val predictSet = hp.leaves.map(_.colIndex).toSet
-    val projectMap = projectIndices.zipWithIndex.map(i => i._1 -> i._2).toMap
-
-    val allColumnSet = predictSet.union(projectMap.keySet)
-
-    val columnMap = allColumnSet.zipWithIndex.map(f => f._1 -> f._2).toMap
-
-    val nonProjectIndices = columnMap.filter(e => {
-      !predictSet.contains(e._1)
-    }).map(_._2).toList.sorted
+    val (columnMap, projectMap, nonPredictIndices) = columnMapping(p, schema, projectIndices)
 
     ParquetReaderHelper.read(input, new ReaderProcessor {
       override def processFooter(footer: Footer): Unit = {}
@@ -205,20 +206,23 @@ class HorizontalSelect extends Select {
           hp.value match {
             case true => {
               recorder.start()
-              nonProjectIndices.map(columns(_)).foreach(col => {
+              nonPredictIndices.map(columns(_)).foreach(col => {
                 col.writeCurrentValueToConverter()
                 col.consume()
               })
               recorder.end()
             }
-            case _ => nonProjectIndices.map(columns(_)).foreach(col => {
+            case _ => nonPredictIndices.map(columns(_)).foreach(col => {
               col.skip()
               col.consume()
             })
           }
         }
+
       }
     })
     return recorder
   }
+
+  def createRecorder(schema: MessageType) = new RowTempTable(schema)
 }
