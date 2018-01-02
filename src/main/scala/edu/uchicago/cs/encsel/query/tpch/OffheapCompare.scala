@@ -25,12 +25,10 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.{File, IOException}
 import java.lang.management.ManagementFactory
-import java.nio.ByteBuffer
-import javax.management.MBeanServerFactory
+import java.nio.{ByteBuffer, ByteOrder}
 
 import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
 import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
-import edu.uchicago.cs.encsel.query.tpch.Offheap.{cputime, mbean, usertime}
 import edu.uchicago.cs.encsel.query.{Bitmap, NonePrimitiveConverter}
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.ColumnDescriptor
@@ -55,11 +53,10 @@ class EqualScalar(val target: Int, val entryWidth: Int) extends Predicate {
     var counter = 0
     var buffer: Byte = 0
     for (i <- 0 until size) {
-      val index = size * entryWidth / 32
-      val offset = size * entryWidth % 32
-      val byteIndex = size % 8
+      val intIndex = i * entryWidth / 32
+      val intOffset = i * entryWidth % 32
 
-      val intValue = input.getInt(offset + index * 4) >> offset
+      val intValue = input.getInt(offset + intIndex * 4) >> intOffset
       val mask = ((1L << entryWidth) - 1)
 
       intValue & mask ^ target match {
@@ -74,94 +71,116 @@ class EqualScalar(val target: Int, val entryWidth: Int) extends Predicate {
         buffer = 0
       }
     }
+    if (counter != 0)
+      result.put(buffer)
+    result.flip
     return result
   }
 }
 
 class EqualInt(val target: Int, val entryWidth: Int) extends Predicate {
 
-  val values = new Array[Int](32)
+  val values = new Array[Int](entryWidth)
+  val adds = new Array[Int](entryWidth)
+
+  val targetMask = (1 << entryWidth) - 1
 
   {
     var origin = 0
-    for (i <- 0 until 32 / entryWidth) {
+    val lbEntryMask = targetMask >> 1
+    var lbIntMask = 0
+    for (i <- 0 to 32 / entryWidth) {
       origin = origin | (target << i * entryWidth)
+      lbIntMask = lbIntMask | (lbEntryMask << i * entryWidth)
     }
 
-    for (i <- 0 until 32) {
-      val mask = (1 << i) - 1
-      values(i) = (origin << i) | ((origin >> (32 - i)) & mask)
+    for (i <- 0 until entryWidth) {
+      values(i) = (origin << i) | ((origin >> (32 - i)) & ((1 << i) - 1))
+      adds(i) = (lbIntMask << i) | ((lbIntMask >> (32 - i)) & ((1 << i) - 1))
     }
   }
 
 
   def execute(input: ByteBuffer, offset: Int, size: Int): ByteBuffer = {
-    val byteLength = Math.ceil((entryWidth * size.toDouble) / 8).toInt
-    val dest = ByteBuffer.allocateDirect(byteLength)
+    val byteLength = Math.ceil((entryWidth * size.toDouble) / 32).toInt * 4
+    val dest = ByteBuffer.allocateDirect(byteLength).order(ByteOrder.LITTLE_ENDIAN)
 
     val intLength = byteLength / 4
 
     input.position(offset)
     for (i <- 0 until intLength) {
-      val bitoff = entryWidth - (i * 32 % entryWidth)
-      dest.putInt(i, input.getInt ^ values(bitoff))
-    }
-    // get remaining bytes
-    var remain = 0
-    val remainBytes = byteLength % 4
-    val remainStart = entryWidth - (intLength * 32 % entryWidth)
-    for (i <- 0 until remainBytes) {
-      remain = remain | (input.get << (i * 8))
-    }
-    val res = remain ^ values(remainStart)
-    for (i <- 0 until remainBytes) {
-      dest.put((remain >> i * 8).asInstanceOf[Byte])
-    }
+      val bitoff = (entryWidth - (i * 32 % entryWidth)) % entryWidth
+      val currentWord = input.getInt()
+      val compare = currentWord ^ values(bitoff)
 
+      var res = ((compare & adds(bitoff)) + adds(bitoff)) | compare
+
+      // Deal with cross-boundary entry
+      if (bitoff != 0) {
+        val lastWord = input.getInt(i - 1)
+        val lastOff = entryWidth - bitoff
+        val combined = ((lastWord >> (32 - lastOff)) | (currentWord >> lastOff)) & targetMask
+        if (combined != target) {
+          res = res | (1 << (bitoff - 1))
+        }
+      }
+      dest.putInt(res)
+    }
+    dest.flip()
     return dest
   }
+
 }
 
 class EqualLong(val target: Int, val entryWidth: Int) extends Predicate {
 
-  val values = new Array[Long](64)
+  val values = new Array[Long](entryWidth)
+  val adds = new Array[Long](entryWidth)
+
+  val targetMask = (1L << entryWidth) - 1
 
   {
     var origin = 0L
-    for (i <- 0 until 64 / entryWidth) {
+    val lbEntryMask = targetMask >> 1
+    var lbIntMask = 0L
+    for (i <- 0 to 64 / entryWidth) {
       origin = origin | (target << i * entryWidth)
+      lbIntMask = lbIntMask | (lbEntryMask << i * entryWidth)
     }
 
-    for (i <- 0 until 64) {
-      val mask = (1 << i) - 1
-      values(i) = (origin << i) | ((origin >> (64 - i)) & mask)
+    for (i <- 0 until entryWidth) {
+      values(i) = (origin << i) | ((origin >> (64 - i)) & ((1 << i) - 1))
+      adds(i) = (lbIntMask << i) | ((lbIntMask >> (64 - i)) & ((1 << i) - 1))
     }
   }
 
 
   def execute(input: ByteBuffer, offset: Int, size: Int): ByteBuffer = {
-    val byteLength = Math.ceil((entryWidth * size.toDouble) / 8).toInt
-    val dest = ByteBuffer.allocateDirect(byteLength)
+    val byteLength = Math.ceil((entryWidth * size.toDouble) / 64).toInt * 8
+    val dest = ByteBuffer.allocateDirect(byteLength).order(ByteOrder.LITTLE_ENDIAN)
 
-    val longLength = byteLength / 8
+    val wordLength = byteLength / 8
 
     input.position(offset)
-    for (i <- 0 until longLength) {
-      val bitoff = entryWidth - (i * 64 % entryWidth)
-      dest.putLong(i, input.getLong ^ values(bitoff))
-    }
-    // get remaining bytes
-    var remain = 0
-    val remainBytes = byteLength % 4
-    val remainStart = entryWidth - (longLength * 64 % entryWidth)
-    for (i <- 0 until remainBytes) {
-      remain = remain | (input.get << (i * 8))
-    }
-    val res = remain ^ values(remainStart)
-    for (i <- 0 until remainBytes) {
-      dest.put((remain >> i * 8).asInstanceOf[Byte])
-    }
+    for (i <- 0 until wordLength) {
+      val bitoff = (entryWidth - (i * 64 % entryWidth)) % entryWidth
+      val currentWord = input.getLong()
+      val compare = currentWord ^ values(bitoff)
 
+      var res = ((compare & adds(bitoff)) + adds(bitoff)) | compare
+
+      // Deal with cross-boundary entry
+      if (bitoff != 0) {
+        val lastWord = input.getInt(i - 1)
+        val lastOff = entryWidth - bitoff
+        val combined = ((lastWord >> (64 - lastOff)) | (currentWord >> lastOff)) & targetMask
+        if (combined != target) {
+          res = res | (1L << (bitoff - 1))
+        }
+      }
+      dest.putLong(res)
+    }
+    dest.flip()
     return dest
   }
 }
@@ -200,46 +219,48 @@ class PredicateVisitor(path: ColumnDescriptor, pred: Predicate) extends Visitor[
 
 object Offheap extends App {
   val entryWidth = 18
-  val pred = new EqualLong(5000, entryWidth)
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
-  val predVisitor = new PredicateVisitor(cd, pred)
 
+  test("Scalar", new EqualScalar(5000, entryWidth))
+  test("Int", new EqualInt(5000, entryWidth))
+  test("Long", new EqualLong(5000, entryWidth))
 
-  val mbean = ManagementFactory.getThreadMXBean
-  val repeat = 10
-  var clocktime = 0L
-  var cputime = 0L
-  var usertime = 0L
-  for (i <- 0 until repeat) {
-    val clockstart = System.currentTimeMillis
-    val cpustart = mbean.getCurrentThreadCpuTime
-    val userstart = mbean.getCurrentThreadUserTime
+  def test(name: String, pred: Predicate): Unit = {
+    val predVisitor = new PredicateVisitor(cd, pred)
+    val mbean = ManagementFactory.getThreadMXBean
+    val repeat = 50
+    var clocktime = 0L
+    var cputime = 0L
+    var usertime = 0L
+    for (i <- 0 until repeat) {
+      val clockstart = System.currentTimeMillis
+      val cpustart = mbean.getCurrentThreadCpuTime
+      val userstart = mbean.getCurrentThreadUserTime
 
-    ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new ReaderProcessor() {
-      override def processFooter(footer: Footer): Unit = {
+      ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new ReaderProcessor() {
+        override def processFooter(footer: Footer): Unit = {
 
-      }
-
-      override def processRowGroup(version: VersionParser.ParsedVersion,
-                                   meta: BlockMetaData,
-                                   rowGroup: PageReadStore): Unit = {
-        val pageReader = rowGroup.getPageReader(cd)
-        var page = pageReader.readPage()
-        while (page != null) {
-          val res = page.accept(predVisitor)
-          page = pageReader.readPage()
-          res.clear()
         }
-      }
-    })
-    clocktime = clocktime + (System.currentTimeMillis() - clockstart)
-    cputime = cputime + (mbean.getCurrentThreadCpuTime - cpustart)
-    usertime = usertime + (mbean.getCurrentThreadUserTime - userstart)
-  }
 
-  println(clocktime / repeat)
-  println(cputime / repeat)
-  println(usertime / repeat)
+        override def processRowGroup(version: VersionParser.ParsedVersion,
+                                     meta: BlockMetaData,
+                                     rowGroup: PageReadStore): Unit = {
+          val pageReader = rowGroup.getPageReader(cd)
+          var page = pageReader.readPage()
+          while (page != null) {
+            val res = page.accept(predVisitor)
+            page = pageReader.readPage()
+            res.clear()
+          }
+        }
+      })
+      clocktime = clocktime + (System.currentTimeMillis() - clockstart)
+      cputime = cputime + (mbean.getCurrentThreadCpuTime - cpustart)
+      usertime = usertime + (mbean.getCurrentThreadUserTime - userstart)
+    }
+
+    println("%s,%d,%d,%d".format(name, clocktime / repeat, cputime / repeat, usertime / repeat))
+  }
 }
 
 object Onheap extends App {
@@ -250,7 +271,7 @@ object Onheap extends App {
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
   val mbean = ManagementFactory.getThreadMXBean
-  val repeat = 10
+  val repeat = 50
   var clocktime = 0L
   var cputime = 0L
   var usertime = 0L
@@ -280,7 +301,5 @@ object Onheap extends App {
     cputime = cputime + (mbean.getCurrentThreadCpuTime - cpustart)
     usertime = usertime + (mbean.getCurrentThreadUserTime - userstart)
   }
-  println(clocktime / repeat)
-  println(cputime / repeat)
-  println(usertime / repeat)
+  println("%s,%d,%d,%d".format("Onheap", clocktime / repeat, cputime / repeat, usertime / repeat))
 }
