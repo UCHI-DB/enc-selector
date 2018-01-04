@@ -21,6 +21,7 @@ object Sketch extends App {
 
   val schema = new MessageType("default",
     new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "v1"),
+
     new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "v2")
   )
 
@@ -43,10 +44,11 @@ object Sketch extends App {
 
         override def processRowGroup(version: VersionParser.ParsedVersion,
                                      meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
-          val col = schema.getColumns()(0)
+          val col = schema.getColumns()(1)
           val colreader = new ColumnReaderImpl(col, rowGroup.getPageReader(col), new NonePrimitiveConverter, version)
           for (i <- 0L until colreader.getTotalValueCount) {
-            colreader.readValue()
+            if (colreader.getCurrentDefinitionLevel == 1)
+              colreader.getInteger()
             colreader.consume()
           }
         }
