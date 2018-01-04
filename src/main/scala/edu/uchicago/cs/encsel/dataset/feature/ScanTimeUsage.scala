@@ -25,12 +25,13 @@ package edu.uchicago.cs.encsel.dataset.feature
 
 import java.io.File
 import java.lang.management.ManagementFactory
+import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
-import edu.uchicago.cs.encsel.query.{HColumnPredicate, VColumnPredicate}
-import edu.uchicago.cs.encsel.query.operator.{HorizontalSelect, VerticalSelect}
+import edu.uchicago.cs.encsel.query.VColumnPredicate
+import edu.uchicago.cs.encsel.query.operator.VerticalSelect
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 import org.apache.parquet.schema.Type.Repetition
 import org.apache.parquet.schema.{MessageType, PrimitiveType}
@@ -49,140 +50,70 @@ object ScanTimeUsage extends FeatureExtractor {
     val predicate = new VColumnPredicate((data) => true, 0)
     val timembean = ManagementFactory.getThreadMXBean;
 
+    val encFunction: (String, MessageType) => Iterable[Feature] =
+      (encoding: String, schema: MessageType) => {
+        try {
+          val fileName = col.colFile + "." + encoding;
+          val encfile = new URI(fileName)
+
+          if (!new File(encfile).exists())
+            return Iterable[Feature]()
+
+          val startcpu = timembean.getCurrentThreadCpuTime
+          val startuser = timembean.getCurrentThreadUserTime
+          val startwc = System.currentTimeMillis()
+          select.select(encfile, predicate, schema, Array(0))
+
+          val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
+          val userconsumption = timembean.getCurrentThreadUserTime - startuser
+          val wcconsumption = System.currentTimeMillis() - startwc
+
+          Iterable(
+            new Feature(featureType, "%s_wallclock".format(encoding), wcconsumption),
+            new Feature(featureType, "%s_cpu".format(encoding), cpuconsumption),
+            new Feature(featureType, "%s_user".format(encoding), userconsumption)
+          )
+        } catch {
+          case e: Exception => {
+            e.printStackTrace()
+            Iterable[Feature]()
+          }
+        }
+      }
+
     col.dataType match {
       case INTEGER => {
-        var schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "data")
+        val schema = new MessageType("default",
+          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "value")
         )
-        IntEncoding.values().flatMap(encoding => {
-          try {
-            val fileName = col.colFile + "." + encoding.name();
-            val startcpu = timembean.getCurrentThreadCpuTime
-            val startuser = timembean.getCurrentThreadUserTime
-
-            select.select(new File(fileName).toURI, predicate, schema, Array(0))
-
-            val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-            val userconsumption = timembean.getCurrentThreadUserTime - startuser
-
-            Iterable(
-              new Feature(featureType, "%s_cpu".format(encoding.name()), cpuconsumption),
-              new Feature(featureType, "%s_user".format(encoding.name()), userconsumption)
-            )
-          } catch {
-            case e: Exception => {
-              e.printStackTrace()
-              Iterable[Feature]()
-            }
-          }
-        })
+        IntEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case STRING => {
-        var schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "data")
+        val schema = new MessageType("default",
+          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "value")
         )
-        StringEncoding.values().flatMap(encoding => {
-          try {
-            val fileName = col.colFile + "." + encoding.name();
-            val startcpu = timembean.getCurrentThreadCpuTime
-            val startuser = timembean.getCurrentThreadUserTime
-
-            select.select(new File(fileName).toURI, predicate, schema, Array(0))
-
-            val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-            val userconsumption = timembean.getCurrentThreadUserTime - startuser
-
-            Iterable(
-              new Feature(featureType, "%s_cpu".format(encoding.name()), cpuconsumption),
-              new Feature(featureType, "%s_user".format(encoding.name()), userconsumption)
-            )
-          } catch {
-            case e: Exception => {
-              Iterable[Feature]()
-            }
-          }
-        })
+        StringEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case DOUBLE => {
-        var schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.DOUBLE, "data")
+        val schema = new MessageType("default",
+          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.DOUBLE, "value")
         )
-        FloatEncoding.values().flatMap(encoding => {
-          try {
-            val fileName = col.colFile + "." + encoding.name();
-            val startcpu = timembean.getCurrentThreadCpuTime
-            val startuser = timembean.getCurrentThreadUserTime
-
-            select.select(new File(fileName).toURI, predicate, schema, Array(0))
-
-            val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-            val userconsumption = timembean.getCurrentThreadUserTime - startuser
-
-            Iterable(
-              new Feature(featureType, "%s_cpu".format(encoding.name()), cpuconsumption),
-              new Feature(featureType, "%s_user".format(encoding.name()), userconsumption)
-            )
-          } catch {
-            case e: Exception => {
-              Iterable[Feature]()
-            }
-          }
-        })
+        FloatEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case LONG => {
-        var schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT64, "data")
+        val schema = new MessageType("default",
+          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT64, "value")
         )
-        LongEncoding.values().flatMap(encoding => {
-          try {
-            val fileName = col.colFile + "." + encoding.name();
-            val startcpu = timembean.getCurrentThreadCpuTime
-            val startuser = timembean.getCurrentThreadUserTime
-
-            select.select(new File(fileName).toURI, predicate, schema, Array(0))
-
-            val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-            val userconsumption = timembean.getCurrentThreadUserTime - startuser
-
-            Iterable(
-              new Feature(featureType, "%s_cpu".format(encoding.name()), cpuconsumption),
-              new Feature(featureType, "%s_user".format(encoding.name()), userconsumption)
-            )
-          } catch {
-            case e: Exception => {
-              Iterable[Feature]()
-            }
-          }
-        })
+        LongEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case BOOLEAN => {
         Iterable[Feature]()
       }
       case FLOAT => {
-        var schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.FLOAT, "data")
+        val schema = new MessageType("default",
+          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.FLOAT, "value")
         )
-        FloatEncoding.values().flatMap(encoding => {
-          try {
-            val fileName = col.colFile + "." + encoding.name();
-            val startcpu = timembean.getCurrentThreadCpuTime
-            val startuser = timembean.getCurrentThreadUserTime
-
-            select.select(new File(fileName).toURI, predicate, schema, Array(0))
-
-            val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-            val userconsumption = timembean.getCurrentThreadUserTime - startuser
-
-            Iterable(
-              new Feature(featureType, "%s_cpu".format(encoding.name()), cpuconsumption),
-              new Feature(featureType, "%s_user".format(encoding.name()), userconsumption)
-            )
-          } catch {
-            case e: Exception => {
-              Iterable[Feature]()
-            }
-          }
-        })
+        FloatEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
     }
 

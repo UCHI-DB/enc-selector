@@ -1,28 +1,55 @@
 package edu.uchicago.cs.encsel.query.tpch
 
-import scala.io.Source
+import java.io.File
+
+import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, ParquetReaderHelper, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
+import org.apache.parquet.VersionParser
+import org.apache.parquet.column.Encoding
+import org.apache.parquet.column.impl.ColumnReaderImpl
+import org.apache.parquet.column.page.PageReadStore
+import org.apache.parquet.hadoop.Footer
+import org.apache.parquet.hadoop.metadata.BlockMetaData
+import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
+import org.apache.parquet.schema.Type.Repetition
+import org.apache.parquet.schema.{MessageType, PrimitiveType}
+
+import scala.collection.JavaConversions._
 
 object Sketch extends App {
 
-  var pkmax = 0
-  var limax = 0
-  var pkmin = Integer.MAX_VALUE
-  var limin = Integer.MAX_VALUE
+  val schema = new MessageType("default",
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "v1"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "v2")
+  )
 
-  Source.fromFile("/Users/harper/TPCH/lineitem.tbl").getLines().foreach(line=>{
-    val data = line.split("\\|")
-    val pk = data(1).toInt
-    val li = data(3).toInt
+  write
+  read
 
-    pkmax = Math.max(pkmax,pk)
-    pkmin = Math.min(pkmin,pk)
-    limax = Math.max(limax,li)
-    limin = Math.min(limin,li)
-  })
+  def write: Unit = {
+    EncContext.encoding.get().put(schema.getColumns()(0).toString, Encoding.PLAIN)
+    EncContext.context.get().put(schema.getColumns()(0).toString, Array[AnyRef]("0", "0"));
+    EncContext.encoding.get().put(schema.getColumns()(1).toString, Encoding.PLAIN)
+    EncContext.context.get().put(schema.getColumns()(1).toString, Array[AnyRef]("0", "0"));
+    ParquetWriterHelper.write(new File("/home/harper/temp/test.tmp").toURI, schema,
+      new File("/home/harper/temp/test.tmp.PLAIN").toURI, ",", false)
+  }
 
-  println(pkmax)
-  println(Math.log(pkmax)/Math.log(2))
-  println(pkmin)
-  println(limax)
-  println(limin)
+  def read: Unit = {
+    ParquetReaderHelper.read(new File("/home/harper/temp/test.tmp.PLAIN").toURI,
+      new ReaderProcessor() {
+        override def processFooter(footer: Footer): Unit = {}
+
+        override def processRowGroup(version: VersionParser.ParsedVersion,
+                                     meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
+          val col = schema.getColumns()(0)
+          val colreader = new ColumnReaderImpl(col, rowGroup.getPageReader(col), new NonePrimitiveConverter, version)
+          for (i <- 0L until colreader.getTotalValueCount) {
+            colreader.readValue()
+            colreader.consume()
+          }
+        }
+      })
+  }
 }

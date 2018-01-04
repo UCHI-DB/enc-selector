@@ -117,7 +117,7 @@ public class ParquetWriterHelper {
         String line = skipHeader ? reader.readLine() : null;
 
         while ((line = reader.readLine()) != null) {
-            String[] dataArray = line.trim().split(split);
+            String[] dataArray = line.trim().split(split,-1);
             List<String> data = Arrays.asList(dataArray);
             writer.write(data);
         }
@@ -133,16 +133,16 @@ public class ParquetWriterHelper {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
         MessageType schema = new MessageType("record",
-                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BOOLEAN, "value"));
+                new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BOOLEAN, "value"));
 
         ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema, false);
 
         String line;
-        List<String> holder = new ArrayList<>();
+
         while ((line = reader.readLine()) != null) {
+            List<String> holder = new ArrayList<>();
             holder.add(line.trim());
             writer.write(holder);
-            holder.clear();
         }
 
         reader.close();
@@ -158,7 +158,7 @@ public class ParquetWriterHelper {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
         MessageType schema = new MessageType("record",
-                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "value"));
+                new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "value"));
 
         EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
         es.intEncoding = encoding;
@@ -188,7 +188,7 @@ public class ParquetWriterHelper {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
         MessageType schema = new MessageType("record",
-                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT64, "value"));
+                new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT64, "value"));
 
         EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
         es.longEncoding = encoding;
@@ -218,7 +218,7 @@ public class ParquetWriterHelper {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
         MessageType schema = new MessageType("record",
-                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "value"));
+                new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "value"));
 
         EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
         es.stringEncoding = encoding;
@@ -246,7 +246,7 @@ public class ParquetWriterHelper {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
         MessageType schema = new MessageType("record",
-                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "value"));
+                new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.DOUBLE, "value"));
 
         EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
         es.floatEncoding = encoding;
@@ -274,7 +274,7 @@ public class ParquetWriterHelper {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
         MessageType schema = new MessageType("record",
-                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.FLOAT, "value"));
+                new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.FLOAT, "value"));
 
         EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
         es.floatEncoding = encoding;
