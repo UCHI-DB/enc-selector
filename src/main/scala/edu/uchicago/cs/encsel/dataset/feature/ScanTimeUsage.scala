@@ -84,25 +84,25 @@ object ScanTimeUsage extends FeatureExtractor {
     col.dataType match {
       case INTEGER => {
         val schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "value")
+          new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "value")
         )
         IntEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case STRING => {
         val schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "value")
+          new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "value")
         )
         StringEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case DOUBLE => {
         val schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.DOUBLE, "value")
+          new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "value")
         )
         FloatEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case LONG => {
         val schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT64, "value")
+          new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT64, "value")
         )
         LongEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }
@@ -111,7 +111,7 @@ object ScanTimeUsage extends FeatureExtractor {
       }
       case FLOAT => {
         val schema = new MessageType("default",
-          new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.FLOAT, "value")
+          new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.FLOAT, "value")
         )
         FloatEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
       }

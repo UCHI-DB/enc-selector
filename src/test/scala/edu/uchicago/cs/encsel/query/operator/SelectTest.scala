@@ -48,24 +48,56 @@ class SelectTest {
     val (columnMap, projectMap, nonPredictIndices) = select.columnMapping(predicate, TPCHSchema.lineitemSchema, Array(1, 3, 6, 8));
 
     assertEquals(5, columnMap.size)
-    assertEquals(0,columnMap.getOrElse(1,-1))
-    assertEquals(1,columnMap.getOrElse(3,-1))
-    assertEquals(2,columnMap.getOrElse(4,-1))
-    assertEquals(3,columnMap.getOrElse(6,-1))
-    assertEquals(4,columnMap.getOrElse(8,-1))
+    assertEquals(0, columnMap.getOrElse(1, -1))
+    assertEquals(1, columnMap.getOrElse(3, -1))
+    assertEquals(2, columnMap.getOrElse(4, -1))
+    assertEquals(3, columnMap.getOrElse(6, -1))
+    assertEquals(4, columnMap.getOrElse(8, -1))
 
-    assertEquals(4,projectMap.size)
+    assertEquals(4, projectMap.size)
 
-    assertEquals(0,projectMap.getOrElse(1,-1))
-    assertEquals(1,projectMap.getOrElse(3,-1))
-    assertEquals(2,projectMap.getOrElse(6,-1))
-    assertEquals(3,projectMap.getOrElse(8,-1))
+    assertEquals(0, projectMap.getOrElse(1, -1))
+    assertEquals(1, projectMap.getOrElse(3, -1))
+    assertEquals(2, projectMap.getOrElse(6, -1))
+    assertEquals(3, projectMap.getOrElse(8, -1))
 
     assertEquals(4, nonPredictIndices.size)
-    assertEquals(0,nonPredictIndices.toList(0))
-    assertEquals(1,nonPredictIndices.toList(1))
-    assertEquals(3,nonPredictIndices.toList(2))
-    assertEquals(4,nonPredictIndices.toList(3))
+    assertEquals(0, nonPredictIndices.toList(0))
+    assertEquals(1, nonPredictIndices.toList(1))
+    assertEquals(3, nonPredictIndices.toList(2))
+    assertEquals(4, nonPredictIndices.toList(3))
+  }
+
+  @Test
+  def testNoPredicateColMapping: Unit = {
+    val select = new Select() {
+      override def select(input: URI, p: Predicate, schema: MessageType, projectIndices: Array[Int]): TempTable = {
+        null
+      }
+    };
+
+    val predicate = null
+
+    val (columnMap, projectMap, nonPredictIndices) = select.columnMapping(predicate, TPCHSchema.lineitemSchema, Array(1, 3, 6, 8));
+
+    assertEquals(4, columnMap.size)
+    assertEquals(0, columnMap.getOrElse(1, -1))
+    assertEquals(1, columnMap.getOrElse(3, -1))
+    assertEquals(2, columnMap.getOrElse(6, -1))
+    assertEquals(3, columnMap.getOrElse(8, -1))
+
+    assertEquals(4, projectMap.size)
+
+    assertEquals(0, projectMap.getOrElse(1, -1))
+    assertEquals(1, projectMap.getOrElse(3, -1))
+    assertEquals(2, projectMap.getOrElse(6, -1))
+    assertEquals(3, projectMap.getOrElse(8, -1))
+
+    assertEquals(4, nonPredictIndices.size)
+    assertEquals(0, nonPredictIndices.toList(0))
+    assertEquals(1, nonPredictIndices.toList(1))
+    assertEquals(2, nonPredictIndices.toList(2))
+    assertEquals(3, nonPredictIndices.toList(3))
   }
 }
 
@@ -101,6 +133,31 @@ class HorizontalSelectTest {
       assertEquals("Customer#000000%03d".format(i + 90), record.getData()(0).asInstanceOf[Binary].toStringUsingUTF8)
     })
   }
+
+  @Test
+  def testSelectNotInPredicate2: Unit = {
+    val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
+    val predicate = new HColumnPredicate((data) => data.toString.toInt == 3, 3)
+    val temptable = new HorizontalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(1, 2, 5, 7))
+
+    assertEquals(7, temptable.getRecords.size)
+
+  }
+
+  @Test
+  def testNullPredicate: Unit = {
+    val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
+    val predicate = null
+    val temptable = new HorizontalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(1, 2, 5, 7))
+
+    assertEquals(100, temptable.getRecords.size)
+
+    (0 to 99).foreach(i => {
+      var record = temptable.getRecords()(i)
+      assertEquals(4, record.getData.length)
+      assertEquals("Customer#000000%03d".format(i + 1), record.getData()(0).asInstanceOf[Binary].toStringUsingUTF8)
+    })
+  }
 }
 
 class VerticalSelectTest {
@@ -131,6 +188,28 @@ class VerticalSelectTest {
 
     (0 to 10).foreach(i => {
       assertEquals("Customer#000000%03d".format(i + 90), temptable.getColumns()(0).getData()(i).asInstanceOf[Binary].toStringUsingUTF8)
+    })
+  }
+  @Test
+  def testSelectNotInPredicate2: Unit = {
+    val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
+    val predicate = new VColumnPredicate((data) => data.toString.toInt == 3, 3)
+    val temptable = new VerticalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(1, 2, 5, 7))
+
+    assertEquals(7, temptable.getColumns()(0).getData.length)
+
+  }
+  @Test
+  def testNullPredicate: Unit = {
+    val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
+    val predicate = null
+    val temptable = new VerticalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(1, 2, 5, 7))
+
+    for (i <- 0 until 4)
+      assertEquals(100, temptable.getColumns()(i).getData.size)
+
+    (0 to 99).foreach(i => {
+      assertEquals("Customer#000000%03d".format(i + 1), temptable.getColumns()(0).getData()(i).asInstanceOf[Binary].toStringUsingUTF8)
     })
   }
 }

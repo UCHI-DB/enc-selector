@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StringWriteSupport extends WriteSupport<List<String>> {
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -104,5 +105,18 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
 
     private Binary stringToBinary(Object value) {
         return Binary.fromString(value.toString());
+    }
+
+    @Override
+    public FinalizedWriteContext finalizeWrite() {
+        Map<String, String> extrameta = new HashMap<>();
+        // Write encoding context information
+
+        EncContext.context.get().entrySet().forEach((Map.Entry<String, Object[]> entry) -> {
+            extrameta.put(entry.getKey() + ".0", entry.getValue()[0].toString());
+            extrameta.put(entry.getKey() + ".1", entry.getValue()[1].toString());
+        });
+
+        return new FinalizedWriteContext(extrameta);
     }
 }

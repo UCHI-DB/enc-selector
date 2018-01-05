@@ -4,6 +4,8 @@ import edu.uchicago.cs.encsel.query.BitwiseOpr.BitwiseOpr
 import org.apache.parquet.column.ColumnReader
 import org.apache.parquet.io.api.Binary
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
+import org.apache.parquet.schema.Type
+import org.apache.parquet.schema.Type.Repetition
 
 trait Predicate {
   def leaves: Iterable[ColumnPredicate]
@@ -27,18 +29,25 @@ abstract class ColumnPredicate(val predicate: (Any) => Boolean, val colIndex: In
 
   var column: ColumnReader = null
 
+  var colType: Type = null
+
   var pipe: PredicatePipe = new PredicatePipe() {};
 
   var processor: () => Boolean = () => {
     false
   };
 
+  def setType(colType: Type) = this.colType = colType
+
   def setColumn(column: ColumnReader) = {
     this.column = column
+
     processor = column.getDescriptor.getType match {
       case PrimitiveTypeName.DOUBLE => {
         () => {
-          predicate(column.getDouble) match {
+          val nocheck = colType.isRepetition(Repetition.REQUIRED)
+          val passed = column.getCurrentDefinitionLevel == column.getDescriptor.getMaxDefinitionLevel
+          ((nocheck || passed) && predicate(column.getDouble)) match {
             case true => {
               pipe.pipe(column.getDouble)
               true
@@ -49,7 +58,9 @@ abstract class ColumnPredicate(val predicate: (Any) => Boolean, val colIndex: In
       }
       case PrimitiveTypeName.BINARY => {
         () => {
-          predicate(column.getBinary) match {
+          val nocheck = colType.isRepetition(Repetition.REQUIRED)
+          val passed = column.getCurrentDefinitionLevel == column.getDescriptor.getMaxDefinitionLevel
+          ((nocheck || passed) && predicate(column.getBinary)) match {
             case true => {
               pipe.pipe(column.getBinary)
               true
@@ -60,7 +71,9 @@ abstract class ColumnPredicate(val predicate: (Any) => Boolean, val colIndex: In
       }
       case PrimitiveTypeName.INT32 => {
         () => {
-          predicate(column.getInteger) match {
+          val nocheck = colType.isRepetition(Repetition.REQUIRED)
+          val passed = column.getCurrentDefinitionLevel == column.getDescriptor.getMaxDefinitionLevel
+          ((nocheck || passed) && predicate(column.getInteger)) match {
             case true => {
               pipe.pipe(column.getInteger)
               true
@@ -71,7 +84,9 @@ abstract class ColumnPredicate(val predicate: (Any) => Boolean, val colIndex: In
       }
       case PrimitiveTypeName.INT64 => {
         () => {
-          predicate(column.getLong) match {
+          val nocheck = colType.isRepetition(Repetition.REQUIRED)
+          val passed = column.getCurrentDefinitionLevel == column.getDescriptor.getMaxDefinitionLevel
+          ((nocheck || passed) && predicate(column.getLong)) match {
             case true => {
               pipe.pipe(column.getLong)
               true
@@ -82,7 +97,9 @@ abstract class ColumnPredicate(val predicate: (Any) => Boolean, val colIndex: In
       }
       case PrimitiveTypeName.FLOAT => {
         () => {
-          predicate(column.getFloat) match {
+          val nocheck = colType.isRepetition(Repetition.REQUIRED)
+          val passed = column.getCurrentDefinitionLevel == column.getDescriptor.getMaxDefinitionLevel
+          ((nocheck || passed) && predicate(column.getFloat)) match {
             case true => {
               pipe.pipe(column.getFloat)
               true
@@ -93,7 +110,9 @@ abstract class ColumnPredicate(val predicate: (Any) => Boolean, val colIndex: In
       }
       case PrimitiveTypeName.BOOLEAN => {
         () => {
-          predicate(column.getBoolean) match {
+          val nocheck = colType.isRepetition(Repetition.REQUIRED)
+          val passed = column.getCurrentDefinitionLevel == column.getDescriptor.getMaxDefinitionLevel
+          ((nocheck || passed) && predicate(column.getBoolean)) match {
             case true => {
               pipe.pipe(column.getBoolean)
               true

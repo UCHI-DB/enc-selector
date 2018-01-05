@@ -79,6 +79,25 @@ object TPCHSchema {
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "comment")
   )
 
+  val lineitemOptSchema = new MessageType("lineitem",
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "order_key"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "part_key"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "supp_key"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "line_number"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "quantity"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "extended_price"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "discount"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "tax"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "return_flag"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "line_status"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ship_date"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "commit_date"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "receipt_date"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ship_instruct"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ship_mode"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "comment")
+  )
+
   val orderSchema = new MessageType("orders",
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "order_key"),
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "cust_key"),

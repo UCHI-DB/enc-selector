@@ -46,7 +46,10 @@ trait Select {
   (Map[Int, Int], Map[Int, Int], Iterable[Int]) = {
     val projectSchema = SchemaUtils.project(schema, projectIndices)
 
-    val predictSet = p.leaves.map(_.colIndex).toSet
+    val predictSet = p match {
+      case null => Set[Int]()
+      case _ => p.leaves.map(_.colIndex).toSet
+    }
     val projectMap = projectIndices.zipWithIndex.map(i => i._1 -> i._2).toMap
 
     val allColumnSet = predictSet.union(projectMap.keySet)
@@ -58,6 +61,15 @@ trait Select {
     }).map(_._2).toList.sorted
 
     return (columnMap, projectMap, nonPredictIndices)
+  }
+
+  def readColumn(col: ColumnReaderImpl, valid: Boolean): Unit = {
+    if (col.getCurrentDefinitionLevel == col.getDescriptor.getMaxDefinitionLevel) {
+      valid match {
+        case false => col.skip()
+        case true => col.writeCurrentValueToConverter()
+      }
+    }
   }
 }
 
@@ -119,7 +131,15 @@ class VerticalSelect extends Select {
   override def select(input: URI, p: Predicate, schema: MessageType,
                       projectIndices: Array[Int]): ColumnTempTable = {
 
-    val vp = p.asInstanceOf[VPredicate]
+    val vp: VPredicate = p match {
+      case null => null
+      case _ => {
+        p.leaves.zipWithIndex.foreach(p => {
+          p._1.setType(schema.getType(p._2))
+        })
+        p.asInstanceOf[VPredicate]
+      }
+    }
     val recorder = createRecorder(SchemaUtils.project(schema, projectIndices))
 
     val (columnMap, projectMap, nonPredictIndices) = columnMapping(p, schema, projectIndices)
@@ -138,27 +158,31 @@ class VerticalSelect extends Select {
           new ColumnReaderImpl(col._1, rowGroup.getPageReader(col._1), converter, version)
         })
 
-
-        vp.leaves.foreach(leaf => {
-          leaf.setColumn(columns(leaf.colIndex))
-          // Install a pipe to push data that belongs to output columns
-          if (projectMap.containsKey(leaf.colIndex)) {
-            leaf.setPipe(new ColumnTempTablePipe(recorder, leaf.colIndex))
-          }
-        })
-
-        val bitmap = vp.bitmap
-
-        nonPredictIndices.map(columns(_)).foreach(col => {
-          for (count <- 0L until rowGroup.getRowCount) {
-            if (bitmap.test(count)) {
-              col.writeCurrentValueToConverter()
-            } else {
-              col.skip()
+        if (vp != null) {
+          vp.leaves.foreach(leaf => {
+            leaf.setColumn(columns(columnMap.getOrElse(leaf.colIndex, -1)))
+            // Install a pipe to push data that belongs to output columns
+            if (projectMap.containsKey(leaf.colIndex)) {
+              leaf.setPipe(new ColumnTempTablePipe(recorder, leaf.colIndex))
             }
-            col.consume()
-          }
-        })
+          })
+
+          val bitmap = vp.bitmap
+
+          nonPredictIndices.map(columns(_)).foreach(col => {
+            for (count <- 0L until rowGroup.getRowCount) {
+              readColumn(col, bitmap.test(count))
+              col.consume()
+            }
+          })
+        } else {
+          nonPredictIndices.map(columns(_)).foreach(col => {
+            for (count <- 0L until rowGroup.getRowCount) {
+              readColumn(col, true)
+              col.consume()
+            }
+          })
+        }
       }
     })
 
@@ -172,7 +196,15 @@ class HorizontalSelect extends Select {
   override def select(input: URI, p: Predicate, schema: MessageType,
                       projectIndices: Array[Int]): RowTempTable = {
 
-    val hp = p.asInstanceOf[HPredicate]
+    val hp: HPredicate = p match {
+      case null => null
+      case _ => {
+        p.leaves.zipWithIndex.foreach(p => {
+          p._1.setType(schema.getType(p._2))
+        })
+        p.asInstanceOf[HPredicate]
+      }
+    }
     val projectSchema = SchemaUtils.project(schema, projectIndices)
     val recorder = createRecorder(projectSchema)
 
@@ -194,31 +226,41 @@ class HorizontalSelect extends Select {
             new ColumnReaderImpl(col._1, rowGroup.getPageReader(col._1), converter, version)
           })
 
-        hp.leaves.foreach(leaf => {
-          leaf.setColumn(columns(leaf.colIndex))
-          if (projectMap.containsKey(leaf.colIndex)) {
-            leaf.setPipe(new RowTempTablePipe(recorder, columnMap.getOrElse(leaf.colIndex, -1)));
-          }
-        })
+        if (hp != null) {
+          hp.leaves.foreach(leaf => {
+            leaf.setColumn(columns(columnMap.getOrElse(leaf.colIndex, -1)))
+            if (projectMap.containsKey(leaf.colIndex)) {
+              leaf.setPipe(new RowTempTablePipe(recorder, columnMap.getOrElse(leaf.colIndex, -1)));
+            }
+          })
 
 
-        for (count <- 0L until rowGroup.getRowCount) {
-          hp.value match {
-            case true => {
-              recorder.start()
-              nonPredictIndices.map(columns(_)).foreach(col => {
-                col.writeCurrentValueToConverter()
+          for (count <- 0L until rowGroup.getRowCount) {
+            hp.value match {
+              case true => {
+                recorder.start()
+                nonPredictIndices.map(columns(_)).foreach(col => {
+                  readColumn(col, false)
+                  col.consume()
+                })
+                recorder.end()
+              }
+              case _ => nonPredictIndices.map(columns(_)).foreach(col => {
+                readColumn(col, true)
                 col.consume()
               })
-              recorder.end()
             }
-            case _ => nonPredictIndices.map(columns(_)).foreach(col => {
-              col.skip()
+          }
+        } else {
+          for (count <- 0L until rowGroup.getRowCount) {
+            recorder.start()
+            nonPredictIndices.map(columns(_)).foreach(col => {
+              readColumn(col, true)
               col.consume()
             })
+            recorder.end()
           }
         }
-
       }
     })
     return recorder
