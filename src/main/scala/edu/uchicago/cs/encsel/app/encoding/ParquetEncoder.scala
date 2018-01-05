@@ -6,7 +6,7 @@ import java.util
 import edu.uchicago.cs.encsel.classify.nn.NNPredictor
 import edu.uchicago.cs.encsel.dataset.column.ColumnReaderFactory
 import edu.uchicago.cs.encsel.dataset.feature.{Features, Filter}
-import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.dataset.schema.Schema
 import edu.uchicago.cs.encsel.model.{DataType, IntEncoding, StringEncoding}
 import org.apache.parquet.column.Encoding

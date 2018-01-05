@@ -14,19 +14,20 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package edu.uchicago.cs.encsel.query.tpch
+package edu.uchicago.cs.encsel.query.tpch.scripts
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.EncReaderProcessor
+import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.RowTempTable
+import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import org.apache.parquet.VersionParser.ParsedVersion
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore
@@ -39,7 +40,7 @@ import scala.collection.JavaConversions._
 /**
   * Look for a value with selectivity 5%, 10%, 25%, 50%, 75% and 90%
   */
-object DataDist extends App {
+object Selectivity extends App {
 
   val schema = TPCHSchema.lineitemSchema
   //  val inputFolder = "/home/harper/TPCH/"
@@ -51,10 +52,16 @@ object DataDist extends App {
 
   val recorder = new RowTempTable(schema);
 
-  val thresholds = Array(0.05, 0.1, 0.25, 0.5, 0.75, 0.9)
+  val minimal = 0L
 
-  var sum = 0.0
+  val selectivities = Array(0.05, 0.1, 0.25, 0.5, 0.75, 0.9)
+  var selCounts: Array[Long] = null
   var count = 0L
+  var selCount = 0L
+
+
+  val step = 50
+  var sum = 0.0
 
   var max = Double.MinValue
   var min = Double.MaxValue
@@ -92,9 +99,18 @@ object DataDist extends App {
     }
   })
   val mean = sum / count
-  var varsum = 0.0
-  // Compute Variance
+
+  val serve = (max - min).toDouble / count
+
+  var thresholds = Array.fill[Double](selectivities.length)(max)
+  var thresCounter = Array.fill[Long](selectivities.length)(0)
+
   ParquetReaderHelper.read(file, new EncReaderProcessor() {
+    override def processFooter(footer: Footer): Unit = {
+      super.processFooter(footer)
+      count = footer.getParquetMetadata.getBlocks.map(_.getRowCount).sum
+      selCounts = selectivities.map(i => (i * count).toLong)
+    }
 
     override def processRowGroup(version: ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
       val col = schema.getColumns()(colIndex)
@@ -103,22 +119,40 @@ object DataDist extends App {
 
       for (counter <- 0L until meta.getRowCount) {
 
-        col.getType match {
+        val current: Double = col.getType match {
           case PrimitiveTypeName.INT32 => {
-            varsum += Math.pow(reader.getInteger - mean, 2)
+            reader.getInteger
           }
           case PrimitiveTypeName.DOUBLE => {
-            varsum += Math.pow(reader.getDouble - mean, 2)
+            reader.getDouble
           }
           case _ => throw new IllegalArgumentException()
+        }
+
+        for (i <- 0 until thresholds.length) {
+          var thres = thresholds(i)
+          var thresCount = thresCounter(i) + 1
+          val thresUpper = selCounts(i)
+          if (current < thres) {
+            if (thresCount < thresUpper) {
+              thres = Math.max(thres, current)
+            } else {
+              // Already used up, now need to shrink the size
+              val subtract = step
+              thres -= subtract
+              thresCount -= Math.ceil(subtract / serve).toLong
+            }
+          }
+          thresholds(i) = thres
+          thresCounter(i) = thresCount
         }
       }
     }
   })
 
-  varsum = varsum / count
-  println(max)
-  println(min)
-  println(mean)
-  println(varsum)
+  println(step)
+  println(serve)
+  println(selCounts.mkString(","))
+  println(thresCounter.mkString(","))
+  println(thresholds.mkString(","))
 }

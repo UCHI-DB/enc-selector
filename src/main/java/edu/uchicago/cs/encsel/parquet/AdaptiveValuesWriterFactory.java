@@ -20,7 +20,7 @@
  *     Hao Jiang - initial API and implementation
  *
  */
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.parquet;
 
 import static org.apache.parquet.column.Encoding.PLAIN;
 import static org.apache.parquet.column.Encoding.RLE_DICTIONARY;

@@ -20,12 +20,9 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.parquet;
 
-import org.apache.parquet.VersionParser;
-import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.hadoop.Footer;
-import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.schema.MessageType;
 
 import java.util.Map;

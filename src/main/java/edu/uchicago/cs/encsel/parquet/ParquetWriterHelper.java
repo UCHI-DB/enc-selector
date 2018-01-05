@@ -20,9 +20,8 @@
  *     Hao Jiang - initial API and implementation
  *
  */
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.parquet;
 
-import edu.uchicago.cs.encsel.dataset.parquet.AdaptiveValuesWriterFactory.EncodingSetting;
 import edu.uchicago.cs.encsel.model.FloatEncoding;
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.LongEncoding;

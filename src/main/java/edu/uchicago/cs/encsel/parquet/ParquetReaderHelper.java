@@ -1,4 +1,4 @@
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.parquet;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -6,14 +6,10 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
-import org.apache.parquet.column.ColumnReader;
-import org.apache.parquet.column.impl.ColumnReaderImpl;
 import org.apache.parquet.column.page.PageReadStore;
-import org.apache.parquet.column.page.PageReader;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
-import org.apache.parquet.hadoop.metadata.ColumnChunkMetaData;
 import org.apache.parquet.hadoop.util.HiddenFileFilter;
 
 import java.io.IOException;

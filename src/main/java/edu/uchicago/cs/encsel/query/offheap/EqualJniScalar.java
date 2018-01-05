@@ -14,21 +14,27 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.query.offheap;
 
-import org.apache.parquet.VersionParser;
-import org.apache.parquet.column.page.PageReadStore;
-import org.apache.parquet.hadoop.Footer;
-import org.apache.parquet.hadoop.metadata.BlockMetaData;
+import java.nio.ByteBuffer;
 
-public interface ReaderProcessor {
-    void processFooter(Footer footer);
+public class EqualJniScalar implements Predicate {
 
-    void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup);
+    private int target;
+    private int entryWidth;
+
+    public EqualJniScalar(int target, int bitWidth) {
+        this.target = target;
+        this.entryWidth = entryWidth;
+        System.loadLibrary("EqualJniScalar");
+    }
+
+    public native ByteBuffer execute(ByteBuffer input, int offset, int size);
 }

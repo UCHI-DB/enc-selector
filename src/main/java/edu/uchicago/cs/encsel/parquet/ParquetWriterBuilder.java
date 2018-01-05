@@ -20,7 +20,7 @@
  *     Hao Jiang - initial API and implementation
  *
  */
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.parquet;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -29,7 +29,6 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.column.ParquetProperties;
-import org.apache.parquet.column.values.ValuesWriter;
 import org.apache.parquet.column.values.factory.ValuesWriterFactory;
 import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.ParquetWriter.Builder;

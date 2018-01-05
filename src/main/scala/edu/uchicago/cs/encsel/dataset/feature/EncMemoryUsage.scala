@@ -28,7 +28,7 @@ import java.net.URI
 
 import com.sun.tools.attach.{AttachNotSupportedException, VirtualMachine}
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetWriterHelper
+import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.tool.mem.JMXMemoryMonitor

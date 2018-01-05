@@ -1,4 +1,4 @@
-package edu.uchicago.cs.encsel.dataset.parquet;
+package edu.uchicago.cs.encsel.parquet;
 
 import org.apache.parquet.column.Encoding;
 

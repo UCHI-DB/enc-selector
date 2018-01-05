@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.dataset.feature
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetWriterHelper
+import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.model._
 
 /**

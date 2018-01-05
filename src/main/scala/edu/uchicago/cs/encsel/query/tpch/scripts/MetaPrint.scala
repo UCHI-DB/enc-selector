@@ -21,12 +21,13 @@
  *
  */
 
-package edu.uchicago.cs.encsel.query.tpch
+package edu.uchicago.cs.encsel.query.tpch.scripts
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper}
+import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
+import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore

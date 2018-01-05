@@ -14,15 +14,21 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License,
+ * under the License.
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
- *
  */
 
-package edu.uchicago.cs.encsel.query.tpch
+package edu.uchicago.cs.encsel.parquet;
 
-object HScanVsVScan extends App {
+import org.apache.parquet.VersionParser;
+import org.apache.parquet.column.page.PageReadStore;
+import org.apache.parquet.hadoop.Footer;
+import org.apache.parquet.hadoop.metadata.BlockMetaData;
 
+public interface ReaderProcessor {
+    void processFooter(Footer footer);
+
+    void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup);
 }

@@ -1,5 +1,6 @@
 package edu.uchicago.cs.encsel.query.tpch
 
+import edu.uchicago.cs.encsel.query.offheap.EqualInt
 import org.hamcrest.CoreMatchers._
 import org.junit.Assert._
 import org.junit.Test

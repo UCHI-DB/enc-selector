@@ -24,7 +24,7 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
+import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
 import edu.uchicago.cs.encsel.query.{ColumnTempTable, PipePrimitiveConverter, TempTable}
 import edu.uchicago.cs.encsel.query.util.{DataUtils, SchemaUtils}
 import org.apache.parquet.VersionParser

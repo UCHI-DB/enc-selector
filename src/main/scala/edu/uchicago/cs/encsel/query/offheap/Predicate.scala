@@ -21,15 +21,10 @@
  *
  */
 
-package edu.uchicago.cs.encsel.query.tpch
+package edu.uchicago.cs.encsel.query.offheap
 
-/* Make a join between order and line item
- */
-object JoinGenData extends App {
+import java.nio.ByteBuffer
 
-
-}
-
-object JoinPerformanceTest extends App {
-
+trait Predicate {
+  def execute(input: ByteBuffer, offset: Int, size: Int): ByteBuffer
 }

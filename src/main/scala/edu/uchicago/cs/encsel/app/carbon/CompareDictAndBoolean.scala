@@ -27,7 +27,7 @@ import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.Config
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.parquet.{ParquetWriterBuilder, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.parquet.{ParquetWriterBuilder, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
