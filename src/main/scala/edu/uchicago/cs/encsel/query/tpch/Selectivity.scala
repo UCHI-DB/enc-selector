@@ -25,8 +25,7 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.RowTempTable
 import org.apache.parquet.VersionParser.ParsedVersion
 import org.apache.parquet.column.impl.ColumnReaderImpl
@@ -66,8 +65,9 @@ object Selectivity extends App {
   var max = Double.MinValue
   var min = Double.MaxValue
   // Compute Sum and Mean
-  ParquetReaderHelper.read(file, new ReaderProcessor() {
+  ParquetReaderHelper.read(file, new EncReaderProcessor() {
     override def processFooter(footer: Footer): Unit = {
+      super.processFooter(footer)
       count = footer.getParquetMetadata.getBlocks.map(_.getRowCount).sum
     }
 
@@ -104,8 +104,9 @@ object Selectivity extends App {
   var thresholds = Array.fill[Double](selectivities.length)(max)
   var thresCounter = Array.fill[Long](selectivities.length)(0)
 
-  ParquetReaderHelper.read(file, new ReaderProcessor() {
+  ParquetReaderHelper.read(file, new EncReaderProcessor() {
     override def processFooter(footer: Footer): Unit = {
+      super.processFooter(footer)
       count = footer.getParquetMetadata.getBlocks.map(_.getRowCount).sum
       selCounts = selectivities.map(i => (i * count).toLong)
     }

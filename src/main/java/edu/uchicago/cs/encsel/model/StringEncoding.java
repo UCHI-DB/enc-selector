@@ -22,6 +22,19 @@
  */
 package edu.uchicago.cs.encsel.model;
 
+import org.apache.parquet.column.Encoding;
+
 public enum StringEncoding {
-	PLAIN, DICT, DELTA, DELTAL, BITVECTOR
+    PLAIN(Encoding.PLAIN), DICT(Encoding.PLAIN_DICTIONARY), DELTA(Encoding.DELTA_BYTE_ARRAY),
+    DELTAL(Encoding.DELTA_LENGTH_BYTE_ARRAY), BITVECTOR(null);
+
+    private Encoding parquetEncoding;
+
+    StringEncoding(Encoding enc) {
+        this.parquetEncoding = enc;
+    }
+
+    public Encoding parquetEncoding() {
+        return this.parquetEncoding;
+    }
 }

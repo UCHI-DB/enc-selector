@@ -39,34 +39,34 @@ public class ParquetWriterHelperTest {
 
 	@Before
 	public void deleteFile() throws IOException {
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_str.data.DELTAL"));
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_str.data.DICT"));
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_str.data.PLAIN"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_str.data.DELTAL"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_str.data.DICT"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_str.data.PLAIN"));
 
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_int.data.DICT"));
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_int.data.BP"));
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_int.data.DELTABP"));
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_int.data.RLE"));
-		Files.deleteIfExists(Paths.get("src/test/resource/test_col_int.data.PLAIN"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_int.data.DICT"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_int.data.BP"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_int.data.DELTABP"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_int.data.RLE"));
+		Files.deleteIfExists(Paths.get("src/test/resource/coldata/test_col_int.data.PLAIN"));
 	}
 
 	@Test
 	public void testWriteStr() throws IOException {
 
-		String file = "src/test/resource/test_col_str.data";
+		String file = "src/test/resource/coldata/test_col_str.data";
 
 		ParquetWriterHelper.singleColumnString(new File(file).toURI(), StringEncoding.DICT);
 		ParquetWriterHelper.singleColumnString(new File(file).toURI(), StringEncoding.DELTAL);
 		ParquetWriterHelper.singleColumnString(new File(file).toURI(), StringEncoding.PLAIN);
 		
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_str.data.DELTAL")));
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_str.data.DICT")));
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_str.data.PLAIN")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_str.data.DELTAL")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_str.data.DICT")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_str.data.PLAIN")));
 	}
 
 	@Test
 	public void testWriteInt() throws IOException {
-		String file = "src/test/resource/test_col_int.data";
+		String file = "src/test/resource/coldata/test_col_int.data";
 
 		ParquetWriterHelper.singleColumnInt(new File(file).toURI(), IntEncoding.DICT);
 		ParquetWriterHelper.singleColumnInt(new File(file).toURI(), IntEncoding.BP);
@@ -75,15 +75,15 @@ public class ParquetWriterHelperTest {
 		ParquetWriterHelper.singleColumnInt(new File(file).toURI(), IntEncoding.PLAIN);
 		
 
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_int.data.DICT")));
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_int.data.BP")));
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_int.data.DELTABP")));
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_int.data.RLE")));
-		assertTrue(Files.exists(Paths.get("src/test/resource/test_col_int.data.PLAIN")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_int.data.DICT")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_int.data.BP")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_int.data.DELTABP")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_int.data.RLE")));
+		assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_int.data.PLAIN")));
 	}
 	
 	@Test
 	public void testDetermineBitLength() {
-		assertEquals(13,ParquetWriterHelper.scanIntBitLength(new File("src/test/resource/bitlength_test").toURI()));
+		assertEquals(13,ParquetWriterHelper.scanIntBitLength(new File("src/test/resource/coldata/bitlength_test").toURI()));
 	}
 }

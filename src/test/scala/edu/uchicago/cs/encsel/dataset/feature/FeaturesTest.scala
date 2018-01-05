@@ -13,8 +13,8 @@ class FeaturesTest {
 
   @Test
   def testFeatures: Unit = {
-    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_int.data").toURI
+    val col = new Column(new File("src/test/resource/coldata/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
+    col.colFile = new File("src/test/resource/coldata/test_col_int.data").toURI
 
     val features = Features.extract(col)
     val fa = features.toArray
@@ -43,8 +43,8 @@ class FeaturesTest {
 
   @Test
   def testFeaturesWithFilter: Unit = {
-    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_int.data").toURI
+    val col = new Column(new File("src/test/resource/coldata/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
+    col.colFile = new File("src/test/resource/coldata/test_col_int.data").toURI
 
     val filter = Filter.firstNFilter(5)
 
@@ -77,10 +77,10 @@ class FeaturesTest {
 
   @Test
   def testFilterFile: Unit = {
-    Features.filterFile(new File("src/test/resource/test_col_int.data").toURI,
-      new File("src/test/resource/test_col_int.data.filtered").toURI, Filter.firstNFilter(5))
+    Features.filterFile(new File("src/test/resource/coldata/test_col_int.data").toURI,
+      new File("src/test/resource/coldata/test_col_int.data.filtered").toURI, Filter.firstNFilter(5))
 
-    val lines = Source.fromFile(new File("src/test/resource/test_col_int.data.filtered")).getLines().toArray
+    val lines = Source.fromFile(new File("src/test/resource/coldata/test_col_int.data.filtered")).getLines().toArray
     assertEquals(5,lines.size)
 
     assertEquals("34",lines(0))

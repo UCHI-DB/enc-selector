@@ -135,7 +135,7 @@ public class ParquetWriterHelper {
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BOOLEAN, "value"));
 
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema, false);
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
 
         String line;
         List<String> holder = new ArrayList<>();
@@ -160,12 +160,13 @@ public class ParquetWriterHelper {
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "value"));
 
-        EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
-        es.intEncoding = encoding;
-        es.intBitLength = scanIntBitLength(input);
+        String type = schema.getColumns().get(0).toString();
+        EncContext.encoding.get().put(type, encoding.parquetEncoding());
+        int bitLength = scanIntBitLength(input);
+        int bound = (1 << bitLength) - 1;
+        EncContext.context.get().put(type, new Object[]{String.valueOf(bitLength), String.valueOf(bound)});
 
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema,
-                encoding == IntEncoding.DICT);
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
 
         String line;
         List<String> holder = new ArrayList<>();
@@ -190,12 +191,13 @@ public class ParquetWriterHelper {
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT64, "value"));
 
-        EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
-        es.longEncoding = encoding;
-        es.longBitLength = scanLongBitLength(input);
+        String type = schema.getColumns().get(0).toString();
+        EncContext.encoding.get().put(type, encoding.parquetEncoding());
+        int bitLength = scanLongBitLength(input);
+        int bound = (1 << bitLength) - 1;
+        EncContext.context.get().put(type, new Object[]{String.valueOf(bitLength), String.valueOf(bound)});
 
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema,
-                encoding == LongEncoding.DICT);
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
 
         String line;
         List<String> holder = new ArrayList<>();
@@ -220,10 +222,11 @@ public class ParquetWriterHelper {
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "value"));
 
-        EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
-        es.stringEncoding = encoding;
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema,
-                encoding == StringEncoding.DICT);
+        String type = schema.getColumns().get(0).toString();
+        EncContext.encoding.get().put(type, encoding.parquetEncoding());
+
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
+
 
         String line;
         List<String> holder = new ArrayList<>();
@@ -248,10 +251,10 @@ public class ParquetWriterHelper {
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "value"));
 
-        EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
-        es.floatEncoding = encoding;
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema,
-                encoding == FloatEncoding.DICT);
+        String type = schema.getColumns().get(0).toString();
+        EncContext.encoding.get().put(type, encoding.parquetEncoding());
+
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
 
         String line;
         List<String> holder = new ArrayList<>();
@@ -276,10 +279,10 @@ public class ParquetWriterHelper {
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.FLOAT, "value"));
 
-        EncodingSetting es = AdaptiveValuesWriterFactory.encodingSetting.get();
-        es.floatEncoding = encoding;
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema,
-                encoding == FloatEncoding.DICT);
+        String type = schema.getColumns().get(0).toString();
+        EncContext.encoding.get().put(type, encoding.parquetEncoding());
+
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
 
         String line;
         List<String> holder = new ArrayList<>();

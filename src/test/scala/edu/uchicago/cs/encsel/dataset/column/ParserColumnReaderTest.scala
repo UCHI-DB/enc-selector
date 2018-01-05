@@ -13,10 +13,10 @@ class ParserColumnReaderTest {
 
   @Test
   def testParseColumnReader1: Unit = {
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test_col_reader.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/filefmt/test_col_reader.schema").toURI)
 
     val cr = new CSVColumnReader
-    var cols = cr.readColumn(new File("src/test/resource/test_col_reader.csv").toURI, schema)
+    var cols = cr.readColumn(new File("src/test/resource/filefmt/test_col_reader.csv").toURI, schema)
 
     assertEquals(5, cols.size)
 
@@ -25,7 +25,7 @@ class ParserColumnReaderTest {
     })
 
     schema.hasHeader = false
-    cols = cr.readColumn(new File("src/test/resource/test_col_reader.csv").toURI, schema)
+    cols = cr.readColumn(new File("src/test/resource/filefmt/test_col_reader.csv").toURI, schema)
 
     assertEquals(5, cols.size)
 
@@ -37,10 +37,10 @@ class ParserColumnReaderTest {
 
   @Test
   def testParseColumnReader2: Unit = {
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test_json_parser.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/filefmt/test_json_parser.schema").toURI)
 
     val cr = new JsonColumnReader
-    val cols = cr.readColumn(new File("src/test/resource/test_json_parser.json").toURI, schema)
+    val cols = cr.readColumn(new File("src/test/resource/filefmt/test_json_parser.json").toURI, schema)
 
     assertEquals(3, cols.size)
 

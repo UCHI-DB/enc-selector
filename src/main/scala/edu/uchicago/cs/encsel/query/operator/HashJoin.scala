@@ -24,8 +24,7 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query._
 import edu.uchicago.cs.encsel.query.util.{DataUtils, SchemaUtils}
 import org.apache.parquet.VersionParser
@@ -53,8 +52,7 @@ class HashJoin extends Join {
     val outputRecorder = new ColumnTempTable(joinedSchema)
 
     // Build Hash Table
-    ParquetReaderHelper.read(hashFile, new ReaderProcessor() {
-      override def processFooter(footer: Footer) = {}
+    ParquetReaderHelper.read(hashFile, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore) = {
         val hashRowReaders = hashProjectSchema.getColumns.map(col => new ColumnReaderImpl(col, rowGroup.getPageReader(col),
@@ -76,6 +74,7 @@ class HashJoin extends Join {
         for (i <- 0L until rowGroup.getRowCount) {
           val hashKey = DataUtils.readValue(hashKeyReader)
 
+          hashtable.put(hashKey, hashRecorder.getCurrentRecord)
           hashRecorder.start()
           hashRowReaders.foreach(reader => {
             reader.writeCurrentValueToConverter()
@@ -83,14 +82,12 @@ class HashJoin extends Join {
           })
           hashRecorder.end()
 
-          hashtable.put(hashKey, hashRecorder.getCurrentRecord)
         }
       }
     })
 
     // Probe Hash Table
-    ParquetReaderHelper.read(probeFile, new ReaderProcessor() {
-      override def processFooter(footer: Footer) = {}
+    ParquetReaderHelper.read(probeFile, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore) = {
         val probeReaders = probeProjectSchema.getColumns.zipWithIndex

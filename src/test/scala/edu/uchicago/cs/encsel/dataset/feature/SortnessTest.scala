@@ -15,7 +15,7 @@ class SortnessTest {
   @Test
   def testExtract: Unit = {
     val col = new Column(null, -1, "", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_int.data").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_int.data").toURI
     val features = new Sortness(2).extract(col).toArray
 
     assertEquals(5, features.length)
@@ -68,7 +68,7 @@ class SortnessTest {
   @Test
   def testExtractEmptyColumn: Unit = {
     val col = new Column(null, -1, "", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_empty.dat").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_empty.dat").toURI
     val features = new Sortness(2).extract(col).toArray
 
     assertEquals(5, features.length)

@@ -24,8 +24,7 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
 import edu.uchicago.cs.encsel.query.{ColumnTempTable, PipePrimitiveConverter, TempTable}
 import edu.uchicago.cs.encsel.query.util.{DataUtils, SchemaUtils}
 import org.apache.parquet.VersionParser
@@ -63,8 +62,7 @@ class BlockNestedLoopJoin(val hash: (Any) => Long, val numBlock: Int) extends Jo
       rightBlocks(i) = new ColumnTempTable(rightProjectSchema)
     }
     // Fill in left group
-    ParquetReaderHelper.read(left, new ReaderProcessor() {
-      override def processFooter(footer: Footer) = {}
+    ParquetReaderHelper.read(left, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore) = {
         val colConverters = (0 until leftProjectSchema.getColumns.size())
@@ -100,8 +98,7 @@ class BlockNestedLoopJoin(val hash: (Any) => Long, val numBlock: Int) extends Jo
       }
     })
     // Fill in right group
-    ParquetReaderHelper.read(right, new ReaderProcessor() {
-      override def processFooter(footer: Footer) = {}
+    ParquetReaderHelper.read(right, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore) = {
         val colConverters = (0 until rightProjectSchema.getColumns.size())

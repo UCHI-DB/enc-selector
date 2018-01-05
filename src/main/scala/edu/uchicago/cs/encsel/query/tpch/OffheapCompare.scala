@@ -27,8 +27,7 @@ import java.io.{File, IOException}
 import java.lang.management.ManagementFactory
 import java.nio.{ByteBuffer, ByteOrder}
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.{Bitmap, NonePrimitiveConverter}
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.ColumnDescriptor
@@ -237,10 +236,7 @@ object Offheap extends App {
       val cpustart = mbean.getCurrentThreadCpuTime
       val userstart = mbean.getCurrentThreadUserTime
 
-      ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new ReaderProcessor() {
-        override def processFooter(footer: Footer): Unit = {
-
-        }
+      ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new EncReaderProcessor() {
 
         override def processRowGroup(version: VersionParser.ParsedVersion,
                                      meta: BlockMetaData,
@@ -280,10 +276,7 @@ object Onheap extends App {
     val cpustart = mbean.getCurrentThreadCpuTime
     val userstart = mbean.getCurrentThreadUserTime
 
-    ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new ReaderProcessor() {
-      override def processFooter(footer: Footer): Unit = {
-
-      }
+    ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion,
                                    meta: BlockMetaData,

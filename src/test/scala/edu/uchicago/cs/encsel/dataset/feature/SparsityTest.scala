@@ -12,7 +12,7 @@ class SparsityTest {
   @Test
   def testRun(): Unit = {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_sparsity.data").toURI
+    col.colFile = new File("src/test/resource/feature/test_col_sparsity.data").toURI
 
     val features = Sparsity.extract(col)
     assertEquals(3, features.size)
@@ -35,7 +35,7 @@ class SparsityTest {
   @Test
   def testEmptyInput: Unit = {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_empty.dat").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_empty.dat").toURI
 
     val features = Sparsity.extract(col, "")
     assertEquals(3, features.size)

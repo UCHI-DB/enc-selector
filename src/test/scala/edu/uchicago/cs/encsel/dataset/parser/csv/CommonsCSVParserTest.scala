@@ -12,8 +12,8 @@ class CommonsCSVParserTest {
 
   @Test
   def testParse(): Unit = {
-    val records = new CommonsCSVParser().parse(new File("src/test/resource/test_csv_parser.csv").toURI,
-      Schema.fromParquetFile(new File("src/test/resource/test_csv_parser.schema").toURI)).toArray
+    val records = new CommonsCSVParser().parse(new File("src/test/resource/filefmt/test_csv_parser.csv").toURI,
+      Schema.fromParquetFile(new File("src/test/resource/filefmt/test_csv_parser.schema").toURI)).toArray
     assertEquals(7, records.length)
     assertEquals("""What a said "Not Good"""", records(0)(1))
   }
@@ -21,7 +21,7 @@ class CommonsCSVParserTest {
   @Test
   def testGuessHeader: Unit = {
     val parser = new CommonsCSVParser()
-    val records = parser.parse(new File("src/test/resource/test_csv_parser.csv").toURI,
+    val records = parser.parse(new File("src/test/resource/filefmt/test_csv_parser.csv").toURI,
       null).toArray
     val guessedHeader = parser.guessHeaderName
     assertArrayEquals(Array[Object]("A", "B", "C", "D", "E"), guessedHeader.toArray[Object])

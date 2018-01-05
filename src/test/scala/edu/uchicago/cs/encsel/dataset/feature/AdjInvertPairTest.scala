@@ -37,7 +37,7 @@ class AdjInvertPairTest {
   @Test
   def testExtract: Unit = {
     val col = new Column(null, -1, "", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_int.data").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_int.data").toURI
     val features = AdjInvertPair.extract(col).toArray
 
     assertEquals(3, features.length)
@@ -57,7 +57,7 @@ class AdjInvertPairTest {
   @Test
   def testExtractEmpty: Unit = {
     val col = new Column(null, -1, "", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/test_col_empty.dat").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_empty.dat").toURI
     val features = AdjInvertPair.extract(col).toArray
 
     assertEquals(3, features.length)

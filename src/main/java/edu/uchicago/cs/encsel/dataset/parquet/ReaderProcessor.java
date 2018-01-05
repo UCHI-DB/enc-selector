@@ -14,29 +14,21 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License,
+ * under the License.
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
- *
  */
-package edu.uchicago.cs.encsel.model;
 
-import org.apache.parquet.column.Encoding;
+package edu.uchicago.cs.encsel.dataset.parquet;
 
-public enum IntEncoding {
-    PLAIN(Encoding.PLAIN), DICT(Encoding.PLAIN_DICTIONARY),
-    BP(Encoding.BIT_PACKED), RLE(Encoding.RLE),
-    DELTABP(Encoding.DELTA_BINARY_PACKED), BITVECTOR(null);
+import org.apache.parquet.VersionParser;
+import org.apache.parquet.column.page.PageReadStore;
+import org.apache.parquet.hadoop.Footer;
+import org.apache.parquet.hadoop.metadata.BlockMetaData;
 
-    private Encoding parquetEncoding;
+public interface ReaderProcessor {
+    void processFooter(Footer footer);
 
-    IntEncoding(Encoding enc) {
-        this.parquetEncoding = enc;
-    }
-
-    public Encoding parquetEncoding() {
-        return this.parquetEncoding;
-    }
-
+    void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup);
 }

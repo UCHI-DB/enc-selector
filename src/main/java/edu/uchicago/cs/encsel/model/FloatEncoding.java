@@ -22,6 +22,18 @@
  */
 package edu.uchicago.cs.encsel.model;
 
+import org.apache.parquet.column.Encoding;
+
 public enum FloatEncoding {
-	PLAIN, DICT, BITVECTOR
+    PLAIN(Encoding.PLAIN), DICT(Encoding.PLAIN_DICTIONARY), BITVECTOR(null);
+
+    private Encoding parquetEncoding;
+
+    FloatEncoding(Encoding enc) {
+        this.parquetEncoding = enc;
+    }
+
+    public Encoding parquetEncoding() {
+        return this.parquetEncoding;
+    }
 }

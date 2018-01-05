@@ -50,7 +50,7 @@ object DataUtils {
         case l: Long => target.addLong(l)
         case f: Float => target.addFloat(f)
         case bo: Boolean => target.addBoolean(bo)
-        case _ => throw new IllegalArgumentException
+        case _ => throw new IllegalArgumentException(data.getClass.getSimpleName)
       }
     }
   }

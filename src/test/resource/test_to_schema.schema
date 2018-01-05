@@ -1,6 +1,0 @@
-message m {
-	has_header
-	required	int32	Wa;
-	required	double	Ma;
-	required	binary	Ka;
-}

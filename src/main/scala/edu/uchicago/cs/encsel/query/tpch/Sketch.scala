@@ -2,8 +2,7 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
-import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, ParquetReaderHelper, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.dataset.parquet.{EncContext, EncReaderProcessor, ParquetReaderHelper, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.Encoding
@@ -39,8 +38,7 @@ object Sketch extends App {
 
   def read: Unit = {
     ParquetReaderHelper.read(new File("/home/harper/temp/test.tmp.PLAIN").toURI,
-      new ReaderProcessor() {
-        override def processFooter(footer: Footer): Unit = {}
+      new EncReaderProcessor() {
 
         override def processRowGroup(version: VersionParser.ParsedVersion,
                                      meta: BlockMetaData, rowGroup: PageReadStore): Unit = {

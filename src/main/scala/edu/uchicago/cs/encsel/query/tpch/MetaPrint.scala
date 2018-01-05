@@ -25,8 +25,7 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.impl.ColumnReaderImpl
@@ -41,8 +40,9 @@ object MetaPrint extends App {
   var rgCounter = 0
 
   ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI,
-    new ReaderProcessor() {
+    new EncReaderProcessor() {
       override def processFooter(footer: Footer): Unit = {
+        super.processFooter(footer)
         println(footer.getParquetMetadata.getBlocks.map(_.getRowCount).sum)
       }
 

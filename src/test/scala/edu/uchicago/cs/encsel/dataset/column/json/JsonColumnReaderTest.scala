@@ -14,9 +14,9 @@ class JsonColumnReaderTest {
   def testReadColumn(): Unit = {
 
 
-    val sourceFile = new File("src/test/resource/test_json_parser.json").toURI
+    val sourceFile = new File("src/test/resource/filefmt/test_json_parser.json").toURI
     val ccr = new JsonColumnReader()
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test_json_parser.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/filefmt/test_json_parser.schema").toURI)
     val cols = ccr.readColumn(sourceFile, schema)
 
     assertEquals(3, cols.size)

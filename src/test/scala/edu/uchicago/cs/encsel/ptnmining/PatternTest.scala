@@ -53,7 +53,7 @@ class PatternTest {
 
   @Test
   def testGenerate: Unit = {
-    val input = Source.fromFile("src/test/resource/pattern_miner_sample").getLines().toSeq
+    val input = Source.fromFile("src/test/resource/pattern/pattern_miner_sample").getLines().toSeq
 
     val pattern = Pattern.generate(input.map(Tokenizer.tokenize(_).toSeq))
 

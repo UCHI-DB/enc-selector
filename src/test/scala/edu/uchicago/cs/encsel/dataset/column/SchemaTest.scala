@@ -11,7 +11,7 @@ class SchemaTest {
 
   @Test
   def testFromParquetFile(): Unit = {
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/schema/test.schema").toURI)
     assertEquals(22, schema.columns.length)
     assertTrue(schema.hasHeader)
 
@@ -21,7 +21,7 @@ class SchemaTest {
 
   @Test
   def testFromParquetFile2(): Unit = {
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test2.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/schema/test2.schema").toURI)
     assertEquals(7, schema.columns.length)
     assertTrue(schema.hasHeader)
 
@@ -40,7 +40,7 @@ class SchemaTest {
 
   @Test
   def testFromParquetFile3(): Unit = {
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test3.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/schema/test3.schema").toURI)
     assertEquals(22, schema.columns.length)
     assertFalse(schema.hasHeader)
 

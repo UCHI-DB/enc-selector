@@ -24,8 +24,7 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
 import edu.uchicago.cs.encsel.query.util.SchemaUtils
 import edu.uchicago.cs.encsel.query.{RowTempTable, _}
 import org.apache.parquet.VersionParser.ParsedVersion
@@ -144,8 +143,7 @@ class VerticalSelect extends Select {
 
     val (columnMap, projectMap, nonPredictIndices) = columnMapping(p, schema, projectIndices)
 
-    ParquetReaderHelper.read(input, new ReaderProcessor {
-      override def processFooter(footer: Footer): Unit = {}
+    ParquetReaderHelper.read(input, new EncReaderProcessor {
 
       override def processRowGroup(version: ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
         val columns = schema.getColumns.zipWithIndex.filter(col => {
@@ -240,13 +238,13 @@ class HorizontalSelect extends Select {
               case true => {
                 recorder.start()
                 nonPredictIndices.map(columns(_)).foreach(col => {
-                  readColumn(col, false)
+                  readColumn(col, true)
                   col.consume()
                 })
                 recorder.end()
               }
               case _ => nonPredictIndices.map(columns(_)).foreach(col => {
-                readColumn(col, true)
+                readColumn(col, false)
                 col.consume()
               })
             }

@@ -14,9 +14,9 @@ class CSVColumnReaderTest {
 
   @Test
   def testReadColumn(): Unit = {
-    val sourceFile = new File("src/test/resource/test_col_reader.csv").toURI
+    val sourceFile = new File("src/test/resource/filefmt/test_col_reader.csv").toURI
     val ccr = new CSVColumnReader()
-    val schema = Schema.fromParquetFile(new File("src/test/resource/test_col_reader.schema").toURI)
+    val schema = Schema.fromParquetFile(new File("src/test/resource/filefmt/test_col_reader.schema").toURI)
     val cols = ccr.readColumn(sourceFile, schema)
 
     assertEquals(5, cols.size)

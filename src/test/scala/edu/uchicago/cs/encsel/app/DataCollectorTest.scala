@@ -36,7 +36,7 @@ class DataCollectorForTest extends DataCollector {
 object DataCollectorTest {
   @BeforeClass
   def deleteFile(): Unit = {
-    Files.deleteIfExists(Paths.get(new File("src/test/resource/content.csv.done").toURI))
+    Files.deleteIfExists(Paths.get(new File("src/test/resource/filefmt/content.csv.done").toURI))
   }
 }
 
@@ -44,8 +44,8 @@ class DataCollectorTest {
 
   @Test
   def testDone(): Unit = {
-    val srcpath = new File("src/test/resource/test_columner.csv").toPath
-    val srcdone = new File("src/test/resource/test_columner.csv.done").toPath
+    val srcpath = new File("src/test/resource/filefmt/test_columner.csv").toPath
+    val srcdone = new File("src/test/resource/filefmt/test_columner.csv.done").toPath
     val srcuri = srcpath.toUri
     Files.deleteIfExists(srcdone)
 
@@ -63,7 +63,7 @@ class DataCollectorTest {
 
     //    Files.deleteIfExists(Paths.get(new File("src/test/resource/content.csv.done").toURI))
 
-    dc.collect(new File("src/test/resource/content.csv").toURI)
+    dc.collect(new File("src/test/resource/filefmt/content.csv").toURI)
     //    assertTrue(Files.exists(Paths.get(new File("src/test/resource/content.csv.done").toURI)))
 
     val columns = dp.load()

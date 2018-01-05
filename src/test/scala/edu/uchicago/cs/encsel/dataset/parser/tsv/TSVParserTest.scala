@@ -20,7 +20,7 @@ class SimpleTSVParserTest {
   @Test
   def testGuessHeader: Unit = {
     val parser = new SimpleTSVParser
-    val records = parser.parse(new File("src/test/resource/test_tsv_parser.tsv").toURI, null).toArray
+    val records = parser.parse(new File("src/test/resource/filefmt/test_tsv_parser.tsv").toURI, null).toArray
     assertArrayEquals(Array[Object]("M", "W", "N", "O"), parser.guessHeaderName.toArray[Object])
     assertEquals(5, records.length)
     assertEquals(4, records(0).length())
@@ -140,7 +140,7 @@ class TSVParserTest {
   @Test
   def testGuessHeader: Unit = {
     val parser = new TSVParser
-    val records = parser.parse(new File("src/test/resource/test_tsv_parser.tsv").toURI, null).toArray
+    val records = parser.parse(new File("src/test/resource/filefmt/test_tsv_parser.tsv").toURI, null).toArray
     assertArrayEquals(Array[Object]("M", "W", "N", "O"), parser.guessHeaderName.toArray[Object])
     assertEquals(5, records.length)
     assertEquals(4, records(0).length())

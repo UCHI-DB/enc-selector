@@ -196,6 +196,14 @@ public enum Encoding {
 
     };
 
+    /**
+     * For RLE, BIT-PACKED, max level is equivalent to max integer bound
+     * Read this information from EncContext, which can be loaded by EncReaderProcessor
+     * @see edu.uchicago.cs.encsel.dataset.parquet.EncReaderProcessor
+     * @param descriptor
+     * @param valuesType
+     * @return
+     */
     int getMaxLevel(ColumnDescriptor descriptor, ValuesType valuesType) {
         int maxLevel;
         switch (valuesType) {
@@ -210,7 +218,6 @@ public enum Encoding {
                     maxLevel = 1;
                     break;
                 }
-                // TODO Modify Parquet Code and put this information in footer. Now just hard code
                 Object[] params = EncContext.context.get().get(descriptor.toString());
                 if(params!= null) {
                     maxLevel = Integer.valueOf(params[1].toString());

@@ -29,6 +29,7 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.column.ParquetProperties;
+import org.apache.parquet.column.values.ValuesWriter;
 import org.apache.parquet.column.values.factory.ValuesWriterFactory;
 import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.ParquetWriter.Builder;
@@ -38,61 +39,49 @@ import org.apache.parquet.schema.MessageType;
 
 public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBuilder> {
 
-	private WriteSupport<List<String>> writeSupport = null;
+    private WriteSupport<List<String>> writeSupport = null;
 
-	private Field field = null;
+    private Field field = null;
 
-	public ParquetWriterBuilder(Path file, MessageType schema) {
-		super(file);
-		writeSupport = new StringWriteSupport(schema);
-		try {
-			field = Builder.class.getDeclaredField("encodingPropsBuilder");
-			field.setAccessible(true);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		getEncodingPropertiesBuilder().withValuesWriterFactory(new AdaptiveValuesWriterFactory());
-	}
-
-	public ParquetWriterBuilder(Path file, MessageType schema, ValuesWriterFactory factory) {
-		super(file);
-		writeSupport = new StringWriteSupport(schema);
-		try {
-			field = Builder.class.getDeclaredField("encodingPropsBuilder");
-			field.setAccessible(true);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+    public ParquetWriterBuilder(Path file, MessageType schema, ValuesWriterFactory factory) {
+        super(file);
+        writeSupport = new StringWriteSupport(schema);
+        try {
+            field = Builder.class.getDeclaredField("encodingPropsBuilder");
+            field.setAccessible(true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         getEncodingPropertiesBuilder().withValuesWriterFactory(factory);
     }
 
-	@Override
-	protected ParquetWriterBuilder self() {
-		return this;
-	}
+    @Override
+    protected ParquetWriterBuilder self() {
+        return this;
+    }
 
-	@Override
-	protected WriteSupport<List<String>> getWriteSupport(Configuration conf) {
-		return writeSupport;
-	}
+    @Override
+    protected WriteSupport<List<String>> getWriteSupport(Configuration conf) {
+        return writeSupport;
+    }
 
-	protected ParquetProperties.Builder getEncodingPropertiesBuilder() {
-		try {
-			return (ParquetProperties.Builder) field.get(this);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    protected ParquetProperties.Builder getEncodingPropertiesBuilder() {
+        try {
+            return (ParquetProperties.Builder) field.get(this);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public static ParquetWriter<List<String>> buildDefault(Path file, MessageType schema, boolean useDictionary)
-			throws IOException {
-		ParquetWriterBuilder builder = new ParquetWriterBuilder(file, schema);
+    public static ParquetWriter<List<String>> buildDefault(Path file, MessageType schema)
+            throws IOException {
+        ParquetWriterBuilder builder = new ParquetWriterBuilder(file, schema, new EncValuesWriterFactory());
 
-		return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
-				.withDictionaryEncoding(useDictionary).withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
-				.withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
-				.withDictionaryPageSize(500 * ParquetWriter.DEFAULT_PAGE_SIZE).build();
-	}
+        return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
+                .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
+                .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
+                .withDictionaryPageSize(500 * ParquetWriter.DEFAULT_PAGE_SIZE).build();
+    }
 
     public static ParquetWriter<List<String>> buildForTable(Path file, MessageType schema)
             throws IOException {

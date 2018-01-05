@@ -47,8 +47,5 @@ public class ParquetReaderHelper {
         }
     }
 
-    public static interface ReaderProcessor {
-        public void processFooter(Footer footer);
-        public void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup);
-    }
+
 }

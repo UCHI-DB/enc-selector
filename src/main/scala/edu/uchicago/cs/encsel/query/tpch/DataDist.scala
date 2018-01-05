@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.query.tpch
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper
-import edu.uchicago.cs.encsel.dataset.parquet.ParquetReaderHelper.ReaderProcessor
+import edu.uchicago.cs.encsel.dataset.parquet.EncReaderProcessor
 import edu.uchicago.cs.encsel.query.RowTempTable
 import org.apache.parquet.VersionParser.ParsedVersion
 import org.apache.parquet.column.impl.ColumnReaderImpl
@@ -59,8 +59,9 @@ object DataDist extends App {
   var max = Double.MinValue
   var min = Double.MaxValue
   // Compute Sum and Mean
-  ParquetReaderHelper.read(file, new ReaderProcessor() {
+  ParquetReaderHelper.read(file, new EncReaderProcessor() {
     override def processFooter(footer: Footer): Unit = {
+      super.processFooter(footer)
       count = footer.getParquetMetadata.getBlocks.map(_.getRowCount).sum
     }
 
@@ -93,9 +94,7 @@ object DataDist extends App {
   val mean = sum / count
   var varsum = 0.0
   // Compute Variance
-  ParquetReaderHelper.read(file, new ReaderProcessor() {
-    override def processFooter(footer: Footer): Unit = {
-    }
+  ParquetReaderHelper.read(file, new EncReaderProcessor() {
 
     override def processRowGroup(version: ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
       val col = schema.getColumns()(colIndex)

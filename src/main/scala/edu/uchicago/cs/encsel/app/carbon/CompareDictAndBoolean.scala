@@ -98,7 +98,7 @@ object CompareDictAndBoolean extends App {
     val schema = new MessageType("record",
       row.zipWithIndex.map(i => new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BOOLEAN, "value_2_%d".format(i._2))))
 
-    val writer: ParquetWriter[java.util.List[String]] = ParquetWriterBuilder.buildDefault(new Path(output.toUri), schema, false)
+    val writer: ParquetWriter[java.util.List[String]] = ParquetWriterBuilder.buildDefault(new Path(output.toUri), schema)
 
     Source.fromFile(new File(column.colFile)).getLines().foreach(line =>
       writer.write(row.map { elem => line.equals(elem).toString }))

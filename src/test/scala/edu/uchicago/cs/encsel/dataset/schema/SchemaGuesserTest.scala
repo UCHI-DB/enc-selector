@@ -51,7 +51,7 @@ class SchemaGuesserTest {
   def testGuessSchema(): Unit = {
     val guess = new SchemaGuesser()
 
-    val csvSchema = guess.guessSchema(new File("src/test/resource/test_guess_schema.csv").toURI)
+    val csvSchema = guess.guessSchema(new File("src/test/resource/schema/test_guess_schema.csv").toURI)
 
     assertEquals(5, csvSchema.columns.length)
     assertEquals("A_K", csvSchema.columns(0)._2)
@@ -65,7 +65,7 @@ class SchemaGuesserTest {
     assertEquals(DataType.STRING, csvSchema.columns(3)._1)
     assertEquals(DataType.INTEGER, csvSchema.columns(4)._1)
 
-    val xlsxSchema = guess.guessSchema(new File("src/test/resource/test_guess_schema.xlsx").toURI)
+    val xlsxSchema = guess.guessSchema(new File("src/test/resource/schema/test_guess_schema.xlsx").toURI)
 
     assertEquals(4, xlsxSchema.columns.length)
 
@@ -74,7 +74,7 @@ class SchemaGuesserTest {
     assertEquals(DataType.LONG, xlsxSchema.columns(2)._1)
     assertEquals(DataType.STRING, xlsxSchema.columns(3)._1)
 
-    val jsonSchema = guess.guessSchema(new File("src/test/resource/test_guess_schema.json").toURI)
+    val jsonSchema = guess.guessSchema(new File("src/test/resource/schema/test_guess_schema.json").toURI)
 
     assertEquals(4, jsonSchema.columns.length)
 
@@ -83,7 +83,7 @@ class SchemaGuesserTest {
     assertEquals(DataType.INTEGER, jsonSchema.columns(2)._1)
     assertEquals(DataType.STRING, jsonSchema.columns(3)._1)
 
-    val tsvSchema = guess.guessSchema(new File("src/test/resource/test_guess_schema.tsv").toURI)
+    val tsvSchema = guess.guessSchema(new File("src/test/resource/schema/test_guess_schema.tsv").toURI)
 
     assertEquals(5, tsvSchema.columns.length)
 

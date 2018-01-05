@@ -42,7 +42,7 @@ object ParquetEncFileSize extends FeatureExtractor {
     val fType = "%s%s".format(prefix, featureType)
     col.dataType match {
       case DataType.STRING => {
-        StringEncoding.values().map { e => {
+        StringEncoding.values().filter(_.parquetEncoding() != null).map { e => {
           try {
             val f = ParquetWriterHelper.singleColumnString(col.colFile, e)
             new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
@@ -56,7 +56,7 @@ object ParquetEncFileSize extends FeatureExtractor {
         }.filter(_ != null)
       }
       case DataType.LONG => {
-        LongEncoding.values().map { e => {
+        LongEncoding.values().filter(_.parquetEncoding() != null).map { e => {
           try {
             val f = ParquetWriterHelper.singleColumnLong(col.colFile, e)
             new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
@@ -69,7 +69,7 @@ object ParquetEncFileSize extends FeatureExtractor {
         }.filter(_ != null)
       }
       case DataType.INTEGER => {
-        IntEncoding.values().map { e => {
+        IntEncoding.values().filter(_.parquetEncoding() != null).map { e => {
           try {
             val f = ParquetWriterHelper.singleColumnInt(col.colFile, e)
             new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
@@ -82,7 +82,7 @@ object ParquetEncFileSize extends FeatureExtractor {
         }.filter(_ != null)
       }
       case DataType.FLOAT => {
-        FloatEncoding.values().map { e => {
+        FloatEncoding.values().filter(_.parquetEncoding() != null).map { e => {
           try {
             val f = ParquetWriterHelper.singleColumnFloat(col.colFile, e)
             new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
@@ -95,7 +95,7 @@ object ParquetEncFileSize extends FeatureExtractor {
         }.filter(_ != null)
       }
       case DataType.DOUBLE => {
-        FloatEncoding.values().map { e => {
+        FloatEncoding.values().filter(_.parquetEncoding() != null).map { e => {
           try {
             val f = ParquetWriterHelper.singleColumnDouble(col.colFile, e)
             new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
