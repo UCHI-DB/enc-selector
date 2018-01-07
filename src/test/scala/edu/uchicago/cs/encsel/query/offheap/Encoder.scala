@@ -14,27 +14,40 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License,
+ * under the License.
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
- *
  */
 
-package edu.uchicago.cs.encsel.query.offheap;
+package edu.uchicago.cs.encsel.query.offheap
 
-import java.nio.ByteBuffer;
+import java.nio.{ByteBuffer, ByteOrder}
 
-public class EqualJniScalar implements Predicate {
+object Encoder {
 
-    private int target;
-    private int entryWidth;
+  val boundary = 32
 
-    public EqualJniScalar(int target, int bitWidth) {
-        this.target = target;
-        this.entryWidth = entryWidth;
-        System.loadLibrary("EqualJniScalar");
+  def encode(input: Array[Int], entryWidth: Int): ByteBuffer = {
+    val byteSize = Math.ceil((entryWidth * input.size).toDouble / boundary).toInt * boundary / 8
+
+    val result = ByteBuffer.allocate(byteSize).order(ByteOrder.LITTLE_ENDIAN)
+
+    var buffer = 0
+    var offset = 0
+
+    for (i <- input.indices) {
+      buffer = buffer | (input(i) << offset)
+      offset = offset + entryWidth
+      if (offset >= boundary) {
+        offset = offset - boundary
+        result.putInt(buffer)
+        buffer = input(i) >> (entryWidth - offset)
+      }
     }
-
-    public native ByteBuffer execute(ByteBuffer input, int offset, int size);
+    if (offset != 0)
+      result.putInt(buffer)
+    result.flip()
+    return result
+  }
 }

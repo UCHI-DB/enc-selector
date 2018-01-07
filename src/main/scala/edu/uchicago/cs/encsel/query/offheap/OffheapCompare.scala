@@ -27,7 +27,6 @@ import java.io.File
 import java.lang.management.ManagementFactory
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
-import edu.uchicago.cs.encsel.query.offheap.Offheap.{cd, test}
 import edu.uchicago.cs.encsel.query.tpch._
 import edu.uchicago.cs.encsel.query.{Bitmap, NonePrimitiveConverter}
 import org.apache.parquet.VersionParser
@@ -38,15 +37,16 @@ import org.apache.parquet.hadoop.metadata.BlockMetaData
 import scala.collection.JavaConversions._
 
 object Jni extends App {
-  val entryWidth = 18
+  val entryWidth = 26
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
+  test("Scalar", new EqualScalar(5000, entryWidth))
   test("JniScalar", new EqualJniScalar(5000, entryWidth))
 
   def test(name: String, pred: Predicate): Unit = {
     val predVisitor = new PredicateVisitor(cd, pred)
     val mbean = ManagementFactory.getThreadMXBean
-    val repeat = 50
+    val repeat = 10
     var clocktime = 0L
     var cputime = 0L
     var usertime = 0L
@@ -55,7 +55,7 @@ object Jni extends App {
       val cpustart = mbean.getCurrentThreadCpuTime
       val userstart = mbean.getCurrentThreadUserTime
 
-      ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new EncReaderProcessor() {
+      ParquetReaderHelper.read(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
 
         override def processRowGroup(version: VersionParser.ParsedVersion,
                                      meta: BlockMetaData,
@@ -80,12 +80,12 @@ object Jni extends App {
 }
 
 object Offheap extends App {
-  val entryWidth = 18
+  val entryWidth = 26
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
   test("Scalar", new EqualScalar(5000, entryWidth))
-  test("Int", new EqualInt(5000, entryWidth))
-  test("Long", new EqualLong(5000, entryWidth))
+//  test("Int", new EqualInt(5000, entryWidth))
+//  test("Long", new EqualLong(5000, entryWidth))
 
   def test(name: String, pred: Predicate): Unit = {
     val predVisitor = new PredicateVisitor(cd, pred)
@@ -99,7 +99,7 @@ object Offheap extends App {
       val cpustart = mbean.getCurrentThreadCpuTime
       val userstart = mbean.getCurrentThreadUserTime
 
-      ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new EncReaderProcessor() {
+      ParquetReaderHelper.read(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
 
         override def processRowGroup(version: VersionParser.ParsedVersion,
                                      meta: BlockMetaData,
@@ -139,7 +139,7 @@ object Onheap extends App {
     val cpustart = mbean.getCurrentThreadCpuTime
     val userstart = mbean.getCurrentThreadUserTime
 
-    ParquetReaderHelper.read(new File("/home/harper/TPCH/lineitem.parquet").toURI, new EncReaderProcessor() {
+    ParquetReaderHelper.read(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion,
                                    meta: BlockMetaData,

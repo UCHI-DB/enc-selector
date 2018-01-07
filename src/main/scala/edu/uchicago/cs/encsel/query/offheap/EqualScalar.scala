@@ -23,36 +23,118 @@
 
 package edu.uchicago.cs.encsel.query.offheap
 
-import java.nio.ByteBuffer
+import java.nio.{ByteBuffer, ByteOrder}
 
 class EqualScalar(val target: Int, val entryWidth: Int) extends Predicate {
+
+  var buffer: Long = 0
+  val BUFFER_SIZE = 64
+
   def execute(input: ByteBuffer, offset: Int, size: Int): ByteBuffer = {
-    val result = ByteBuffer.allocateDirect(Math.ceil(size.toDouble / 8).toInt)
+    val result = ByteBuffer.allocateDirect(Math.ceil(size.toDouble / BUFFER_SIZE).toInt * BUFFER_SIZE / 8)
+      .order(ByteOrder.LITTLE_ENDIAN)
 
-    var counter = 0
-    var buffer: Byte = 0
-    for (i <- 0 until size) {
-      val intIndex = i * entryWidth / 32
-      val intOffset = i * entryWidth % 32
+    if (entryWidth < 26) {
+      // Each entry is guaranteed in a integer
+      scanInt(input, offset, size, result)
+    } else { // Each entry is in a long
+      scanLong(input, offset, size, result)
+    }
+    return result
+  }
 
-      val intValue = input.getLong(offset + intIndex * 4) >> intOffset
-      val mask = ((1L << entryWidth) - 1)
+  private def scanInt(input: ByteBuffer, offset: Int, size: Int, result: ByteBuffer): Unit = {
+    buffer = 0
+    // Entry before this number can be read using getInt
+    val entryInInt = (input.capacity() - offset - 4) * 8 / entryWidth + 1
+    val intLimit = Math.min(entryInInt, size)
+    val mask = (1 << entryWidth) - 1
 
-      intValue & mask match {
-        case target => buffer = (buffer | (1 << counter)).toByte
+    for (i <- 0 until intLimit) {
+      val byteIndex = i * entryWidth / 8
+      val byteOffset = i * entryWidth % 8
+
+      val readValue = input.getInt(offset + byteIndex) >> byteOffset
+
+      (readValue & mask) match {
+        case b if b == target => {
+          buffer |= (1L << (i % BUFFER_SIZE))
+        }
         case _ => {}
       }
 
-      counter += 1
-      if (counter == 8) {
-        counter = 0
-        result.put(buffer)
+      if (i % BUFFER_SIZE == BUFFER_SIZE - 1) {
+        result.putLong(buffer)
         buffer = 0
       }
     }
-    if (counter != 0)
-      result.put(buffer)
+    // These entries need to be read bytes by bytes
+    for (i <- intLimit until size) {
+      scanByByte(input, offset, i, result)
+    }
+    if (size % BUFFER_SIZE != 0)
+      result.putLong(buffer)
+    result.flip()
+  }
+
+  private def scanLong(input: ByteBuffer, offset: Int, size: Int, result: ByteBuffer): Unit = {
+    buffer = 0
+    // Entry before this number can be read using getLong
+    val entryInLong = (input.capacity() - offset - 8) * 8 / entryWidth + 1
+    val longLimit = Math.min(size, entryInLong)
+    val mask = (1L << entryWidth) - 1
+
+    for (i <- 0 until longLimit) {
+      val byteIndex = i * entryWidth / 8
+      val byteOffset = i * entryWidth % 8
+
+      val readValue = input.getLong(offset + byteIndex) >> byteOffset
+
+      (readValue & mask) match {
+        case b if b == target => {
+          buffer |= (1L << (i % BUFFER_SIZE))
+        }
+        case _ => {}
+      }
+
+      if (i % BUFFER_SIZE == BUFFER_SIZE - 1) {
+        result.putLong(buffer)
+        buffer = 0
+      }
+    }
+    // These entries need to be read bytes by bytes
+    for (i <- longLimit until size) {
+      scanByByte(input, offset, i, result)
+    }
+    if (size % BUFFER_SIZE != 0)
+      result.putLong(buffer)
     result.flip
-    return result
+  }
+
+  private def scanByByte(input: ByteBuffer, offset: Int, i: Int, result: ByteBuffer): Unit = {
+    val byteIndex = i * entryWidth / 8
+    val byteOffset = i * entryWidth % 8
+
+    val byteToRead = Math.ceil((byteOffset + entryWidth).toDouble / 8).toInt
+
+    var readValue = 0L
+
+    for (i <- 0 until byteToRead) {
+      readValue |= ((input.get(offset + byteIndex + i).toInt & 0xff) << (i * 8))
+    }
+    readValue >>= byteOffset
+    val mask = (1L << entryWidth) - 1
+
+    (readValue & mask) match {
+      case b if b == target => {
+        buffer |= (1L << i % BUFFER_SIZE)
+      }
+      case _ => {}
+    }
+
+    if (i % BUFFER_SIZE == BUFFER_SIZE - 1) {
+      result.putLong(buffer)
+      buffer = 0
+    }
   }
 }

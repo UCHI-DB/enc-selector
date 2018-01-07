@@ -25,9 +25,10 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.parquet.{EncContext, EncReaderProcessor, ParquetReaderHelper, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import org.apache.parquet.VersionParser
+import org.apache.parquet.column.Encoding
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore
 import org.apache.parquet.hadoop.metadata.BlockMetaData
@@ -51,9 +52,11 @@ object LoadTPCH extends App {
 
 }
 
-object LoadTPCHTest extends App {
-  ParquetWriterHelper.write(new File("/home/harper/TPCH/lineitem.tbl").toURI, TPCHSchema.lineitemOptSchema,
-    new File("/home/harper/TPCH/opt/lineitem.parquet").toURI, "\\|", false)
+object LoadTPCH4Offheap extends App {
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.BIT_PACKED)
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("6", "50"))
+  ParquetWriterHelper.write(new File("/home/harper/TPCH/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
+    new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, "\\|", false)
 }
 
 object SelectLineitem extends App {
