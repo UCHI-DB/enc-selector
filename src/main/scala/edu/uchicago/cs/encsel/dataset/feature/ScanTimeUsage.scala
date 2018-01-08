@@ -86,25 +86,29 @@ object ScanTimeUsage extends FeatureExtractor {
         val schema = new MessageType("default",
           new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "value")
         )
-        IntEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
+        IntEncoding.values().filter(_.parquetEncoding() != null)
+          .flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case STRING => {
         val schema = new MessageType("default",
           new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "value")
         )
-        StringEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
+        StringEncoding.values().filter(_.parquetEncoding() != null)
+          .flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case DOUBLE => {
         val schema = new MessageType("default",
           new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "value")
         )
-        FloatEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
+        FloatEncoding.values().filter(_.parquetEncoding() != null)
+          .flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case LONG => {
         val schema = new MessageType("default",
           new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT64, "value")
         )
-        LongEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
+        LongEncoding.values().filter(_.parquetEncoding() != null)
+          .flatMap(encoding => encFunction(encoding.name(), schema))
       }
       case BOOLEAN => {
         Iterable[Feature]()
@@ -113,7 +117,8 @@ object ScanTimeUsage extends FeatureExtractor {
         val schema = new MessageType("default",
           new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.FLOAT, "value")
         )
-        FloatEncoding.values().flatMap(encoding => encFunction(encoding.name(), schema))
+        FloatEncoding.values().filter(_.parquetEncoding() != null)
+          .flatMap(encoding => encFunction(encoding.name(), schema))
       }
     }
 

@@ -46,7 +46,7 @@ object Jni extends App {
   def test(name: String, pred: Predicate): Unit = {
     val predVisitor = new PredicateVisitor(cd, pred)
     val mbean = ManagementFactory.getThreadMXBean
-    val repeat = 10
+    val repeat = 20
     var clocktime = 0L
     var cputime = 0L
     var usertime = 0L

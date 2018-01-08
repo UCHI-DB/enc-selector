@@ -24,7 +24,7 @@ public class EncReaderProcessorTest {
         };
 
         Map<String, Object[]> context = EncContext.context.get();
-
+        context.clear();
         assertEquals(0, context.size());
         ParquetReaderHelper.read(new File("src/test/resource/coldata/test_bp_int").toURI(), p);
 

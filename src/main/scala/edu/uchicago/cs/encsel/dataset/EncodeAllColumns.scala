@@ -32,27 +32,57 @@ object EncodeAllColumns extends App {
     col.dataType match {
       case DataType.STRING => {
         StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          ParquetWriterHelper.singleColumnString(col.colFile, e)
+          try {
+            ParquetWriterHelper.singleColumnString(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+
+            }
+          }
         )
       }
       case DataType.LONG => {
         LongEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          ParquetWriterHelper.singleColumnLong(col.colFile, e)
+          try {
+            ParquetWriterHelper.singleColumnLong(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+
+            }
+          }
         )
       }
       case DataType.INTEGER => {
         IntEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          ParquetWriterHelper.singleColumnInt(col.colFile, e)
+          try {
+            ParquetWriterHelper.singleColumnInt(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+
+            }
+          }
         )
       }
       case DataType.FLOAT => {
         FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          ParquetWriterHelper.singleColumnFloat(col.colFile, e)
+          try {
+            ParquetWriterHelper.singleColumnFloat(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+
+            }
+          }
         )
       }
       case DataType.DOUBLE => {
         FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          ParquetWriterHelper.singleColumnDouble(col.colFile, e)
+          try {
+            ParquetWriterHelper.singleColumnDouble(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+
+            }
+          }
         )
       }
       case DataType.BOOLEAN => {}

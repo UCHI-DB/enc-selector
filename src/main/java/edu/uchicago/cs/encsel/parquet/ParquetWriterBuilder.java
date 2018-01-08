@@ -22,10 +22,6 @@
  */
 package edu.uchicago.cs.encsel.parquet;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.List;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.column.ParquetProperties;
@@ -36,11 +32,17 @@ import org.apache.parquet.hadoop.api.WriteSupport;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.apache.parquet.schema.MessageType;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.List;
+
 public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBuilder> {
 
     private WriteSupport<List<String>> writeSupport = null;
 
     private Field field = null;
+
+    private static int SCALE = 1024 * 10;
 
     public ParquetWriterBuilder(Path file, MessageType schema, ValuesWriterFactory factory) {
         super(file);
@@ -79,7 +81,7 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
         return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
                 .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
                 .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
-                .withDictionaryPageSize(500 * ParquetWriter.DEFAULT_PAGE_SIZE).build();
+                .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
     }
 
     public static ParquetWriter<List<String>> buildForTable(Path file, MessageType schema)
@@ -89,6 +91,6 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
         return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
                 .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
                 .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
-                .withDictionaryPageSize(500 * ParquetWriter.DEFAULT_PAGE_SIZE).build();
+                .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
     }
 }
