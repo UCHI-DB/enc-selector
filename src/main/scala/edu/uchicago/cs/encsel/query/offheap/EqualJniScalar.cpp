@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include "edu_uchicago_cs_encsel_query_offheap_EqualJniScalar.h"
 
@@ -10,10 +11,32 @@ jlong getLong(jbyte* buffer, jint index) ;
 void putInt(jbyte* buffer, jint index, jint value);
 void putLong(jbyte* buffer, jint index, jlong value) ;
 
-JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeDirect
-  (JNIEnv *env, jobject self, jobject input, jint offset, jint size, jint target, jint entryWidth, jobject result) {
 
-   jbyte* memblock = (jbyte*)env->GetDirectBufferAddress(result);
+static void init() __attribute__((constructor));
+static void release() __attribute__((destructor));
+
+static jbyte* memblock;
+static uint64_t memsize;
+
+void init() {
+    memsize = 100*1024*1024;
+    memblock = (jbyte*)malloc(memsize*sizeof(jbyte));
+}
+
+void release() {
+    free(memblock);
+}
+
+JNIEXPORT jobject JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeDirect
+  (JNIEnv *env, jobject self, jobject input, jint offset, jint size, jint target, jint entryWidth) {
+   jlong resSize = (size * entryWidth / 64 + (((size * entryWidth) % 64)?1:0)) * 8;
+
+   if(resSize > memsize) {
+        memsize = resSize;
+        free(memblock);
+        memblock = (jbyte*) malloc(sizeof(jbyte)*memsize);
+   }
+
    jbyte* array = (jbyte*)env->GetDirectBufferAddress(input);
    jlong arrayLen = env->GetDirectBufferCapacity(input);
 
@@ -21,6 +44,8 @@ JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_
        scanInt(array, arrayLen, offset, size, target, entryWidth, memblock);
    else
        scanLong(array,arrayLen, offset, size, target, entryWidth, memblock);
+
+   return env->NewDirectByteBuffer(memblock,resSize);
 }
 
 /*
@@ -28,10 +53,16 @@ JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_
  * Method:    executeHeap
  * Signature: ([BIIII)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeHeap
-  (JNIEnv *env, jobject self, jbyteArray input, jint offset, jint size, jint target, jint entryWidth, jobject result){
+JNIEXPORT jobject JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeHeap
+  (JNIEnv *env, jobject self, jbyteArray input, jint offset, jint size, jint target, jint entryWidth) {
 
-    jbyte* memblock = (jbyte*)env->GetDirectBufferAddress(result);
+    jlong resSize = (size * entryWidth / 64 + (((size * entryWidth) % 64)?1:0)) * 8;
+
+    if(resSize > memsize) {
+           memsize = resSize;
+           free(memblock);
+           memblock = (jbyte*) malloc(sizeof(jbyte)*memsize);
+      }
     jbyte* array = env->GetByteArrayElements(input, 0);
     jint arrayLen = env->GetArrayLength(input);
 
@@ -39,6 +70,7 @@ JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_
         scanInt(array, arrayLen, offset, size, target, entryWidth, memblock);
     else
         scanLong(array,arrayLen, offset, size, target, entryWidth, memblock);
+    return env->NewDirectByteBuffer(memblock,resSize);
 }
 
 void scanInt(jbyte* input, jlong len, jint offset, jint size, jint target, jint entryWidth, jbyte* result) {

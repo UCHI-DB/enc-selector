@@ -23,16 +23,32 @@
 
 package edu.uchicago.cs.encsel.query.offheap
 
-import java.nio.{ByteBuffer, ByteOrder}
+import java.nio.{BufferOverflowException, ByteBuffer, ByteOrder}
 
-class EqualScalar(val target: Int, val entryWidth: Int) extends Predicate {
+object EqualScalar {
+  var resBuffer = ByteBuffer.allocateDirect(1024 * 1024).order(ByteOrder.LITTLE_ENDIAN)
+}
+
+class EqualScalar(val target: Int, val entryWidth: Int, val dm: Boolean = true) extends Predicate {
 
   var buffer: Long = 0
   val BUFFER_SIZE = 64
 
   def execute(input: ByteBuffer, offset: Int, size: Int): ByteBuffer = {
-    val result = ByteBuffer.allocateDirect(Math.ceil(size.toDouble / BUFFER_SIZE).toInt * BUFFER_SIZE / 8)
-      .order(ByteOrder.LITTLE_ENDIAN)
+    val bufferSize = Math.ceil(size.toDouble / BUFFER_SIZE).toInt * BUFFER_SIZE / 8
+    val result = dm match {
+      case true => {
+        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.LITTLE_ENDIAN)
+      }
+      case false => {
+        if (bufferSize > EqualScalar.resBuffer.capacity()) {
+          EqualScalar.resBuffer = ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.LITTLE_ENDIAN);
+        } else {
+          EqualScalar.resBuffer.rewind
+        }
+        EqualScalar.resBuffer
+      }
+    }
 
     if (entryWidth < 26) {
       // Each entry is guaranteed in a integer
@@ -98,7 +114,13 @@ class EqualScalar(val target: Int, val entryWidth: Int) extends Predicate {
       }
 
       if (i % BUFFER_SIZE == BUFFER_SIZE - 1) {
-        result.putLong(buffer)
+        try {
+          result.putLong(buffer)
+        } catch {
+          case e: BufferOverflowException => {
+            println("Overflow")
+          }
+        }
         buffer = 0
       }
     }

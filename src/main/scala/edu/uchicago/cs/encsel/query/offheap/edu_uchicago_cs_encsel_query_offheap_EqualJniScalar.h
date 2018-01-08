@@ -10,18 +10,18 @@ extern "C" {
 /*
  * Class:     edu_uchicago_cs_encsel_query_offheap_EqualJniScalar
  * Method:    executeDirect
- * Signature: (Ljava/nio/ByteBuffer;IIIILjava/nio/ByteBuffer;)V
+ * Signature: (Ljava/nio/ByteBuffer;IIII)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeDirect
-  (JNIEnv *, jobject, jobject, jint, jint, jint, jint, jobject);
+JNIEXPORT jobject JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeDirect
+  (JNIEnv *, jobject, jobject, jint, jint, jint, jint);
 
 /*
  * Class:     edu_uchicago_cs_encsel_query_offheap_EqualJniScalar
  * Method:    executeHeap
- * Signature: ([BIIIILjava/nio/ByteBuffer;)V
+ * Signature: ([BIIII)Ljava/nio/ByteBuffer;
  */
-JNIEXPORT void JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeHeap
-  (JNIEnv *, jobject, jbyteArray, jint, jint, jint, jint, jobject);
+JNIEXPORT jobject JNICALL Java_edu_uchicago_cs_encsel_query_offheap_EqualJniScalar_executeHeap
+  (JNIEnv *, jobject, jbyteArray, jint, jint, jint, jint);
 
 #ifdef __cplusplus
 }

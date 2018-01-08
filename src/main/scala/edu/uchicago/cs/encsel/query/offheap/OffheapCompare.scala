@@ -24,7 +24,6 @@
 package edu.uchicago.cs.encsel.query.offheap
 
 import java.io.File
-import java.lang.management.ManagementFactory
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.tpch._
@@ -36,71 +35,25 @@ import org.apache.parquet.hadoop.metadata.BlockMetaData
 
 import scala.collection.JavaConversions._
 
-object Jni extends App {
-  val entryWidth = 26
-  val cd = TPCHSchema.lineitemSchema.getColumns()(1)
-
-  test("Scalar", new EqualScalar(5000, entryWidth))
-  test("JniScalar", new EqualJniScalar(5000, entryWidth))
-
-  def test(name: String, pred: Predicate): Unit = {
-    val predVisitor = new PredicateVisitor(cd, pred)
-    val mbean = ManagementFactory.getThreadMXBean
-    val repeat = 20
-    var clocktime = 0L
-    var cputime = 0L
-    var usertime = 0L
-    for (i <- 0 until repeat) {
-      val clockstart = System.currentTimeMillis
-      val cpustart = mbean.getCurrentThreadCpuTime
-      val userstart = mbean.getCurrentThreadUserTime
-
-      ParquetReaderHelper.read(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
-
-        override def processRowGroup(version: VersionParser.ParsedVersion,
-                                     meta: BlockMetaData,
-                                     rowGroup: PageReadStore): Unit = {
-          val pageReader = rowGroup.getPageReader(cd)
-          var page = pageReader.readPage()
-          while (page != null) {
-            val res = page.accept(predVisitor)
-            page = pageReader.readPage()
-            res.clear()
-          }
-        }
-      })
-      clocktime = clocktime + (System.currentTimeMillis() - clockstart)
-      cputime = cputime + (mbean.getCurrentThreadCpuTime - cpustart)
-      usertime = usertime + (mbean.getCurrentThreadUserTime - userstart)
-    }
-
-    println("%s,%d,%d,%d".format(name, clocktime / repeat, cputime / repeat, usertime / repeat))
-  }
-
-}
-
 object Offheap extends App {
+
   val entryWidth = 26
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
-  test("Scalar", new EqualScalar(5000, entryWidth))
+  test("ScalarDM", new EqualScalar(5000, entryWidth, true))
+  test("ScalarFM", new EqualScalar(5000, entryWidth, false))
+  test("JniScalar", new EqualJniScalar(5000, entryWidth))
   test("Int", new EqualInt(5000, entryWidth))
   test("Long", new EqualLong(5000, entryWidth))
 
   def test(name: String, pred: Predicate): Unit = {
     val predVisitor = new PredicateVisitor(cd, pred)
-    val mbean = ManagementFactory.getThreadMXBean
-    val repeat = 50
+    val repeat = 20
     var clocktime = 0L
     var cputime = 0L
     var usertime = 0L
     for (i <- 0 until repeat) {
-      val clockstart = System.currentTimeMillis
-      val cpustart = mbean.getCurrentThreadCpuTime
-      val userstart = mbean.getCurrentThreadUserTime
-
-      ParquetReaderHelper.read(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
-
+      val prof = ParquetReaderHelper.profile(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
         override def processRowGroup(version: VersionParser.ParsedVersion,
                                      meta: BlockMetaData,
                                      rowGroup: PageReadStore): Unit = {
@@ -113,9 +66,9 @@ object Offheap extends App {
           }
         }
       })
-      clocktime = clocktime + (System.currentTimeMillis() - clockstart)
-      cputime = cputime + (mbean.getCurrentThreadCpuTime - cpustart)
-      usertime = usertime + (mbean.getCurrentThreadUserTime - userstart)
+      clocktime = clocktime + prof.wallclock
+      cputime = cputime + prof.cpu
+      usertime = usertime + prof.user
     }
 
     println("%s,%d,%d,%d".format(name, clocktime / repeat, cputime / repeat, usertime / repeat))
@@ -129,17 +82,12 @@ object Onheap extends App {
   }
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
-  val mbean = ManagementFactory.getThreadMXBean
   val repeat = 50
   var clocktime = 0L
   var cputime = 0L
   var usertime = 0L
   for (i <- 0 until repeat) {
-    val clockstart = System.currentTimeMillis
-    val cpustart = mbean.getCurrentThreadCpuTime
-    val userstart = mbean.getCurrentThreadUserTime
-
-    ParquetReaderHelper.read(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
+    val prof = ParquetReaderHelper.profile(new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, new EncReaderProcessor() {
 
       override def processRowGroup(version: VersionParser.ParsedVersion,
                                    meta: BlockMetaData,
@@ -153,9 +101,9 @@ object Onheap extends App {
       }
     })
 
-    clocktime = clocktime + (System.currentTimeMillis() - clockstart)
-    cputime = cputime + (mbean.getCurrentThreadCpuTime - cpustart)
-    usertime = usertime + (mbean.getCurrentThreadUserTime - userstart)
+    clocktime = clocktime + prof.wallclock
+    cputime = cputime + prof.cpu
+    usertime = usertime + prof.user
   }
   println("%s,%d,%d,%d".format("Onheap", clocktime / repeat, cputime / repeat, usertime / repeat))
 }

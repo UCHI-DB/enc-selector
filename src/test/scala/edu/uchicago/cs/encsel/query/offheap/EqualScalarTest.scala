@@ -62,7 +62,7 @@ class EqualScalarTest {
 
   @Test
   def testPredicateManyData: Unit = {
-    val dataLength = 1500;
+    val dataLength = 3000;
 
     for (entryWidth <- 5 to 30) {
       val data = (0 until dataLength).map(i => Random.nextInt(30)).toArray

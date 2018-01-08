@@ -22,24 +22,19 @@
 
 package edu.uchicago.cs.encsel.query.offheap
 
-import java.nio.{ByteBuffer, ByteOrder}
+import java.nio.ByteBuffer
 
 class EqualJniScalar(val target: Int, val entryWidth: Int) extends Predicate {
-
   System.loadLibrary("EqualJniScalar")
 
   override def execute(input: ByteBuffer, offset: Int, size: Int): ByteBuffer = {
-    val result = ByteBuffer.allocateDirect(Math.ceil(size.toDouble / 64).toInt * 8).order(ByteOrder.LITTLE_ENDIAN);
     if (input.isDirect)
-      executeDirect(input, offset, size, target, entryWidth, result);
+      return executeDirect(input, offset, size, target, entryWidth);
     else
-      executeHeap(input.array(), offset, size, target, entryWidth, result);
-    return result;
+      return executeHeap(input.array(), offset, size, target, entryWidth);
   }
 
-  @native def executeDirect(input: ByteBuffer, offset: Int, size: Int,
-                            target: Int, entryWidth: Int, result: ByteBuffer): Unit;
+  @native def executeDirect(input: ByteBuffer, offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;
 
-  @native def executeHeap(input: Array[Byte], offset: Int, size: Int,
-                          target: Int, entryWidth: Int, result: ByteBuffer): Unit;
+  @native def executeHeap(input: Array[Byte], offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;
 }
