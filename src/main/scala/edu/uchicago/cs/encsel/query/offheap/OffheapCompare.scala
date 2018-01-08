@@ -84,8 +84,8 @@ object Offheap extends App {
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
   test("Scalar", new EqualScalar(5000, entryWidth))
-//  test("Int", new EqualInt(5000, entryWidth))
-//  test("Long", new EqualLong(5000, entryWidth))
+  test("Int", new EqualInt(5000, entryWidth))
+  test("Long", new EqualLong(5000, entryWidth))
 
   def test(name: String, pred: Predicate): Unit = {
     val predVisitor = new PredicateVisitor(cd, pred)
