@@ -58,7 +58,7 @@ class JPAPersistence extends Persistence {
 
   def load(): Iterator[Column] = {
     val em = JPAPersistence.emf.createEntityManager()
-    val query = em.createQuery("SELECT c FROM Column c", classOf[ColumnWrapper])
+    val query = em.createQuery("SELECT c FROM Column c ORDER BY c.id", classOf[ColumnWrapper])
     val res = query.getResultList.map(_.asInstanceOf[Column]).toIterator
     em.close()
     res

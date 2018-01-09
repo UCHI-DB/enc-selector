@@ -24,11 +24,13 @@ package edu.uchicago.cs.encsel.dataset
 
 
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
+import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 
 object EncodeAllColumns extends App {
   Persistence.get.load.foreach(col => {
+    println(col.asInstanceOf[ColumnWrapper].id)
     col.dataType match {
       case DataType.STRING => {
         StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
