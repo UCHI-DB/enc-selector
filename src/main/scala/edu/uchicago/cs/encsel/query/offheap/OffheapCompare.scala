@@ -40,9 +40,9 @@ object Offheap extends App {
   val entryWidth = 26
   val cd = TPCHSchema.lineitemSchema.getColumns()(1)
 
+  test("JniScalar", new EqualJniScalar(5000, entryWidth))
   test("ScalarDM", new EqualScalar(5000, entryWidth, true))
   test("ScalarFM", new EqualScalar(5000, entryWidth, false))
-  test("JniScalar", new EqualJniScalar(5000, entryWidth))
   test("Int", new EqualInt(5000, entryWidth))
   test("Long", new EqualLong(5000, entryWidth))
 

@@ -139,7 +139,7 @@
                 <configuration>
                     <forkMode>once</forkMode>
                     <argLine>
-                        -Djava.library.path=${project.build.directory}/libs/
+                        -Djava.library.path=${project.build.directory}
                     </argLine>
                 </configuration>
             </plugin>
@@ -197,30 +197,20 @@
                 <executions>
                     <execution>
                         <id>jni-javah</id>
-                        <phase>generate-sources</phase>
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>javah</goal>
+                            <goal>compile</goal>
+                            <goal>link</goal>
                         </goals>
                         <configuration>
                             <javahPath>${java.home}/../bin/javah</javahPath>
                             <javahClassNames>
-                                edu.uchicago.cs.encsel.query.offheap.EqualJniScalar
+                                <javahClassName>
+                                    edu.uchicago.cs.encsel.query.offheap.EqualJniScalar
+                                </javahClassName>
                             </javahClassNames>
-                            <javahOS>linux</javahOS>
                             <javahVerbose>true</javahVerbose>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>jni-compile</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <compilerStartOptions>
-                                <compilerStartOption></compilerStartOption>
-                            </compilerStartOptions>
-                            <objectFileExtension>so</objectFileExtension>
                             <javahOS>linux</javahOS>
                             <sources>
                                 <source>
@@ -228,25 +218,44 @@
                                     <fileNames>
                                         <fileName>EqualJniScalar.cpp</fileName>
                                     </fileNames>
-                                    <directory>${project.build.directory}/native/javah</directory>
+                                </source>
+                                <source>
+                                    <directory>
+                                        ${project.build.directory}/native/javah
+                                    </directory>
                                 </source>
                             </sources>
+                            <compilerStartOptions>
+                                <compilerStartOption>-fPIC</compilerStartOption>
+                            </compilerStartOptions>
+                            <compilerOutputDirectory>${project.build.directory}/native/javah</compilerOutputDirectory>
                             <linkerFinalName>libEqualJniScalar</linkerFinalName>
                             <linkerStartOptions>
-                                <linkerStartOption>-fPIC -shared</linkerStartOption>
+                                <linkerStartOption>-shared</linkerStartOption>
                             </linkerStartOptions>
-                            <compilerOutputDirectory>${project.build.directory}/libs</compilerOutputDirectory>
                         </configuration>
                     </execution>
-
                 </executions>
-
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <executions>
+                    <execution>
+                        <id>rename-jni-lib</id>
+                        <phase>generate-test-sources</phase>
+                        <configuration>
+                            <target>
+                                <move
+                                        file="${project.build.directory}/libEqualJniScalar.jar"
+                                        tofile="${project.build.directory}/libEqualJniScalar.so"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>copy-test-persistence</id>
                         <phase>process-test-resources</phase>
@@ -429,5 +438,7 @@
             <systemPath>${java.home}/../lib/tools.jar</systemPath>
             <version>1.8</version>
         </dependency>
+
+
     </dependencies>
 </project>
