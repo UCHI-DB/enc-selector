@@ -20,32 +20,32 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package org.apache.parquet.bytes;
-
-import java.nio.ByteBuffer;
-
-public class HeapByteBufferAllocator implements ByteBufferAllocator {
-
-    public static final HeapByteBufferAllocator getInstance() {
-        return new HeapByteBufferAllocator();
-    }
-
-    public HeapByteBufferAllocator() {
-        super();
-    }
-
-    public ByteBuffer allocate(final int size) {
-        return ByteBuffer.allocateDirect(size);
-    }
-
-    @Override
-    public void release(ByteBuffer b) {
-        // The ByteBuffer.allocateDirect
-        return;
-    }
-
-    @Override
-    public boolean isDirect() {
-        return true;
-    }
-}
+//package org.apache.parquet.bytes;
+//
+//import java.nio.ByteBuffer;
+//
+//public class HeapByteBufferAllocator implements ByteBufferAllocator {
+//
+//    public static final HeapByteBufferAllocator getInstance() {
+//        return new HeapByteBufferAllocator();
+//    }
+//
+//    public HeapByteBufferAllocator() {
+//        super();
+//    }
+//
+//    public ByteBuffer allocate(final int size) {
+//        return ByteBuffer.allocateDirect(size);
+//    }
+//
+//    @Override
+//    public void release(ByteBuffer b) {
+//        // The ByteBuffer.allocateDirect
+//        return;
+//    }
+//
+//    @Override
+//    public boolean isDirect() {
+//        return true;
+//    }
+//}
