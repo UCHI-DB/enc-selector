@@ -42,7 +42,7 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
 
     private Field field = null;
 
-    private static int SCALE = 1024 * 10;
+    private static int SCALE = 512;
 
     public ParquetWriterBuilder(Path file, MessageType schema, ValuesWriterFactory factory) {
         super(file);
@@ -81,7 +81,7 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
         return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
                 .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
                 .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
-                .withDictionaryPageSize(Integer.MAX_VALUE).build();
+                .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
     }
 
     public static ParquetWriter<List<String>> buildForTable(Path file, MessageType schema)
@@ -91,6 +91,6 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
         return builder.withValidation(false).withCompressionCodec(CompressionCodecName.UNCOMPRESSED)
                 .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
                 .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
-                .withDictionaryPageSize(Integer.MAX_VALUE).build();
+                .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
     }
 }
