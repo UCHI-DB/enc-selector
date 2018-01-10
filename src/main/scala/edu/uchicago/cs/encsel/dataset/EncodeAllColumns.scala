@@ -29,65 +29,74 @@ import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 
 object EncodeAllColumns extends App {
+
+  val start = args.length match {
+    case 0 => 0
+    case _ => args(0).toInt
+  }
+
   Persistence.get.load.foreach(col => {
-    println(col.asInstanceOf[ColumnWrapper].id)
-    col.dataType match {
-      case DataType.STRING => {
-        StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          try {
-            ParquetWriterHelper.singleColumnString(col.colFile, e)
-          } catch {
-            case e: IllegalArgumentException => {
+    val colw = col.asInstanceOf[ColumnWrapper]
+    println(colw.id)
+    if (colw.id >= start) {
+      col.dataType match {
+        case DataType.STRING => {
+          StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+            try {
+              ParquetWriterHelper.singleColumnString(col.colFile, e)
+            } catch {
+              case e: IllegalArgumentException => {
 
+              }
             }
-          }
-        )
-      }
-      case DataType.LONG => {
-        LongEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          try {
-            ParquetWriterHelper.singleColumnLong(col.colFile, e)
-          } catch {
-            case e: IllegalArgumentException => {
+          )
+        }
+        case DataType.LONG => {
+          LongEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+            try {
+              ParquetWriterHelper.singleColumnLong(col.colFile, e)
+            } catch {
+              case e: IllegalArgumentException => {
 
+              }
             }
-          }
-        )
-      }
-      case DataType.INTEGER => {
-        IntEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          try {
-            ParquetWriterHelper.singleColumnInt(col.colFile, e)
-          } catch {
-            case e: IllegalArgumentException => {
+          )
+        }
+        case DataType.INTEGER => {
+          IntEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+            try {
+              ParquetWriterHelper.singleColumnInt(col.colFile, e)
+            } catch {
+              case e: IllegalArgumentException => {
 
+              }
             }
-          }
-        )
-      }
-      case DataType.FLOAT => {
-        FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          try {
-            ParquetWriterHelper.singleColumnFloat(col.colFile, e)
-          } catch {
-            case e: IllegalArgumentException => {
+          )
+        }
+        case DataType.FLOAT => {
+          FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+            try {
+              ParquetWriterHelper.singleColumnFloat(col.colFile, e)
+            } catch {
+              case e: IllegalArgumentException => {
 
+              }
             }
-          }
-        )
-      }
-      case DataType.DOUBLE => {
-        FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-          try {
-            ParquetWriterHelper.singleColumnDouble(col.colFile, e)
-          } catch {
-            case e: IllegalArgumentException => {
+          )
+        }
+        case DataType.DOUBLE => {
+          FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+            try {
+              ParquetWriterHelper.singleColumnDouble(col.colFile, e)
+            } catch {
+              case e: IllegalArgumentException => {
 
+              }
             }
-          }
-        )
+          )
+        }
+        case DataType.BOOLEAN => {}
       }
-      case DataType.BOOLEAN => {}
     }
   })
 }
