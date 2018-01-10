@@ -255,7 +255,7 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
+                    </execution-->
                     <execution>
                         <id>copy-test-persistence</id>
                         <phase>process-test-resources</phase>
@@ -272,7 +272,7 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution-->
+                    </execution>
                     <execution>
                         <id>restore-persistence</id>
                         <phase>prepare-package</phase>
