@@ -34,8 +34,10 @@ object EncodeAllColumns extends App {
     case 0 => 0
     case _ => args(0).toInt
   }
-
-  Persistence.get.load.foreach(col => {
+  val columns = Persistence.get.load()
+  println(columns.length)
+  
+  columns.foreach(col => {
     val colw = col.asInstanceOf[ColumnWrapper]
     println(colw.id)
     if (colw.id >= start) {
