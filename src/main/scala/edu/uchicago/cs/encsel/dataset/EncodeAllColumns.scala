@@ -37,8 +37,8 @@ object EncodeAllColumns extends App {
 
   Persistence.get.load.foreach(col => {
     val colw = col.asInstanceOf[ColumnWrapper]
-    println(colw.id)
     if (colw.id >= start) {
+      println(colw.id)
       col.dataType match {
         case DataType.STRING => {
           StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
