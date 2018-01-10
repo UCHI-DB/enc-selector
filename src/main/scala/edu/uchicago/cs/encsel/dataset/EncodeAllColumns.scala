@@ -35,8 +35,7 @@ object EncodeAllColumns extends App {
     case _ => args(0).toInt
   }
   val columns = Persistence.get.load()
-  println(columns.length)
-  
+
   columns.foreach(col => {
     val colw = col.asInstanceOf[ColumnWrapper]
     println(colw.id)
@@ -48,7 +47,7 @@ object EncodeAllColumns extends App {
               ParquetWriterHelper.singleColumnString(col.colFile, e)
             } catch {
               case e: IllegalArgumentException => {
-
+                e.printStackTrace()
               }
             }
           )
@@ -59,7 +58,7 @@ object EncodeAllColumns extends App {
               ParquetWriterHelper.singleColumnLong(col.colFile, e)
             } catch {
               case e: IllegalArgumentException => {
-
+                e.printStackTrace()
               }
             }
           )
@@ -70,7 +69,7 @@ object EncodeAllColumns extends App {
               ParquetWriterHelper.singleColumnInt(col.colFile, e)
             } catch {
               case e: IllegalArgumentException => {
-
+                e.printStackTrace()
               }
             }
           )
@@ -81,7 +80,7 @@ object EncodeAllColumns extends App {
               ParquetWriterHelper.singleColumnFloat(col.colFile, e)
             } catch {
               case e: IllegalArgumentException => {
-
+                e.printStackTrace()
               }
             }
           )
@@ -92,7 +91,7 @@ object EncodeAllColumns extends App {
               ParquetWriterHelper.singleColumnDouble(col.colFile, e)
             } catch {
               case e: IllegalArgumentException => {
-
+                e.printStackTrace()
               }
             }
           )
