@@ -42,7 +42,7 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
 
     private Field field = null;
 
-    private static int SCALE = 512;
+    private static int SCALE = 500;
 
     public ParquetWriterBuilder(Path file, MessageType schema, ValuesWriterFactory factory) {
         super(file);
