@@ -132,7 +132,7 @@
                 </executions>
             </plugin>
 
-            <plugin>
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
@@ -142,7 +142,7 @@
                         -Djava.library.path=${project.build.directory}
                     </argLine>
                 </configuration>
-            </plugin>
+            </plugin-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
@@ -188,7 +188,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <version>1.0-alpha-8</version>
@@ -236,13 +236,13 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <executions>
-                    <execution>
+                    <!--execution>
                         <id>rename-jni-lib</id>
                         <phase>generate-test-sources</phase>
                         <configuration>
@@ -261,11 +261,9 @@
                         <phase>process-test-resources</phase>
                         <configuration>
                             <target>
-                                <!--backup the "proper" persistence.xml -->
                                 <copy
                                         file="${project.build.outputDirectory}/META-INF/persistence.xml"
                                         tofile="${project.build.outputDirectory}/META-INF/persistence.xml.proper"/>
-                                <!--replace the "proper" persistence.xml with the "test" version -->
                                 <copy
                                         file="${project.build.testOutputDirectory}/META-INF/persistence.xml"
                                         tofile="${project.build.outputDirectory}/META-INF/persistence.xml"/>
@@ -274,7 +272,7 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
+                    </execution-->
                     <execution>
                         <id>restore-persistence</id>
                         <phase>prepare-package</phase>
