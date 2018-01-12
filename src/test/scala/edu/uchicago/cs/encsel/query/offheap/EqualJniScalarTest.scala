@@ -28,7 +28,6 @@ import org.junit.Test
 import scala.util.Random
 
 class EqualJniScalarTest {
-  @Test
   def testPredicate: Unit = {
 
     val entryWidth = 6
@@ -43,7 +42,6 @@ class EqualJniScalarTest {
     assertEquals(0x4.toByte, result.get(2))
   }
 
-  @Test
   def testPredicateLong: Unit = {
 
     val entryWidth = 28
@@ -58,7 +56,6 @@ class EqualJniScalarTest {
     assertEquals(0x4.toByte, result.get(2))
   }
 
-  @Test
   def testPredicateManyData: Unit = {
     val dataLength = 3000;
 

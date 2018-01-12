@@ -21,20 +21,21 @@
  *
  */
 
-package edu.uchicago.cs.encsel.ptnmining.validation
+package edu.uchicago.cs.encsel.ptnmining.rule.regex
 
 import edu.uchicago.cs.encsel.ptnmining.Pattern
 import edu.uchicago.cs.encsel.ptnmining.parser.Token
 
 /**
-  * Created by harper on 3/31/17.
+  * Recursively generate regex-like representation based on given list of items
+  *
+  * General rules:
+  *   1. Find common header,
+  *   2. Combine
   */
-class PatternValidator {
+class Regex {
 
-  def validate(ptn:Pattern, vset:Seq[Seq[Token]]):Pattern = {
+  def generate(data: Iterable[Iterable[Token]]): Pattern = {
 
-    vset.foreach(vsample=>{
-    })
-    null
   }
 }

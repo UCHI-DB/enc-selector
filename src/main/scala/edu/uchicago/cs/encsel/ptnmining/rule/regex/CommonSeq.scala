@@ -21,14 +21,14 @@
  *
  */
 
-package edu.uchicago.cs.encsel.ptnmining.rule
+package edu.uchicago.cs.encsel.ptnmining.rule.regex
 
-import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 
 /**
-  * Created by Hao Jiang on 3/14/17.
+  * Look for common sequences from a list of tokens
+  *
   */
 
 

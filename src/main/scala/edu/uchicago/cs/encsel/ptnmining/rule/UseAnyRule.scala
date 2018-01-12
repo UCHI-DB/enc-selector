@@ -31,6 +31,7 @@ import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
   * Use Any to replace big Union
   */
 object UseAnyRule {
+  // Execute the rule if union size is greater than threshold * data size
   val threshold = 0.3
 }
 
