@@ -25,8 +25,7 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.TSymbol
-
-import scala.collection.mutable
+import edu.uchicago.cs.encsel.ptnmining.rule.regex.CommonSeq
 
 /**
   * Look for common separators (non-alphabetic, non-numerical characters) from Union and use them to
@@ -38,25 +37,58 @@ class SeparatorRule extends RewriteRule {
 
   protected def update(union: Pattern): Pattern = {
     // flatten the union content
-    val unionData = union.asInstanceOf[PUnion].content.map(p => {
-      p match {
-        case seq: PSeq => seq.content
-        case _ => Seq(p)
-      }
-    })
+    val unionData = union.asInstanceOf[PUnion].content
+      .map(_ match { case seq: PSeq => seq.content case p => Seq(p) })
     // Scan union data for symbols
-    val symbols = unionData.map(line => {
-      line.filter(p => p match {
-        case t: PToken => t.token.isInstanceOf[TSymbol]
-        case _ => false
-      })
-    })
+    val symbolsWithIndex = unionData.map(_.zipWithIndex.filter(_._1 match {
+      case t: PToken => t.token.isInstanceOf[TSymbol]
+      case _ => false
+    }))
     // Determine common symbols and match symbol in each line to the common
-    val symbolList = new mutable.ArrayBuffer[TSymbol]
-    val symbolMatch =
 
+    val commonSeq = new CommonSeq
+    val commonSymbols = commonSeq.find(symbolsWithIndex, (a: (Pattern, Int), b: (Pattern, Int)) => {
+      a._1.equals(b._1)
+    }).flatten
+    val n = commonSymbols.length
+    commonSymbols.isEmpty match {
+      case true => union
+      case false => {
+        // Use the positions to split data and generate new unions
 
-    null
+        // n common symbols split the data to at most n+1 pieces
+        val pieces = (0 to n).map(i => {
+          PUnion.make(unionData.indices.map(j => {
+            val data = unionData(j)
+            val symbols = symbolsWithIndex(j)
+            val pos = commonSeq.positions(j)
+            val index = pos.map(p => symbols.view(p._1, p._1 + p._2)).flatten.map(_._2)
+
+            val start = i match {
+              case 0 => 0
+              case _ => index(i - 1)
+            }
+            val stop = i match {
+              case last if last == n => data.length
+              case _ => index(i)
+            }
+            stop - start match {
+              case 1 => data(start)
+              case _ => PSeq.make(data.view(start, stop))
+            }
+          }))
+        })
+        // Make a sequence formed of union pieces and common sequences
+        PSeq.make((0 until 2 * n + 1).view.map(i => {
+          i % 2 match {
+            case 0 => pieces(i / 2)
+            case 1 => commonSymbols((i - 1) / 2)._1
+          }
+        }).filter(_ match {
+          case union: PUnion => union.content.nonEmpty
+          case _ => true
+        }))
+      }
+    }
   }
-
 }

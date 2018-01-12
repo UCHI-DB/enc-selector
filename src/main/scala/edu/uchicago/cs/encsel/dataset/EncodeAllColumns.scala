@@ -39,6 +39,7 @@ object EncodeAllColumns extends App {
   columns.foreach(col => {
     val colw = col.asInstanceOf[ColumnWrapper]
     println(colw.id)
+
     if (colw.id >= start) {
       col.dataType match {
         case DataType.STRING => {

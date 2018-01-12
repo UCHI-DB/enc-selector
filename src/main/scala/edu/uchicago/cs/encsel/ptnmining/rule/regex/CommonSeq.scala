@@ -31,13 +31,15 @@ import scala.collection.mutable.ArrayBuffer
   *
   */
 
-
-class CommonSeq {
-
-  val sequence_length = 1
+object CommonSeq {
+  val DEFAULT_SEQ_LENGTH = 1
   // Percentage that a common sequence is not in some sentence
   // TODO: the tolerance is not supported now
-  val tolerance = 0.1
+  val DEFAULT_TOLERANCE = 0.1
+}
+
+class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
+                val tolerance: Double = CommonSeq.DEFAULT_TOLERANCE) {
 
   implicit def bool2int(b: Boolean) = if (b) 1 else 0
 
@@ -50,7 +52,9 @@ class CommonSeq {
     * @param lines
     * @return common sequences
     */
-  def find[T](lines: Seq[Seq[T]], equal: (T, T) => Boolean): Seq[Seq[T]] = {
+  def find[T](lines: Seq[Seq[T]], equal: (T, T) => Boolean = (a: T, b: T) => {
+    a.equals(b)
+  }): Seq[Seq[T]] = {
     positions.clear
 
     val commons = new ArrayBuffer[Seq[T]]()
@@ -143,7 +147,7 @@ class CommonSeq {
     // Collecting results
     for (i <- a.indices;
          j <- b.indices) {
-      if (data(i)(j) >= sequence_length) {
+      if (data(i)(j) >= seqLength) {
         candidates += ((i - data(i)(j) + 1, j - data(i)(j) + 1, data(i)(j)))
       }
     }

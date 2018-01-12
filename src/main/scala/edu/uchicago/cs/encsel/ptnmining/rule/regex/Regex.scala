@@ -36,6 +36,6 @@ import edu.uchicago.cs.encsel.ptnmining.parser.Token
 class Regex {
 
   def generate(data: Iterable[Iterable[Token]]): Pattern = {
-
+    null
   }
 }
