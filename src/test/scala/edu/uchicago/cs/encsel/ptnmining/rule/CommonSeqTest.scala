@@ -1,7 +1,6 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining.parser.{TWord, Token, Tokenizer}
-import edu.uchicago.cs.encsel.ptnmining.rule.regex.CommonSeq
 import org.junit.Assert._
 import org.junit.Test
 

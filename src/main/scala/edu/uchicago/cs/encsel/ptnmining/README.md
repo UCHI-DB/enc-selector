@@ -14,6 +14,7 @@ The process of generating patterns from a collection of given token sequence is 
 ### Refine Rules
 
 1. **Common Sequence** Find Common Sequence from the token streams. Here we define the common sequence to be a sub-list of tokens having the same type. The common sequences separate the list of token streams into sub-chunks.
+1. **Common Symbols** Considering that most readable data use non-alphabetic,non-numerical characters as separator, a faster alternative to **Common Sequence** is to only look at common symbols in sequence.
 2. **Frequent Similar Words** Sub-chunks do not contain common sequences and thus cannot be further separated by the steps above. To deal with this, we look for frequent similar words in those sub-chunks as separator. This further split sub-chunks into smaller sub-chunks.
 3. **Merge Sequence** Remove unnecessary sequence. E.g., `Seq(Seq(a,b),Seq(x,y)) => Seq(a,b,x,y)`
 4. **Remove Unnecessary Structure** 

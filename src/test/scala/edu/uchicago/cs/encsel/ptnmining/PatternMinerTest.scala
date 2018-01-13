@@ -36,6 +36,7 @@ class PatternMinerTest {
     val input = Source.fromFile("src/test/resource/pattern/pattern_miner_sample").getLines().toSeq
     val pm = new PatternMiner
     val pattern = pm.mine(input)
-    return
+
+
   }
 }

@@ -14,14 +14,13 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License,
+ * under the License.
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
- *
  */
 
-package edu.uchicago.cs.encsel.ptnmining.rule.regex
+package edu.uchicago.cs.encsel.ptnmining.rule
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -52,9 +51,8 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
     * @param lines
     * @return common sequences
     */
-  def find[T](lines: Seq[Seq[T]], equal: (T, T) => Boolean = (a: T, b: T) => {
-    a.equals(b)
-  }): Seq[Seq[T]] = {
+  def find[T](lines: Seq[Seq[T]],
+              equal: (T, T) => Boolean = (a: T, b: T) => a.equals(b)): Seq[Seq[T]] = {
     positions.clear
 
     val commons = new ArrayBuffer[Seq[T]]()

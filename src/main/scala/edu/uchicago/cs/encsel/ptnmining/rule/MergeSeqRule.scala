@@ -26,7 +26,10 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 import edu.uchicago.cs.encsel.ptnmining.{PSeq, Pattern}
 
 /**
-  * This rule merges unnecessary PSeq. E.g., Seq(Seq(a,b),Seq(x,y)) => Seq(a,b,x,y)
+  * This rule merges unnecessary PSeq.
+  * E.g.,
+  *   Seq(Seq(a,b),Seq(x,y)) => Seq(a,b,x,y)
+  *   Seq(Seq(a,b),x,y) => Seq(a,b,x,y)
   */
 class MergeSeqRule extends RewriteRule {
 

@@ -24,7 +24,6 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
-import edu.uchicago.cs.encsel.ptnmining.rule.regex.CommonSeq
 
 import scala.collection.mutable.ArrayBuffer
 

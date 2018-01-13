@@ -25,13 +25,12 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.TSymbol
-import edu.uchicago.cs.encsel.ptnmining.rule.regex.CommonSeq
 
 /**
   * Look for common separators (non-alphabetic, non-numerical characters) from Union and use them to
   * split data
   */
-class SeparatorRule extends RewriteRule {
+class CommonSymbolRule extends RewriteRule {
   protected def condition(ptn: Pattern): Boolean =
     ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.size > 1
 
@@ -54,6 +53,7 @@ class SeparatorRule extends RewriteRule {
     commonSymbols.isEmpty match {
       case true => union
       case false => {
+        happen()
         // Use the positions to split data and generate new unions
 
         // n common symbols split the data to at most n+1 pieces
@@ -66,13 +66,14 @@ class SeparatorRule extends RewriteRule {
 
             val start = i match {
               case 0 => 0
-              case _ => index(i - 1)
+              case _ => index(i - 1) + 1
             }
             val stop = i match {
               case last if last == n => data.length
               case _ => index(i)
             }
             stop - start match {
+              case 0 => PEmpty
               case 1 => data(start)
               case _ => PSeq.make(data.view(start, stop))
             }
