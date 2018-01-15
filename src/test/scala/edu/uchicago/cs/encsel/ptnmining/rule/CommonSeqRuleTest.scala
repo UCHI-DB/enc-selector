@@ -60,4 +60,8 @@ class CommonSeqRuleTest {
     assertEquals(u1c(3), new PSeq(new PToken(new TWord("ttpt")), new PToken(new TInt("3232"))))
   }
 
+  @Test
+  def testWithSimilarWord:Unit = {
+
+  }
 }

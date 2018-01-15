@@ -17,46 +17,41 @@ class JPAPersistenceTest {
 
   @Before
   def cleanSchema: Unit = {
-    try {
-      val em = JPAPersistence.emf.createEntityManager()
-      em.getTransaction.begin()
+    val em = JPAPersistence.emf.createEntityManager()
+    em.getTransaction.begin()
 
-      em.createNativeQuery("DELETE FROM feature WHERE 1 = 1;").executeUpdate()
-      em.createNativeQuery("DELETE FROM col_data WHERE 1 = 1;").executeUpdate()
-      em.flush()
+    em.createNativeQuery("DELETE FROM feature WHERE 1 = 1;").executeUpdate()
+    em.createNativeQuery("DELETE FROM col_data WHERE 1 = 1;").executeUpdate()
+    em.flush()
 
-      em.getTransaction.commit()
+    em.getTransaction.commit()
 
-      em.getTransaction.begin()
-      val col1 = new ColumnWrapper
-      col1.id = 2
-      col1.colName = "a"
-      col1.colIndex = 5
-      col1.dataType = DataType.STRING
-      col1.colFile = new File("aab").toURI
-      col1.origin = new File("ccd").toURI
+    em.getTransaction.begin()
+    val col1 = new ColumnWrapper
+    col1.id = 2
+    col1.colName = "a"
+    col1.colIndex = 5
+    col1.dataType = DataType.STRING
+    col1.colFile = new File("aab").toURI
+    col1.origin = new File("ccd").toURI
 
-      col1.features = new java.util.HashSet[Feature]
+    col1.features = new java.util.HashSet[Feature]
 
-      var fea1 = new Feature
-      fea1.name = "M"
-      fea1.featureType = "P"
-      fea1.value = 2.4
+    var fea1 = new Feature
+    fea1.name = "M"
+    fea1.featureType = "P"
+    fea1.value = 2.4
 
-      col1.features += fea1
+    col1.features += fea1
 
-      em.persist(col1)
+    em.persist(col1)
 
-      em.getTransaction.commit()
-      em.close()
-    } catch {
-      case e:PersistenceException => {}
-    }
+    em.getTransaction.commit()
+    em.close()
   }
 
   @Test
   def testSaveNew: Unit = {
-    try {
     val jpa = new JPAPersistence
 
     val col1 = new Column(new File("dd").toURI, 3, "m", DataType.INTEGER)
@@ -93,15 +88,11 @@ class JPAPersistenceTest {
           assertEquals(2.4, feature.value, 0.01)
         }
       }
-    })}
-    catch {
-      case e:PersistenceException=>{}
-    }
+    })
   }
 
   @Test
   def testSaveMerge: Unit = {
-    try {
     val jpa = new JPAPersistence
     val cols = jpa.load().toArray
     assertEquals(1, cols.length)
@@ -114,55 +105,45 @@ class JPAPersistenceTest {
     assertEquals(2, features.size)
     assertEquals("PP", features(0).name)
     assertEquals("M", features(1).name)
-  }catch{
-    case e:PersistenceException=>{}
-  }}
+  }
 
   @Test
   def testUpdate: Unit = {
-    try {
-      val jpa = new JPAPersistence
+    val jpa = new JPAPersistence
 
-      val col1 = new ColumnWrapper()
-      col1.origin = new File("dd").toURI
-      col1.colIndex = 3
-      col1.colName = "m"
-      col1.dataType = DataType.INTEGER
-      col1.id = 2
-      col1.colFile = new File("tt").toURI
+    val col1 = new ColumnWrapper()
+    col1.origin = new File("dd").toURI
+    col1.colIndex = 3
+    col1.colName = "m"
+    col1.dataType = DataType.INTEGER
+    col1.id = 2
+    col1.colFile = new File("tt").toURI
 
-      col1.features = new java.util.HashSet[Feature]
+    col1.features = new java.util.HashSet[Feature]
 
-      val fea1 = new Feature("W", "A", 3.5)
+    val fea1 = new Feature("W", "A", 3.5)
 
-      col1.features ++= Array(fea1)
+    col1.features ++= Array(fea1)
 
-      jpa.save(Array[Column](col1))
+    jpa.save(Array[Column](col1))
 
-      val cols = jpa.load().toArray
+    val cols = jpa.load().toArray
 
-      assertEquals(1, cols.length)
-      val col = cols(0)
-      assertEquals(1, col.features.size())
-    }catch{
-      case e:PersistenceException=>{}
-    }
+    assertEquals(1, cols.length)
+    val col = cols(0)
+    assertEquals(1, col.features.size())
   }
 
   @Test
   def testLoad: Unit = {
-    try {
-      val jpa = new JPAPersistence
-      val cols = jpa.load().toArray
+    val jpa = new JPAPersistence
+    val cols = jpa.load().toArray
 
-      assertEquals(1, cols.length)
-      val col = cols(0)
-      assertEquals(DataType.STRING, col.dataType)
-      assertEquals(5, col.colIndex)
-      assertEquals("a", col.colName)
-    } catch {
-      case e: PersistenceException => {}
-    }
+    assertEquals(1, cols.length)
+    val col = cols(0)
+    assertEquals(DataType.STRING, col.dataType)
+    assertEquals(5, col.colIndex)
+    assertEquals("a", col.colName)
   }
 
   @Test

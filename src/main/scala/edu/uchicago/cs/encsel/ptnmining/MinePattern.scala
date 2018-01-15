@@ -35,6 +35,7 @@ import scala.io.Source
 object MinePattern extends App {
 
   val histogram = new mutable.HashMap[Int, Int]
+  val miner = new PatternMiner
 
   Persistence.get.lookup(DataType.STRING).foreach(column => {
 
@@ -43,7 +44,7 @@ object MinePattern extends App {
     val train = rows.slice(0, 1000)
     val test = rows.slice(1000, 2000)
 
-    val pattern = Pattern.generate(train.map(Tokenizer.tokenize(_).toSeq))
+    val pattern = miner.mine(train.map(Tokenizer.tokenize(_).toSeq))
 
     var failed = 0
 

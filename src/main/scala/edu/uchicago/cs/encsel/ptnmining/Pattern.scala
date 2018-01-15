@@ -123,6 +123,8 @@ class PToken(t: Token) extends Pattern {
   val token = t
 
   override def equals(obj: scala.Any): Boolean = {
+    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+      return true
     if (obj.isInstanceOf[PToken]) {
       val t = obj.asInstanceOf[PToken]
       return t.token.equals(token)
@@ -148,6 +150,8 @@ class PSeq(cnt: Pattern*) extends Pattern {
   def this(ps: Traversable[Pattern]) = this(ps.toSeq: _*)
 
   override def equals(obj: scala.Any): Boolean = {
+    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+      return true
     if (obj.isInstanceOf[PSeq]) {
       val seq = obj.asInstanceOf[PSeq]
       return seq.content.equals(content)
@@ -187,6 +191,8 @@ class PUnion(cnt: Pattern*) extends Pattern {
   def this(c: Traversable[Pattern]) = this(c.toSeq: _*)
 
   override def equals(obj: scala.Any): Boolean = {
+    if (obj == this)
+      return true
     if (obj.isInstanceOf[PUnion]) {
       val union = obj.asInstanceOf[PUnion]
       return union.content.equals(content)
@@ -212,11 +218,14 @@ class PUnion(cnt: Pattern*) extends Pattern {
 object PEmpty extends Pattern
 
 trait PAny extends Pattern {
-  override def equals(obj: scala.Any): Boolean =
+  override def equals(obj: scala.Any): Boolean = {
+    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+      return true
     obj match {
       case any: PAny => getClass == any.getClass
       case _ => super.equals(obj)
     }
+  }
 
   override def hashCode(): Int = getClass.hashCode()
 
@@ -224,21 +233,37 @@ trait PAny extends Pattern {
 }
 
 class PWordAny extends PAny {
-  var maxLength = -1
+  var _minLength = 1
+  var _maxLength = -1
 
-  def this(ml: Int) = {
+  def this(min: Int, max: Int) = {
     this()
-    maxLength = ml
+    _minLength = min
+    _maxLength = max
   }
+
+  def this(limit: Int) = this(limit, limit)
+
+  def minLength: Int = _minLength
+
+  def maxLength: Int = _maxLength
 }
 
 class PIntAny extends PAny {
-  var maxLength = 4
+  var _minLength = 1
+  var _maxLength = -1
 
-  def this(ml: Int) = {
+  def this(min: Int, max: Int) = {
     this()
-    maxLength = ml
+    _maxLength = max
+    _minLength = min
   }
+
+  def this(limit: Int) = this(limit, limit)
+
+  def maxLength: Int = _maxLength
+
+  def minLength: Int = _minLength
 }
 
 class PDoubleAny extends PAny {
@@ -265,6 +290,8 @@ class PIntRange extends Pattern {
   override def hashCode(): Int = this.min.hashCode() * 13 + this.max.hashCode()
 
   override def equals(obj: scala.Any): Boolean = {
+    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+      return true
     obj match {
       case range: PIntRange => {
         this.min == range.min && this.max == range.max

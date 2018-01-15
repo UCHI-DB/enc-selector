@@ -22,6 +22,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
+import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 import org.junit.Test
 
 import scala.io.Source
@@ -33,7 +34,8 @@ class PatternMinerTest {
 
   @Test
   def testMine: Unit = {
-    val input = Source.fromFile("src/test/resource/pattern/pattern_miner_sample").getLines().toSeq
+    val input = Source.fromFile("src/test/resource/pattern/pattern_miner_sample")
+      .getLines().map(Tokenizer.tokenize(_).toSeq).toSeq
     val pm = new PatternMiner
     val pattern = pm.mine(input)
 

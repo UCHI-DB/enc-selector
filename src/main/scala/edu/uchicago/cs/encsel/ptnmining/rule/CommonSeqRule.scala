@@ -24,6 +24,8 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
+import edu.uchicago.cs.encsel.ptnmining.parser.TWord
+import edu.uchicago.cs.encsel.wordvec.{DbSimilarWord, SimilarWord}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -31,7 +33,8 @@ import scala.collection.mutable.ArrayBuffer
   * Look for common sequence from a union and split it into smaller pieces
   *
   */
-class CommonSeqRule extends RewriteRule {
+class CommonSeqRule(val similarWord: SimilarWord = null) extends RewriteRule {
+  val cseq = new CommonSeq()
 
   protected def condition(ptn: Pattern): Boolean =
     ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.size > 1
@@ -44,9 +47,8 @@ class CommonSeqRule extends RewriteRule {
         case _ => Seq(p)
       }
     })
-    val cseq = new CommonSeq
     // Look for common sequence
-    val seq = cseq.find(unionData, compare)
+    val seq = cseq.find(unionData)
 
     if (seq.nonEmpty) {
       val sectionBuffers = Array.fill(seq.length + 1)(new ArrayBuffer[Pattern])
@@ -85,7 +87,23 @@ class CommonSeqRule extends RewriteRule {
       union
   }
 
-  private def compare(a: Pattern, b: Pattern): Boolean = {
-    a.equals(b)
+  def compare(a: Pattern, b: Pattern): Boolean = {
+    (similarWord == null) match {
+      case false => {
+        if (a.isInstanceOf[PToken]
+          && a.asInstanceOf[PToken].token.isInstanceOf[TWord]
+          && b.isInstanceOf[PToken]
+          && b.asInstanceOf[PToken].token.isInstanceOf[TWord]) {
+          val w1 = a.asInstanceOf[PToken].token.asInstanceOf[TWord].value
+          val w2 = b.asInstanceOf[PToken].token.asInstanceOf[TWord].value
+          return similarWord.similar(w1, w2)
+        } else {
+          return a.equals(b)
+        }
+      }
+      case true => {
+        a.equals(b)
+      }
+    }
   }
 }

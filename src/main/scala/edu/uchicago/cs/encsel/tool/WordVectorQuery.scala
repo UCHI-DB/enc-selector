@@ -23,6 +23,9 @@
 
 package edu.uchicago.cs.encsel.tool
 
+import org.nd4j.linalg.factory.Nd4j
+import org.nd4j.linalg.ops.transforms.Transforms
+
 import scala.io.Source
 
 object WordVectorQuery extends App {
@@ -30,25 +33,28 @@ object WordVectorQuery extends App {
   val src = "/home/harper/Downloads/glove.42B.300d.txt"
 
   val word1 = "st."
-  val word2 = "rd."
-  val word3 = "road"
-  val word4 = "street"
-  val word5 = "avenue"
+  val word2 = "road"
+
+  var line1: String = null
+  var line2: String = null
 
   Source.fromFile(src).getLines().foreach {
-    line =>
-      {
-        val sp = line.split("\\s+")
-        if (sp(0).equals(word1))
-          println(line)
-        if (sp(0).equals(word2))
-          println(line)
-        if (sp(0).equals(word3))
-          println(line)
-        if (sp(0).equals(word4))
-          println(line)
-        if (sp(0).equals(word5))
-          println(line)
-      }
+    line => {
+      val sp = line.split("\\s+")
+      if (sp(0).equals(word1))
+        line1 = line
+      if (sp(0).equals(word2))
+        line2 = line
+    }
   }
+  val vec1 = Nd4j.create(line1.split("\\s+").drop(1).map(_.toDouble))
+  val vec2 = Nd4j.create(line2.split("\\s+").drop(1).map(_.toDouble))
+
+  println(Transforms.cosineSim(vec1,vec2))
+
+}
+
+object Nd4jRunner extends App {
+
+  Nd4j.create(3,5)
 }

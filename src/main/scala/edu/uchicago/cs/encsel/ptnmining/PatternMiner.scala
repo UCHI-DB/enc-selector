@@ -23,20 +23,61 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
+import edu.uchicago.cs.encsel.ptnmining.parser.{Token, Tokenizer}
 import edu.uchicago.cs.encsel.ptnmining.preprocess.FrequentWord
+import edu.uchicago.cs.encsel.ptnmining.rule._
 
 /**
   * Created by harper on 3/25/17.
   */
 class PatternMiner {
 
-  def mine(input: Seq[String]): Pattern = {
+  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
 
-    val tokens = input.map(Tokenizer.tokenize(_).toSeq)
-    // Pre-processing
-    val ptn = Pattern.generate(tokens)
+  def mine(in: Seq[Seq[Token]]): Pattern = {
+    // Generate a direct pattern by translating tokens
 
+    val translated = new PUnion(in.map(l => new PSeq(l.map(new PToken(_)): _*)))
+
+    rules.foreach(rule => {
+      rule match {
+        case data: DataRewriteRule => data.generateOn(in)
+        case _ => Unit
+      }
+    })
+    // Repeatedly refine the pattern using supplied rules
+    var toRefine: Pattern = translated
+    var needRefine = true
+    var refineResult: Pattern = toRefine
+    while (needRefine) {
+      val refined = refine(toRefine)
+      if (refined._2) {
+        toRefine = refined._1
+      } else {
+        needRefine = false
+        refineResult = refined._1
+      }
+    }
+
+    val validated = validate(refineResult)
+    validated
+  }
+
+  protected def refine(root: Pattern): (Pattern, Boolean) = {
+    var current = root
+
+    rules.indices.foreach(i => {
+      rules(i).reset
+      current = rules(i).rewrite(current)
+      if (rules(i).happened) {
+        // Apply the first valid rule
+        return (current, true)
+      }
+    })
+    (root, false)
+  }
+
+  def validate(ptn: Pattern): Pattern = {
     ptn
   }
 

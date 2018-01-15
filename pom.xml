@@ -6,6 +6,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Encoding Selector</name>
     <build>
+        <outputDirectory>target/classes</outputDirectory>
+        <testOutputDirectory>target/test-classes</testOutputDirectory>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
@@ -131,18 +133,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12.4</version>
-                <configuration>
-                    <forkMode>once</forkMode>
-                    <argLine>
-                        -Djava.library.path=${project.build.directory}
-                    </argLine>
-                </configuration>
-            </plugin-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
@@ -188,68 +178,23 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>1.0-alpha-8</version>
-                <extensions>true</extensions>
 
-                <executions>
-                    <execution>
-                        <id>jni-javah</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>javah</goal>
-                            <goal>compile</goal>
-                            <goal>link</goal>
-                        </goals>
-                        <configuration>
-                            <javahPath>${java.home}/../bin/javah</javahPath>
-                            <javahClassNames>
-                                <javahClassName>
-                                    edu.uchicago.cs.encsel.query.offheap.EqualJniScalar
-                                </javahClassName>
-                            </javahClassNames>
-                            <javahVerbose>true</javahVerbose>
-                            <javahOS>linux</javahOS>
-                            <sources>
-                                <source>
-                                    <directory>src/main/scala/edu/uchicago/cs/encsel/query/offheap</directory>
-                                    <fileNames>
-                                        <fileName>EqualJniScalar.cpp</fileName>
-                                    </fileNames>
-                                </source>
-                                <source>
-                                    <directory>
-                                        ${project.build.directory}/native/javah
-                                    </directory>
-                                </source>
-                            </sources>
-                            <compilerStartOptions>
-                                <compilerStartOption>-fPIC</compilerStartOption>
-                            </compilerStartOptions>
-                            <compilerOutputDirectory>${project.build.directory}/native/javah</compilerOutputDirectory>
-                            <linkerFinalName>libEqualJniScalar</linkerFinalName>
-                            <linkerStartOptions>
-                                <linkerStartOption>-shared</linkerStartOption>
-                            </linkerStartOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <executions>
                     <!--execution>
-                        <id>rename-jni-lib</id>
-                        <phase>generate-test-sources</phase>
+                        <id>copy-test-persistence</id>
+                        <phase>process-test-resources</phase>
                         <configuration>
                             <target>
-                                <move
-                                        file="${project.build.directory}/libEqualJniScalar.jar"
-                                        tofile="${project.build.directory}/libEqualJniScalar.so"/>
+                                <copy
+                                        file="${project.build.outputDirectory}/META-INF/persistence.prod.xml"
+                                        tofile="${project.build.outputDirectory}/META-INF/persistence.prod.xml.proper"/>
+                                <copy
+                                        file="${project.build.testOutputDirectory}/META-INF/persistence.prod.xml"
+                                        tofile="${project.build.outputDirectory}/META-INF/persistence.prod.xml"/>
                             </target>
                         </configuration>
                         <goals>
@@ -257,30 +202,13 @@
                         </goals>
                     </execution-->
                     <execution>
-                        <id>copy-test-persistence</id>
-                        <phase>process-test-resources</phase>
-                        <configuration>
-                            <target>
-                                <copy
-                                        file="${project.build.outputDirectory}/META-INF/persistence.xml"
-                                        tofile="${project.build.outputDirectory}/META-INF/persistence.xml.proper"/>
-                                <copy
-                                        file="${project.build.testOutputDirectory}/META-INF/persistence.xml"
-                                        tofile="${project.build.outputDirectory}/META-INF/persistence.xml"/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
                         <id>restore-persistence</id>
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
-                                <!-- restore the " proper " persistence.xml -->
+                                <!-- restore the " proper " persistence.prod.xml -->
                                 <copy
-                                        file="${project.build.outputDirectory}/META-INF/persistence.xml.proper"
+                                        file="${project.build.outputDirectory}/META-INF/persistence.prod.xml"
                                         tofile="${project.build.outputDirectory}/META-INF/persistence.xml"
                                         overwrite="true"/>
                             </target>
@@ -297,6 +225,7 @@
     <properties>
         <parquet.version>1.9.0</parquet.version>
         <hadoop.version>2.9.0</hadoop.version>
+        <nd4j.version>0.9.1</nd4j.version>
     </properties>
 
     <dependencies>
@@ -426,23 +355,20 @@
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-api</artifactId>
-            <version>0.9.1</version>
+            <version>${nd4j.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.nd4j/nd4j-native -->
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
-            <version>0.9.1</version>
+            <version>${nd4j.version}</version>
+        </dependency>
+        <!-- Memory Database for Unit Test-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>jdk.tools</groupId>
-            <artifactId>jdk.tools</artifactId>
-            <scope>system</scope>
-            <systemPath>${java.home}/../lib/tools.jar</systemPath>
-            <version>1.8</version>
-        </dependency>
-
-
     </dependencies>
 </project>
