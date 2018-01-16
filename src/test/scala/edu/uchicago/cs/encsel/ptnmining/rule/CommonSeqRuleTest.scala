@@ -2,6 +2,7 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord}
 import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion}
+import edu.uchicago.cs.encsel.wordvec.DbSimilarWord
 import org.junit.Assert._
 import org.junit.Test
 
@@ -62,6 +63,8 @@ class CommonSeqRuleTest {
 
   @Test
   def testWithSimilarWord:Unit = {
+    val rule = new CommonSeqRule(new DbSimilarWord())
+
 
   }
 }

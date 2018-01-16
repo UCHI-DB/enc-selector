@@ -6,9 +6,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Encoding Selector</name>
     <build>
-        <outputDirectory>target/classes</outputDirectory>
-        <testOutputDirectory>target/test-classes</testOutputDirectory>
         <sourceDirectory>src/main/java</sourceDirectory>
+
         <resources>
             <resource>
                 <directory>src/main/scala</directory>
@@ -190,11 +189,11 @@
                         <configuration>
                             <target>
                                 <copy
-                                        file="${project.build.outputDirectory}/META-INF/persistence.prod.xml"
-                                        tofile="${project.build.outputDirectory}/META-INF/persistence.prod.xml.proper"/>
+                                        file="${project.build.outputDirectory}/META-INF/persistence.xml"
+                                        tofile="${project.build.outputDirectory}/META-INF/persistence.xml.proper"/>
                                 <copy
-                                        file="${project.build.testOutputDirectory}/META-INF/persistence.prod.xml"
-                                        tofile="${project.build.outputDirectory}/META-INF/persistence.prod.xml"/>
+                                        file="${project.build.testOutputDirectory}/META-INF/persistence.xml"
+                                        tofile="${project.build.outputDirectory}/META-INF/persistence.xml"/>
                             </target>
                         </configuration>
                         <goals>
