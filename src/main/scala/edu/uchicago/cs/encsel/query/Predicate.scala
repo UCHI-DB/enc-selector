@@ -1,6 +1,6 @@
 package edu.uchicago.cs.encsel.query
 
-import edu.uchicago.cs.encsel.query.BitwiseOpr.BitwiseOpr
+import edu.uchicago.cs.encsel.query.bitmap.{Bitmap, RoaringBitmap}
 import org.apache.parquet.column.ColumnReader
 import org.apache.parquet.io.api.Binary
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
@@ -160,7 +160,7 @@ class VColumnPredicate(predicate: Any => Boolean, colIndex: Int)
   extends ColumnPredicate(predicate, colIndex)
     with VPredicate {
   def bitmap: Bitmap = {
-    val bitmap = new Bitmap(column.getTotalValueCount)
+    val bitmap = new RoaringBitmap()
     for (i <- 0L until column.getTotalValueCount) {
       bitmap.set(i, test())
     }
@@ -168,17 +168,14 @@ class VColumnPredicate(predicate: Any => Boolean, colIndex: Int)
   }
 }
 
-class VBitwisePredicate(val opr: BitwiseOpr, val left: VPredicate, val right: VPredicate)
+class VAndPredicate(val left: VPredicate, val right: VPredicate)
   extends GroupPredicate(Iterable(left, right)) with VPredicate {
 
-  def bitmap: Bitmap = {
-    val leftbm = left.bitmap
-    val rightbm = right match {
-      case null => null
-      case _ => right.bitmap
-    }
-    leftbm.compute(opr, rightbm)
-  }
+  def bitmap: Bitmap = left.bitmap.and(right.bitmap)
+}
 
+class VOrPredicate(val left: VPredicate, val right: VPredicate)
+  extends GroupPredicate(Iterable(left, right)) with VPredicate {
 
+  def bitmap: Bitmap = left.bitmap.or(right.bitmap)
 }

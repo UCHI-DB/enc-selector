@@ -40,7 +40,7 @@ object LoadWordVectorDb extends App {
   //  val limit = 12795
   var counter = 0
   Class.forName("com.mysql.jdbc.Driver")
-  val connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/wordvec?characterEncoding=UTF-8", "wordvec", "wordvec")
+  val connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/glove?characterEncoding=UTF-8", "glove", "glove")
   connection.setAutoCommit(false)
   val stmt = connection.prepareStatement("insert into word_vec (word, vector) values (?, ?)")
 

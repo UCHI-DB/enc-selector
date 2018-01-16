@@ -24,8 +24,8 @@ package edu.uchicago.cs.encsel.wordvec
 
 import javax.persistence.Persistence
 
-import org.junit.{Before, Test}
 import org.junit.Assert._
+import org.junit.{Before, Test}
 
 class DbSimilarwordTest {
 
@@ -47,7 +47,7 @@ class DbSimilarwordTest {
 
   @Test
   def testSimilar: Unit = {
-    val similar = new DbSimilarWord()
+    val similar = new SimilarWord(0.5, new DbWordSource())
     assertEquals(0.6651, similar.similarity("illinois", "chicago"), 0.0001)
     assertEquals(0.5726, similar.similarity("road", "avenue"), 0.0001)
   }

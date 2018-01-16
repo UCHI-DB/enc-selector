@@ -23,6 +23,7 @@
 package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
+import java.util.function.LongConsumer
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
 import edu.uchicago.cs.encsel.query.util.SchemaUtils
@@ -76,54 +77,54 @@ class ColumnTempTablePipe(val table: ColumnTempTable, val index: Int) extends Pr
 
   override def pipe(d: Double) = {
     table.add(index, d)
-  };
+  }
 
   override def pipe(b: Binary) = {
     table.add(index, b)
-  };
+  }
 
   override def pipe(i: Int) = {
     table.add(index, i)
-  };
+  }
 
   override def pipe(l: Long) = {
     table.add(index, l)
-  };
+  }
 
   override def pipe(bl: Boolean) = {
     table.add(index, bl)
-  };
+  }
 
   override def pipe(f: Float) = {
     table.add(index, f)
-  };
+  }
 }
 
 class RowTempTablePipe(val table: RowTempTable, val index: Int) extends PredicatePipe {
 
   override def pipe(d: Double) = {
     table.getConverter(index).asPrimitiveConverter().addDouble(d)
-  };
+  }
 
   override def pipe(b: Binary) = {
     table.getConverter(index).asPrimitiveConverter().addBinary(b);
-  };
+  }
 
   override def pipe(i: Int) = {
     table.getConverter(index).asPrimitiveConverter().addInt(i);
-  };
+  }
 
   override def pipe(l: Long) = {
     table.getConverter(index).asPrimitiveConverter().addLong(l);
-  };
+  }
 
   override def pipe(bl: Boolean) = {
     table.getConverter(index).asPrimitiveConverter().addBoolean(bl);
-  };
+  }
 
   override def pipe(f: Float) = {
     table.getConverter(index).asPrimitiveConverter().addFloat(f);
-  };
+  }
 }
 
 class VerticalSelect extends Select {
@@ -145,7 +146,9 @@ class VerticalSelect extends Select {
 
     ParquetReaderHelper.read(input, new EncReaderProcessor {
 
-      override def processRowGroup(version: ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
+      override def processRowGroup(version: ParsedVersion,
+                                   meta: BlockMetaData,
+                                   rowGroup: PageReadStore): Unit = {
         val columns = schema.getColumns.zipWithIndex.filter(col => {
           columnMap.containsKey(col._2)
         }).map(col => {
@@ -168,16 +171,34 @@ class VerticalSelect extends Select {
           val bitmap = vp.bitmap
 
           nonPredictIndices.map(columns(_)).foreach(col => {
+            var counter = 0
+            // Skip columns if necessary
+            bitmap.foreach(new LongConsumer() {
+              def accept(stop: Long) = {
+                while (counter < stop) {
+                  readColumn(col, false)
+                  col.consume()
+                  counter += 1
+                }
+                readColumn(col, true)
+                col.consume()
+                counter += 1
+              }
+            })
+            /*
             for (count <- 0L until rowGroup.getRowCount) {
+
               readColumn(col, bitmap.test(count))
               col.consume()
-            }
+            }*/
           })
         } else {
           nonPredictIndices.map(columns(_)).foreach(col => {
-            for (count <- 0L until rowGroup.getRowCount) {
+            var count = 0
+            while (count < rowGroup.getRowCount) {
               readColumn(col, true)
               col.consume()
+              count += 1
             }
           })
         }
@@ -211,7 +232,9 @@ class HorizontalSelect extends Select {
     ParquetReaderHelper.read(input, new ReaderProcessor {
       override def processFooter(footer: Footer): Unit = {}
 
-      override def processRowGroup(version: ParsedVersion, meta: BlockMetaData, rowGroup: PageReadStore): Unit = {
+      override def processRowGroup(version: ParsedVersion,
+                                   meta: BlockMetaData,
+                                   rowGroup: PageReadStore): Unit = {
         val columns = schema.getColumns.zipWithIndex
           .filter(col => {
             columnMap.containsKey(col._2)

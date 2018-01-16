@@ -23,12 +23,11 @@
 
 package edu.uchicago.cs.encsel.ptnmining.preprocess
 
+import edu.uchicago.cs.encsel.wordvec.WordSource
 import org.nd4j.linalg.api.ndarray.INDArray
-import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.ops.transforms.Transforms
 
 import scala.collection.mutable.HashMap
-import scala.io.Source
 
 object WordEmbedDict {
   val bufferSize = 500
@@ -39,7 +38,7 @@ object WordEmbedDict {
   *
   * @param source the dictionary file to load
   */
-class WordEmbedDict(source: String) {
+class WordEmbedDict(source: WordSource) {
 
   private val buffer = new HashMap[String, Option[INDArray]]
   private val additional = new HashMap[String, Option[INDArray]]
@@ -74,11 +73,6 @@ class WordEmbedDict(source: String) {
   }
 
   protected def load(key: String): Option[INDArray] = {
-    val found = Source.fromFile(source).getLines.map(_.split("\\s+"))
-      .find(data => data(0).equals(key))
-    found.isEmpty match {
-      case true => None
-      case _ => Some(Nd4j.create(found.get.drop(1).map(_.toDouble)))
-    }
+    return source.fetch(key).get(key)
   }
 }

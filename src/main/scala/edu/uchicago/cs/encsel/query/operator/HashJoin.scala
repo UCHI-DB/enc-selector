@@ -26,11 +26,11 @@ import java.net.URI
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query._
+import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
 import edu.uchicago.cs.encsel.query.util.{DataUtils, SchemaUtils}
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore
-import org.apache.parquet.hadoop.Footer
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 import org.apache.parquet.schema.MessageType
 
@@ -99,7 +99,7 @@ class HashJoin extends Join {
         val hashKeyReader = new ColumnReaderImpl(hashKeyCol, rowGroup.getPageReader(hashKeyCol),
           new PipePrimitiveConverter(probeSchema.getType(joinKey._2).asPrimitiveType()), version)
         // Build bitmap
-        val bitmap = new Bitmap(rowGroup.getRowCount)
+        val bitmap = new RoaringBitmap()
 
         for (i <- 0L until rowGroup.getRowCount) {
           val hashKey = DataUtils.readValue(hashKeyReader)

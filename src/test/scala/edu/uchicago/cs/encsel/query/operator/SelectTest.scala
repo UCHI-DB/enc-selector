@@ -165,31 +165,39 @@ class VerticalSelectTest {
   @Test
   def testSelectNotInPredicate: Unit = {
     val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
-    val predicate = new VColumnPredicate((data) => data.toString.toInt >= 90, 0)
+    val predicate = new VColumnPredicate((data) => data.toString.toInt >= 90 && data.toString.toInt % 2 == 0, 0)
     val temptable = new VerticalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(0, 1, 2))
 
     assertEquals(3, temptable.getColumns.size)
     for (i <- 0 until 3)
-      assertEquals(11, temptable.getColumns()(i).getData.size)
+      assertEquals(6, temptable.getColumns()(i).getData.size)
 
-    (0 to 10).foreach(i => {
-      assertEquals(i + 90, temptable.getColumns()(0).getData()(i).toString.toInt)
+    (0 until 6).foreach(i => {
+      assertEquals(i * 2 + 90, temptable.getColumns()(0).getData()(i).toString.toInt)
     })
+
+    assertEquals("IfVNIN9KtkScJ9dUjK3Pg5gY1aFeaXewwf",
+      temptable.getColumns()(2).getData()(2).asInstanceOf[Binary].toStringUsingUTF8)
   }
 
   @Test
   def testSelectInPredicate: Unit = {
     val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
-    val predicate = new VColumnPredicate((data) => data.toString.toInt >= 90, 0)
+    val predicate = new VColumnPredicate((data) => data.toString.toInt >= 90 && data.toString.toInt % 2 == 0, 0)
     val temptable = new VerticalSelect().select(input, predicate, TPCHSchema.customerSchema, Array(1, 2, 5, 7))
 
     for (i <- 0 until 4)
-      assertEquals(11, temptable.getColumns()(i).getData.size)
+      assertEquals(6, temptable.getColumns()(i).getData.size)
 
-    (0 to 10).foreach(i => {
-      assertEquals("Customer#000000%03d".format(i + 90), temptable.getColumns()(0).getData()(i).asInstanceOf[Binary].toStringUsingUTF8)
+    (0 until 6).foreach(i => {
+      assertEquals("Customer#000000%03d".format(i * 2 + 90),
+        temptable.getColumns()(0).getData()(i).asInstanceOf[Binary].toStringUsingUTF8)
     })
+
+    assertEquals("IfVNIN9KtkScJ9dUjK3Pg5gY1aFeaXewwf",
+      temptable.getColumns()(1).getData()(2).asInstanceOf[Binary].toStringUsingUTF8)
   }
+
   @Test
   def testSelectNotInPredicate2: Unit = {
     val input = new File("src/test/resource/query_select/customer_100.parquet").toURI
@@ -199,6 +207,7 @@ class VerticalSelectTest {
     assertEquals(7, temptable.getColumns()(0).getData.length)
 
   }
+
   @Test
   def testNullPredicate: Unit = {
     val input = new File("src/test/resource/query_select/customer_100.parquet").toURI

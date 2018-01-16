@@ -369,5 +369,11 @@
             <version>1.4.196</version>
             <scope>test</scope>
         </dependency>
+        <!-- Bitmap implementation -->
+        <dependency>
+            <groupId>org.roaringbitmap</groupId>
+            <artifactId>RoaringBitmap</artifactId>
+            <version>0.6.66</version>
+        </dependency>
     </dependencies>
 </project>

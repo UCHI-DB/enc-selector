@@ -22,23 +22,11 @@
 
 package edu.uchicago.cs.encsel.wordvec
 
-import javax.persistence._
-
-import edu.uchicago.cs.encsel.tool.WordVectorQuery._
-import org.nd4j.linalg.api.ndarray.INDArray
-import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.ops.transforms.Transforms
 
-import scala.beans.BeanProperty
-import scala.collection.mutable
-import scala.io.Source
-import scala.collection.Map
-import scala.collection.JavaConversions._
-import scala.collection.JavaConverters._
-
-abstract class SimilarWord(val threshold: Double) {
+class SimilarWord(val threshold: Double, val source: WordSource = new DbWordSource()) {
   def similarity(word1: String, word2: String): Double = {
-    val fetched = fetch(word1, word2)
+    val fetched = source.fetch(word1, word2)
     if (!fetched.contains(word1) || !fetched.contains(word2))
       return -1
     Transforms.cosineSim(fetched(word1), fetched(word2))
@@ -46,54 +34,6 @@ abstract class SimilarWord(val threshold: Double) {
 
   def similar(word1: String, word2: String) = {
     similarity(word1, word2) > threshold
-  }
-
-  def fetch(word: String*): Map[String, INDArray]
-}
-
-class FileSimilarWord(val filePath: String, threshold: Double = 0.5) extends SimilarWord(threshold) {
-
-  override def fetch(words: String*): Map[String, INDArray] = {
-    val buffer = new mutable.HashMap[String, INDArray]
-    Source.fromFile(src).getLines().takeWhile(p => buffer.size < words.size)
-      .foreach(line => {
-        val sp = line.split("\\s+")
-        if (words.contains(sp(0))) {
-          buffer.put(sp(0), Nd4j.create(sp.drop(1).map(_.toDouble)))
-        }
-      })
-    buffer
-  }
-}
-
-class DbSimilarWord(threshold: Double = 0.5) extends SimilarWord(threshold) {
-
-  private val em = Persistence.createEntityManagerFactory("word-vector").createEntityManager()
-
-  override def fetch(words: String*): Map[String, INDArray] = {
-    val wvs = em.createQuery("SELECT w FROM WordVector w where w.word in :words", classOf[WordVector])
-      .setParameter("words", words.toList.asJava).getResultList
-    wvs.map(w => (w.word, Nd4j.create(w.vector.split("\\s+").map(_.toDouble)))).toMap
-  }
-}
-
-@Entity
-@Table(name = "word_vec")
-class WordVector {
-
-
-  @BeanProperty
-  @Id
-  @Column(name = "word")
-  var word: String = ""
-  @BeanProperty
-  @Column(name = "vector")
-  var vector: String = ""
-
-  def this(w: String, v: String) {
-    this()
-    this.word = w
-    this.vector = v
   }
 }
 

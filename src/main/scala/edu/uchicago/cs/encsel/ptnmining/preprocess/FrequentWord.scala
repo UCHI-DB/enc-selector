@@ -24,6 +24,7 @@
 package edu.uchicago.cs.encsel.ptnmining.preprocess
 
 import edu.uchicago.cs.encsel.ptnmining.parser._
+import edu.uchicago.cs.encsel.wordvec.DbWordSource
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.ops.transforms.Transforms
 
@@ -197,7 +198,7 @@ class FrequentWord {
 
   private val wordFrequency = new HashMap[String, Double]
 
-  private val dict = new WordEmbedDict("/home/harper/Downloads/glove.840B.300d.txt")
+  private val dict = new WordEmbedDict(new DbWordSource())
 
   private val tokens = new ArrayBuffer[Seq[Token]]
 

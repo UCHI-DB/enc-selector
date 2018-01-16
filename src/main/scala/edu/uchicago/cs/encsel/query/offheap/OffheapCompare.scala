@@ -26,8 +26,9 @@ package edu.uchicago.cs.encsel.query.offheap
 import java.io.File
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
+import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
+import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
 import edu.uchicago.cs.encsel.query.tpch._
-import edu.uchicago.cs.encsel.query.{Bitmap, NonePrimitiveConverter}
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page._
@@ -93,7 +94,7 @@ object Onheap extends App {
                                    meta: BlockMetaData,
                                    rowGroup: PageReadStore): Unit = {
         val colReader = new ColumnReaderImpl(cd, rowGroup.getPageReader(cd), new NonePrimitiveConverter, version);
-        val bitmap = new Bitmap(rowGroup.getRowCount)
+        val bitmap = new RoaringBitmap()
         for (i <- 0L until rowGroup.getRowCount) {
           bitmap.set(i, pred(colReader.getInteger))
           colReader.consume

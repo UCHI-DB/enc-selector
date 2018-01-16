@@ -1,58 +1,43 @@
 package edu.uchicago.cs.encsel.ptnmining.preprocess
 
-import java.io.File
-import java.nio.file.{Files, Paths}
-
+import edu.uchicago.cs.encsel.wordvec.FileWordSource
 import org.junit.Assert._
 import org.junit.Test
 
 object WordEmbedDictTest {
-  val file = "/home/harper/Downloads/glove.840B.300d.txt"
+  val file = "src/test/resource/wordvec/glove"
 }
 
 class WordEmbedDictTest {
 
   @Test
-  def testOutput: Unit = {
-    if (Files.exists(Paths.get(new File(WordEmbedDictTest.file).toURI))) {
-      val words = new WordEmbedDict(WordEmbedDictTest.file)
-    }
-  }
-
-  @Test
   def testFind: Unit = {
-    if (Files.exists(Paths.get(new File(WordEmbedDictTest.file).toURI))) {
-      val words = new WordEmbedDict(WordEmbedDictTest.file)
+    val words = new WordEmbedDict(new FileWordSource(WordEmbedDictTest.file))
 
-      assertTrue(words.find("st.").isDefined)
-    }
+    assertTrue(words.find("any").isDefined)
   }
 
   @Test
   def testCompare: Unit = {
-    if (Files.exists(Paths.get(new File(WordEmbedDictTest.file).toURI))) {
-      val words = new WordEmbedDict(WordEmbedDictTest.file)
+    val words = new WordEmbedDict(new FileWordSource(WordEmbedDictTest.file))
 
-      assertTrue(0.5 < words.compare("street", "avenue"))
-    }
+    assertTrue(0.5 < words.compare("when", "who"))
   }
 
   @Test
   def testAddPhrase: Unit = {
-    if (Files.exists(Paths.get(new File(WordEmbedDictTest.file).toURI))) {
-      val words = new WordEmbedDict(WordEmbedDictTest.file)
 
-      assertTrue(words.find("good man").isEmpty)
+    val words = new WordEmbedDict(new FileWordSource(WordEmbedDictTest.file))
+    assertTrue(words.find("any how").isEmpty)
 
-      words.addPhrase("good man", Array("good", "man"))
+    words.addPhrase("any how", Array("any", "how"))
 
-      assertTrue(words.find("good man").isDefined)
+    assertTrue(words.find("any how").isDefined)
 
-      val result = words.find("good man").get
-      val good = words.find("good").get
-      val man = words.find("man").get
+    val result = words.find("any how").get
+    val good = words.find("any").get
+    val man = words.find("how").get
 
-      assertEquals(result, good.add(man))
-    }
+    assertEquals(result, good.add(man))
   }
 }
