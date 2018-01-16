@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.TWord
-import edu.uchicago.cs.encsel.wordvec.{DbSimilarWord, SimilarWord}
+import edu.uchicago.cs.encsel.wordvec.SimilarWord
 
 import scala.collection.mutable.ArrayBuffer
 
