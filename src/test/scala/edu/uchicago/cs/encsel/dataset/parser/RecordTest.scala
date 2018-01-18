@@ -11,7 +11,7 @@ class RecordTest {
     assertEquals(10, record.length())
     for (i <- 0 to 9)
       assertEquals("", record(i))
-    assertEquals("", record.toString())
+    assertEquals("", record.toString)
     val ite = record.iterator()
     for (_ <- 0 to 9) {
       assertTrue(ite.hasNext)

@@ -23,7 +23,6 @@
 package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
-import java.util.function.LongConsumer
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
 import edu.uchicago.cs.encsel.query.util.SchemaUtils
@@ -173,17 +172,16 @@ class VerticalSelect extends Select {
           nonPredictIndices.map(columns(_)).foreach(col => {
             var counter = 0
             // Skip columns if necessary
-            bitmap.foreach(new LongConsumer() {
-              def accept(stop: Long) = {
-                while (counter < stop) {
-                  readColumn(col, false)
-                  col.consume()
-                  counter += 1
-                }
-                readColumn(col, true)
+
+            bitmap.foreach(stop => {
+              while (counter < stop) {
+                readColumn(col, false)
                 col.consume()
                 counter += 1
               }
+              readColumn(col, true)
+              col.consume()
+              counter += 1
             })
             /*
             for (count <- 0L until rowGroup.getRowCount) {
@@ -191,8 +189,11 @@ class VerticalSelect extends Select {
               readColumn(col, bitmap.test(count))
               col.consume()
             }*/
-          })
-        } else {
+          }
+          )
+        }
+
+        else {
           nonPredictIndices.map(columns(_)).foreach(col => {
             var count = 0
             while (count < rowGroup.getRowCount) {
@@ -203,7 +204,9 @@ class VerticalSelect extends Select {
           })
         }
       }
-    })
+    }
+
+    )
 
     return recorder
   }
