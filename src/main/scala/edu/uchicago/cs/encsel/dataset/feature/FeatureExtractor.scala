@@ -41,6 +41,6 @@ object FeatureExtractorUtils {
 
   def lineCount(column: Column): Int = {
     val result = "wc -l %s".format(column.colFile.getPath).!!
-    result.split("\\s+")(0).toInt
+    result.trim.split("\\s+")(0).toInt
   }
 }
