@@ -24,12 +24,59 @@
 package edu.uchicago.cs.encsel.ptnmining
 
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
+import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
+import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.ptnmining.genregex.GenRegexVisitor
+import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 
 import scala.io.Source
 
 object MineFromColumn {
 
-  Persistence.get.load().foreach(column => {
-    Source.fromFile(column.colFile)
-  })
+  val patternMiner = new PatternMiner
+
+  Persistence.get.load().filter(_.dataType == DataType.STRING)
+    .foreach(column => {
+      val colid = column.asInstanceOf[ColumnWrapper].id
+      val pattern = patternMiner.mine(Source.fromFile(column.colFile).getLines()
+        .take(100).toSeq.map(Tokenizer.tokenize(_).toSeq))
+
+      val validator = new PatternValidator
+      pattern.visit(validator)
+      if (validator.isValid) {
+        pattern.naming()
+        val regex = new GenRegexVisitor
+        pattern.visit(regex)
+        println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
+      }
+    })
+}
+
+/**
+  * There are currently several requirements to the pattern
+  * 1. No too large unions
+  * 2. No too long sequences
+  *
+  * Note: these rules are temporary and subject to change
+  */
+class PatternValidator extends PatternVisitor {
+
+  var valid = true
+
+  val unionThreshold = 10
+  val seqThreshold = 10
+
+  override def on(ptn: Pattern): Unit = {
+    ptn match {
+      case union: PUnion => {
+        valid &= union.content.size <= unionThreshold
+      }
+      case seq: PSeq => {
+        valid &= seq.content.size <= seqThreshold
+      }
+      case _ => {}
+    }
+  }
+
+  def isValid: Boolean = valid
 }

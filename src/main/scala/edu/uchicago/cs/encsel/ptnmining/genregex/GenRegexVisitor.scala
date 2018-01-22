@@ -73,6 +73,7 @@ class GenRegexVisitor extends PatternVisitor {
   }
 
   override def exit(ptn: Pattern): Unit = {
+    super.exit(ptn)
     ptn match {
       case union: PUnion => {
         var result = union.content.filter(_ != PEmpty).map(n => history.getOrElse(n.name, "<err>"))
