@@ -39,8 +39,8 @@ class IntegerRangeRuleTest {
     assertTrue(content(1).isInstanceOf[PIntRange])
     val range = content(1).asInstanceOf[PIntRange]
 
-    assertEquals(43, range.min)
-    assertEquals(332, range.max)
+    assertEquals(BigInt(43), range.min)
+    assertEquals(BigInt(332), range.max)
   }
 
 }

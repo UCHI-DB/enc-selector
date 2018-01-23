@@ -79,5 +79,5 @@ object PatternEvaluator {
 
   def intSize(input: Int): Int = Math.ceil(Math.log(input) / (8 * Math.log(2))).toInt
 
-  def intSize(input: BigInteger): Int = Math.ceil(Math.log(input.doubleValue()) / (8 * Math.log(2))).toInt
+  def intSize(input: BigInt): Int = Math.ceil(Math.log(input.doubleValue()) / (8 * Math.log(2))).toInt
 }

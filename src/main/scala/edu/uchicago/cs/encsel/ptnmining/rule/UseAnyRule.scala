@@ -32,47 +32,40 @@ import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
   */
 object UseAnyRule {
   // Execute the rule if union size is greater than threshold * data size
-  val threshold = 0.1
+  val threshold = 0.3
 }
 
 class UseAnyRule extends DataRewriteRule {
 
-  override def condition(ptn: Pattern): Boolean =
-    ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.length >= UseAnyRule.threshold * originData.length
+  override def condition(ptn: Pattern): Boolean = {
+    ptn.isInstanceOf[PUnion] && {
+      val union = ptn.asInstanceOf[PUnion]
+      val childrenType = union.content.map(_.getClass).toSet
+      childrenType.size == 1 && childrenType.contains(classOf[PToken]) && union.content.length >= UseAnyRule.threshold * originData.length
+    }
+  }
 
 
   override protected def update(ptn: Pattern): Pattern = {
     val union = ptn.asInstanceOf[PUnion]
-    toAny(union)
-  }
-
-  protected def toAny(ptn: Pattern): Pattern = {
-    ptn match {
-      case union: PUnion => PUnion.make(union.content.map(toAny))
-      case seq: PSeq => PSeq.make(seq.content.map(toAny))
-      case token: PToken => {
-        token.token match {
-          case word: TWord => new PWordAny
-          case int: TInt => new PIntAny
-          case double: TDouble => new PDoubleAny
-          case _ => token
+    val anyed = union.content.map(
+      _ match {
+        case token: PToken => {
+          token.token match {
+            case word: TWord => new PWordAny
+            case int: TInt => new PIntAny
+            case double: TDouble => new PDoubleAny
+            case tother => token
+          }
         }
+        case other => other
       }
-      case _ => ptn
-    }
-  }
-
-  def fuzzyCompare(a: Pattern, b: Pattern): Boolean = {
-    (a, b) match {
-      case (at: PToken, bt: PToken) => {
-        at.token.isData match {
-          case true => at.token.getClass == bt.token.getClass
-          case false => at.token.equals(bt.token)
-        }
-      }
-      case (_, _) => {
-        a.equals(b)
-      }
+    ).toSet
+    if (anyed.size == 1 && anyed.head.isInstanceOf[PAny]) {
+      happen()
+      anyed.head
+    } else {
+      ptn
     }
   }
 }

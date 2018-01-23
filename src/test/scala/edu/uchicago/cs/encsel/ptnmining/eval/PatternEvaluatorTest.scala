@@ -44,7 +44,7 @@ class PatternEvaluatorTest {
 
     val result = PatternEvaluator.evaluate(pattern1, dataset)
 
-    assertEquals(99, result, 0.01)
+    assertEquals(104, result, 0.01)
 
     val pattern2 = new PSeq(new PWordAny, new PIntAny, new PToken(new TSymbol("-")),
       new PWordAny,
@@ -53,6 +53,6 @@ class PatternEvaluatorTest {
 
     val result2 = PatternEvaluator.evaluate(pattern2, dataset)
 
-    assertEquals(143, result2, 0.01)
+    assertEquals(159, result2, 0.01)
   }
 }

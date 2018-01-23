@@ -65,9 +65,9 @@ class TInt(v: AnyRef) extends Token {
 
   override def isData = true
 
-  def intValue = new BigInteger(value)
+  def intValue = BigInt(value)
 
-  override def length = 2
+  override def length = 4
 }
 
 class TDouble(v: AnyRef) extends Token {
@@ -75,11 +75,14 @@ class TDouble(v: AnyRef) extends Token {
 
   override def isData = true
 
-  def doubleValue = value.toDouble
+  def doubleValue = BigDecimal(value)
 
-  override def length = doubleValue == doubleValue.toFloat match {
-    case true => 4
-    case false => 8
+  override def length = {
+    val double = doubleValue.toDouble
+    double == double.toFloat match {
+      case true => 4
+      case false => 8
+    }
   }
 }
 

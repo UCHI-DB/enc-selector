@@ -60,6 +60,28 @@ object MineFromColumn extends App {
   output.close
 }
 
+object MineSingleFile extends App {
+  val patternMiner = new PatternMiner
+
+  val output = new PrintWriter(new FileOutputStream("pattern_res"))
+
+  val pattern = patternMiner.mine(Source.fromFile("/home/harper/test").getLines()
+    .take(100).toList.map(Tokenizer.tokenize(_).toList))
+
+  val validator = new PatternValidator
+  pattern.visit(validator)
+  //      if (validator.isValid) {
+  pattern.naming()
+  val regex = new GenRegexVisitor
+  pattern.visit(regex)
+  output.println(regex.history.get(pattern.name).getOrElse(""))
+  /*} else {
+    val regex = new GenRegexVisitor
+    println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
+  }*/
+  output.close
+}
+
 /**
   * There are currently several requirements to the pattern
   * 1. No too large unions

@@ -33,14 +33,14 @@ import edu.uchicago.cs.encsel.ptnmining.{PIntRange, PToken, PUnion, Pattern}
 class IntegerRangeRule extends RewriteRule {
 
   override protected def update(ptn: Pattern): Pattern = {
-    var max: BigInteger = null
-    var min: BigInteger = null
+    var max: BigInt = null
+    var min: BigInt = null
     val union = ptn.asInstanceOf[PUnion]
     union.content.foreach(item => {
       val intToken = item.flatten(0).asInstanceOf[PToken].token.asInstanceOf[TInt]
-      if (min == null || intToken.intValue.compareTo(min) < 0)
+      if (min == null || intToken.intValue < min)
         min = intToken.intValue
-      if (max == null || intToken.intValue.compareTo(max) > 0)
+      if (max == null || intToken.intValue > max)
         max = intToken.intValue
     })
     happen()

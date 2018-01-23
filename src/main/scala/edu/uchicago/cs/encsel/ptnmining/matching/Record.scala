@@ -38,7 +38,7 @@ class Record {
   val choices: mutable.HashMap[String, (Int, Int)] = new mutable.HashMap[String, (Int, Int)]
 
   // The delta towards min value of range
-  val rangeDeltas: mutable.HashMap[String, BigInteger] = new mutable.HashMap[String, BigInteger]
+  val rangeDeltas: mutable.HashMap[String, BigInt] = new mutable.HashMap[String, BigInt]
 
   def add(name: String, value: Token) = {
     values += ((name, value))

@@ -278,17 +278,17 @@ class PDoubleAny extends PAny {
 }
 
 class PIntRange extends Pattern {
-  var min: BigInteger = BigInteger.ZERO
-  var max: BigInteger = BigInteger.ZERO
+  var min: BigInt = BigInt(0)
+  var max: BigInt = BigInt(0)
 
-  def this(min: BigInteger, max: BigInteger) {
+  def this(min: BigInt, max: BigInt) {
     this()
     this.min = min
     this.max = max
   }
 
   def this(min: Int, max: Int) {
-    this(BigInteger.valueOf(min), BigInteger.valueOf(max))
+    this(BigInt(min), BigInt(max))
   }
 
   override def hashCode(): Int = this.min.hashCode() * 13 + this.max.hashCode()
