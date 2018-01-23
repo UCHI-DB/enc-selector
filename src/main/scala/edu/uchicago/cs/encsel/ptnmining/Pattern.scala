@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
+import java.math.BigInteger
+
 import edu.uchicago.cs.encsel.ptnmining.matching.{NamingVisitor, PatternMatcher, Record}
 import edu.uchicago.cs.encsel.ptnmining.parser._
 import edu.uchicago.cs.encsel.ptnmining.rule._
@@ -276,16 +278,18 @@ class PDoubleAny extends PAny {
 }
 
 class PIntRange extends Pattern {
-  var min: Int = 0
-  var max: Int = 0
+  var min: BigInteger = BigInteger.ZERO
+  var max: BigInteger = BigInteger.ZERO
 
-  def this(min: Int, max: Int) {
+  def this(min: BigInteger, max: BigInteger) {
     this()
     this.min = min
     this.max = max
   }
 
-  def range(): Range = (min to max)
+  def this(min: Int, max: Int) {
+    this(BigInteger.valueOf(min), BigInteger.valueOf(max))
+  }
 
   override def hashCode(): Int = this.min.hashCode() * 13 + this.max.hashCode()
 

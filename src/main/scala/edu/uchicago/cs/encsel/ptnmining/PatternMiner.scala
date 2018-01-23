@@ -23,8 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{Token, Tokenizer}
-import edu.uchicago.cs.encsel.ptnmining.preprocess.FrequentWord
+import edu.uchicago.cs.encsel.ptnmining.parser.Token
 import edu.uchicago.cs.encsel.ptnmining.rule._
 
 /**
@@ -32,7 +31,8 @@ import edu.uchicago.cs.encsel.ptnmining.rule._
   */
 class PatternMiner {
 
-  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
+  val rules = Array(new CommonSymbolRule, new CommonSeqRule,
+    new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
 
   def mine(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens

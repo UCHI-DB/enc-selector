@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining.matching
 
+import java.math.BigInteger
+
 import edu.uchicago.cs.encsel.ptnmining.parser.Token
 
 import scala.collection.mutable
@@ -36,7 +38,7 @@ class Record {
   val choices: mutable.HashMap[String, (Int, Int)] = new mutable.HashMap[String, (Int, Int)]
 
   // The delta towards min value of range
-  val rangeDeltas: mutable.HashMap[String, Int] = new mutable.HashMap[String, Int]
+  val rangeDeltas: mutable.HashMap[String, BigInteger] = new mutable.HashMap[String, BigInteger]
 
   def add(name: String, value: Token) = {
     values += ((name, value))

@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining.parser
 
+import java.math.BigInteger
+
 /**
   * Token is a data processing unit
   */
@@ -63,7 +65,7 @@ class TInt(v: AnyRef) extends Token {
 
   override def isData = true
 
-  def intValue = value.toInt
+  def intValue = new BigInteger(value)
 
   override def length = 2
 }
@@ -81,13 +83,11 @@ class TDouble(v: AnyRef) extends Token {
   }
 }
 
-class TSpace extends Token {
-  val value = " "
-}
-
 class TSymbol(v: AnyRef) extends Token {
   val value = v.toString
 }
+
+class TSpace extends TSymbol(" ")
 
 class TPara(t: Int, l: Boolean) extends Token {
   val paraType = t

@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining.eval
 
+import java.math.BigInteger
+
 import edu.uchicago.cs.encsel.ptnmining.parser.Token
 import edu.uchicago.cs.encsel.ptnmining.{PAny, Pattern}
 import org.apache.commons.lang3.StringUtils
@@ -76,4 +78,6 @@ object PatternEvaluator {
   }
 
   def intSize(input: Int): Int = Math.ceil(Math.log(input) / (8 * Math.log(2))).toInt
+
+  def intSize(input: BigInteger): Int = Math.ceil(Math.log(input.doubleValue()) / (8 * Math.log(2))).toInt
 }

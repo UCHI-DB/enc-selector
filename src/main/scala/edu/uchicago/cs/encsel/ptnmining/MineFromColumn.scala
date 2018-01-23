@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
+import java.io.{FileOutputStream, PrintWriter}
+
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
@@ -31,11 +33,13 @@ import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 
 import scala.io.Source
 
-object MineFromColumn {
+object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  Persistence.get.load().filter(_.dataType == DataType.STRING)
+  val output = new PrintWriter(new FileOutputStream("pattern_res"))
+
+  Persistence.get.load().filter(_.dataType == DataType.STRING).filter(_.asInstanceOf[ColumnWrapper].id == 2)
     .foreach(column => {
       val colid = column.asInstanceOf[ColumnWrapper].id
       val pattern = patternMiner.mine(Source.fromFile(column.colFile).getLines()
@@ -43,13 +47,17 @@ object MineFromColumn {
 
       val validator = new PatternValidator
       pattern.visit(validator)
-      if (validator.isValid) {
-        pattern.naming()
+      //      if (validator.isValid) {
+      pattern.naming()
+      val regex = new GenRegexVisitor
+      pattern.visit(regex)
+      output.println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
+      /*} else {
         val regex = new GenRegexVisitor
-        pattern.visit(regex)
         println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
-      }
+      }*/
     })
+  output.close
 }
 
 /**

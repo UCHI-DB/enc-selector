@@ -22,6 +22,8 @@
  */
 package edu.uchicago.cs.encsel.ptnmining.rule
 
+import java.math.BigInteger
+
 import edu.uchicago.cs.encsel.ptnmining.parser.TInt
 import edu.uchicago.cs.encsel.ptnmining.{PIntRange, PToken, PUnion, Pattern}
 
@@ -31,14 +33,14 @@ import edu.uchicago.cs.encsel.ptnmining.{PIntRange, PToken, PUnion, Pattern}
 class IntegerRangeRule extends RewriteRule {
 
   override protected def update(ptn: Pattern): Pattern = {
-    var max = -Integer.MAX_VALUE
-    var min = Integer.MAX_VALUE
+    var max: BigInteger = null
+    var min: BigInteger = null
     val union = ptn.asInstanceOf[PUnion]
     union.content.foreach(item => {
       val intToken = item.flatten(0).asInstanceOf[PToken].token.asInstanceOf[TInt]
-      if (intToken.intValue < min)
+      if (min == null || intToken.intValue.compareTo(min) < 0)
         min = intToken.intValue
-      if (intToken.intValue > max)
+      if (max == null || intToken.intValue.compareTo(max) > 0)
         max = intToken.intValue
     })
     happen()

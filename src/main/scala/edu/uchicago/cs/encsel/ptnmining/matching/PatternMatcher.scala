@@ -97,9 +97,9 @@ object PatternMatcher {
             case range: PIntRange => {
               matched &= {
                 if (tokens(pointer).isInstanceOf[TInt]) {
-                  val intToken = tokens(pointer).asInstanceOf[TInt]
-                  record.rangeDeltas += ((range.name, range.max - range.min))
-                  range.range().contains(intToken.intValue)
+                  val intValue = tokens(pointer).asInstanceOf[TInt].intValue
+                  record.rangeDeltas += ((range.name, intValue.subtract(range.min)))
+                  range.min.compareTo(intValue) <= 0 && range.max.compareTo(intValue) >= 0
                 } else {
                   false
                 }

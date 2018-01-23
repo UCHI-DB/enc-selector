@@ -32,7 +32,7 @@ import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
   */
 object UseAnyRule {
   // Execute the rule if union size is greater than threshold * data size
-  val threshold = 0.3
+  val threshold = 0.1
 }
 
 class UseAnyRule extends DataRewriteRule {
