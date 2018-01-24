@@ -55,6 +55,7 @@ class JPAPersistenceTest {
 
     val col0 = new Column(new File("xmp").toURI, 9, "tpq", DataType.INTEGER)
     col0.colFile = new File("wpt").toURI
+    col0.parent = jpa.find(20)
 
     val col1 = new Column(new File("dd").toURI, 3, "m", DataType.INTEGER)
     col1.colFile = new File("tt").toURI
@@ -94,6 +95,7 @@ class JPAPersistenceTest {
         case 9 => {
           assertEquals(DataType.INTEGER, col.dataType)
           assertEquals("tpq", col.colName)
+          assertEquals(20, col.parent.colIndex)
         }
       }
     })

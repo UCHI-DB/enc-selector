@@ -33,8 +33,9 @@ import scala.collection.JavaConversions.asScalaBuffer
 class JPAPersistence extends Persistence {
   val logger = LoggerFactory.getLogger(getClass)
 
+  private val em = JPAPersistence.emf.createEntityManager()
+
   def save(datalist: Traversable[Column]) = {
-    val em = JPAPersistence.emf.createEntityManager()
     em.getTransaction.begin()
     try {
       datalist.map(ColumnWrapper.fromColumn).foreach { data => {
@@ -53,19 +54,15 @@ class JPAPersistence extends Persistence {
         throw new RuntimeException(e)
       }
     }
-    em.close()
   }
 
   def load(): Iterator[Column] = {
-    val em = JPAPersistence.emf.createEntityManager()
     val query = em.createQuery("SELECT c FROM Column c ORDER BY c.id", classOf[ColumnWrapper])
     val res = query.getResultList.map(_.asInstanceOf[Column]).toIterator
-    em.close()
     res
   }
 
   def clean() = {
-    val em = JPAPersistence.emf.createEntityManager()
     em.getTransaction.begin()
     try {
       val query = em.createQuery("DELETE FROM Column c", classOf[ColumnWrapper])
@@ -77,22 +74,17 @@ class JPAPersistence extends Persistence {
         throw new RuntimeException(e)
       }
     }
-    em.close()
   }
 
   def find(id: Int): Column = {
-    val em = JPAPersistence.emf.createEntityManager()
     val res = em.createQuery("SELECT c FROM Column c where c.id = :id",
       classOf[ColumnWrapper]).setParameter("id", id).getSingleResult
-    em.close()
     res
   }
 
   def lookup(dataType: DataType): Iterator[Column] = {
-    val em = JPAPersistence.emf.createEntityManager
     val result = em.createQuery("SELECT c FROM Column c where c.dataType = :dt", classOf[ColumnWrapper])
       .setParameter("dt", dataType).getResultList.map(_.asInstanceOf[Column]).toIterator
-    em.close()
     result
   }
 }
