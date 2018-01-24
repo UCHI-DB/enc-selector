@@ -39,24 +39,23 @@ object MineFromColumn extends App {
 
   val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
-  Persistence.get.load().filter(_.dataType == DataType.STRING).filter(_.asInstanceOf[ColumnWrapper].id == 2)
-    .foreach(column => {
-      val colid = column.asInstanceOf[ColumnWrapper].id
-      val pattern = patternMiner.mine(Source.fromFile(column.colFile).getLines()
-        .take(100).toSeq.map(Tokenizer.tokenize(_).toSeq))
+  Persistence.get.load().filter(_.dataType == DataType.STRING).foreach(column => {
+    val colid = column.asInstanceOf[ColumnWrapper].id
+    val pattern = patternMiner.mine(Source.fromFile(column.colFile).getLines()
+      .take(100).toSeq.map(Tokenizer.tokenize(_).toSeq))
 
-      val validator = new PatternValidator
-      pattern.visit(validator)
-      //      if (validator.isValid) {
-      pattern.naming()
+    val validator = new PatternValidator
+    pattern.visit(validator)
+    //      if (validator.isValid) {
+    pattern.naming()
+    val regex = new GenRegexVisitor
+    pattern.visit(regex)
+    output.println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
+    /*} else {
       val regex = new GenRegexVisitor
-      pattern.visit(regex)
-      output.println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
-      /*} else {
-        val regex = new GenRegexVisitor
-        println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
-      }*/
-    })
+      println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
+    }*/
+  })
   output.close
 }
 
