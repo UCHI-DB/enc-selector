@@ -21,14 +21,15 @@
  */
 
 package edu.uchicago.cs.encsel.ptnmining.rule
+
 import edu.uchicago.cs.encsel.ptnmining.Pattern
 
 class HexNumberRule extends RewriteRule {
   override protected def condition(ptn: Pattern): Boolean = {
-
+    false
   }
 
   override protected def update(ptn: Pattern): Pattern = {
-
+    ptn
   }
 }
