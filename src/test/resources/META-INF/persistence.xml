@@ -17,7 +17,7 @@
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-            <!-- property name="eclipselink.logging.level" value="FINE"/-->
+            <!--property name="eclipselink.logging.level" value="FINE"/-->
         </properties>
     </persistence-unit>
 

@@ -23,12 +23,11 @@ class JPAPersistenceTest {
     em.createNativeQuery("DELETE FROM feature WHERE 1 = 1;").executeUpdate()
     em.createNativeQuery("DELETE FROM col_data WHERE 1 = 1;").executeUpdate()
     em.flush()
-
     em.getTransaction.commit()
 
     em.getTransaction.begin()
     val col1 = new ColumnWrapper
-    col1.id = 2
+    col1.id = 20
     col1.colName = "a"
     col1.colIndex = 5
     col1.dataType = DataType.STRING
@@ -54,8 +53,12 @@ class JPAPersistenceTest {
   def testSaveNew: Unit = {
     val jpa = new JPAPersistence
 
+    val col0 = new Column(new File("xmp").toURI, 9, "tpq", DataType.INTEGER)
+    col0.colFile = new File("wpt").toURI
+
     val col1 = new Column(new File("dd").toURI, 3, "m", DataType.INTEGER)
     col1.colFile = new File("tt").toURI
+    col1.parent = col0
 
     col1.features = new java.util.HashSet[Feature]
 
@@ -67,13 +70,14 @@ class JPAPersistenceTest {
 
     val cols = jpa.load()
 
-    assertEquals(2, cols.size)
+    assertEquals(3, cols.size)
 
     cols.foreach(col => {
       col.colIndex match {
         case 3 => {
           assertEquals(DataType.INTEGER, col.dataType)
           assertEquals("m", col.colName)
+          assertEquals(9, col.parent.colIndex)
           val feature = col.features.iterator.next
           assertEquals("W", feature.featureType)
           assertEquals("A", feature.name)
@@ -86,6 +90,10 @@ class JPAPersistenceTest {
           assertEquals("P", feature.featureType)
           assertEquals("M", feature.name)
           assertEquals(2.4, feature.value, 0.01)
+        }
+        case 9 => {
+          assertEquals(DataType.INTEGER, col.dataType)
+          assertEquals("tpq", col.colName)
         }
       }
     })
@@ -116,7 +124,7 @@ class JPAPersistenceTest {
     col1.colIndex = 3
     col1.colName = "m"
     col1.dataType = DataType.INTEGER
-    col1.id = 2
+    col1.id = 20
     col1.colFile = new File("tt").toURI
 
     col1.features = new java.util.HashSet[Feature]
