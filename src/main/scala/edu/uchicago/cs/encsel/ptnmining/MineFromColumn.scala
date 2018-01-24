@@ -30,6 +30,7 @@ import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.genregex.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
+import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
 
@@ -64,8 +65,8 @@ object MineSingleFile extends App {
 
   val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
-  val pattern = patternMiner.mine(Source.fromFile("/home/harper/test").getLines()
-    .take(100).toList.map(Tokenizer.tokenize(_).toList))
+  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/267").getLines()
+    .take(100).filter(!StringUtils.isEmpty(_)).toList.map(Tokenizer.tokenize(_).toList))
 
   val validator = new PatternValidator
   pattern.visit(validator)
