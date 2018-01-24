@@ -33,6 +33,8 @@ import scala.collection.mutable.ArrayBuffer
   * Find a possible match between a pattern and a sequence of token.
   * If a match can be found, a mapping between pattern node and token
   * will be returned.
+  *
+  * TODO The algorithm need to be improved to increase efficiency
   */
 object PatternMatcher {
 
