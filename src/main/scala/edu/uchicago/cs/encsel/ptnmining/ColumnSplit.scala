@@ -38,8 +38,8 @@ import scala.io.Source
 object ColumnSplit extends App {
 
   val persistence = new JPAPersistence
-  val datecol = persistence.find(2)
-  persistence.save(splitDateColumn(datecol))
+  //  val datecol = persistence.find(2)
+  //  persistence.save(splitDateColumn(datecol))
 
   val idcol = persistence.find(20)
   persistence.save(splitDashColumn(idcol))
@@ -108,10 +108,10 @@ object ColumnSplit extends App {
             case sm if sm < split.length => {
               val value =
                 try {
-                  Integer.parseInt(split(sm))
+                  Integer.parseInt(split(sm + 1))
                 } catch {
                   case e: NumberFormatException => {
-                    Integer.parseInt(split(sm), 16)
+                    Integer.parseInt(split(sm + 1), 16)
                   }
                 }
               outputs(sm).println(value)
