@@ -34,7 +34,7 @@
         <properties>
             <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://francisco/encsel"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/encsel"/>
             <property name="javax.persistence.jdbc.user" value="encsel"/>
             <property name="javax.persistence.jdbc.password" value="encsel"/>
             <!-- property name="eclipselink.logging.level" value="FINE" /-->
