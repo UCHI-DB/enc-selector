@@ -46,7 +46,7 @@ class CommonSymbolRule extends RewriteRule {
 
     val groups = symbolsWithPos.zipWithIndex.groupBy(_._1.isEmpty)
 
-    val noSymbolLines = groups.getOrElse(true, Seq()).map(p => (p._2, p._1.map(_._1))).toMap
+    val noSymbolLines = groups.getOrElse(true, Seq()).map(p => p._2).toSet
     // Valid lines are lines with at least one symbol
     val validLinesWithIndex = groups.getOrElse(false, Seq())
     val validLines = validLinesWithIndex.map(_._1)
@@ -70,7 +70,7 @@ class CommonSymbolRule extends RewriteRule {
             if (noSymbolLines.contains(j)) {
               // This line has no symbol, for first column return all, for others return empty
               i match {
-                case 0 => PSeq.make(noSymbolLines.get(j).get)
+                case 0 => PSeq.make(unionData(j))
                 case _ => PEmpty
               }
             } else {
