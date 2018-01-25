@@ -1,7 +1,7 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord}
-import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord, Tokenizer}
+import edu.uchicago.cs.encsel.ptnmining.{PEmpty, PSeq, PToken, PUnion}
 import edu.uchicago.cs.encsel.wordvec.{DbWordSource, SimilarWord}
 import org.junit.Assert._
 import org.junit.Test
@@ -59,6 +59,22 @@ class CommonSeqRuleTest {
     assertEquals(u1c(1), new PToken(new TInt("4021")))
     assertEquals(u1c(2), new PSeq(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")), new PToken(new TInt("2323"))))
     assertEquals(u1c(3), new PSeq(new PToken(new TWord("ttpt")), new PToken(new TInt("3232"))))
+  }
+
+  @Test
+  def testSequencesWithPEmpty: Unit = {
+
+    val data = PUnion.make(Array("J01", "P05", "L37", "D53", "M21")
+      .map(s => PSeq.make(Tokenizer.tokenize(s).map(t => new PToken(t)).toSeq)).toSeq :+ PEmpty)
+
+    val rule = new CommonSeqRule
+    val result = rule.rewrite(data)
+    assertTrue(rule.happened)
+    assertTrue(result.isInstanceOf[PUnion])
+    val u = result.asInstanceOf[PUnion]
+    assertEquals(2, u.content.size)
+    assertTrue(u.content(0).isInstanceOf[PSeq])
+    assertEquals(PEmpty, u.content(1))
   }
 
   @Test

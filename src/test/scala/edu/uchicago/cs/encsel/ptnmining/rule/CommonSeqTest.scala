@@ -1,5 +1,6 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
+import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion, Pattern}
 import edu.uchicago.cs.encsel.ptnmining.parser.{TWord, Token, Tokenizer}
 import org.junit.Assert._
 import org.junit.Test
@@ -44,9 +45,7 @@ class CommonSeqTest {
       Array(3, 4, 5, 6, 7)).map(_.toSeq).toSeq
 
     val cseq = new CommonSeq
-    val commons = cseq.find(a, (a: Int, b: Int) => {
-      a == b
-    })
+    val commons = cseq.find(a)
 
     assertEquals(2, commons.length)
     assertArrayEquals(Array(3, 4), commons(0).toArray)
@@ -63,6 +62,43 @@ class CommonSeqTest {
     assertEquals((5, 2), pos(2)(1))
     assertEquals((0, 2), pos(3)(0))
     assertEquals((2, 2), pos(3)(1))
+  }
+
+  @Test
+  def testSingleRecordPosition: Unit = {
+    // Position should not be empty when a single line is provided
+    val a = Array(Array(1, 2, 3, 4, 5, 6, 7, 8, 9)).map(_.toSeq).toSeq
+
+    val cseq = new CommonSeq
+    val commons = cseq.find(a)
+
+    assertEquals(1, commons.length)
+    assertArrayEquals(Array(1, 2, 3, 4, 5, 6, 7, 8, 9), commons(0).toArray)
+
+    val pos = cseq.positions
+    assertEquals(1, pos.length)
+
+    assertEquals((0, 9), pos(0)(0))
+  }
+
+  @Test
+  def testCommonSeqWithToken: Unit = {
+    val a = Array("J01", "P05", "L37", "D53", "M21")
+      .map(s => Tokenizer.tokenize(s).map(t => new PToken(t)).toSeq).toSeq
+
+    val csq = new CommonSeq
+    val tokeneq: (Pattern, Pattern) => Boolean = (a, b) => {
+      if (a.isInstanceOf[PToken] && b.isInstanceOf[PToken]) {
+        val at = a.asInstanceOf[PToken].token
+        val bt = b.asInstanceOf[PToken].token
+        return at.getClass == bt.getClass
+      }
+      return a.equals(b)
+    }
+    val res = csq.find(a, tokeneq)
+    println(res.toList)
+    assertEquals(1, res.size)
+    assertEquals(2, res(0).size)
   }
 }
 

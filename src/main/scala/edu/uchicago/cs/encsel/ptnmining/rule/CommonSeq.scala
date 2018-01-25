@@ -57,6 +57,11 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
 
     val commons = new ArrayBuffer[Seq[T]]()
     commons += lines.head
+
+    if (lines.length == 1) {
+      positions += Seq((0, lines.head.size))
+      return commons
+    }
     var firstLine = true
     lines.drop(1).foreach(line => {
       if (commons.nonEmpty) {

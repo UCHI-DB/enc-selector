@@ -49,10 +49,13 @@ class CommonSymbolRule extends RewriteRule {
     val noSymbolLines = groups.getOrElse(true, Seq()).map(p => p._2).toSet
     // Valid lines are lines with at least one symbol
     val validLinesWithIndex = groups.getOrElse(false, Seq())
+    if (validLinesWithIndex.isEmpty) {
+      // No valid lines
+      return union
+    }
     val validLines = validLinesWithIndex.map(_._1)
     val validIndexMapping = validLinesWithIndex.map(_._2).zipWithIndex.map(p => (p._1, p._2)).toMap
     // Determine common symbols and match symbol in each line to the common
-
     val commonSeq = new CommonSeq
     val commonSymbols = commonSeq.find(validLines, (a: (Pattern, Int), b: (Pattern, Int)) => {
       a._1.equals(b._1)

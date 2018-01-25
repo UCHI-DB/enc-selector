@@ -65,7 +65,7 @@ object MineSingleFile extends App {
 
   val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
-  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/267").getLines()
+  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/213").getLines()
     .take(100).filter(!StringUtils.isEmpty(_)).toList.map(Tokenizer.tokenize(_).toList))
 
   val validator = new PatternValidator
