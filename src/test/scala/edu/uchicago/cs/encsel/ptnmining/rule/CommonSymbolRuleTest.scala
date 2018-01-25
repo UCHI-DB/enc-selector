@@ -1,12 +1,11 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord, Tokenizer}
 import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion}
 import org.junit.Assert._
 import org.junit.Test
 
 class CommonSymbolRuleTest {
-
 
   @Test
   def testRewrite: Unit = {
@@ -53,5 +52,17 @@ class CommonSymbolRuleTest {
     assertTrue(seq.content(4).isInstanceOf[PUnion])
     val u2 = seq.content(4).asInstanceOf[PUnion]
     assertEquals(2, u2.content.size)
+  }
+
+  @Test
+  def testRewriteWithEmptyLine: Unit = {
+    val data = PUnion.make(Array("2010-01-35", "2012", "", "2010-03-07", "2021-12-12")
+      .map(s => new PSeq(Tokenizer.tokenize(s).toList.map(new PToken(_)))))
+    val rule = new CommonSymbolRule()
+    val result = rule.rewrite(data)
+
+    assertTrue(result.isInstanceOf[PSeq])
+    val seq = result.asInstanceOf[PSeq]
+    assertEquals(5, seq.content.size)
   }
 }
