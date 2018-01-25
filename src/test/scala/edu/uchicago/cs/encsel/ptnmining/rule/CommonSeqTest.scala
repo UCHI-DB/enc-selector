@@ -1,7 +1,7 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion, Pattern}
-import edu.uchicago.cs.encsel.ptnmining.parser.{TWord, Token, Tokenizer}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord, Token, Tokenizer}
+import edu.uchicago.cs.encsel.ptnmining.{PToken, Pattern}
 import org.junit.Assert._
 import org.junit.Test
 
@@ -65,6 +65,17 @@ class CommonSeqTest {
   }
 
   @Test
+  def testCommonSeqInSequence: Unit = {
+    // The common sequences should appear in order
+    val a = Array(Array(1, 2, 3, 2), Array(1, 0, 1, 0, 2, 3, 2), Array(2, 3, 2, 1)).map(_.toSeq).toSeq
+    val cseq = new CommonSeq
+    val commons = cseq.find(a)
+
+    // should only contain (2,3,2), (1) is not good
+    assertEquals(1, commons.size)
+  }
+
+  @Test
   def testSingleRecordPosition: Unit = {
     // Position should not be empty when a single line is provided
     val a = Array(Array(1, 2, 3, 4, 5, 6, 7, 8, 9)).map(_.toSeq).toSeq
@@ -88,17 +99,16 @@ class CommonSeqTest {
 
     val csq = new CommonSeq
     val tokeneq: (Pattern, Pattern) => Boolean = (a, b) => {
-      if (a.isInstanceOf[PToken] && b.isInstanceOf[PToken]) {
-        val at = a.asInstanceOf[PToken].token
-        val bt = b.asInstanceOf[PToken].token
-        return at.getClass == bt.getClass
+      (a, b) match {
+        case (atk: PToken, btk: PToken) => atk.token.getClass == btk.token.getClass
+        case _ => a.equals(b)
       }
-      return a.equals(b)
     }
     val res = csq.find(a, tokeneq)
-    println(res.toList)
     assertEquals(1, res.size)
     assertEquals(2, res(0).size)
+    assertTrue(res(0)(0).token.isInstanceOf[TWord])
+    assertTrue(res(0)(1).token.isInstanceOf[TInt])
   }
 }
 

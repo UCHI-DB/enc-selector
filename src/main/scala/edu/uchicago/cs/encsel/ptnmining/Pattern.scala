@@ -23,8 +23,6 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import java.math.BigInteger
-
 import edu.uchicago.cs.encsel.ptnmining.matching.{NamingVisitor, PatternMatcher, Record}
 import edu.uchicago.cs.encsel.ptnmining.parser._
 import edu.uchicago.cs.encsel.ptnmining.rule._
@@ -138,12 +136,14 @@ class PToken(t: Token) extends Pattern {
 }
 
 object PSeq {
-  def make(content: Seq[Pattern]): Pattern =
-    content.length match {
+  def make(content: Seq[Pattern]): Pattern = {
+    val filtered = content.filter(_ != PEmpty)
+    filtered.length match {
       case 0 => PEmpty
       case 1 => content.head
-      case _ => new PSeq(content)
+      case _ => new PSeq(filtered)
     }
+  }
 }
 
 class PSeq(cnt: Pattern*) extends Pattern {
@@ -179,7 +179,7 @@ class PSeq(cnt: Pattern*) extends Pattern {
 
 object PUnion {
   def make(content: Seq[Pattern]) = {
-    content.length match {
+    content.toSet.size match {
       case 0 => PEmpty
       case 1 => content.head
       case _ => new PUnion(content)

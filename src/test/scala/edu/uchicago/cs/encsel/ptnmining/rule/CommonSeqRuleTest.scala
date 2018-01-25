@@ -2,7 +2,6 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord, Tokenizer}
 import edu.uchicago.cs.encsel.ptnmining.{PEmpty, PSeq, PToken, PUnion}
-import edu.uchicago.cs.encsel.wordvec.{DbWordSource, SimilarWord}
 import org.junit.Assert._
 import org.junit.Test
 
@@ -26,7 +25,8 @@ class CommonSeqRuleTest {
       new PSeq(new PToken(new TWord("ttpt")), new PToken(new TInt("3232")),
         new PToken(new TSymbol("-")), new PToken(new TInt("42429")),
         new PToken(new TWord("dddd")), new PToken(new TSymbol("-"))))
-    val csq = new CommonSeqRule
+
+    val csq = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals)
 
     val newptn = csq.rewrite(union)
 
@@ -51,7 +51,7 @@ class CommonSeqRuleTest {
 
     assertEquals(4, union1.content.size)
     assertEquals(new TSymbol("-"), common.token)
-    assertEquals(new TSymbol("-"), common.token)
+    assertEquals(new TSymbol("-"), common2.token)
     assertEquals(4, union2.content.size)
 
     val u1c = union1.content.toArray
@@ -67,7 +67,7 @@ class CommonSeqRuleTest {
     val data = PUnion.make(Array("J01", "P05", "L37", "D53", "M21")
       .map(s => PSeq.make(Tokenizer.tokenize(s).map(t => new PToken(t)).toSeq)).toSeq :+ PEmpty)
 
-    val rule = new CommonSeqRule
+    val rule = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _)
     val result = rule.rewrite(data)
     assertTrue(rule.happened)
     assertTrue(result.isInstanceOf[PUnion])
@@ -79,7 +79,7 @@ class CommonSeqRuleTest {
 
   @Test
   def testWithSimilarWord: Unit = {
-    val rule = new CommonSeqRule(new SimilarWord(0.5, new DbWordSource))
+    val rule = new CommonSeqRule
 
 
   }

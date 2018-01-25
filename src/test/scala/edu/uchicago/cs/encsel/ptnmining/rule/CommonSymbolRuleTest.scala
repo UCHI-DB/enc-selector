@@ -57,50 +57,59 @@ class CommonSymbolRuleTest {
   @Test
   def testRewriteWithEmptyLine: Unit = {
     val data = PUnion.make(Array("2010-01-35", "2012", "", "2010-03-07", "2021-12-12", "2013-09")
-      .map(s => new PSeq(Tokenizer.tokenize(s).toList.map(new PToken(_)))))
+      .map(s => PSeq.make(Tokenizer.tokenize(s).toList.map(new PToken(_)))))
     val rule = new CommonSymbolRule()
-    val result = rule.rewrite(data)
+    val rr = rule.rewrite(data)
 
     assertTrue(rule.happened)
 
-    assertTrue(result.isInstanceOf[PSeq])
-    val seq = result.asInstanceOf[PSeq]
+    assertTrue(rr.isInstanceOf[PUnion])
+    val u = rr.asInstanceOf[PUnion]
+
+    assertEquals(PEmpty, u.content(1))
+    assertTrue(u.content(0).isInstanceOf[PSeq])
+
+    val seq = u.content(0).asInstanceOf[PSeq]
+
     assertEquals(3, seq.content.size)
 
     assertTrue(seq.content(0).isInstanceOf[PUnion])
     val u0 = seq.content(0).asInstanceOf[PUnion]
-    assertEquals(5, u0.content.size)
+    assertEquals(4, u0.content.size)
     assertTrue(u0.content.contains(new PToken(new TInt("2010"))))
     assertTrue(u0.content.contains(new PToken(new TInt("2012"))))
     assertTrue(u0.content.contains(new PToken(new TInt("2021"))))
     assertTrue(u0.content.contains(new PToken(new TInt("2013"))))
-    assertTrue(u0.content.contains(PEmpty))
 
-    assertTrue(seq.content(1).isInstanceOf[PToken])
-    val t1 = seq.content(1).asInstanceOf[PToken]
-    assertEquals("-", t1.token.toString)
+    assertTrue(seq.content(1).isInstanceOf[PUnion])
+    val u1 = seq.content(1).asInstanceOf[PUnion]
+    assertEquals(2, u1.content.size)
+    assertTrue(u1.content.contains(new PToken(new TSymbol("-"))))
+    assertTrue(u1.content.contains(PEmpty))
 
     assertTrue(seq.content(2).isInstanceOf[PUnion])
     val u2 = seq.content(2).asInstanceOf[PUnion]
     assertEquals(5, u2.content.size)
-    assertTrue(u2.content(0).isInstanceOf[PSeq])
-    val s20 = u2.content(0).asInstanceOf[PSeq]
-    assertEquals(new PToken(new TInt("03")), s20.content(0))
-    assertEquals(new PToken(new TSymbol("-")), s20.content(1))
-    assertEquals(new PToken(new TInt("07")), s20.content(2))
 
-    assertEquals(new PToken(new TInt("09")), u2.content(1))
-    assertEquals(PEmpty, u2.content(2))
-    assertTrue(u2.content(3).isInstanceOf[PSeq])
-    val s23 = u2.content(3).asInstanceOf[PSeq]
-    assertEquals(new PToken(new TInt("12")), s23.content(0))
-    assertEquals(new PToken(new TSymbol("-")), s23.content(1))
-    assertEquals(new PToken(new TInt("12")), s23.content(2))
+    assertTrue(u2.content.contains(PEmpty))
+    assertTrue(u2.content.contains(new PToken(new TInt("09"))))
 
-    assertTrue(u2.content(4).isInstanceOf[PSeq])
-    val s24 = u2.content(4).asInstanceOf[PSeq]
-    assertEquals(new PToken(new TInt("01")), s24.content(0))
-    assertEquals(new PToken(new TSymbol("-")), s24.content(1))
-    assertEquals(new PToken(new TInt("35")), s24.content(2))
+    val s20 = PSeq.make(Seq(
+      new PToken(new TInt("03")),
+      new PToken(new TSymbol("-")),
+      new PToken(new TInt("07"))))
+    assertTrue(u2.content.contains(s20))
+
+    val s21 = PSeq.make(Seq(
+      new PToken(new TInt("12")),
+      new PToken(new TSymbol("-")),
+      new PToken(new TInt("12"))))
+    assertTrue(u2.content.contains(s21))
+
+    val s22 = PSeq.make(Seq(
+      new PToken(new TInt("01")),
+      new PToken(new TSymbol("-")),
+      new PToken(new TInt("35"))))
+    assertTrue(u2.content.contains(s22))
   }
 }

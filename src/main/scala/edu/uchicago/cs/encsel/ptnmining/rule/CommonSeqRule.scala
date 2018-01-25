@@ -24,22 +24,45 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord}
+import edu.uchicago.cs.encsel.ptnmining.parser.TWord
 import edu.uchicago.cs.encsel.wordvec.SimilarWord
 
 import scala.collection.mutable.ArrayBuffer
+
+object CommonSeqEqualFunc {
+
+  def exactEquals(a: Pattern, b: Pattern): Boolean = a == b
+
+  def patternFuzzyEquals(a: Pattern, b: Pattern): Boolean = {
+    (a, b) match {
+      case (atk: PToken, btk: PToken) => atk.token.getClass == btk.token.getClass
+      case _ => a.equals(b)
+    }
+  }
+
+  def similarWordEquals(similarWord: SimilarWord): (Pattern, Pattern) => Boolean = {
+    val func = (a: Pattern, b: Pattern) =>
+      (a, b) match {
+        case (atk: PToken, btk: PToken) => {
+          (atk.token, btk.token) match {
+            case (aw: TWord, bw: TWord) => similarWord.similar(aw.value, bw.value)
+            case (at, bt) => at.getClass == bt.getClass
+          }
+        }
+        case _ => a.equals(b)
+      }
+    func
+  }
+}
 
 /**
   * Look for common sequence from a union and split it into smaller pieces
   *
   */
-class CommonSeqRule(val similarWord: SimilarWord = null) extends RewriteRule {
+class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFunc.exactEquals _)
+  extends RewriteRule {
 
   val cseq = new CommonSeq()
-  val eqfunc = (similarWord == null) match {
-    case true => patternEquals _
-    case false => similarWordEquals _
-  }
 
   protected def condition(ptn: Pattern): Boolean =
     ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.size > 1
@@ -62,38 +85,31 @@ class CommonSeqRule(val similarWord: SimilarWord = null) extends RewriteRule {
     val seq = cseq.find(unionData, eqfunc)
 
     if (seq.nonEmpty) {
-      val sectionBuffers = Array.fill(seq.length + 1)(new ArrayBuffer[Pattern])
+      happen()
+
+      val sectionBuffers = Array.fill(2 * seq.length + 1)(new ArrayBuffer[Pattern])
       val commonPos = cseq.positions
-      commonPos.zip(unionData).foreach(lp => {
-        val pos = lp._1
-        val data = lp._2
+      val n = seq.length
+      commonPos.indices.foreach(j => {
+        val pos = commonPos(j)
+        val data = unionData(j)
 
         var pointer = 0
 
         pos.indices.foreach(i => {
           val sec = pos(i)
-          sectionBuffers(i) += PSeq.make(data.slice(pointer, sec._1))
+          sectionBuffers(2 * i) += PSeq.make(data.view(pointer, sec._1))
           pointer = sec._1 + sec._2
+          sectionBuffers(2 * i + 1) += PSeq.make(data.view(sec._1, pointer))
         })
         sectionBuffers.last += (pointer match {
           case last if last == data.length => PEmpty
-          case _ => PSeq.make(data.slice(pointer, data.length))
+          case _ => PSeq.make(data.view(pointer, data.length))
         })
       })
       // Create new pattern
 
-      val patternSeqs = new ArrayBuffer[Pattern]
-      seq.indices.foreach(i => {
-        patternSeqs += PUnion.make(sectionBuffers(i))
-        patternSeqs += (seq(i).length match {
-          case 1 => seq(i).last
-          case _ => PSeq.make(seq(i))
-        })
-      })
-      patternSeqs += PUnion.make(sectionBuffers.last)
-
-      happen()
-      val result = PSeq.make(patternSeqs)
+      val result = PSeq.make(sectionBuffers.map(s => PUnion.make(s)))
       hasEmpty match {
         case true => PUnion.make(Seq(result, PEmpty))
         case false => result
@@ -101,26 +117,5 @@ class CommonSeqRule(val similarWord: SimilarWord = null) extends RewriteRule {
     } else
       union
   }
-
-  def patternEquals(a: Pattern, b: Pattern): Boolean = {
-    if (a.isInstanceOf[PToken] && b.isInstanceOf[PToken]) {
-      val at = a.asInstanceOf[PToken].token
-      val bt = b.asInstanceOf[PToken].token
-      return at.getClass == bt.getClass
-    }
-    return a.equals(b)
-  }
-
-  def similarWordEquals(a: Pattern, b: Pattern): Boolean = {
-    if (a.isInstanceOf[PToken] && b.isInstanceOf[PToken]) {
-      val at = a.asInstanceOf[PToken].token
-      val bt = b.asInstanceOf[PToken].token
-      (at, bt) match {
-        case (aw: TWord, bw: TWord) => similarWord.similar(aw.value, bw.value)
-        case _ => at.getClass == bt.getClass
-      }
-      return at.getClass == bt.getClass
-    }
-    return a.equals(b)
-  }
 }
+

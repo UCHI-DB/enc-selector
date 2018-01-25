@@ -26,6 +26,8 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.TSymbol
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * Look for common separators (non-alphabetic, non-numerical characters) from Union and use them to
   * split data. Rows that does not contain any symbols will be treated as a whole to put to the first group.
@@ -36,8 +38,16 @@ class CommonSymbolRule extends RewriteRule {
 
   protected def update(union: Pattern): Pattern = {
     // flatten the union content
+    var hasEmpty = false
     val unionData = union.asInstanceOf[PUnion].content
-      .map(_ match { case seq: PSeq => seq.content case p => Seq(p) })
+      .flatMap(_ match {
+        case seq: PSeq => Some(seq.content)
+        case PEmpty => {
+          hasEmpty = true
+          None
+        }
+        case p => Some(Seq(p))
+      })
     // Scan union data for symbols
     val symbolsWithPos = unionData.map(_.zipWithIndex.filter(_._1 match {
       case t: PToken => t.token.isInstanceOf[TSymbol]
@@ -53,6 +63,8 @@ class CommonSymbolRule extends RewriteRule {
       // No valid lines
       return union
     }
+    // If there is at least one line with no symbol, the common symbol found is optional
+    val optionalSymbol = noSymbolLines.nonEmpty
     val validLines = validLinesWithIndex.map(_._1)
     val validIndexMapping = validLinesWithIndex.map(_._2).zipWithIndex.map(p => (p._1, p._2)).toMap
     // Determine common symbols and match symbol in each line to the common
@@ -66,49 +78,51 @@ class CommonSymbolRule extends RewriteRule {
       case false => {
         happen()
         // Use the positions to split data and generate new unions
-
         // n common symbols split the data to at most n+1 pieces
-        val pieces = (0 to n).map(i => {
-          PUnion.make(unionData.indices.map(j => {
-            if (noSymbolLines.contains(j)) {
-              // This line has no symbol, for first column return all, for others return empty
-              i match {
-                case 0 => PSeq.make(unionData(j))
-                case _ => PEmpty
-              }
-            } else {
-              // This line has symbol
-              val data = unionData(j)
-              val symbols = symbolsWithPos(j)
-              val pos = commonSeq.positions(validIndexMapping.getOrElse(j, -1))
-              val index = pos.map(p => symbols.view(p._1, p._1 + p._2)).flatten.map(_._2)
+        val pieces = Array.fill(n + 1)(new ArrayBuffer[Pattern])
 
-              val start = i match {
-                case 0 => 0
-                case _ => index(i - 1) + 1
-              }
-              val stop = i match {
-                case last if last == n => data.length
-                case _ => index(i)
-              }
-              stop - start match {
-                case 0 => PEmpty
-                case 1 => data(start)
-                case _ => PSeq.make(data.view(start, stop))
-              }
-            }
-          }))
+        unionData.indices.foreach(j => {
+          if (noSymbolLines.contains(j)) {
+            // This line has no symbol, for first column return all, for others return empty
+            pieces(0) += PSeq.make(unionData(j))
+            for (i <- 1 to n)
+              pieces(i) += PEmpty
+          } else {
+            // This line has symbol
+            val data = unionData(j)
+            val symbols = symbolsWithPos(j)
+            val pos = commonSeq.positions(validIndexMapping.getOrElse(j, -1))
+            val index = pos.map(p => symbols.view(p._1, p._1 + p._2)).flatten.map(_._2)
+
+            var pointer = 0
+            index.indices.foreach(i => {
+              pieces(i) += PSeq.make(data.slice(pointer, index(i)))
+              pointer = index(i) + 1
+            })
+            pieces.last += (pointer match {
+              case last if last == data.length => PEmpty
+              case _ => PSeq.make(data.view(pointer, data.length))
+            })
+          }
         })
         // Make a sequence formed of union pieces and common sequences
-        PSeq.make((0 until 2 * n + 1).view.map(i => {
+        val result = PSeq.make((0 until 2 * n + 1).view.map(i => {
           i % 2 match {
-            case 0 => pieces(i / 2)
-            case 1 => commonSymbols((i - 1) / 2)._1
+            case 0 => PUnion.make(pieces(i / 2))
+            case 1 => {
+              val symbol = commonSymbols((i - 1) / 2)._1
+              // Add a PEmpty to symbol if it is optional
+              optionalSymbol match {
+                case true => PUnion.make(Seq(symbol, PEmpty))
+                case false => symbol
+              }
+            }
           }
-        }).filter(_ match {
-          case union: PUnion => union.content.nonEmpty
-          case _ => true
         }))
+        hasEmpty match {
+          case true => PUnion.make(Seq(result, PEmpty))
+          case false => result
+        }
       }
     }
   }
