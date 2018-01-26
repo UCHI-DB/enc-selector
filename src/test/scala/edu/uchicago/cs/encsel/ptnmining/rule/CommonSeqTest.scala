@@ -31,10 +31,46 @@ class CommonSeqTest {
 
     //noinspection ZeroIndexToHead
     assertEquals((0, 3, 4), commons(0))
-    assertEquals((5, 1, 1), commons(1))
-    assertEquals((7, 8, 1), commons(2))
-    assertEquals((9, 10, 1), commons(3))
+    assertEquals((5, 8, 1), commons(1))
+    assertEquals((7, 10, 1), commons(2))
+    assertEquals((9, 12, 1), commons(3))
     assertEquals((11, 14, 8), commons(4))
+  }
+
+  @Test
+  def testBetween2: Unit = {
+    val a = Array(0, 2, 3, 0, 4, 5, 6)
+    val b = Array(2, 3, 4, 1, 8, 7, 5, 6, 0)
+    val cseq = new CommonSeq
+    val commons = cseq.between(a, b, (a: Int, b: Int) => a == b)
+
+    assertEquals(3, commons.size)
+    assertEquals((1, 0, 2), commons(0))
+    assertEquals((4, 2, 1), commons(1))
+    assertEquals((5, 6, 2), commons(2))
+  }
+
+  @Test
+  def testBetweenFirstOccurance: Unit = {
+    val a = Array(1)
+    val b = Array(1, 0, 5, 1, 3)
+
+    val cseq = new CommonSeq
+    val btw = cseq.between(a, b, (a: Int, b: Int) => a == b)
+
+    assertEquals(1, btw.size)
+    assertEquals((0, 0, 1), btw(0))
+  }
+
+  @Test
+  def testBetweenInOrder: Unit = {
+    val a = Array(0, 1, 8, 7, 2, 3, 4, 5, 6)
+    val b = Array(2, 3, 4, 5, 6, 8, 7, 0, 1)
+    val cseq = new CommonSeq
+    val commons = cseq.between(a, b, (a: Int, b: Int) => a == b)
+
+    assertEquals(1, commons.size)
+    assertEquals((4, 0, 5), commons(0))
   }
 
   @Test
@@ -73,6 +109,19 @@ class CommonSeqTest {
 
     // should only contain (2,3,2), (1) is not good
     assertEquals(1, commons.size)
+  }
+
+  @Test
+  def testFirstOccurance: Unit = {
+    val input = Array(Array(3, 1, 5, 1, 7), Array(4, 1, 8), Array(9, 1, 6, 1, 2)).map(_.toSeq)
+    val cseq = new CommonSeq
+    val commons = cseq.find(input)
+    assertEquals(1, commons.size)
+    assertEquals(1, commons(0).size)
+
+    assertEquals((1, 1), cseq.positions(0)(0))
+    assertEquals((1, 1), cseq.positions(1)(0))
+    assertEquals((1, 1), cseq.positions(2)(0))
   }
 
   @Test

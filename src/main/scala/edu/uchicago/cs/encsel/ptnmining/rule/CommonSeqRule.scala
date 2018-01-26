@@ -59,19 +59,22 @@ object CommonSeqEqualFunc {
   * Look for common sequence from a union and split it into smaller pieces
   *
   */
-class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFunc.exactEquals _)
+class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFunc.exactEquals)
   extends RewriteRule {
 
   val cseq = new CommonSeq()
+  val exactMatch = (eqfunc == CommonSeqEqualFunc.exactEquals _)
 
   protected def condition(ptn: Pattern): Boolean =
     ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.size > 1
 
   protected def update(ptn: Pattern): Pattern = {
     // flatten the union content
-
     val union = ptn.asInstanceOf[PUnion]
     var hasEmpty = false
+    // For non-exact match, each component of the symbol should be break-down into separate groups
+    // E.g., P01, W21 -> (P,W) (01,21)
+
     val unionData = union.content.flatMap(
       _ match {
         case seq: PSeq => Some(seq.content)
@@ -84,38 +87,54 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
     // Look for common sequence
     val seq = cseq.find(unionData, eqfunc)
 
-    if (seq.nonEmpty) {
-      happen()
+    seq.isEmpty match {
+      case true => union
+      case false => {
+        happen()
+        val sectionBuffers = Array.fill(seq.length + 1)(new ArrayBuffer[Pattern])
+        // Symbols, for non-exact match, group each piece of symbol as a union
+        val fuzzySymbols = exactMatch match {
+          case true => Seq()
+          case false => seq.map(s => Array.fill(s.length)(new ArrayBuffer[Pattern]()))
+        }
+        val commonPos = cseq.positions
+        val n = seq.length
 
-      val sectionBuffers = Array.fill(2 * seq.length + 1)(new ArrayBuffer[Pattern])
-      val commonPos = cseq.positions
-      val n = seq.length
-      commonPos.indices.foreach(j => {
-        val pos = commonPos(j)
-        val data = unionData(j)
+        commonPos.indices.foreach(j => {
+          val pos = commonPos(j)
+          val data = unionData(j)
 
-        var pointer = 0
+          var pointer = 0
 
-        pos.indices.foreach(i => {
-          val sec = pos(i)
-          sectionBuffers(2 * i) += PSeq.make(data.view(pointer, sec._1))
-          pointer = sec._1 + sec._2
-          sectionBuffers(2 * i + 1) += PSeq.make(data.view(sec._1, pointer))
+          pos.indices.foreach(i => {
+            val sec = pos(i)
+            sectionBuffers(i) += PSeq.make(data.view(pointer, sec._1))
+            pointer = sec._1 + sec._2
+
+            if (!exactMatch)
+              fuzzySymbols(i).zip(data.view(sec._1, pointer)).foreach(p => p._1 += p._2)
+          })
+          sectionBuffers.last += (pointer match {
+            case last if last == data.length => PEmpty
+            case _ => PSeq.make(data.view(pointer, data.length))
+          })
         })
-        sectionBuffers.last += (pointer match {
-          case last if last == data.length => PEmpty
-          case _ => PSeq.make(data.view(pointer, data.length))
-        })
-      })
-      // Create new pattern
+        val symbols = exactMatch match {
+          case true => seq.map(PSeq.make(_))
+          case false => fuzzySymbols.map(t => PSeq.make(t.map(PUnion.make(_))))
+        }
+        // Create new pattern
+        val result = PSeq.make((0 until 2 * n + 1).map(i => i % 2 match {
+          case 0 => PUnion.make(sectionBuffers(i / 2))
+          case 1 => symbols(i / 2)
+        }))
 
-      val result = PSeq.make(sectionBuffers.map(s => PUnion.make(s)))
-      hasEmpty match {
-        case true => PUnion.make(Seq(result, PEmpty))
-        case false => result
+        hasEmpty match {
+          case true => PUnion.make(Seq(result, PEmpty))
+          case false => result
+        }
       }
-    } else
-      union
+    }
   }
 }
 

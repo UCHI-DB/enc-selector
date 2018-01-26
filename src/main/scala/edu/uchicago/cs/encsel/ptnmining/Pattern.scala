@@ -140,7 +140,7 @@ object PSeq {
     val filtered = content.filter(_ != PEmpty)
     filtered.length match {
       case 0 => PEmpty
-      case 1 => content.head
+      case 1 => filtered.head
       case _ => new PSeq(filtered)
     }
   }

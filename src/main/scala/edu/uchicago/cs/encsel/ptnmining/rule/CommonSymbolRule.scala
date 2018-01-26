@@ -80,7 +80,10 @@ class CommonSymbolRule extends RewriteRule {
         // Use the positions to split data and generate new unions
         // n common symbols split the data to at most n+1 pieces
         val pieces = Array.fill(n + 1)(new ArrayBuffer[Pattern])
-
+        val symbols = optionalSymbol match {
+          case true => commonSymbols.map(cs => PUnion.make(Seq(cs._1, PEmpty)))
+          case false => commonSymbols.map(_._1)
+        }
         unionData.indices.foreach(j => {
           if (noSymbolLines.contains(j)) {
             // This line has no symbol, for first column return all, for others return empty
@@ -109,14 +112,7 @@ class CommonSymbolRule extends RewriteRule {
         val result = PSeq.make((0 until 2 * n + 1).view.map(i => {
           i % 2 match {
             case 0 => PUnion.make(pieces(i / 2))
-            case 1 => {
-              val symbol = commonSymbols((i - 1) / 2)._1
-              // Add a PEmpty to symbol if it is optional
-              optionalSymbol match {
-                case true => PUnion.make(Seq(symbol, PEmpty))
-                case false => symbol
-              }
-            }
+            case 1 => symbols((i - 1) / 2)
           }
         }))
         hasEmpty match {
