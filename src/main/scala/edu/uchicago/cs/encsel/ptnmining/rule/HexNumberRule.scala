@@ -22,11 +22,14 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.Pattern
+import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, Pattern}
 
+/**
+  * Discover hex numbers and merge them
+  */
 class HexNumberRule extends RewriteRule {
   override protected def condition(ptn: Pattern): Boolean = {
-    false
+    ptn.isInstanceOf[PSeq] && ptn.asInstanceOf[PSeq].content.forall(_.isInstanceOf[PToken])
   }
 
   override protected def update(ptn: Pattern): Pattern = {

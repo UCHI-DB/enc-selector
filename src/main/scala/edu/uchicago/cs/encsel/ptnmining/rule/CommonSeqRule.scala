@@ -35,7 +35,9 @@ object CommonSeqEqualFunc {
 
   def patternFuzzyEquals(a: Pattern, b: Pattern): Boolean = {
     (a, b) match {
-      case (atk: PToken, btk: PToken) => atk.token.getClass == btk.token.getClass
+      case (atk: PToken, btk: PToken) => {
+        atk.token.getClass == btk.token.getClass && atk.token.toString.length == btk.token.toString.length
+      }
       case _ => a.equals(b)
     }
   }
