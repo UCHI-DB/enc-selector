@@ -55,8 +55,8 @@ class GenRegexVisitor extends PatternVisitor {
       }
       case iany: PIntAny => {
         val digit = iany.hasHex match {
-          case true => "\\d"
-          case false => "[0-9a-fA-F]"
+          case false => "\\d"
+          case true => "[0-9a-fA-F]"
         }
         history.put(iany.name,
           (iany.minLength, iany.maxLength) match {

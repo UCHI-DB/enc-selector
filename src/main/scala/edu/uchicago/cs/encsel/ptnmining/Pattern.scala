@@ -252,19 +252,19 @@ trait PAny extends Pattern {
   }
 }
 
-class PWordAny(val minLength: Int = -1, val maxLength: Int = -1) extends PAny {
+class PWordAny(val minLength: Int = 1, val maxLength: Int = -1) extends PAny {
 
   def this(limit: Int) = this(limit, limit)
 
 }
 
-class PDoubleAny(var minLength: Int = -1, var maxLength: Int = -1) extends PAny {
+class PDoubleAny(var minLength: Int = 1, var maxLength: Int = -1) extends PAny {
 
   def this(ml: Int) = this(ml, ml);
 
 }
 
-class PIntAny(var minLength: Int = -1, var maxLength: Int = -1,
+class PIntAny(var minLength: Int = 1, var maxLength: Int = -1,
               var hasHex: Boolean = false) extends PAny {
 
   def this(limit: Int) = this(limit, limit)
