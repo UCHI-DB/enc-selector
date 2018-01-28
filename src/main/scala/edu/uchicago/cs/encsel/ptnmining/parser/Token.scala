@@ -38,6 +38,8 @@ trait Token {
     */
   def length: Int = 1
 
+  def numChar = value.length
+
   override def toString = value
 
   override def equals(obj: scala.Any): Boolean = {
@@ -62,10 +64,14 @@ class TWord(v: AnyRef) extends Token {
 
 class TInt(v: AnyRef) extends Token {
   val value = v.toString
+  val isHex = "[A-Fa-f]".r.findFirstMatchIn(value).isDefined
 
   override def isData = true
 
-  def intValue = BigInt(value)
+  def intValue = isHex match {
+    case true => BigInt(value, 16)
+    case false => BigInt(value)
+  }
 
   override def length = 4
 }

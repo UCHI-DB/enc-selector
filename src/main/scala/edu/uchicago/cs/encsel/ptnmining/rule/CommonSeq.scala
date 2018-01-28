@@ -140,12 +140,12 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
     val longest = Array.fill(a.length + 1)(Array.fill(b.length + 1)((0, 0)))
     val path = Array.fill(a.length + 1)(new Array[(Int, Int, Int)](b.length + 1))
 
-    a.indices.foreach(i => {
+    (0 to a.length).foreach(i => {
       data(i)(0) = 0
       longest(i)(0) = (0, 0)
       path(i)(0) = (i, 0, 0)
     })
-    b.indices.foreach(i => {
+    (0 to b.length).foreach(i => {
       data(0)(i) = 0
       longest(0)(i) = (0, 0)
       path(0)(i) = (0, i, 0)
@@ -177,7 +177,6 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
         case c2 if c2 == l2 => path(i)(j) = (i - 1, j, 0)
         case c3 if c3 == l3 => path(i)(j) = (i, j - 1, 0)
         case c1 if c1 == l1 => path(i)(j) = (i - data(i)(j), j - data(i)(j), data(i)(j))
-
       }
     }
 

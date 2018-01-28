@@ -31,13 +31,13 @@ import edu.uchicago.cs.encsel.ptnmining.rule._
   */
 class PatternMiner {
 
-  val rules = Array(new CommonSymbolRule, new CommonSeqRule,
-    new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
+  val rules = Array(new CommonSymbolRule, new SameLenMergeRule, new CommonSeqRule,
+    new SuccinctRule, new MergeSeqRule, new UseAnyRule)
 
   def mine(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens
 
-    val translated = new PUnion(in.map(l => new PSeq(l.map(new PToken(_)): _*)))
+    val translated = new PUnion(in.map(l => new PSeq(l.map(new PToken(_)))))
 
     rules.foreach(rule => {
       rule match {

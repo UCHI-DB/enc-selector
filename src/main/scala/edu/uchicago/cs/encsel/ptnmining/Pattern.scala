@@ -40,7 +40,7 @@ object Pattern {
   def generate(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens
 
-    val translated = new PUnion(in.map(l => new PSeq(l.map(new PToken(_)): _*)))
+    val translated = PUnion(in.map(l => PSeq(l.map(new PToken(_)))))
 
     rules.foreach(rule => {
       rule match {
@@ -69,10 +69,10 @@ object Pattern {
   protected def refine(root: Pattern): (Pattern, Boolean) = {
     var current = root
 
-    rules.indices.foreach(i => {
-      rules(i).reset
-      current = rules(i).rewrite(current)
-      if (rules(i).happened) {
+    rules.foreach(rule => {
+      rule.reset
+      current = rule.rewrite(current)
+      if (rule.happened) {
         // Apply the first valid rule
         return (current, true)
       }
@@ -109,7 +109,6 @@ trait Pattern {
 
   def matchon(tokens: Seq[Token]): Option[Record] = PatternMatcher.matchon(this, tokens)
 
-  def naming() = visit(new NamingVisitor)
 
   /**
     * Recursively visit the pattern elements starting from the root
@@ -117,13 +116,17 @@ trait Pattern {
     * @param visitor
     */
   def visit(visitor: PatternVisitor): Unit = visitor.on(this)
+
+  def naming() = visit(new NamingVisitor)
+
+  def numChar: Int
 }
 
 class PToken(t: Token) extends Pattern {
   val token = t
 
   override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+    if (eq(obj.asInstanceOf[AnyRef]))
       return true
     if (obj.isInstanceOf[PToken]) {
       val t = obj.asInstanceOf[PToken]
@@ -133,10 +136,13 @@ class PToken(t: Token) extends Pattern {
   }
 
   override def hashCode(): Int = token.hashCode()
+
+  override def numChar: Int = token.numChar
 }
 
 object PSeq {
-  def make(content: Seq[Pattern]): Pattern = {
+
+  def apply(content: Seq[Pattern]): Pattern = {
     val filtered = content.filter(_ != PEmpty)
     filtered.length match {
       case 0 => PEmpty
@@ -144,15 +150,15 @@ object PSeq {
       case _ => new PSeq(filtered)
     }
   }
+
+  def collect(content: Pattern*): Pattern = apply(content)
 }
 
-class PSeq(cnt: Pattern*) extends Pattern {
+class PSeq(cnt: Seq[Pattern]) extends Pattern {
   val content = cnt
 
-  def this(ps: Traversable[Pattern]) = this(ps.toSeq: _*)
-
   override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+    if (eq(obj.asInstanceOf[AnyRef]))
       return true
     if (obj.isInstanceOf[PSeq]) {
       val seq = obj.asInstanceOf[PSeq]
@@ -175,25 +181,28 @@ class PSeq(cnt: Pattern*) extends Pattern {
     content.foreach(_.visit(visitor))
     visitor.exit(this)
   }
+
+  override def numChar: Int = content.map(_.numChar).sum
 }
 
 object PUnion {
-  def make(content: Seq[Pattern]) = {
+
+  def apply(content: Seq[Pattern]): Pattern = {
     content.toSet.size match {
       case 0 => PEmpty
       case 1 => content.head
       case _ => new PUnion(content)
     }
   }
+
+  def collect(content: Pattern*): Pattern = apply(content)
 }
 
-class PUnion(cnt: Pattern*) extends Pattern {
+class PUnion(cnt: Seq[Pattern]) extends Pattern {
   val content = cnt.toSet.toSeq
 
-  def this(c: Traversable[Pattern]) = this(c.toSeq: _*)
-
   override def equals(obj: scala.Any): Boolean = {
-    if (obj == this)
+    if (eq(obj.asInstanceOf[AnyRef]))
       return true
     if (obj.isInstanceOf[PUnion]) {
       val union = obj.asInstanceOf[PUnion]
@@ -215,13 +224,17 @@ class PUnion(cnt: Pattern*) extends Pattern {
     case true => 0
     case false => content.map(_.hashCode()).sum
   }
+
+  override def numChar: Int = content.map(_.numChar).max
 }
 
-object PEmpty extends Pattern
+object PEmpty extends Pattern {
+  override def numChar: Int = 0
+}
 
 trait PAny extends Pattern {
   override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+    if (eq(obj.asInstanceOf[AnyRef]))
       return true
     obj match {
       case any: PAny => getClass == any.getClass
@@ -231,41 +244,21 @@ trait PAny extends Pattern {
 
   override def hashCode(): Int = getClass.hashCode()
 
+  override def numChar: Int = maxLength
+
   def maxLength: Int
 }
 
-class PWordAny extends PAny {
-  var _minLength = 1
-  var _maxLength = -1
-
-  def this(min: Int, max: Int) = {
-    this()
-    _minLength = min
-    _maxLength = max
-  }
+class PWordAny(val minLength: Int = -1, val maxLength: Int = -1) extends PAny {
 
   def this(limit: Int) = this(limit, limit)
 
-  def minLength: Int = _minLength
-
-  def maxLength: Int = _maxLength
 }
 
-class PIntAny extends PAny {
-  var _minLength = 1
-  var _maxLength = -1
-
-  def this(min: Int, max: Int) = {
-    this()
-    _maxLength = max
-    _minLength = min
-  }
+class PIntAny(var minLength: Int = -1, var maxLength: Int = -1,
+              var hasHex: Boolean = false) extends PAny {
 
   def this(limit: Int) = this(limit, limit)
-
-  def maxLength: Int = _maxLength
-
-  def minLength: Int = _minLength
 }
 
 class PDoubleAny extends PAny {
@@ -277,6 +270,11 @@ class PDoubleAny extends PAny {
   }
 }
 
+/**
+  * As we are extracting patterns from a small subset, determining range from
+  * that is prone to error
+  */
+@deprecated
 class PIntRange extends Pattern {
   var min: BigInt = BigInt(0)
   var max: BigInt = BigInt(0)
@@ -294,7 +292,7 @@ class PIntRange extends Pattern {
   override def hashCode(): Int = this.min.hashCode() * 13 + this.max.hashCode()
 
   override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+    if (eq(obj.asInstanceOf[AnyRef]))
       return true
     obj match {
       case range: PIntRange => {
@@ -302,5 +300,12 @@ class PIntRange extends Pattern {
       }
       case _ => super.equals(obj)
     }
+  }
+
+  override def numChar: Int = {
+    val factor = Math.log(2) / Math.log(10)
+    val digitCount = (factor * max.bitLength + 1).toInt
+    if (BigInt(10).pow(digitCount - 1).compareTo(max) > 0) return digitCount - 1
+    digitCount
   }
 }

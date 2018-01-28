@@ -41,7 +41,7 @@ class MergeSeqRule extends RewriteRule {
     check match {
       case true => {
         happen()
-        PSeq.make(seq.content.flatMap(_ match {
+        PSeq(seq.content.flatMap(_ match {
           case seq: PSeq => seq.content
           case x => Seq(x)
         }))

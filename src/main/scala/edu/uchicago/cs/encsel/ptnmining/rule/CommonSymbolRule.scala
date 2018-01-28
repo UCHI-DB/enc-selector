@@ -48,6 +48,8 @@ class CommonSymbolRule extends RewriteRule {
         }
         case p => Some(Seq(p))
       })
+    if (unionData.length == 1)
+      return union
     // Scan union data for symbols
     val symbolsWithPos = unionData.map(_.zipWithIndex.filter(_._1 match {
       case t: PToken => t.token.isInstanceOf[TSymbol]
@@ -81,13 +83,13 @@ class CommonSymbolRule extends RewriteRule {
         // n common symbols split the data to at most n+1 pieces
         val pieces = Array.fill(n + 1)(new ArrayBuffer[Pattern])
         val symbols = optionalSymbol match {
-          case true => commonSymbols.map(cs => PUnion.make(Seq(cs._1, PEmpty)))
+          case true => commonSymbols.map(cs => PUnion(Seq(cs._1, PEmpty)))
           case false => commonSymbols.map(_._1)
         }
         unionData.indices.foreach(j => {
           if (noSymbolLines.contains(j)) {
             // This line has no symbol, for first column return all, for others return empty
-            pieces(0) += PSeq.make(unionData(j))
+            pieces(0) += PSeq(unionData(j))
             for (i <- 1 to n)
               pieces(i) += PEmpty
           } else {
@@ -99,24 +101,24 @@ class CommonSymbolRule extends RewriteRule {
 
             var pointer = 0
             index.indices.foreach(i => {
-              pieces(i) += PSeq.make(data.slice(pointer, index(i)))
+              pieces(i) += PSeq(data.slice(pointer, index(i)))
               pointer = index(i) + 1
             })
             pieces.last += (pointer match {
               case last if last == data.length => PEmpty
-              case _ => PSeq.make(data.view(pointer, data.length))
+              case _ => PSeq(data.view(pointer, data.length))
             })
           }
         })
         // Make a sequence formed of union pieces and common sequences
-        val result = PSeq.make((0 until 2 * n + 1).view.map(i => {
+        val result = PSeq((0 until 2 * n + 1).view.map(i => {
           i % 2 match {
-            case 0 => PUnion.make(pieces(i / 2))
+            case 0 => PUnion(pieces(i / 2))
             case 1 => symbols((i - 1) / 2)
           }
         }))
         hasEmpty match {
-          case true => PUnion.make(Seq(result, PEmpty))
+          case true => PUnion(Seq(result, PEmpty))
           case false => result
         }
       }

@@ -12,9 +12,9 @@ class UseAnyRuleTest {
 
   @Test
   def testRewrite: Unit = {
-    val ptn = new PSeq(
+    val ptn = PSeq.collect(
       new PToken(new TInt("23432")),
-      new PUnion(
+      PUnion.collect(
         new PToken(new TInt("323")),
         new PToken(new TInt("32322")),
         new PToken(new TInt("333")),
@@ -39,9 +39,9 @@ class UseAnyRuleTest {
 
   @Test
   def testNotHappen: Unit = {
-    val ptn = new PSeq(
+    val ptn = PSeq.collect(
       new PToken(new TInt("23432")),
-      new PUnion(
+      PUnion.collect(
         new PToken(new TInt("323")),
         new PToken(new TInt("32322")),
         new PToken(new TWord("abbd")),

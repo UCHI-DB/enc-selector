@@ -86,6 +86,10 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
         }
         case p => Some(Seq(p))
       })
+    // Single sequence, no common sequence to find
+    if (unionData.size == 1) {
+      return union
+    }
     // Look for common sequence
     val seq = cseq.find(unionData, eqfunc)
 
@@ -110,7 +114,7 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
 
           pos.indices.foreach(i => {
             val sec = pos(i)
-            sectionBuffers(i) += PSeq.make(data.view(pointer, sec._1))
+            sectionBuffers(i) += PSeq(data.view(pointer, sec._1))
             pointer = sec._1 + sec._2
 
             if (!exactMatch)
@@ -118,21 +122,21 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
           })
           sectionBuffers.last += (pointer match {
             case last if last == data.length => PEmpty
-            case _ => PSeq.make(data.view(pointer, data.length))
+            case _ => PSeq(data.view(pointer, data.length))
           })
         })
         val symbols = exactMatch match {
-          case true => seq.map(PSeq.make(_))
-          case false => fuzzySymbols.map(t => PSeq.make(t.map(PUnion.make(_))))
+          case true => seq.map(PSeq(_))
+          case false => fuzzySymbols.map(t => PSeq(t.map(PUnion(_))))
         }
         // Create new pattern
-        val result = PSeq.make((0 until 2 * n + 1).map(i => i % 2 match {
-          case 0 => PUnion.make(sectionBuffers(i / 2))
+        val result = PSeq((0 until 2 * n + 1).map(i => i % 2 match {
+          case 0 => PUnion(sectionBuffers(i / 2))
           case 1 => symbols(i / 2)
         }))
 
         hasEmpty match {
-          case true => PUnion.make(Seq(result, PEmpty))
+          case true => PUnion(Seq(result, PEmpty))
           case false => result
         }
       }

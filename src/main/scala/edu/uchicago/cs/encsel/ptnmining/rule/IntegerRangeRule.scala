@@ -28,8 +28,13 @@ import edu.uchicago.cs.encsel.ptnmining.parser.TInt
 import edu.uchicago.cs.encsel.ptnmining.{PIntRange, PToken, PUnion, Pattern}
 
 /**
+  *
   * Convert a union of integer to a Integer range
+  *
+  * @deprecated
+  * @see edu.uchicago.cs.encsel.ptnmining.PIntRange
   */
+
 class IntegerRangeRule extends RewriteRule {
 
   override protected def update(ptn: Pattern): Pattern = {

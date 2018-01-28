@@ -9,16 +9,16 @@ class CommonSymbolRuleTest {
 
   @Test
   def testRewrite: Unit = {
-    val union = new PUnion(
-      new PSeq(new PToken(new TWord("abc")), new PToken(new TInt("312")),
+    val union = PUnion.collect(
+      PSeq.collect(new PToken(new TWord("abc")), new PToken(new TInt("312")),
         new PToken(new TSymbol("-")), new PToken(new TInt("212")),
         new PToken(new TWord("good")), new PToken(new TSymbol("-"))),
-      new PSeq(new PToken(new TInt("4021")), new PToken(new TSymbol("-")),
+      PSeq.collect(new PToken(new TInt("4021")), new PToken(new TSymbol("-")),
         new PToken(new TSymbol("-")), new PToken(new TInt("420"))),
-      new PSeq(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")),
+      PSeq.collect(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")),
         new PToken(new TInt("2323")), new PToken(new TSymbol("-")),
         new PToken(new TSymbol("-"))),
-      new PSeq(new PToken(new TWord("ttpt")), new PToken(new TInt("3232")),
+      PSeq.collect(new PToken(new TWord("ttpt")), new PToken(new TInt("3232")),
         new PToken(new TSymbol("-")), new PToken(new TInt("42429")),
         new PToken(new TWord("dddd")), new PToken(new TSymbol("-"))))
 
@@ -56,8 +56,8 @@ class CommonSymbolRuleTest {
 
   @Test
   def testRewriteWithEmptyLine: Unit = {
-    val data = PUnion.make(Array("2010-01-35", "2012", "", "2010-03-07", "2021-12-12", "2013-09")
-      .map(s => PSeq.make(Tokenizer.tokenize(s).toList.map(new PToken(_)))))
+    val data = PUnion(Array("2010-01-35", "2012", "", "2010-03-07", "2021-12-12", "2013-09")
+      .map(s => PSeq(Tokenizer.tokenize(s).toList.map(new PToken(_)))))
     val rule = new CommonSymbolRule()
     val rr = rule.rewrite(data)
 
@@ -94,19 +94,19 @@ class CommonSymbolRuleTest {
     assertTrue(u2.content.contains(PEmpty))
     assertTrue(u2.content.contains(new PToken(new TInt("09"))))
 
-    val s20 = PSeq.make(Seq(
+    val s20 = PSeq(Seq(
       new PToken(new TInt("03")),
       new PToken(new TSymbol("-")),
       new PToken(new TInt("07"))))
     assertTrue(u2.content.contains(s20))
 
-    val s21 = PSeq.make(Seq(
+    val s21 = PSeq(Seq(
       new PToken(new TInt("12")),
       new PToken(new TSymbol("-")),
       new PToken(new TInt("12"))))
     assertTrue(u2.content.contains(s21))
 
-    val s22 = PSeq.make(Seq(
+    val s22 = PSeq(Seq(
       new PToken(new TInt("01")),
       new PToken(new TSymbol("-")),
       new PToken(new TInt("35"))))

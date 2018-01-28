@@ -35,15 +35,15 @@ class PatternMatcherTest {
   @Test
   def testMatchon: Unit = {
 
-    val pattern = new PSeq(
-      new PSeq(new PToken(new TWord("mmtm")), new PToken(new TWord("wwkp"))),
-      new PUnion(
-        new PSeq(new PToken(new TWord("nmsmd")), new PWordAny, new PIntAny),
-        new PSeq(
+    val pattern = PSeq.collect(
+      PSeq.collect(new PToken(new TWord("mmtm")), new PToken(new TWord("wwkp"))),
+      PUnion.collect(
+        PSeq.collect(new PToken(new TWord("nmsmd")), new PWordAny, new PIntAny),
+        PSeq.collect(
           new PToken(new TInt("3232")),
-          new PUnion(
-            new PSeq(new PToken(new TWord("dassd")), new PToken(new TInt("34223"))),
-            new PSeq(new PToken(new TWord("mmd")), new PToken(new TWord("wwtm"))),
+          PUnion.collect(
+            PSeq.collect(new PToken(new TWord("dassd")), new PToken(new TInt("34223"))),
+            PSeq.collect(new PToken(new TWord("mmd")), new PToken(new TWord("wwtm"))),
             new PToken(new TWord("www"))
           )
         )
@@ -116,17 +116,17 @@ class PatternMatcherTest {
 
   @Test
   def testChoice: Unit = {
-    val pattern = new PSeq(
-      new PSeq(new PToken(new TWord("mmtm")), new PToken(new TWord("wwkp"))),
-      new PUnion(
-        new PSeq(new PToken(new TWord("nmsmd")), new PWordAny, new PIntAny),
-        new PSeq(
+    val pattern = PSeq.collect(
+      PSeq.collect(new PToken(new TWord("mmtm")), new PToken(new TWord("wwkp"))),
+      PUnion.collect(
+        PSeq.collect(new PToken(new TWord("nmsmd")), new PWordAny, new PIntAny),
+        PSeq.collect(
           new PToken(new TInt("3232")),
-          new PUnion(
-            new PSeq(new PToken(new TWord("dassd")), new PToken(new TInt("34223"))),
-            new PSeq(new PToken(new TWord("mmd")), new PToken(new TWord("wwtm"))),
-            new PSeq(new PToken(new TWord("www")),
-              new PUnion(
+          PUnion.collect(
+            PSeq.collect(new PToken(new TWord("dassd")), new PToken(new TInt("34223"))),
+            PSeq.collect(new PToken(new TWord("mmd")), new PToken(new TWord("wwtm"))),
+            PSeq.collect(new PToken(new TWord("www")),
+              PUnion.collect(
                 new PToken(new TWord("aad")),
                 new PToken(new TInt("334"))
               )

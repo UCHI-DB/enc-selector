@@ -13,12 +13,12 @@ class MergeSeqRuleTest {
   @Test
   def testRewrite: Unit = {
 
-    val pattern = new PSeq(
-      new PSeq(
+    val pattern = PSeq.collect(
+      PSeq.collect(
         new PToken(new TInt("323")),
         new PToken(new TWord("sdds"))
       ),
-      new PSeq(
+      PSeq.collect(
         new PToken(new TWord("Aad")),
         new PToken(new TInt("23423"))
       )
@@ -41,8 +41,8 @@ class MergeSeqRuleTest {
   @Test
   def testRewrite2: Unit = {
 
-    val pattern = new PSeq(
-      new PSeq(
+    val pattern = PSeq.collect(
+      PSeq.collect(
         new PToken(new TInt("323")),
         new PToken(new TWord("sdds"))
       ),
@@ -67,7 +67,7 @@ class MergeSeqRuleTest {
   @Test
   def testRewriteNotHappen: Unit = {
 
-    val pattern = new PSeq(
+    val pattern = PSeq.collect(
       new PToken(new TInt("323")),
       new PToken(new TWord("sdds")),
       new PToken(new TWord("Aad")),

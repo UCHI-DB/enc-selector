@@ -54,11 +54,15 @@ class GenRegexVisitor extends PatternVisitor {
           })
       }
       case iany: PIntAny => {
+        val digit = iany.hasHex match {
+          case true => "\\d"
+          case false => "[0-9a-fA-F]"
+        }
         history.put(iany.name,
           (iany.minLength, iany.maxLength) match {
-            case (1, -1) => "\\d+"
-            case (i, j) if i == j => "\\d{%d}".format(i)
-            case (i, j) => "\\d{%d,%d}".format(i, j)
+            case (1, -1) => "%s+".format(digit)
+            case (i, j) if i == j => "%s{%d}".format(digit, i)
+            case (i, j) => "%s{%d,%d}".format(digit, i, j)
           })
       }
       case dany: PDoubleAny => {

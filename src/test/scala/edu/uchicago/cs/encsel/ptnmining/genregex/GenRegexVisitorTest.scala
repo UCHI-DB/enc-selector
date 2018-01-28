@@ -31,12 +31,12 @@ class GenRegexVisitorTest {
 
   @Test
   def testVisit: Unit = {
-    val ptn = new PSeq(
+    val ptn = PSeq.collect(
       new PIntAny(5),
       new PToken(new TWord("And")),
       new PIntAny(),
       PEmpty,
-      new PUnion(
+      PUnion.collect(
         PEmpty,
         new PToken(new TWord("dmd")),
         new PToken(new TInt("12312")),

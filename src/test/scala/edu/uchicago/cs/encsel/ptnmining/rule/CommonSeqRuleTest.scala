@@ -1,7 +1,7 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord, Tokenizer}
-import edu.uchicago.cs.encsel.ptnmining.{PEmpty, PSeq, PToken, PUnion}
+import edu.uchicago.cs.encsel.ptnmining._
 import org.junit.Assert._
 import org.junit.Test
 
@@ -13,20 +13,28 @@ class CommonSeqRuleTest {
   @Test
   def testRewrite: Unit = {
     val union = new PUnion(
-      new PSeq(new PToken(new TWord("abc")), new PToken(new TInt("312")),
-        new PToken(new TSymbol("-")), new PToken(new TInt("212")),
-        new PToken(new TWord("good")), new PToken(new TSymbol("-"))),
-      new PSeq(new PToken(new TInt("4021")), new PToken(new TSymbol("-")),
-        new PToken(new TInt("2213")), new PToken(new TWord("akka")),
-        new PToken(new TSymbol("-")), new PToken(new TInt("420"))),
-      new PSeq(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")),
-        new PToken(new TInt("2323")), new PToken(new TSymbol("-")),
-        new PToken(new TInt("33130")), new PToken(new TSymbol("-"))),
-      new PSeq(new PToken(new TWord("ttpt")), new PToken(new TInt("3232")),
-        new PToken(new TSymbol("-")), new PToken(new TInt("42429")),
-        new PToken(new TWord("dddd")), new PToken(new TSymbol("-"))))
-
-    val csq = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals)
+      Seq(
+        PSeq(Seq(new PToken(new TWord("abc")), new PToken(new TInt("312")),
+          new PToken(new TSymbol("-")), new PToken(new TInt("212")),
+          new PToken(new TWord("good")), new PToken(new TSymbol("-")))),
+        PSeq(Seq(new PToken(new TInt("4021")), new PToken(new TSymbol("-")),
+          new PToken(new TInt("2213")), new PToken(new TWord("akka")),
+          new PToken(new TSymbol("-")), new PToken(new TInt("420")))),
+        PSeq(Seq(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")),
+          new PToken(new TInt("2323")), new PToken(new TSymbol("-")),
+          new PToken(new TInt("33130")), new PToken(new TSymbol("-")))),
+        PSeq(Seq(new PToken(new TWord("ttpt")), new PToken(new TInt("3232")),
+          new PToken(new TSymbol("-")), new PToken(new TInt("42429")),
+          new PToken(new TWord("dddd")), new PToken(new TSymbol("-")))))
+    )
+    val csq = new CommonSeqRule((a: Pattern, b: Pattern) => {
+      (a, b) match {
+        case (atk: PToken, btk: PToken) => {
+          atk.token.getClass == btk.token.getClass
+        }
+        case _ => a.equals(b)
+      }
+    })
 
     val newptn = csq.rewrite(union)
 
@@ -57,15 +65,15 @@ class CommonSeqRuleTest {
 
     assertTrue(u0.content.contains(new PToken(new TWord("abc"))))
     assertTrue(u0.content.contains(PEmpty))
-    assertTrue(u0.content.contains(new PSeq(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")))))
+    assertTrue(u0.content.contains(PSeq.collect(new PToken(new TWord("kwmt")), new PToken(new TWord("ddmpt")))))
     assertTrue(u0.content.contains(new PToken(new TWord("ttpt"))))
   }
 
   @Test
   def testSequencesWithPEmpty: Unit = {
 
-    val data = PUnion.make(Array("J01", "P05", "L37", "D53", "M21")
-      .map(s => PSeq.make(Tokenizer.tokenize(s).map(t => new PToken(t)).toSeq)).toSeq :+ PEmpty)
+    val data = PUnion(Array("J01", "P05", "L37", "D53", "M21")
+      .map(s => PSeq(Tokenizer.tokenize(s).map(t => new PToken(t)).toSeq)).toSeq :+ PEmpty)
 
     val rule = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _)
     val result = rule.rewrite(data)
