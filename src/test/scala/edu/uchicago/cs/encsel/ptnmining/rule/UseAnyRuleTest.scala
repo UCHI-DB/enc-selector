@@ -1,9 +1,9 @@
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.{PIntAny, PSeq, PToken, PUnion}
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord, Tokenizer}
-import org.junit.Test
+import edu.uchicago.cs.encsel.ptnmining._
+import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord, Tokenizer}
 import org.junit.Assert._
+import org.junit.Test
 
 /**
   * Created by harper on 4/5/17.
@@ -11,7 +11,7 @@ import org.junit.Assert._
 class UseAnyRuleTest {
 
   @Test
-  def testRewrite: Unit = {
+  def testRewriteInt: Unit = {
     val ptn = PSeq.collect(
       new PToken(new TInt("23432")),
       PUnion.collect(
@@ -31,9 +31,63 @@ class UseAnyRuleTest {
     val resq = result.asInstanceOf[PSeq]
     assertEquals(3, resq.content.size)
 
-    assertTrue(resq.content(0).isInstanceOf[PToken])
-    assertTrue(resq.content(1).isInstanceOf[PIntAny])
-    assertTrue(resq.content(2).isInstanceOf[PToken])
+    assertEquals(new PToken(new TInt("23432")), resq.content(0))
+    assertEquals(new PIntAny(3, 5, false), resq.content(1))
+    assertEquals(new PToken(new TWord("dasfdfa")), resq.content(2))
+
+  }
+
+  @Test
+  def testRewriteDouble: Unit = {
+    val ptn = PSeq.collect(
+      new PToken(new TInt("23432")),
+      PUnion.collect(
+        new PToken(new TDouble("323.75")),
+        new PToken(new TDouble("32322.21")),
+        new PToken(new TDouble("333.77")),
+        new PToken(new TDouble("1231.82"))
+      ),
+      new PToken(new TWord("dasfdfa")))
+
+    val rule = new UseAnyRule
+    rule.generateOn((0 to 10).map(i => String.valueOf(i)).map(Tokenizer.tokenize(_).toSeq))
+    val result = rule.rewrite(ptn)
+    assertTrue(rule.happened)
+
+    assertTrue(result.isInstanceOf[PSeq])
+    val resq = result.asInstanceOf[PSeq]
+    assertEquals(3, resq.content.size)
+
+    assertEquals(new PToken(new TInt("23432")), resq.content(0))
+    assertEquals(new PDoubleAny(6, 8), resq.content(1))
+    assertEquals(new PToken(new TWord("dasfdfa")), resq.content(2))
+
+  }
+
+  @Test
+  def testRewriteWord: Unit = {
+    val ptn = PSeq.collect(
+      new PToken(new TInt("23432")),
+      PUnion.collect(
+        new PToken(new TWord("apa")),
+        new PToken(new TWord("dmp")),
+        new PToken(new TWord("twdqa")),
+        new PToken(new TWord("wmpa"))
+      ),
+      new PToken(new TWord("dasfdfa")))
+
+    val rule = new UseAnyRule
+    rule.generateOn((0 to 10).map(i => String.valueOf(i)).map(Tokenizer.tokenize(_).toSeq))
+    val result = rule.rewrite(ptn)
+    assertTrue(rule.happened)
+
+    assertTrue(result.isInstanceOf[PSeq])
+    val resq = result.asInstanceOf[PSeq]
+    assertEquals(3, resq.content.size)
+
+    assertEquals(new PToken(new TInt("23432")), resq.content(0))
+    assertEquals(new PWordAny(3, 5), resq.content(1))
+    assertEquals(new PToken(new TWord("dasfdfa")), resq.content(2))
 
   }
 

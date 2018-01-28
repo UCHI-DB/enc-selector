@@ -40,33 +40,63 @@ class UseAnyRule extends DataRewriteRule {
   override def condition(ptn: Pattern): Boolean = {
     ptn.isInstanceOf[PUnion] && {
       val union = ptn.asInstanceOf[PUnion]
-      val childrenType = union.content.map(_.getClass).toSet
-      childrenType.size == 1 && childrenType.contains(classOf[PToken]) && union.content.length >= UseAnyRule.threshold * originData.length
+      union.content.length >= UseAnyRule.threshold * originData.length &&
+        union.content.view.forall(_.isInstanceOf[PToken])
     }
   }
 
 
   override protected def update(ptn: Pattern): Pattern = {
     val union = ptn.asInstanceOf[PUnion]
-    val anyed = union.content.map(
+    val anyed = union.content.view.map(
       _ match {
         case token: PToken => {
           token.token match {
-            case word: TWord => new PWordAny
-            case int: TInt => new PIntAny
-            case double: TDouble => new PDoubleAny
+            case word: TWord => new PWordAny(word.numChar)
+            case int: TInt => new PIntAny(int.numChar, int.isHex)
+            case double: TDouble => new PDoubleAny(double.numChar)
             case tother => token
           }
         }
         case other => other
       }
-    ).toSet
-    if (anyed.size == 1 && anyed.head.isInstanceOf[PAny]) {
-      happen()
-      anyed.head
-    } else {
-      ptn
+    ).groupBy(_.getClass)
+    anyed.size match {
+      case 1 => {
+        happen()
+        anyed.map(kv => {
+          kv._1 match {
+            case wa if wa == classOf[PWordAny] => {
+              kv._2.reduce((a, b) => {
+                val aw = a.asInstanceOf[PWordAny]
+                val bw = b.asInstanceOf[PWordAny]
+                new PWordAny(Math.min(aw.minLength, bw.minLength),
+                  Math.max(aw.maxLength, bw.maxLength))
+              })
+            }
+            case ia if ia == classOf[PIntAny] => {
+              kv._2.reduce((a, b) => {
+                val ai = a.asInstanceOf[PIntAny]
+                val bi = b.asInstanceOf[PIntAny]
+                new PIntAny(Math.min(ai.minLength, bi.minLength),
+                  Math.max(ai.maxLength, bi.maxLength),
+                  ai.hasHex || bi.hasHex)
+              })
+            }
+            case da if da == classOf[PDoubleAny] => {
+
+              kv._2.reduce((a, b) => {
+                val ad = a.asInstanceOf[PDoubleAny]
+                val bd = b.asInstanceOf[PDoubleAny]
+                new PDoubleAny(Math.min(ad.minLength, bd.minLength),
+                  Math.max(ad.maxLength, bd.maxLength))
+              })
+            }
+            case _ => throw new IllegalArgumentException
+          }
+        }).head
+      }
+      case _ => ptn
     }
   }
 }
-

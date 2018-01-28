@@ -23,8 +23,6 @@
 
 package edu.uchicago.cs.encsel.ptnmining.parser
 
-import java.math.BigInteger
-
 /**
   * Token is a data processing unit
   */
@@ -42,16 +40,16 @@ trait Token {
 
   override def toString = value
 
-  override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[Token]) {
-      val token = obj.asInstanceOf[Token]
-      return token.getClass == getClass && token.value.equals(value)
-    }
-    super.equals(obj)
+  def canEqual(other: Any): Boolean = other.getClass.eq(this.getClass)
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Token =>
+      (that canEqual this) &&
+        value == that.value
+    case _ => false
   }
 
-  override def hashCode(): Int = getClass.hashCode() * 13 + value.hashCode
-
+  override def hashCode(): Int = value.hashCode
 }
 
 class TWord(v: AnyRef) extends Token {
