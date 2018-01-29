@@ -22,8 +22,10 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.parser.TInt
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord}
 import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion, Pattern}
+
+import scala.collection.mutable.ArrayBuffer
 
 object HexNumber {
 
@@ -33,44 +35,78 @@ object HexNumber {
 }
 
 /**
-  * This rule looks at unions having the same length of sequences, and tries to apply some conversion to them
+  * This rule looks at unions having the same length of sequences, and tries to organize them to groups
+  * During this process transformation may be applied , e.g. converting character to hex number
   */
 class SameLenMergeRule extends RewriteRule {
 
   override protected def condition(ptn: Pattern): Boolean = {
     ptn.isInstanceOf[PUnion] && {
       val union = ptn.asInstanceOf[PUnion]
-
       // Contains only seq or token
       // Seq contains only token (at most 2 layer, this is for simplicity)
       // all content has same length
       val content = union.content.view
-      content.forall(p => (p.isInstanceOf[PSeq] || p.isInstanceOf[PToken])) &&
-        content.filter(_.isInstanceOf[PSeq])
-          .forall(_.asInstanceOf[PSeq].content.forall(_.isInstanceOf[PToken])) &&
-        content.map(_.numChar).filter(_ != 0).toSet.size == 1
+      content.size > 1 && {
+        val res = content.map(_ match {
+          case seq: PSeq => {
+            val sc = seq.content.view
+            (sc.forall(_.isInstanceOf[PToken]), sc.map(_.numChar).sum)
+          }
+          case token: PToken => {
+            (token.token.isInstanceOf[TInt] || token.token.isInstanceOf[TWord], token.numChar)
+          }
+          case _ => {
+            (false, -1)
+          }
+        })
+        res.forall(_._1) && res.map(_._2).toSet.size == 1
+      }
     }
   }
 
   override protected def update(ptn: Pattern): Pattern = {
     val union = ptn.asInstanceOf[PUnion]
-    // Hex check
-    val mapped = union.content.map(_ match {
-      case token: PToken => token
-      case seq: PSeq => {
-        val view = seq.content.view
-        val tkvals = view.map(_.asInstanceOf[PToken].token.value)
-        if (tkvals.forall(HexNumber.isHex)) {
-          happen()
-          new PToken(new TInt(tkvals.mkString))
+
+    // Scan the chars one by one
+    val rawData = union.content.view.map(_.flatten.map(_.asInstanceOf[PToken].token.value).mkString)
+    val length = rawData.head.length
+
+    val startPoint = new ArrayBuffer[Int]
+    val stopPoint = new ArrayBuffer[Int]
+    startPoint += 0
+    stopPoint += 1
+    // false is number, true is word
+    val wordToken = new ArrayBuffer[Boolean]
+    wordToken += false
+    var numMode = true
+
+    for (i <- 0 until length) {
+      val chars = rawData.map(_.charAt(i).toString)
+      (numMode ^ chars.forall(HexNumber.isHex)) match {
+        case false => {
+          stopPoint.last += 1
         }
-        else
-          seq
+        case true => {
+          startPoint += stopPoint.last + 1
+          stopPoint += startPoint.last + 1
+          wordToken += numMode
+          numMode = !numMode
+        }
       }
-    })
-    happened match {
-      case true => PUnion(mapped)
-      case false => union
     }
+    val ranges = startPoint.zip(stopPoint).zip(wordToken)
+    // map the partition to original data to rebuild token
+    val tokens = rawData.map(line => {
+      val start = 0
+      ranges.map(r => {
+        val value = line.substring(r._1._1, r._1._2)
+        new PToken(r._2 match {
+          case true => new TWord(value)
+          case false => new TInt(value)
+        })
+      })
+    })
+    PSeq(ranges.indices.map(i => PUnion(tokens.map(_(i)))).toSeq)
   }
 }
