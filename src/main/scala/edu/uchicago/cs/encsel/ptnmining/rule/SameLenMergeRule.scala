@@ -73,9 +73,7 @@ class SameLenMergeRule extends RewriteRule {
     val length = rawData.head.length
 
     val startPoint = new ArrayBuffer[Int]
-    val stopPoint = new ArrayBuffer[Int]
     startPoint += 0
-    stopPoint += 1
     // false is number, true is word
     val wordToken = new ArrayBuffer[Boolean]
     wordToken += false
@@ -85,16 +83,17 @@ class SameLenMergeRule extends RewriteRule {
       val chars = rawData.map(_.charAt(i).toString)
       (numMode ^ chars.forall(HexNumber.isHex)) match {
         case false => {
-          stopPoint.last += 1
+          val last = startPoint.remove(startPoint.length - 1)
+          startPoint += last + 1
         }
         case true => {
-          startPoint += stopPoint.last + 1
-          stopPoint += startPoint.last + 1
+          startPoint += startPoint.last + 1
           wordToken += numMode
           numMode = !numMode
         }
       }
     }
+    val stopPoint = startPoint.view.drop(0) :+ length
     val ranges = startPoint.zip(stopPoint).zip(wordToken)
     // map the partition to original data to rebuild token
     val tokens = rawData.map(line => {
@@ -107,6 +106,6 @@ class SameLenMergeRule extends RewriteRule {
         })
       })
     })
-    PSeq(ranges.indices.map(i => PUnion(tokens.map(_(i)))).toSeq)
+    PSeq(ranges.indices.map(i => PUnion(tokens.map(_ (i)))).toSeq)
   }
 }
