@@ -66,7 +66,7 @@ object MineSingleFile extends App {
 
   val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
-  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/213").getLines()
+  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/92").getLines()
     .take(100).filter(!StringUtils.isEmpty(_)).toList.map(Tokenizer.tokenize(_).toList))
 
   val rule = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _)

@@ -27,8 +27,8 @@ import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
 
 /**
-  * If the union size is too large, e.g., 90% of total size
-  * Use Any to replace big Union
+  *
+  * Use <code>PAny</code> to replace big Union of tokens
   */
 object UseAnyRule {
   // Execute the rule if union size is greater than threshold * data size

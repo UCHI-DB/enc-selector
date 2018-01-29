@@ -33,8 +33,29 @@ import scala.collection.mutable.ArrayBuffer
   * split data. Rows that does not contain any symbols will be treated as a whole to put to the first group.
   */
 class CommonSymbolRule extends RewriteRule {
+
+  /**
+    * Only apply to non-empty, non-single record union of
+    * 1. seq of token
+    * 2. single token
+    * 3. empty
+    *
+    * @param ptn
+    * @return
+    */
   protected def condition(ptn: Pattern): Boolean =
-    ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.size > 1
+    ptn.isInstanceOf[PUnion] && {
+      val cnt = ptn.asInstanceOf[PUnion].content.view
+      cnt.size > 1 && {
+        val res = cnt.map(_ match {
+          case seq: PSeq => (seq.content.forall(t => t.isInstanceOf[PToken] || t == PEmpty), seq.content.size)
+          case token: PToken => (true, 1)
+          case PEmpty => (true, 1)
+          case _ => (false, 0)
+        })
+        res.exists(_._2 > 1) && res.forall(_._1)
+      }
+    }
 
   protected def update(union: Pattern): Pattern = {
     // flatten the union content

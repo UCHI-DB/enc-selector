@@ -74,6 +74,15 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
   val cseq = new CommonSeq()
   val exactMatch = (eqfunc == CommonSeqEqualFunc.exactEquals _)
 
+  /**
+    * Only apply to non-empty, non-single record union of
+    * 1. seq of token
+    * 2. single token
+    * 3. empty
+    *
+    * @param ptn
+    * @return
+    */
   protected def condition(ptn: Pattern): Boolean =
     ptn.isInstanceOf[PUnion] && {
       val cnt = ptn.asInstanceOf[PUnion].content.view
@@ -84,7 +93,7 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
           case PEmpty => (true, 1)
           case _ => (false, 0)
         })
-        res.forall(_._1) && res.exists(_._2 > 1)
+        res.exists(_._2 > 1) && res.forall(_._1)
       }
     }
 

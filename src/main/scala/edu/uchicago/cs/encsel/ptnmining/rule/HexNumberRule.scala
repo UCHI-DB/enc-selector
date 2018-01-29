@@ -23,30 +23,26 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.{PSeq, Pattern}
+import edu.uchicago.cs.encsel.ptnmining.{PSeq, PUnion, Pattern}
 
 /**
-  * This rule merges unnecessary PSeq.
-  * E.g.,
-  *   Seq(Seq(a,b),Seq(x,y)) => Seq(a,b,x,y)
-  *   Seq(Seq(a,b),x,y) => Seq(a,b,x,y)
+  * Recognize hex number and merge it with adjacent number tokens
   */
-class MergeSeqRule extends RewriteRule {
+class HexNumberRule extends RewriteRule {
 
-  protected def condition(ptn: Pattern): Boolean = ptn.isInstanceOf[PSeq]
-
-  protected def update(ptn: Pattern): Pattern = {
-    val seq = ptn.asInstanceOf[PSeq]
-    val check = seq.content.view.exists(_.isInstanceOf[PSeq])
-    check match {
-      case true => {
-        happen()
-        PSeq(seq.content.flatMap(_ match {
-          case subs: PSeq => subs.content
-          case x => Seq(x)
-        }))
+  override protected def condition(ptn: Pattern): Boolean = {
+    ptn match {
+      case seq: PSeq => {
+        false
       }
-      case false => ptn
+      case union: PUnion => {
+        false
+      }
+      case _ => false
     }
+  }
+
+  override protected def update(ptn: Pattern): Pattern = {
+    ptn
   }
 }
