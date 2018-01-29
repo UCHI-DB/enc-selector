@@ -30,6 +30,7 @@ import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.genregex.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
+import edu.uchicago.cs.encsel.ptnmining.rule.{CommonSeqEqualFunc, CommonSeqRule, UseAnyRule}
 import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
@@ -65,8 +66,12 @@ object MineSingleFile extends App {
 
   val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
-  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/267").getLines()
+  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/213").getLines()
     .take(100).filter(!StringUtils.isEmpty(_)).toList.map(Tokenizer.tokenize(_).toList))
+
+  val rule = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _)
+  rule.rewrite(pattern)
+
 
   val validator = new PatternValidator
   pattern.visit(validator)

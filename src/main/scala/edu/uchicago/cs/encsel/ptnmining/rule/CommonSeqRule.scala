@@ -36,7 +36,14 @@ object CommonSeqEqualFunc {
   def patternFuzzyEquals(a: Pattern, b: Pattern): Boolean = {
     (a, b) match {
       case (atk: PToken, btk: PToken) => {
-        atk.token.getClass == btk.token.getClass && atk.token.toString.length == btk.token.toString.length
+        (atk.token, btk.token) match {
+          case (aw: TWord, bw: TWord) => {
+            aw.value.length == bw.value.length
+          }
+          case (at, bt) => {
+            at.getClass == bt.getClass
+          }
+        }
       }
       case _ => a.equals(b)
     }
@@ -68,7 +75,18 @@ class CommonSeqRule(val eqfunc: (Pattern, Pattern) => Boolean = CommonSeqEqualFu
   val exactMatch = (eqfunc == CommonSeqEqualFunc.exactEquals _)
 
   protected def condition(ptn: Pattern): Boolean =
-    ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.size > 1
+    ptn.isInstanceOf[PUnion] && {
+      val cnt = ptn.asInstanceOf[PUnion].content.view
+      cnt.size > 1 && {
+        val res = cnt.map(_ match {
+          case seq: PSeq => (seq.content.forall(t => t.isInstanceOf[PToken] || t == PEmpty), seq.content.size)
+          case token: PToken => (true, 1)
+          case PEmpty => (true, 1)
+          case _ => (false, 0)
+        })
+        res.forall(_._1) && res.exists(_._2 > 1)
+      }
+    }
 
   protected def update(ptn: Pattern): Pattern = {
     // flatten the union content

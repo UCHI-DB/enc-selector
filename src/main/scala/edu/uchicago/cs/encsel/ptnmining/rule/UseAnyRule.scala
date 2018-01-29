@@ -32,7 +32,7 @@ import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
   */
 object UseAnyRule {
   // Execute the rule if union size is greater than threshold * data size
-  val threshold = 0.3
+  val threshold = 0.001
 }
 
 class UseAnyRule extends DataRewriteRule {
@@ -41,30 +41,33 @@ class UseAnyRule extends DataRewriteRule {
     ptn.isInstanceOf[PUnion] && {
       val union = ptn.asInstanceOf[PUnion]
       union.content.length >= UseAnyRule.threshold * originData.length &&
-        union.content.view.forall(_.isInstanceOf[PToken])
+        union.content.view.forall(p => p.isInstanceOf[PToken] || p == PEmpty)
     }
   }
 
 
   override protected def update(ptn: Pattern): Pattern = {
     val union = ptn.asInstanceOf[PUnion]
-    val anyed = union.content.view.map(
+    val hasEmpty = union.content.contains(PEmpty)
+    val anyed = union.content.view.filter(_ != PEmpty).map(
       _ match {
         case token: PToken => {
           token.token match {
             case word: TWord => new PWordAny(word.numChar)
             case int: TInt => new PIntAny(int.numChar, int.isHex)
             case double: TDouble => new PDoubleAny(double.numChar)
-            case tother => token
+            case other => token
           }
         }
         case other => other
       }
     ).groupBy(_.getClass)
-    anyed.size match {
-      case 1 => {
+
+    anyed.size == 1 &&
+      anyed.forall(p => classOf[PAny].isAssignableFrom(p._1)) match {
+      case true => {
         happen()
-        anyed.map(kv => {
+        val any = anyed.map(kv => {
           kv._1 match {
             case wa if wa == classOf[PWordAny] => {
               kv._2.reduce((a, b) => {
@@ -84,7 +87,6 @@ class UseAnyRule extends DataRewriteRule {
               })
             }
             case da if da == classOf[PDoubleAny] => {
-
               kv._2.reduce((a, b) => {
                 val ad = a.asInstanceOf[PDoubleAny]
                 val bd = b.asInstanceOf[PDoubleAny]
@@ -95,6 +97,10 @@ class UseAnyRule extends DataRewriteRule {
             case _ => throw new IllegalArgumentException
           }
         }).head
+        hasEmpty match {
+          case true => new PUnion(Seq(any, PEmpty))
+          case false => any
+        }
       }
       case _ => ptn
     }

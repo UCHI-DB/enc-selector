@@ -31,7 +31,8 @@ import edu.uchicago.cs.encsel.ptnmining.rule._
   */
 class PatternMiner {
 
-  val rules = Array(new CommonSymbolRule, new SameLenMergeRule, new CommonSeqRule,
+  val rules = Array(new CommonSymbolRule, new SameLenMergeRule,
+    new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _),
     new SuccinctRule, new MergeSeqRule, new UseAnyRule)
 
   def mine(in: Seq[Seq[Token]]): Pattern = {
@@ -51,7 +52,7 @@ class PatternMiner {
     var refineResult: Pattern = toRefine
     while (needRefine) {
       val refined = refine(toRefine)
-      if (refined._2) {
+      if (refined._2.isDefined) {
         toRefine = refined._1
       } else {
         needRefine = false
@@ -63,18 +64,18 @@ class PatternMiner {
     validated
   }
 
-  protected def refine(root: Pattern): (Pattern, Boolean) = {
+  protected def refine(root: Pattern): (Pattern, Option[RewriteRule]) = {
     var current = root
 
-    rules.indices.foreach(i => {
-      rules(i).reset
-      current = rules(i).rewrite(current)
-      if (rules(i).happened) {
+    rules.foreach(rule => {
+      rule.reset
+      current = rule.rewrite(current)
+      if (rule.happened) {
         // Apply the first valid rule
-        return (current, true)
+        return (current, Some(rule))
       }
     })
-    (root, false)
+    (root, None)
   }
 
   def validate(ptn: Pattern): Pattern = {
