@@ -38,95 +38,60 @@ import scala.io.Source
 object ColumnSplit extends App {
 
   val persistence = new JPAPersistence
-  //  val datecol = persistence.find(2)
-  //  persistence.save(splitDateColumn(datecol))
 
-  val idcol = persistence.find(20)
-  persistence.save(splitDashColumn(idcol))
+  def splitColumn(column: Column, pattern: Pattern): Seq[Column] = {
+    pattern.naming()
+    pattern match {
+      case seq: PSeq => {
+        val numColumns = seq.content.map(_ match {
+          case token: PToken => 0
+          case _ => 1
+        }).sum
+        val childColumns = (0 until numColumns).map(i => {
+          val col = new Column()
+          col.colIndex = i
+          col.colName = String.valueOf(i)
+          col.colFile = FileUtils.addExtension(column.colFile, i.toString)
+          col.parent = column
+          col.dataType = DataType.INTEGER
+          col
+        })
 
-  def splitDateColumn(parent: Column): Seq[Column] = {
-    val regex = "(\\d+)\\-(\\d+)\\-(\\d+) (\\d+):(\\d+):(\\d+)\\.(\\d+)".r
+        val outputs = childColumns.map(col => new PrintWriter(new FileOutputStream(new File(col.colFile))))
 
-    val childColumns = (0 until 7).map(i => {
-      val col = new Column()
-      col.colIndex = i
-      col.colName = String.valueOf(i)
-      col.colFile = FileUtils.addExtension(parent.colFile, i.toString)
-      col.parent = parent
-      col.dataType = DataType.INTEGER
-      col
-    })
-
-    val outputs = childColumns.map(col => new PrintWriter(new FileOutputStream(new File(col.colFile))))
-
-    Source.fromFile(parent.colFile).getLines().foreach(line => {
-      StringUtils.isEmpty(line) match {
-        case false => {
-          regex.findFirstMatchIn(line) match {
-            case Some(matcher) => {
-              (0 until 7).foreach(i => {
-                outputs(i).println(matcher.group(i + 1))
+        Source.fromFile(column.colFile).getLines().foreach(line => {
+          StringUtils.isEmpty(line) match {
+            case false => {
+              val split = line.split("-")
+              (0 until numColumns).foreach(_ match {
+                case sm if sm < split.length => {
+                  val value =
+                    try {
+                      Integer.parseInt(split(sm + 1))
+                    } catch {
+                      case e: NumberFormatException => {
+                        Integer.parseInt(split(sm + 1), 16)
+                      }
+                    }
+                  outputs(sm).println(value)
+                }
+                case lg => outputs(lg).println("")
               })
             }
-            case None => {
-              (0 until 7).foreach(i => {
+            case true => {
+              (0 until numColumns).foreach(i => {
                 outputs(i).println("")
               })
             }
           }
-        }
-        case true => {
-          (0 until 7).foreach(i => {
-            outputs(i).println("")
-          })
-        }
+        })
+        outputs.foreach(_.close)
+        childColumns
       }
-    })
-    outputs.foreach(_.close)
-    childColumns
+      case _ => {
+        Seq()
+      }
+    }
   }
 
-  def splitDashColumn(parent: Column): Seq[Column] = {
-    val numColumns = 3
-    val childColumns = (0 until numColumns).map(i => {
-      val col = new Column()
-      col.colIndex = i
-      col.colName = String.valueOf(i)
-      col.colFile = FileUtils.addExtension(parent.colFile, i.toString)
-      col.parent = parent
-      col.dataType = DataType.INTEGER
-      col
-    })
-
-    val outputs = childColumns.map(col => new PrintWriter(new FileOutputStream(new File(col.colFile))))
-
-    Source.fromFile(parent.colFile).getLines().foreach(line => {
-      StringUtils.isEmpty(line) match {
-        case false => {
-          val split = line.split("-")
-          (0 until numColumns).foreach(_ match {
-            case sm if sm < split.length => {
-              val value =
-                try {
-                  Integer.parseInt(split(sm + 1))
-                } catch {
-                  case e: NumberFormatException => {
-                    Integer.parseInt(split(sm + 1), 16)
-                  }
-                }
-              outputs(sm).println(value)
-            }
-            case lg => outputs(lg).println("")
-          })
-        }
-        case true => {
-          (0 until numColumns).foreach(i => {
-            outputs(i).println("")
-          })
-        }
-      }
-    })
-    outputs.foreach(_.close)
-    childColumns
-  }
 }
