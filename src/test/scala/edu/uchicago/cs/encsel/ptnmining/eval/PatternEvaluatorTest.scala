@@ -40,7 +40,7 @@ class PatternEvaluatorTest {
     ))
 
     val dataset = Seq("good1-ASM127", "good2-MTM101", "good2-DDTE122",
-      "good3-CHO-A134", "good3-CHO-B120", "good3-ASM149", "ttmdpt-dawee-323").map(Tokenizer.tokenize(_).toSeq)
+      "good3-CHO-A134", "good3-CHO-B120", "good3-ASM149", "ttmdpt-dawee-323")
 
     val result = PatternEvaluator.evaluate(pattern1, dataset)
 

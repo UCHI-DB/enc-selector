@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.matching.{NamingVisitor, PatternMatcher, Record}
+import edu.uchicago.cs.encsel.ptnmining.matching.{NamingVisitor, Record, RegexMatcher}
 import edu.uchicago.cs.encsel.ptnmining.parser._
 import edu.uchicago.cs.encsel.ptnmining.rule._
 
@@ -106,9 +106,6 @@ trait Pattern {
     * @return all leaf patterns
     */
   def flatten: Seq[Pattern] = Seq(this)
-
-  def matchon(tokens: Seq[Token]): Option[Record] = PatternMatcher.matchon(this, tokens)
-
 
   /**
     * Recursively visit the pattern elements starting from the root

@@ -68,9 +68,10 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
         for (int i = 0; i < cols.size(); ++i) {
             String val = values.get(i).trim();
             // val.length() == 0 indicates a NULL value.
-            try {
-                if (val.length() > 0) {
-                    recordConsumer.startField(cols.get(i).getPath()[0], i);
+
+            if (val.length() > 0) {
+                recordConsumer.startField(cols.get(i).getPath()[0], i);
+                try {
                     switch (cols.get(i).getType()) {
                         case BOOLEAN:
                             String lower = val.toLowerCase();
@@ -94,10 +95,10 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
                         default:
                             throw new ParquetEncodingException("Unsupported column type: " + cols.get(i).getType());
                     }
-                    recordConsumer.endField(cols.get(i).getPath()[0], i);
+                } catch (Exception e) {
+                    logger.warn("Malformated data encountered and skipping:" + val, e);
                 }
-            } catch (Exception e) {
-                logger.warn("Malformated data encountered and skipping:" + val, e);
+                recordConsumer.endField(cols.get(i).getPath()[0], i);
             }
         }
         recordConsumer.endMessage();

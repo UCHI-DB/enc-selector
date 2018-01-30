@@ -30,7 +30,7 @@ import org.junit.Test
 /**
   * Created by harper on 4/1/17.
   */
-class PatternMatcherTest {
+class NaiveMatcherTest {
 
   @Test
   def testMatchon: Unit = {
@@ -53,7 +53,7 @@ class PatternMatcherTest {
     pattern.naming()
 
 
-    var record = pattern.matchon(Seq(new TWord("mmtm"), new TWord("wwkp"),
+    var record = NaiveMatcher.matchon(pattern, Seq(new TWord("mmtm"), new TWord("wwkp"),
       new TInt("3232"), new TWord("mmd"), new TWord("wwtm")))
     assertTrue(record.isDefined)
     val rec = record.get
@@ -65,15 +65,15 @@ class PatternMatcherTest {
     assertTrue(rec.get("_0_1_0_0").isEmpty)
     assertTrue(rec.get("_0_1_0_1").isEmpty)
 
-    record = pattern.matchon(Seq(new TWord("mmtm"), new TWord("wwkp"),
+    record = NaiveMatcher.matchon(pattern, Seq(new TWord("mmtm"), new TWord("wwkp"),
       new TWord("nmsmd"), new TWord("mmd"), new TInt("312")))
     assertTrue(record.isDefined)
 
-    record = pattern.matchon(Seq(new TWord("mmtm"), new TWord("wwkp"),
+    record = NaiveMatcher.matchon(pattern, Seq(new TWord("mmtm"), new TWord("wwkp"),
       new TInt("3232"), new TWord("dassd"), new TInt("34223")))
     assertTrue(record.isDefined)
 
-    record = pattern.matchon(Seq(new TWord("mmtm"), new TWord("wwkp"),
+    record = NaiveMatcher.matchon(pattern, Seq(new TWord("mmtm"), new TWord("wwkp"),
       new TInt("3232"), new TWord("www")))
     assertTrue(record.isDefined)
 
@@ -91,7 +91,7 @@ class PatternMatcherTest {
       new PIntRange(3, 60))
     patterns.zipWithIndex.foreach(p => p._1.name = p._2.toString)
 
-    val rec1 = PatternMatcher.matchItems(patterns,
+    val rec1 = NaiveMatcher.matchItems(patterns,
       Seq(new TWord("dkkd"), new TInt("3123"), new TWord("aab"), new TWord("wtw"),
         new TWord("kmpt"), new TInt("21")))
     assertTrue(rec1.isDefined)
@@ -103,11 +103,11 @@ class PatternMatcherTest {
     assertEquals(new TWord("kmpt"), rec1.get.get("5").get)
     assertEquals(new TInt("21"), rec1.get.get("6").get)
 
-    val rec2 = PatternMatcher.matchItems(patterns,
+    val rec2 = NaiveMatcher.matchItems(patterns,
       Seq(new TInt("3432"), new TWord("kkmdpt"), new TWord("wpnta")))
     assertTrue(rec2.isEmpty)
 
-    val rec3 = PatternMatcher.matchItems(patterns,
+    val rec3 = NaiveMatcher.matchItems(patterns,
       Seq(new TWord("dkkd"), new TInt("3123"), new TWord("aab"), new TWord("wtw"),
         new TWord("kmpt"), new TInt("99"))
     )
@@ -139,7 +139,7 @@ class PatternMatcherTest {
     pattern.naming()
 
 
-    val record = pattern.matchon(Seq(new TWord("mmtm"), new TWord("wwkp"),
+    val record = NaiveMatcher.matchon(pattern, Seq(new TWord("mmtm"), new TWord("wwkp"),
       new TInt("3232"), new TWord("mmd"), new TWord("wwtm")))
 
     assertTrue(record.isDefined)
@@ -151,7 +151,7 @@ class PatternMatcherTest {
     assertEquals(2, rec.choices.size)
     assertFalse(rec.choices.contains("_0_1_1_1_2_1"))
 
-    val record2 = pattern.matchon(Seq(new TWord("mmtm"), new TWord("wwkp"),
+    val record2 = NaiveMatcher.matchon(pattern, Seq(new TWord("mmtm"), new TWord("wwkp"),
       new TInt("3232"), new TWord("www"), new TWord("aad")))
 
     assertTrue(record2.isDefined)

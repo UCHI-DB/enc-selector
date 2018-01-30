@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.ptnmining
 
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.ptnmining.matching.RegexMatcher
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 
 import scala.collection.mutable
@@ -48,8 +49,8 @@ object MinePattern extends App {
 
     var failed = 0
 
-    test.map(Tokenizer.tokenize).foreach(tokens => {
-      pattern.matchon(tokens.toSeq) match {
+    test.foreach(line => {
+      RegexMatcher.matchon(pattern, line) match {
         case None => {
           failed += 1
         }

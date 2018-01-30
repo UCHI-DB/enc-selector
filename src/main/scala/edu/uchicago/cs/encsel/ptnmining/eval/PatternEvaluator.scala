@@ -23,9 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining.eval
 
-import java.math.BigInteger
-
-import edu.uchicago.cs.encsel.ptnmining.parser.Token
+import edu.uchicago.cs.encsel.ptnmining.matching.{PatternMatcher, RegexMatcher}
 import edu.uchicago.cs.encsel.ptnmining.{PAny, Pattern}
 import org.apache.commons.lang3.StringUtils
 
@@ -35,7 +33,9 @@ import org.apache.commons.lang3.StringUtils
   *
   */
 object PatternEvaluator {
-  def evaluate(ptn: Pattern, dataset: Seq[Seq[Token]]): Double = {
+  val matcher: PatternMatcher = RegexMatcher
+
+  def evaluate(ptn: Pattern, dataset: Traversable[String]): Double = {
 
     if (StringUtils.isEmpty(ptn.getName))
       ptn.naming()
@@ -48,7 +48,7 @@ object PatternEvaluator {
     val anyNames = ptn.flatten.filter(_.isInstanceOf[PAny]).map(_.getName).distinct
 
     // Encoded Data Size
-    val matched = dataset.map(di => (ptn.matchon(di), di))
+    val matched = dataset.map(di => (matcher.matchon(ptn, di), di))
 
     val encodedSize = matched.map(item => {
       val record = item._1
@@ -70,7 +70,7 @@ object PatternEvaluator {
             case false => anys.sum + anys.size
           }) + intRange
         }
-        case false => origin.map(_.value.length).sum
+        case false => origin.length
       }
     })
 

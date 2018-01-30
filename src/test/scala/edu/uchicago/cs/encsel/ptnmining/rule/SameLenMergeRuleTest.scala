@@ -22,10 +22,10 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion}
 import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord, Tokenizer}
-import org.junit.Test
+import edu.uchicago.cs.encsel.ptnmining.{PEmpty, PSeq, PToken, PUnion}
 import org.junit.Assert._
+import org.junit.Test
 
 class SameLenMergeRuleTest {
 
@@ -51,7 +51,7 @@ class SameLenMergeRuleTest {
     assertTrue(rule.happened)
 
     val seq = output.asInstanceOf[PSeq]
-    assertEquals(7,seq.content.size)
+    assertEquals(7, seq.content.size)
     val u0 = seq.content(0).asInstanceOf[PUnion].content
     assertTrue(u0.contains(new PToken(new TInt("00"))))
     assertTrue(u0.contains(new PToken(new TInt("74"))))
@@ -64,14 +64,14 @@ class SameLenMergeRuleTest {
     assertTrue(u2.contains(new PToken(new TInt("5867"))))
     assertTrue(u2.contains(new PToken(new TInt("9656"))))
 
-    assertEquals(seq.content(3),new PToken(new TWord("YL")))
+    assertEquals(seq.content(3), new PToken(new TWord("YL")))
 
     val u4 = seq.content(4).asInstanceOf[PUnion].content
     assertTrue(u4.contains(new PToken(new TInt("1A"))))
     assertTrue(u4.contains(new PToken(new TInt("1C"))))
     assertTrue(u4.contains(new PToken(new TInt("1D"))))
 
-    assertEquals(seq.content(5),new PToken(new TWord("K")))
+    assertEquals(seq.content(5), new PToken(new TWord("K")))
 
     val u6 = seq.content(6).asInstanceOf[PUnion].content
     assertTrue(u6.contains(new PToken(new TInt("1352349"))))
@@ -100,6 +100,16 @@ class SameLenMergeRuleTest {
       .map(rs => PSeq(Tokenizer.tokenize(rs).map(new PToken(_)).toSeq)))
     rule.rewrite(data3)
     assertFalse(rule.happened)
+
+    val data4 = PUnion(Array("1234DMPT23423")
+      .map(rs => PSeq(Tokenizer.tokenize(rs).map(new PToken(_)).toSeq)))
+    rule.rewrite(data4)
+    assertFalse(rule.happened)
+
+    val data5 = PUnion(Array(PEmpty))
+    rule.rewrite(data5)
+    assertFalse(rule.happened)
+
   }
 
   @Test

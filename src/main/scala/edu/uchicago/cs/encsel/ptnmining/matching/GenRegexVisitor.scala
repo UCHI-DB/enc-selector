@@ -14,17 +14,18 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package edu.uchicago.cs.encsel.ptnmining.genregex
+package edu.uchicago.cs.encsel.ptnmining.matching
 
 import edu.uchicago.cs.encsel.ptnmining._
 
-import scala.collection.mutable
+import scala.collection.mutable.{ArrayBuffer, HashMap}
 
 /**
   * Generate a regular expression string that contains the given pattern.
@@ -35,42 +36,53 @@ import scala.collection.mutable
   */
 class GenRegexVisitor extends PatternVisitor {
 
-  val history = new mutable.HashMap[String, String]
+  private val history = new HashMap[String, String]
+
+  // The pattern names by the order of appearance
+  // Note: this only covers those Patterns having variable content
+  val list = new ArrayBuffer[String]
+
+  def reset: Unit = {
+    history.clear
+    list.clear
+  }
+
+  def get: String = history.head._2
 
   override def on(ptn: Pattern): Unit = {
     ptn match {
-      case token: PToken => {
-        history.put(token.name, token.token.value)
-      }
-      case PEmpty => {
-
-      }
+      case union: PUnion => list += union.name
+      case token: PToken => history.put(token.name, token.token.value)
       case wany: PWordAny => {
+        list += wany.name
         history.put(wany.name,
-          (wany.minLength, wany.maxLength) match {
+          "(%s)".format((wany.minLength, wany.maxLength) match {
             case (1, -1) => "\\w+"
             case (i, j) if i == j => "\\w{%d}".format(i)
             case (i, j) => "\\w{%d,%d}".format(i, j)
-          })
+          }))
       }
       case iany: PIntAny => {
+        list += iany.name
         val digit = iany.hasHex match {
           case false => "\\d"
           case true => "[0-9a-fA-F]"
         }
         history.put(iany.name,
-          (iany.minLength, iany.maxLength) match {
+          "(%s)".format((iany.minLength, iany.maxLength) match {
             case (1, -1) => "%s+".format(digit)
             case (i, j) if i == j => "%s{%d}".format(digit, i)
             case (i, j) => "%s{%d,%d}".format(digit, i, j)
-          })
+          }))
       }
       case dany: PDoubleAny => {
-        history.put(dany.name, "\\d+\\.\\d+")
+        list += dany.name
+        history.put(dany.name, "(\\d+\\.\\d+)")
       }
       case irng: PIntRange => {
+        list += irng.name
         // Use PIntAny instead
-        history.put(irng.name, "\\d+")
+        history.put(irng.name, "(\\d+)")
       }
       case _ => {}
     }
@@ -81,10 +93,13 @@ class GenRegexVisitor extends PatternVisitor {
     ptn match {
       case union: PUnion => {
         var result = union.content.filter(_ != PEmpty).map(n => history.getOrElse(n.name, "<err>"))
-          .reduce((a, b) => "(%s)|(%s)".format(a, b))
+          .reduce((a, b) => "%s|%s".format(a, b))
         if (union.content.contains(PEmpty)) {
           result = "(%s)?".format(result)
+        } else {
+          result = "(%s)".format(result)
         }
+
         union.content.foreach(n => history.remove(n.name))
         history.put(union.name, result)
       }

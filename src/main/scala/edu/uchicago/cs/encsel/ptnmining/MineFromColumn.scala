@@ -28,9 +28,8 @@ import java.io.{FileOutputStream, PrintWriter}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.genregex.GenRegexVisitor
+import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
-import edu.uchicago.cs.encsel.ptnmining.rule.{CommonSeqEqualFunc, CommonSeqRule, UseAnyRule}
 import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
@@ -39,28 +38,24 @@ object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  val output = new PrintWriter(new FileOutputStream("pattern_res"))
-
-  Persistence.get.load().filter(_.dataType == DataType.STRING).foreach(column => {
+  val persist = Persistence.get
+  persist.load().filter(_.dataType == DataType.STRING).foreach(column => {
     val colid = column.asInstanceOf[ColumnWrapper].id
     val pattern = patternMiner.mine(Source.fromFile(column.colFile).getLines()
       .take(100).toSeq.map(Tokenizer.tokenize(_).toSeq))
 
     val validator = new PatternValidator
     pattern.visit(validator)
-    //      if (validator.isValid) {
-    pattern.naming()
-    val regex = new GenRegexVisitor
-    pattern.visit(regex)
-    output.println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
-    /*} else {
-      val regex = new GenRegexVisitor
-      println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
-    }*/
+    if (validator.isValid) {
+      val subcols = SplitColumn.split(column, pattern)
+      persist.save(subcols)
+    }
   })
-  output.close
 }
 
+/**
+  * Encode single file for test purpose
+  */
 object MineSingleFile extends App {
   val patternMiner = new PatternMiner
 
@@ -71,15 +66,10 @@ object MineSingleFile extends App {
 
   val validator = new PatternValidator
   pattern.visit(validator)
-  //      if (validator.isValid) {
   pattern.naming()
   val regex = new GenRegexVisitor
   pattern.visit(regex)
-  output.println(regex.history.get(pattern.name).getOrElse(""))
-  /*} else {
-    val regex = new GenRegexVisitor
-    println("%d:%s".format(colid, regex.history.get(pattern.name).getOrElse("")))
-  }*/
+  output.println(regex.get)
   output.close
 }
 

@@ -23,23 +23,31 @@
 
 package edu.uchicago.cs.encsel.ptnmining.matching
 
-import scala.collection.mutable.HashMap
+import edu.uchicago.cs.encsel.ptnmining.Pattern
 
-/**
-  * Mapping between pattern node and token
-  */
-class Record {
-  val values = new HashMap[String, String]
+object RegexMatcher extends PatternMatcher {
 
-  val choices = new HashMap[String, (Int, Int)]
+  val regexgen = new GenRegexVisitor
 
-  // The delta towards min value of range
-  val rangeDeltas = new HashMap[String, BigInt]
+  override def matchon(pattern: Pattern, input: String): Option[Record] = {
+    regexgen.reset
+    pattern.visit(regexgen)
+    val regexstr = regexgen.get
+    val groupPatterns = regexgen.list
 
-  def add(name: String, value: String) = {
-    values += ((name, value))
+    val regex = regexstr.r
+    val matched = regex.findFirstMatchIn(input)
+
+    matched match {
+      case Some(mc) => {
+        // matched value by index
+        val patternValues = (0 until mc.groupCount).map(mc.group).zip(groupPatterns).map(t => (t._2, t._1)).toMap
+
+        val record = new Record()
+        record.values ++= patternValues
+        Some(record)
+      }
+      case None => None
+    }
   }
-
-  def get(name: String): Option[String] = values.get(name)
 }
-
