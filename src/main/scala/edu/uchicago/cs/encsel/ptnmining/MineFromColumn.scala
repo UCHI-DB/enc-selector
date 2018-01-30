@@ -69,10 +69,6 @@ object MineSingleFile extends App {
   val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/92").getLines()
     .take(100).filter(!StringUtils.isEmpty(_)).toList.map(Tokenizer.tokenize(_).toList))
 
-  val rule = new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _)
-  rule.rewrite(pattern)
-
-
   val validator = new PatternValidator
   pattern.visit(validator)
   //      if (validator.isValid) {
