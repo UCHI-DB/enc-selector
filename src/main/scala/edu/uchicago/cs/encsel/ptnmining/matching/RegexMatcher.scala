@@ -40,11 +40,10 @@ object RegexMatcher extends PatternMatcher {
 
     matched match {
       case Some(mc) => {
-        // matched value by index
-        val patternValues = (0 until mc.groupCount).map(mc.group).zip(groupPatterns).map(t => (t._2, t._1)).toMap
+        // matched value by index, skip the entire group
+        val patternValues = (1 to mc.groupCount).map(mc.group).zip(groupPatterns).map(t => (t._2, t._1)).toMap
 
-        val record = new Record()
-        record.values ++= patternValues
+        val record = new Record(patternValues)
         Some(record)
       }
       case None => None

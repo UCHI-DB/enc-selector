@@ -76,9 +76,9 @@ object SplitColumn {
           if (!StringUtils.isEmpty(line)) {
             // Match the line against pattern
             val matched = matcher.matchon(pattern, line)
-            if (matched.isDefined && colPatterns.forall(p => matched.get.values.contains(p.name))) {
+            if (matched.isDefined && colPatterns.forall(p => matched.get.has(p.name))) {
               colPatterns.indices.foreach(i => {
-                outputs(i).println(matched.get.values.get(colPatterns(i).name))
+                outputs(i).println(matched.get.get(colPatterns(i).name))
               })
             } else {
               // Not match, write to unmatch

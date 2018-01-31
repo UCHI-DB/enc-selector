@@ -57,11 +57,11 @@ class NaiveMatcherTest {
       new TInt("3232"), new TWord("mmd"), new TWord("wwtm")))
     assertTrue(record.isDefined)
     val rec = record.get
-    assertEquals(new TWord("mmtm"), rec.get("_0_0_0").get)
-    assertEquals(new TWord("wwkp"), rec.get("_0_0_1").get)
-    assertEquals(new TInt("3232"), rec.get("_0_1_1_0").get)
-    assertEquals(new TWord("mmd"), rec.get("_0_1_1_1_1_0").get)
-    assertEquals(new TWord("wwtm"), rec.get("_0_1_1_1_1_1").get)
+    assertEquals(new TWord("mmtm"), rec.get("_0_0_0"))
+    assertEquals(new TWord("wwkp"), rec.get("_0_0_1"))
+    assertEquals(new TInt("3232"), rec.get("_0_1_1_0"))
+    assertEquals(new TWord("mmd"), rec.get("_0_1_1_1_1_0"))
+    assertEquals(new TWord("wwtm"), rec.get("_0_1_1_1_1_1"))
     assertTrue(rec.get("_0_1_0_0").isEmpty)
     assertTrue(rec.get("_0_1_0_1").isEmpty)
 
@@ -96,12 +96,12 @@ class NaiveMatcherTest {
         new TWord("kmpt"), new TInt("21")))
     assertTrue(rec1.isDefined)
 
-    assertEquals(new TWord("dkkd"), rec1.get.get("0").get)
-    assertEquals(new TInt("3123"), rec1.get.get("1").get)
-    assertEquals(new TWord("aab"), rec1.get.get("2").get)
-    assertEquals(new TWord("wtw"), rec1.get.get("3").get)
-    assertEquals(new TWord("kmpt"), rec1.get.get("5").get)
-    assertEquals(new TInt("21"), rec1.get.get("6").get)
+    assertEquals(new TWord("dkkd"), rec1.get.get("0"))
+    assertEquals(new TInt("3123"), rec1.get.get("1"))
+    assertEquals(new TWord("aab"), rec1.get.get("2"))
+    assertEquals(new TWord("wtw"), rec1.get.get("3"))
+    assertEquals(new TWord("kmpt"), rec1.get.get("5"))
+    assertEquals(new TInt("21"), rec1.get.get("6"))
 
     val rec2 = NaiveMatcher.matchItems(patterns,
       Seq(new TInt("3432"), new TWord("kkmdpt"), new TWord("wpnta")))

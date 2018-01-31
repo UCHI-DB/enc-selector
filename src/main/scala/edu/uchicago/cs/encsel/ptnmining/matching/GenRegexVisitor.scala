@@ -47,7 +47,8 @@ class GenRegexVisitor extends PatternVisitor {
     list.clear
   }
 
-  def get: String = history.head._2
+  // No partial matching
+  def get: String = "^%s$".format(history.head._2)
 
   override def on(ptn: Pattern): Unit = {
     ptn match {

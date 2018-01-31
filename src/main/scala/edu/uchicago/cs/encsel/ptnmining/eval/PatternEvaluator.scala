@@ -60,8 +60,8 @@ object PatternEvaluator {
             .map(x => intSize(x._2)).sum
           val anys = anyNames.map(name => {
             content.get(name) match {
-              case Some(token) => token.length
-              case None => 0
+              case "" => 0
+              case a => a.length
             }
           })
           val intRange = content.rangeDeltas.values.map(intSize).sum
