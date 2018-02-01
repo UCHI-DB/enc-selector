@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.dataset
 
 import java.io.{File, FileOutputStream, PrintWriter}
 
+import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.model.DataType
 import org.apache.commons.lang3.StringUtils
@@ -41,27 +42,43 @@ object DataFixer extends App {
 
   val sed = "sed -i '%ds/%s/%s/g' %s"
 
-  val commands = new PrintWriter(new FileOutputStream("cmd_fix"))
+  fixAll
 
-  Persistence.get.load().foreach(col => {
+
+  def fixFile: Seq[String] = {
+    val file = "/home/harper/pattern/demo"
+    val column = new Column(null, 0, "", DataType.DOUBLE)
+    column.colFile = new File(file).toURI
+
+    fixColumn(column)
+  }
+
+  def fixAll: Unit = {
+    val commands = new PrintWriter(new FileOutputStream("cmd_fix"))
+    Persistence.get.load().foreach(col => {
+      fixColumn(col).foreach(commands.println)
+    })
+    commands.close
+  }
+
+  def fixColumn(col: Column): Seq[String] = {
+    val result = new ArrayBuffer[String]
     col.dataType match {
       case DataType.INTEGER | DataType.LONG => {
         var counter = 0
-        var prevline: String = null
+        var prevline: String = ""
         Source.fromFile(col.colFile).getLines().foreach(line => {
           counter += 1
-          if (!StringUtils.isEmpty(line.trim)) {
+          val trimed = line.trim
+          if (!trimed.isEmpty) {
             try {
-              BigInt(line)
+              BigInt(trimed)
               prevline = line
             } catch {
               case e: NumberFormatException => {
                 // find the invalid char and generate command to replace data in this line
-                val newline = prevline match {
-                  case null => {
-                    line.replaceAll("[:,;<>=\\?]", "0")
-                  }
-                  case _ => {
+                val newline = prevline.length match {
+                  case same if same == line.length => {
                     line.zip(prevline).map(pair => {
                       pair._1 match {
                         case digit if Character.isDigit(digit) => pair._1
@@ -69,31 +86,31 @@ object DataFixer extends App {
                       }
                     }).mkString
                   }
+                  case _ => {
+                    line.replaceAll("[:,;<>=\\?]", "0")
+                  }
                 }
-                commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
+                result += sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
               }
             }
           }
         })
       }
-      case DataType.FLOAT | DataType.DOUBLE
-      => {
+      case DataType.FLOAT | DataType.DOUBLE => {
         var counter = 0
         var prevline: String = null
         Source.fromFile(col.colFile).getLines().foreach(line => {
           counter += 1
-          if (!StringUtils.isEmpty(line.trim)) {
+          val trimed = line.trim
+          if (!trimed.isEmpty) {
             try {
-              BigDecimal(line)
+              BigDecimal(trimed)
               prevline = line
             } catch {
               case e: NumberFormatException => {
                 // find the invalid char and generate command to replace data in this line
-                val newline = prevline match {
-                  case null => {
-                    line.replaceAll("[:;,<>=\\?]", "0")
-                  }
-                  case _ => {
+                val newline = prevline.length match {
+                  case same if same == line.length => {
                     line.zip(prevline).map(pair => {
                       pair._1 match {
                         case digit if Character.isDigit(digit) => digit
@@ -101,8 +118,11 @@ object DataFixer extends App {
                       }
                     }).mkString
                   }
+                  case _ => {
+                    line.replaceAll("[:;,<>=\\?]", "0")
+                  }
                 }
-                commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
+                result += sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
               }
             }
           }
@@ -110,6 +130,6 @@ object DataFixer extends App {
       }
       case _ => Unit
     }
-  })
-  commands.close
+    result
+  }
 }
