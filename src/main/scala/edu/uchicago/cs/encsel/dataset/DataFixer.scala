@@ -88,6 +88,7 @@ object DataFixer extends App {
           }
         })
       }
+      case _ => Unit
     }
   })
   commands.close
