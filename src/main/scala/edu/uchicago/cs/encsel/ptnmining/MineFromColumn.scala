@@ -55,7 +55,7 @@ object MineFromColumn extends App {
     pattern.naming()
     val regex = new GenRegexVisitor
     pattern.visit(regex)
-    output.println(colid)
+    println(colid)
     output.println("%s:%s", validator.isValid, regex.get)
   })
   output.close
