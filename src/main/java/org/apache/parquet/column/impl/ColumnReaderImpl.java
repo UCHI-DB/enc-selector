@@ -649,9 +649,13 @@ public class ColumnReaderImpl implements ColumnReader {
     return readValues >= endOfPageValueCount;
   }
   
-  public OffheapReadSopport offheapSupport() {
+  public OffheapReadSopport getoffheapSupport() {
 	  readPage();
 	  this.readValues += currentOffheapPageInf.getValueCount();
+	  return this.currentOffheapPageInf;
+  }
+  
+  public OffheapReadSopport getPageInf() {
 	  return this.currentOffheapPageInf;
   }
 
