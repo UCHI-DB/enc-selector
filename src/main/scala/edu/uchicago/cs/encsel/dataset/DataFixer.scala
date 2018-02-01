@@ -26,6 +26,7 @@ import java.io.{File, FileOutputStream, PrintWriter}
 
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.model.DataType
+import org.apache.commons.lang3.StringUtils
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -49,26 +50,28 @@ object DataFixer extends App {
         var prevline: String = null
         Source.fromFile(col.colFile).getLines().foreach(line => {
           counter += 1
-          try {
-            BigInt(line)
-            prevline = line
-          } catch {
-            case e: NumberFormatException => {
-              // find the invalid char and generate command to replace data in this line
-              val newline = prevline match {
-                case null => {
-                  line.replaceAll("[:,;<>=\\?]", "0")
+          if (!StringUtils.isEmpty(line)) {
+            try {
+              BigInt(line)
+              prevline = line
+            } catch {
+              case e: NumberFormatException => {
+                // find the invalid char and generate command to replace data in this line
+                val newline = prevline match {
+                  case null => {
+                    line.replaceAll("[:,;<>=\\?]", "0")
+                  }
+                  case _ => {
+                    line.zip(prevline).map(pair => {
+                      pair._1 match {
+                        case digit if Character.isDigit(digit) => pair._1
+                        case _ => pair._2
+                      }
+                    }).mkString
+                  }
                 }
-                case _ => {
-                  line.zip(prevline).map(pair => {
-                    pair._1 match {
-                      case digit if Character.isDigit(digit) => pair._1
-                      case _ => pair._2
-                    }
-                  }).mkString
-                }
+                commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
               }
-              commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
             }
           }
         })
@@ -79,26 +82,28 @@ object DataFixer extends App {
         var prevline: String = null
         Source.fromFile(col.colFile).getLines().foreach(line => {
           counter += 1
-          try {
-            BigDecimal(line)
-            prevline = line
-          } catch {
-            case e: NumberFormatException => {
-              // find the invalid char and generate command to replace data in this line
-              val newline = prevline match {
-                case null => {
-                  line.replaceAll("[:;,<>=\\?]", "0")
+          if (!StringUtils.isEmpty(line)) {
+            try {
+              BigDecimal(line)
+              prevline = line
+            } catch {
+              case e: NumberFormatException => {
+                // find the invalid char and generate command to replace data in this line
+                val newline = prevline match {
+                  case null => {
+                    line.replaceAll("[:;,<>=\\?]", "0")
+                  }
+                  case _ => {
+                    line.zip(prevline).map(pair => {
+                      pair._1 match {
+                        case digit if Character.isDigit(digit) => digit
+                        case _ => pair._2
+                      }
+                    }).mkString
+                  }
                 }
-                case _ => {
-                  line.zip(prevline).map(pair => {
-                    pair._1 match {
-                      case digit if Character.isDigit(digit) => digit
-                      case _ => pair._2
-                    }
-                  }).mkString
-                }
+                commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
               }
-              commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
             }
           }
         })
