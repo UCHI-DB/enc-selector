@@ -95,11 +95,11 @@ class PatternValidator extends PatternVisitor {
   val seqThreshold = 10
 
   override def on(ptn: Pattern): Unit = {
-    valid & = ptn match {
+    valid &= (ptn match {
       case union: PUnion => union.content.size <= unionThreshold
       case seq: PSeq => seq.content.size <= seqThreshold
       case _ => true
-    }
+    })
   }
 
   def isValid: Boolean = valid
