@@ -50,7 +50,7 @@ object DataFixer extends App {
         var prevline: String = null
         Source.fromFile(col.colFile).getLines().foreach(line => {
           counter += 1
-          if (!StringUtils.isEmpty(line)) {
+          if (!StringUtils.isEmpty(line.trim)) {
             try {
               BigInt(line)
               prevline = line
@@ -82,7 +82,7 @@ object DataFixer extends App {
         var prevline: String = null
         Source.fromFile(col.colFile).getLines().foreach(line => {
           counter += 1
-          if (!StringUtils.isEmpty(line)) {
+          if (!StringUtils.isEmpty(line.trim)) {
             try {
               BigDecimal(line)
               prevline = line
