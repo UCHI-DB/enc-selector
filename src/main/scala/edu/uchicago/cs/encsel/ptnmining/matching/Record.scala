@@ -28,10 +28,13 @@ import scala.collection.mutable.HashMap
 /**
   * Mapping between pattern node and token
   */
-class Record(vs: Map[String, String]) {
+class Record {
   private val values = new HashMap[String, String]
 
-  values ++= vs
+  def this(vs: Map[String, String]) {
+    this()
+    values ++= vs
+  }
 
   val choices = new HashMap[String, (Int, Int)]
 
@@ -45,5 +48,6 @@ class Record(vs: Map[String, String]) {
   def has(name: String): Boolean = values.contains(name)
 
   def get(name: String): String = values.getOrElse(name, "<err>")
+
 }
 
