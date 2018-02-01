@@ -53,7 +53,7 @@ class GenRegexVisitorTest {
 
     val regexv = new GenRegexVisitor
     ptn.visit(regexv)
-    assertEquals("(\\d{5})And(\\d+)(dmd|12312|(\\d{3,4}))?(\\w{5})3077(\\d+\\.\\d+)(\\w+)mpq(\\w{10})",
+    assertEquals("^(\\d{5})And(\\d+)(dmd|12312|(\\d{3,4}))?(\\w{5})3077(\\d+\\.\\d+)(\\w+)mpq(\\w{10})$",
       regexv.get)
 
     assertArrayEquals(Array[AnyRef]("_0_0","_0_2","_0_3","_0_3_3","_0_4","_0_6","_0_7","_0_9"), regexv.list.toArray[AnyRef])
