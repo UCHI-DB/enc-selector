@@ -55,18 +55,26 @@ object DataFixer extends App {
           } catch {
             case e: NumberFormatException => {
               // find the invalid char and generate command to replace data in this line
-              val newline = line.zip(prevline).map(pair => {
-                pair._1 match {
-                  case digit if Character.isDigit(digit) => pair._1
-                  case _ => pair._2
+              val newline = prevline match {
+                case null => {
+                  line.replaceAll("[:,;<>=\\?]", "0")
                 }
-              }).mkString
+                case _ => {
+                  line.zip(prevline).map(pair => {
+                    pair._1 match {
+                      case digit if Character.isDigit(digit) => pair._1
+                      case _ => pair._2
+                    }
+                  }).mkString
+                }
+              }
               commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
             }
           }
         })
       }
-      case DataType.FLOAT | DataType.DOUBLE => {
+      case DataType.FLOAT | DataType.DOUBLE
+      => {
         var counter = 0
         var prevline: String = null
         Source.fromFile(col.colFile).getLines().foreach(line => {
@@ -77,12 +85,19 @@ object DataFixer extends App {
           } catch {
             case e: NumberFormatException => {
               // find the invalid char and generate command to replace data in this line
-              val newline = line.zip(prevline).map(pair => {
-                pair._1 match {
-                  case digit if Character.isDigit(digit) => digit
-                  case _ => pair._2
+              val newline = prevline match {
+                case null => {
+                  line.replaceAll("[:;,<>=\\?]", "0")
                 }
-              }).mkString
+                case _ => {
+                  line.zip(prevline).map(pair => {
+                    pair._1 match {
+                      case digit if Character.isDigit(digit) => digit
+                      case _ => pair._2
+                    }
+                  }).mkString
+                }
+              }
               commands println sed.format(counter, line, newline, new File(col.colFile).getAbsolutePath)
             }
           }
