@@ -28,6 +28,7 @@ import java.io.{FileOutputStream, PrintWriter}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.ptnmining.MineSingleFile.{output, pattern}
 import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 import org.apache.commons.lang3.StringUtils
@@ -37,6 +38,7 @@ import scala.io.Source
 object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
+  val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
   val persist = Persistence.get
   persist.load().filter(_.dataType == DataType.STRING).foreach(column => {
@@ -46,11 +48,16 @@ object MineFromColumn extends App {
 
     val validator = new PatternValidator
     pattern.visit(validator)
-    if (validator.isValid) {
-      val subcols = SplitColumn.split(column, pattern)
-      persist.save(subcols)
-    }
+    //    if (validator.isValid) {
+    //      val subcols = SplitColumn.split(column, pattern)
+    //      persist.save(subcols)
+    //    }
+    pattern.naming()
+    val regex = new GenRegexVisitor
+    pattern.visit(regex)
+    output.println("%s:%s", validator.isValid, regex.get)
   })
+  output.close
 }
 
 /**
@@ -88,14 +95,10 @@ class PatternValidator extends PatternVisitor {
   val seqThreshold = 10
 
   override def on(ptn: Pattern): Unit = {
-    ptn match {
-      case union: PUnion => {
-        valid &= union.content.size <= unionThreshold
-      }
-      case seq: PSeq => {
-        valid &= seq.content.size <= seqThreshold
-      }
-      case _ => {}
+    valid & = ptn match {
+      case union: PUnion => union.content.size <= unionThreshold
+      case seq: PSeq => seq.content.size <= seqThreshold
+      case _ => true
     }
   }
 
