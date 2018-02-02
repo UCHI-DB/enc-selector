@@ -55,8 +55,7 @@ object MineFromColumn extends App {
     pattern.naming()
     val regex = new GenRegexVisitor
     pattern.visit(regex)
-    println(colid)
-    output.println("%s:%s", validator.isValid, regex.get)
+    output.println("%d:%s:%s".format(colid, validator.isValid, regex.get))
   })
   output.close
 }
@@ -92,11 +91,12 @@ class PatternValidator extends PatternVisitor {
 
   var valid = true
 
-  val unionThreshold = 10
-  val seqThreshold = 10
+  val unionThreshold = 50
+  val seqThreshold = 50
 
   override def on(ptn: Pattern): Unit = {
     valid &= (ptn match {
+      case PEmpty => !path.isEmpty
       case union: PUnion => union.content.size <= unionThreshold
       case seq: PSeq => seq.content.size <= seqThreshold
       case _ => true
