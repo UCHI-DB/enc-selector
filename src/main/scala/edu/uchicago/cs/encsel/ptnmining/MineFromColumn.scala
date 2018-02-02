@@ -71,10 +71,10 @@ object MineFromColumn extends App {
 
   def patternFromFile(file: URI): Pattern = {
     val lines = Source.fromFile(file).getLines().filter(!_.trim.isEmpty).toIterable
-    val head = lines.take(100)
-    val tail = lines.takeRight(100)
-    val both = head ++ tail
-    val pattern = patternMiner.mine(both.map(Tokenizer.tokenize(_).toSeq).toSeq)
+    val head = lines.take(500)
+//    val tail = lines.takeRight(100)
+//    val both = head ++ tail
+    val pattern = patternMiner.mine(head.map(Tokenizer.tokenize(_).toSeq).toSeq)
     pattern.naming()
 
     pattern
