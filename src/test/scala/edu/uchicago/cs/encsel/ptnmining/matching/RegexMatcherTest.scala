@@ -41,15 +41,15 @@ class RegexMatcherTest {
       new PWordAny(3)
     ))
     ptn.naming()
-    val test1 = "1234qmP55237oWD"
-    val test2 = "1233KKdMPPwoq"
+    val test1 = "1D34qmP55237oWD"
+    val test2 = "12E3KKdMPPwoq"
     val test3 = "12341423owdfwr"
 
     val match1 = RegexMatcher.matchon(ptn, test1)
 
     assertTrue(match1.isDefined)
     val m1 = match1.get
-    assertEquals("1234", m1.get("_0_0"))
+    assertEquals("1D34", m1.get("_0_0"))
     assertEquals("qmP", m1.get("_0_1"))
     assertEquals("55237", m1.get("_0_2"))
     assertEquals("oWD", m1.get("_0_3"))
@@ -58,7 +58,7 @@ class RegexMatcherTest {
 
     assertTrue(match2.isDefined)
     val m2 = match2.get
-    assertEquals("1233", m2.get("_0_0"))
+    assertEquals("12E3", m2.get("_0_0"))
     assertEquals("KKd", m2.get("_0_1"))
     assertEquals("MPP", m2.get("_0_2"))
     assertEquals("woq", m2.get("_0_3"))

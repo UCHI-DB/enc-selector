@@ -49,10 +49,11 @@ object MineFromColumn extends App {
       val colid = column.asInstanceOf[ColumnWrapper].id
       val pattern = patternFromFile(column.colFile)
       val valid = validate(pattern)
-      //    if (validator.isValid) {
-      //      val subcols = SplitColumn.split(column, pattern)
-      //      persist.save(subcols)
-      //    }
+      if (valid) {
+        val subcols = SplitColumn.split(column, pattern)
+        if (!subcols.isEmpty)
+          persist.save(subcols)
+      }
       val regex = new GenRegexVisitor
       pattern.visit(regex)
       output.println("%d:%s:%s".format(colid, valid, regex.get))
@@ -72,8 +73,8 @@ object MineFromColumn extends App {
   def patternFromFile(file: URI): Pattern = {
     val lines = Source.fromFile(file).getLines().filter(!_.trim.isEmpty).toIterable
     val head = lines.take(500)
-//    val tail = lines.takeRight(100)
-//    val both = head ++ tail
+    //    val tail = lines.takeRight(100)
+    //    val both = head ++ tail
     val pattern = patternMiner.mine(head.map(Tokenizer.tokenize(_).toSeq).toSeq)
     pattern.naming()
 
