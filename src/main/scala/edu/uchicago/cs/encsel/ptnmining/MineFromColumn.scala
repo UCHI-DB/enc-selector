@@ -23,12 +23,12 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import java.io.{FileOutputStream, PrintWriter}
+import java.io.{File, FileOutputStream, PrintWriter}
+import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.MineSingleFile.{output, pattern}
 import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 import org.apache.commons.lang3.StringUtils
@@ -38,46 +38,53 @@ import scala.io.Source
 object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
-  val output = new PrintWriter(new FileOutputStream("pattern_res"))
 
-  val persist = Persistence.get
-  persist.load().filter(_.dataType == DataType.STRING).foreach(column => {
-    val colid = column.asInstanceOf[ColumnWrapper].id
-    val pattern = patternMiner.mine(Source.fromFile(column.colFile).getLines()
-      .take(100).toSeq.map(Tokenizer.tokenize(_).toSeq))
+  mineAllFiles
 
-    val validator = new PatternValidator
-    pattern.visit(validator)
-    //    if (validator.isValid) {
-    //      val subcols = SplitColumn.split(column, pattern)
-    //      persist.save(subcols)
-    //    }
-    pattern.naming()
+  def mineAllFiles: Unit = {
+    val output = new PrintWriter(new FileOutputStream("pattern_res"))
+
+    val persist = Persistence.get
+    persist.load().filter(_.dataType == DataType.STRING).foreach(column => {
+      val colid = column.asInstanceOf[ColumnWrapper].id
+      val pattern = patternFromFile(column.colFile)
+      val valid = validate(pattern)
+      //    if (validator.isValid) {
+      //      val subcols = SplitColumn.split(column, pattern)
+      //      persist.save(subcols)
+      //    }
+      val regex = new GenRegexVisitor
+      pattern.visit(regex)
+      output.println("%d:%s:%s".format(colid, valid, regex.get))
+    })
+    output.close
+  }
+
+  def mineSingleFile: Unit = {
+    val file = new File("/local/hajiang/./columns/columner3524782481115062568/SERIALNUMBER_97529673794382523077.tmp").toURI
+    val pattern = patternFromFile(file)
+    val valid = validate(pattern)
     val regex = new GenRegexVisitor
     pattern.visit(regex)
-    output.println("%d:%s:%s".format(colid, validator.isValid, regex.get))
-  })
-  output.close
-}
+    println("%s:%s".format(regex.get, valid))
+  }
 
-/**
-  * Encode single file for test purpose
-  */
-object MineSingleFile extends App {
-  val patternMiner = new PatternMiner
+  def patternFromFile(file: URI): Pattern = {
+    val lines = Source.fromFile(file).getLines().filter(!_.trim.isEmpty).toIterable
+    val head = lines.take(100)
+    //    val tail = lines.takeRight(100)
+    //    val both = head ++ tail
+    val pattern = patternMiner.mine(head.map(Tokenizer.tokenize(_).toSeq).toSeq)
+    pattern.naming()
 
-  val output = new PrintWriter(new FileOutputStream("pattern_res"))
+    pattern
+  }
 
-  val pattern = patternMiner.mine(Source.fromFile("/home/harper/pattern/test").getLines()
-    .take(100).filter(!StringUtils.isEmpty(_)).toList.map(Tokenizer.tokenize(_).toList))
-
-  val validator = new PatternValidator
-  pattern.visit(validator)
-  pattern.naming()
-  val regex = new GenRegexVisitor
-  pattern.visit(regex)
-  output.println(regex.get)
-  output.close
+  def validate(pattern: Pattern): Boolean = {
+    val validator = new PatternValidator
+    pattern.visit(validator)
+    validator.isValid
+  }
 }
 
 /**
@@ -96,10 +103,9 @@ class PatternValidator extends PatternVisitor {
 
   override def on(ptn: Pattern): Unit = {
     valid &= (ptn match {
-      case PEmpty => !path.isEmpty
-      case union: PUnion => union.content.size <= unionThreshold
+      case union: PUnion => !path.isEmpty && union.content.size <= unionThreshold
       case seq: PSeq => seq.content.size <= seqThreshold
-      case _ => true
+      case _ => !path.isEmpty
     })
   }
 
