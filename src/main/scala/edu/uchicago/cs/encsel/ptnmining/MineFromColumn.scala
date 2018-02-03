@@ -39,30 +39,35 @@ object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  mineAllFiles
+  mineSingleFile
+  //  mineAllFiles
 
   def mineAllFiles: Unit = {
-    val output = new PrintWriter(new FileOutputStream("pattern_res"))
+    val start = args.length match {
+      case 0 => 0
+      case _ => args(0).toInt
+    }
 
     val persist = Persistence.get
     persist.load().filter(_.dataType == DataType.STRING).foreach(column => {
       val colid = column.asInstanceOf[ColumnWrapper].id
-      val pattern = patternFromFile(column.colFile)
-      val valid = validate(pattern)
-      if (valid) {
-        val subcols = SplitColumn.split(column, pattern)
-        if (!subcols.isEmpty)
-          persist.save(subcols)
+      if (colid >= start) {
+        val pattern = patternFromFile(column.colFile)
+        val valid = validate(pattern)
+        if (valid) {
+          val subcols = SplitColumn.split(column, pattern)
+          if (!subcols.isEmpty)
+            persist.save(subcols)
+        }
+        val regex = new GenRegexVisitor
+        pattern.visit(regex)
+        println("%d:%s:%s".format(colid, valid, regex.get))
       }
-      val regex = new GenRegexVisitor
-      pattern.visit(regex)
-      output.println("%d:%s:%s".format(colid, valid, regex.get))
     })
-    output.close
   }
 
   def mineSingleFile: Unit = {
-    val file = new File("/local/hajiang/./columns/columner3524782481115062568/SERIALNUMBER_97529673794382523077.tmp").toURI
+    val file = new File("/local/hajiang/./columns/columner5788729709017517733/EXIT_CODE_195866084998213540583.tmp").toURI
     val pattern = patternFromFile(file)
     val valid = validate(pattern)
     val regex = new GenRegexVisitor

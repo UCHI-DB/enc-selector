@@ -96,6 +96,7 @@ class TSymbol(v: AnyRef) extends Token {
 
 class TSpace extends TSymbol(" ")
 
+@deprecated("not in use right now")
 class TPara(t: Int, l: Boolean) extends Token {
   val paraType = t
   val left = l

@@ -34,6 +34,17 @@ import scala.collection.mutable.{ArrayBuffer, HashMap}
   * to represent it
   *
   */
+
+object RegexHelper {
+  def escape(input: String): String = {
+    input match {
+      // [\^$.|?*+(){}
+      case "[" | "\\" | "^" | "$" | "." | "|" | "?" | "*" | "+" | "(" | ")" | "{" | "}" => "\\%s".format(input)
+      case _ => input
+    }
+  }
+}
+
 class GenRegexVisitor extends PatternVisitor {
 
   private val history = new HashMap[String, String]
@@ -50,7 +61,7 @@ class GenRegexVisitor extends PatternVisitor {
   // No partial matching
   def get: String = {
     history.size match {
-      case 0 => "^.*$"// not
+      case 0 => "^.*$" // not
       case _ => "^%s$".format(history.head._2)
     }
   }
@@ -58,7 +69,7 @@ class GenRegexVisitor extends PatternVisitor {
   override def on(ptn: Pattern): Unit = {
     ptn match {
       case union: PUnion => list += union.name
-      case token: PToken => history.put(token.name, token.token.value)
+      case token: PToken => history.put(token.name, RegexHelper.escape(token.token.value))
       case wany: PWordAny => {
         list += wany.name
         history.put(wany.name,

@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel.ptnmining.matching
 
 import edu.uchicago.cs.encsel.ptnmining._
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord}
 import org.junit.Assert._
 import org.junit.Test
 
@@ -56,6 +56,30 @@ class GenRegexVisitorTest {
     assertEquals("^(\\d{5})And(\\d+)(dmd|12312|(\\d{3,4}))?(\\w{5})3077(\\d+\\.\\d+)(\\w+)mpq(\\w{10})$",
       regexv.get)
 
-    assertArrayEquals(Array[AnyRef]("_0_0","_0_2","_0_3","_0_3_3","_0_4","_0_6","_0_7","_0_9"), regexv.list.toArray[AnyRef])
+    assertArrayEquals(Array[AnyRef]("_0_0", "_0_2", "_0_3", "_0_3_3", "_0_4", "_0_6", "_0_7", "_0_9"), regexv.list.toArray[AnyRef])
+  }
+
+  @Test
+  def testSpecialChars: Unit = {
+    val ptn = PSeq.collect(
+      new PIntAny(5),
+      new PToken(new TSymbol("+")),
+      new PIntAny(),
+      new PToken(new TSymbol("=")),
+      new PWordAny(5),
+      new PToken(new TSymbol("*")),
+      new PDoubleAny(),
+      new PWordAny(4),
+      new PToken(new TSymbol("?")),
+      new PToken(new TWord("mpq")),
+      new PWordAny(10)
+    )
+    ptn.naming()
+
+    val regexv = new GenRegexVisitor
+    ptn.visit(regexv)
+    assertEquals("^(\\d{5})\\+(\\d+)=(\\w{5})\\*(\\d+\\.\\d+)(\\w{4})\\?mpq(\\w{10})$", regexv.get)
+
+    assertArrayEquals(Array[AnyRef]("_0_0", "_0_2", "_0_4", "_0_6", "_0_7", "_0_10"), regexv.list.toArray[AnyRef])
   }
 }
