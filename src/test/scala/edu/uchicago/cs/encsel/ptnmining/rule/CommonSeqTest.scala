@@ -34,7 +34,7 @@ class CommonSeqTest {
     assertEquals((5, 8, 1), commons(1))
     assertEquals((7, 10, 1), commons(2))
     assertEquals((9, 12, 1), commons(3))
-    assertEquals((11, 14, 8), commons(4))
+    assertEquals((11, 14, 10), commons(4))
   }
 
   @Test

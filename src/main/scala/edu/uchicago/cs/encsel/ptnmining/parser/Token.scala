@@ -110,6 +110,7 @@ class TPara(t: Int, l: Boolean) extends Token {
   }
 }
 
+@deprecated("deprecated with TPara, grouping is done in parser")
 class TGroup(t: Int, l: Seq[Token]) extends Token {
   val sym = t
   val content = l
