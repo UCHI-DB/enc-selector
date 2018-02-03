@@ -39,8 +39,8 @@ object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  mineSingleFile
-  //  mineAllFiles
+  //  mineSingleFile
+  mineAllFiles
 
   def mineAllFiles: Unit = {
     val start = args.length match {
