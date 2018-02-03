@@ -34,7 +34,6 @@ class DictTest {
     val rpt = Dict.lookup("rpt")
     assertEquals("report", rpt._1)
     val cmd = Dict.lookup("cmd")
-    println(cmd)
     assertEquals("command", cmd._1)
     val yr = Dict.lookup("yr")
     assertEquals("year", yr._1)
@@ -43,7 +42,6 @@ class DictTest {
     val zip = Dict.lookup("zip")
     assertEquals("zip", zip._1)
     val non = Dict.lookup("jiang")
-    println(non)
     assertEquals("jiang", non._1)
   }
 

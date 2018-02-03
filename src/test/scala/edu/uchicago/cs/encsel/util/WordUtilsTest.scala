@@ -11,8 +11,8 @@ class WordUtilsTest {
     val a = "actual"
     val b = "actua"
 
-    println(WordUtils.levDistance2(a, b))
+    assertEquals(0.79, WordUtils.levDistance2(a, b), 0.01)
   }
-  
+
 
 }
