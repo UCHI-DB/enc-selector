@@ -63,7 +63,7 @@ object SplitColumn {
           col.colFile = FileUtils.addExtension(column.colFile, pi._2.toString)
           col.parent = column
           col
-        })
+        }).toList
         // columns for unmatched lines
         val unmatchCol = new Column(null, -1, "unmatch", DataType.STRING)
         unmatchCol.colFile = FileUtils.addExtension(column.colFile, "unmatch")
