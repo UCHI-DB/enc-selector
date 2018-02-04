@@ -72,37 +72,41 @@ object SplitColumn {
         val outputs = childColumns.map(col => new PrintWriter(new FileOutputStream(new File(col.colFile))))
         val umoutput = new PrintWriter(new FileOutputStream(new File(unmatchCol.colFile)))
 
-        Source.fromFile(column.colFile).getLines().foreach(line => {
-          if (!StringUtils.isEmpty(line)) {
-            // Match the line against pattern
-            val matched = matcher.matchon(pattern, line)
-            if (matched.isDefined && colPatterns.forall(p => matched.get.has(p.name))) {
-              colPatterns.indices.foreach(i => {
-                val ptn = colPatterns(i)
-                ptn match {
-                  case iany: PIntAny => {
-                    val radix = if (iany.hasHex) 16 else 10
-                    outputs(i).println(Integer.parseInt(matched.get.get(ptn.name), radix).toString)
+        val source = Source.fromFile(column.colFile)
+        try {
+          source.getLines().foreach(line => {
+            if (!StringUtils.isEmpty(line)) {
+              // Match the line against pattern
+              val matched = matcher.matchon(pattern, line)
+              if (matched.isDefined && colPatterns.forall(p => matched.get.has(p.name))) {
+                colPatterns.indices.foreach(i => {
+                  val ptn = colPatterns(i)
+                  ptn match {
+                    case iany: PIntAny => {
+                      val radix = if (iany.hasHex) 16 else 10
+                      outputs(i).println(Integer.parseInt(matched.get.get(ptn.name), radix).toString)
+                    }
+                    case _ => {
+                      outputs(i).println(matched.get.get(ptn.name))
+                    }
                   }
-                  case _ => {
-                    outputs(i).println(matched.get.get(ptn.name))
-                  }
-                }
 
-              })
+                })
+              } else {
+                // Not match, write to unmatch
+                umoutput.println(line)
+              }
             } else {
-              // Not match, write to unmatch
-              umoutput.println(line)
+              // Output empty line for empty line
+              outputs.foreach(_.println(""))
             }
-          } else {
-            // Output empty line for empty line
-            outputs.foreach(_.println(""))
-          }
-        })
-
-        outputs.foreach(_.close)
-        umoutput.close
-        childColumns
+          })
+          childColumns
+        } finally {
+          source.close
+          outputs.foreach(_.close)
+          umoutput.close
+        }
       }
       case _ => Seq()
     }
