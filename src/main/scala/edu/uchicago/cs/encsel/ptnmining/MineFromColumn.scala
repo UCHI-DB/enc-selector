@@ -26,6 +26,7 @@ package edu.uchicago.cs.encsel.ptnmining
 import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
 
+import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
@@ -39,8 +40,8 @@ object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  //  mineSingleFile
-  mineAllFiles
+  mineSingleFile
+  //  mineAllFiles
 
   def mineAllFiles: Unit = {
     val start = args.length match {
@@ -67,12 +68,18 @@ object MineFromColumn extends App {
   }
 
   def mineSingleFile: Unit = {
-    val file = new File("/local/hajiang/./columns/columner5788729709017517733/EXIT_CODE_195866084998213540583.tmp").toURI
+    val file = new File("/home/harper/pattern/test").toURI
     val pattern = patternFromFile(file)
     val valid = validate(pattern)
     val regex = new GenRegexVisitor
     pattern.visit(regex)
     println("%s:%s".format(regex.get, valid))
+    if (valid) {
+      val col = new Column(null, -1, "demo", DataType.STRING)
+      col.colFile = file
+      val subcols = SplitColumn.split(col, pattern)
+      println(subcols.size)
+    }
   }
 
   def patternFromFile(file: URI): Pattern = {
