@@ -78,13 +78,15 @@ object SplitColumn {
             if (!StringUtils.isEmpty(line)) {
               // Match the line against pattern
               val matched = matcher.matchon(pattern, line)
-              if (matched.isDefined && colPatterns.forall(p => matched.get.has(p.name))) {
+              if (matched.isDefined) {
                 colPatterns.indices.foreach(i => {
                   val ptn = colPatterns(i)
                   ptn match {
                     case iany: PIntAny => {
-                      val radix = if (iany.hasHex) 16 else 10
-                      outputs(i).println(BigInt(matched.get.get(ptn.name), radix).toString)
+                      val radix =
+                        outputs(i).println(
+                          BigInt(matched.get.get(ptn.name), if (iany.hasHex) 16 else 10).toString
+                        )
                     }
                     case _ => {
                       outputs(i).println(matched.get.get(ptn.name))
@@ -112,7 +114,7 @@ object SplitColumn {
     }
   }
 
-  protected def typeof(pattern: Pattern): DataType = {
+  def typeof(pattern: Pattern): DataType = {
     pattern match {
       case iany: PIntAny => {
         if (iany.maxLength < 0 || (iany.hasHex && iany.maxLength > 8) || (!iany.hasHex && iany.maxLength > 9))
@@ -121,6 +123,14 @@ object SplitColumn {
           DataType.INTEGER
       }
       case dany: PDoubleAny => DataType.DOUBLE
+      case union: PUnion => {
+        if (union.content.size == 2 && union.content.contains(PEmpty)) {
+          val remain = union.content.filter(_ != PEmpty).head
+          typeof(remain)
+        }
+        else
+          DataType.STRING
+      }
       case _ => DataType.STRING
     }
   }

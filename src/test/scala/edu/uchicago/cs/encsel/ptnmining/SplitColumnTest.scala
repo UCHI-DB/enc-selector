@@ -71,4 +71,12 @@ class SplitColumnTest {
     assertArrayEquals(Array[AnyRef]("WORKHARD", "WORKHARD", "WORKWORKWORKHARD"),
       Source.fromFile("src/test/resource/colsplit/column.unmatch").getLines().toArray[AnyRef])
   }
+
+  @Test
+  def testTypeOf: Unit = {
+    val pattern = PUnion.collect(PEmpty, new PIntAny(5, true))
+    assertEquals(DataType.INTEGER, SplitColumn.typeof(pattern))
+
+
+  }
 }

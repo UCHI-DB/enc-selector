@@ -33,7 +33,7 @@ import scala.collection.JavaConversions.asScalaBuffer
 class JPAPersistence extends Persistence {
   val logger = LoggerFactory.getLogger(getClass)
 
-  private val em = JPAPersistence.emf.createEntityManager()
+  val em = JPAPersistence.emf.createEntityManager()
 
   def save(datalist: Traversable[Column]) = {
     em.getTransaction.begin()
