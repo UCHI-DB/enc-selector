@@ -84,7 +84,7 @@ object SplitColumn {
                   ptn match {
                     case iany: PIntAny => {
                       val radix = if (iany.hasHex) 16 else 10
-                      outputs(i).println(Integer.parseInt(matched.get.get(ptn.name), radix).toString)
+                      outputs(i).println(BigInt(matched.get.get(ptn.name), radix).toString)
                     }
                     case _ => {
                       outputs(i).println(matched.get.get(ptn.name))
@@ -115,7 +115,7 @@ object SplitColumn {
   protected def typeof(pattern: Pattern): DataType = {
     pattern match {
       case iany: PIntAny => {
-        if ((iany.hasHex && iany.maxLength > 8) || (!iany.hasHex && iany.maxLength > 9))
+        if (iany.maxLength < 0 || (iany.hasHex && iany.maxLength > 8) || (!iany.hasHex && iany.maxLength > 9))
           DataType.LONG
         else
           DataType.INTEGER

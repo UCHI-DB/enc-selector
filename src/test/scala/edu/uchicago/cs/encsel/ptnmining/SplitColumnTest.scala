@@ -45,13 +45,17 @@ class SplitColumnTest {
       new PToken(new TSymbol("-")),
       new PWordAny(3),
       new PToken(new TSymbol("-")),
-      new PIntAny(4, true)
+      new PIntAny(4, true),
+      new PToken(new TSymbol("+")),
+      new PIntAny
     )
     val subcolumns = SplitColumn.split(col, pattern)
+    assertEquals(4, subcolumns.size)
 
     assertEquals(DataType.INTEGER, subcolumns(0).dataType)
     assertEquals(DataType.STRING, subcolumns(1).dataType)
     assertEquals(DataType.INTEGER, subcolumns(2).dataType)
+    assertEquals(DataType.LONG, subcolumns(3).dataType)
     assertArrayEquals(Array[AnyRef]("301401", "228104", "", "323421", "243242", "", "423432"),
       Source.fromFile("src/test/resource/colsplit/column.0").getLines().toArray[AnyRef])
 
@@ -60,6 +64,9 @@ class SplitColumnTest {
 
     assertArrayEquals(Array[AnyRef]("12829", "20500", "", "17124", "16931", "", "4660"),
       Source.fromFile("src/test/resource/colsplit/column.2").getLines().toArray[AnyRef])
+
+    assertArrayEquals(Array[AnyRef]("23423432432423432423423", "123", "", "74234232342323", "423442242342342342342", "", "3242323423432423423"),
+      Source.fromFile("src/test/resource/colsplit/column.3").getLines().toArray[AnyRef])
 
     assertArrayEquals(Array[AnyRef]("WORKHARD", "WORKHARD", "WORKWORKWORKHARD"),
       Source.fromFile("src/test/resource/colsplit/column.unmatch").getLines().toArray[AnyRef])
