@@ -50,7 +50,7 @@ object MineFromColumn extends App {
 
     val persist = new JPAPersistence
 
-    val loadcols = persist.em.createQuery("SELECT c FROM Column c where c.id >= :id AND c.dataType = 'STRING' AND c.parentWrapper IS NULL", classOf[ColumnWrapper]).setParameter("id", start).getResultList
+    val loadcols = persist.em.createQuery("SELECT c FROM Column c where c.id >= :id AND c.dataType = :dt AND c.parentWrapper IS NULL", classOf[ColumnWrapper]).setParameter("id", start).setParameter("dt", DataType.STRING).getResultList
 
     loadcols.asScala.foreach(column => {
       val colid = column.id
