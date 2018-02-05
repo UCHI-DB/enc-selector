@@ -39,8 +39,8 @@ object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  mineSingleFile
-  //  mineAllFiles
+  //  mineSingleFile
+  mineAllFiles
 
   def mineAllFiles: Unit = {
     val start = args.length match {
@@ -54,18 +54,16 @@ object MineFromColumn extends App {
 
     loadcols.asScala.foreach(column => {
       val colid = column.id
-      if (colid >= start) {
-        val pattern = patternFromFile(column.colFile)
-        val valid = validate(pattern)
-        if (valid) {
-          val subcols = SplitColumn.split(column, pattern)
-          if (!subcols.isEmpty)
-            persist.save(subcols)
-        }
-        val regex = new GenRegexVisitor
-        pattern.visit(regex)
-        println("%d:%s:%s".format(colid, valid, regex.get))
+      val pattern = patternFromFile(column.colFile)
+      val valid = validate(pattern)
+      if (valid) {
+        val subcols = SplitColumn.split(column, pattern)
+        if (!subcols.isEmpty)
+          persist.save(subcols)
       }
+      val regex = new GenRegexVisitor
+      pattern.visit(regex)
+      println("%d:%s:%s".format(colid, valid, regex.get))
     })
   }
 
