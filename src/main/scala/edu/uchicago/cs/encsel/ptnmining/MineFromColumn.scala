@@ -27,21 +27,20 @@ import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.persist.Persistence
-import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
+import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
-import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
+import scala.collection.JavaConverters._
 
 object MineFromColumn extends App {
 
   val patternMiner = new PatternMiner
 
-  //  mineSingleFile
-  mineAllFiles
+  mineSingleFile
+  //  mineAllFiles
 
   def mineAllFiles: Unit = {
     val start = args.length match {
@@ -49,9 +48,12 @@ object MineFromColumn extends App {
       case _ => args(0).toInt
     }
 
-    val persist = Persistence.get
-    persist.load().filter(_.dataType == DataType.STRING).foreach(column => {
-      val colid = column.asInstanceOf[ColumnWrapper].id
+    val persist = new JPAPersistence
+
+    val loadcols = persist.em.createQuery("SELECT c FROM Column c where c.id >= :id AND c.dataType = 'STRING' AND c.parentWrapper IS NULL", classOf[ColumnWrapper]).setParameter("id", start).getResultList
+
+    loadcols.asScala.foreach(column => {
+      val colid = column.id
       if (colid >= start) {
         val pattern = patternFromFile(column.colFile)
         val valid = validate(pattern)
