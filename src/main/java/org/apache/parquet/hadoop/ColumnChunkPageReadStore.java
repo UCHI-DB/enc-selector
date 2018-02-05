@@ -111,7 +111,7 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
     	  this.filterPredicate = filterPredicate;
       }
     
-    ColumnChunkPageReader(BytesDecompressor decompressor, List<DataPage> compressedPages, DictionaryPage compressedDictionaryPage, Bitmap bitmap, int startpos) {
+    ColumnChunkPageReader(BytesDecompressor decompressor, List<DataPage> compressedPages, DictionaryPage compressedDictionaryPage, Bitmap bitmap, long startpos) {
   	  this(decompressor, compressedPages, compressedDictionaryPage);
   	  this.skipped = 0;
   	  this.bitmap  = bitmap;

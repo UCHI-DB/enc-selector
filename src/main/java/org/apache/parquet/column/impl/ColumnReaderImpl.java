@@ -533,11 +533,20 @@ public class ColumnReaderImpl implements ColumnReader {
       readPage();
       if (isFullyConsumed()) {
         LOG.debug("end reached");
+        //System.out.println("end reached");
         repetitionLevel = 0; // the next repetition level
         return;
       }
     }
     readRepetitionAndDefinitionLevels();
+  }
+  
+  public long getReadValue() {
+	  return this.readValues;
+  }
+  
+  public int getPageValueCount() {
+	  return this.pageValueCount;
   }
 
   private void readPage() {
@@ -546,6 +555,7 @@ public class ColumnReaderImpl implements ColumnReader {
     int skipping = pageReader.checkSkipped();
     this.readValues += skipping;
     this.endOfPageValueCount += skipping;
+    //System.out.println("skipping:" + skipping+", readValues:"+readValues+", endOfPageValueCount:"+endOfPageValueCount);
     if (isFullyConsumed()) {
       LOG.debug("end reached");
       repetitionLevel = 0; // the next repetition level
@@ -649,9 +659,11 @@ public class ColumnReaderImpl implements ColumnReader {
     return readValues >= endOfPageValueCount;
   }
   
+  //Must called after consume()
   public OffheapReadSopport getoffheapSupport() {
-	  readPage();
+	  //offheap version: readValues should be modified here, we should substract the "1" from consume()
 	  this.readValues += currentOffheapPageInf.getValueCount();
+	  this.readValues -= 1;
 	  return this.currentOffheapPageInf;
   }
   

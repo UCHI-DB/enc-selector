@@ -64,7 +64,7 @@ import org.apache.parquet.column.Encoding;
 import org.apache.parquet.column.page.DictionaryPageReadStore;
 import org.apache.parquet.filter2.compat.FilterCompat;
 import org.apache.parquet.filter2.compat.RowGroupFilter;
-
+import org.apache.parquet.filter2.predicate.FilterPredicate;
 import org.apache.parquet.bytes.BytesInput;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.page.DataPage;
@@ -98,6 +98,8 @@ import org.apache.parquet.schema.PrimitiveType;
 import org.apache.parquet.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.uchicago.cs.encsel.query.bitmap.Bitmap;
 
 /**
  * Internal implementation of the Parquet file reader as a block container
@@ -503,6 +505,17 @@ public class ParquetFileReader implements Closeable {
 
   public static ParquetFileReader open(Configuration conf, Path file, ParquetMetadata footer) throws IOException {
     return new ParquetFileReader(conf, file, footer);
+  }
+  
+  public static void setColFilter(PageReadStore ccprs, ColumnDescriptor col, FilterPredicate pred) {
+	  ColumnChunkPageReader pageReader = (ColumnChunkPageReader) ccprs.getPageReader(col);
+	  pageReader.setFilterPredicate(pred);
+  }
+  
+  public static void setColBitmap(PageReadStore pageReaders, ColumnDescriptor col, Bitmap bitmap, long startpos) {
+	  ColumnChunkPageReader pageReader = (ColumnChunkPageReader) pageReaders.getPageReader(col);
+	  pageReader.setBitmap(bitmap);
+	  pageReader.setStartpos(startpos);
   }
 
   private final CodecFactory codecFactory;
