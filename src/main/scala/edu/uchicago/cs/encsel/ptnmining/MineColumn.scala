@@ -14,38 +14,60 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
 package edu.uchicago.cs.encsel.ptnmining
 
 import java.io.{File, FileOutputStream, PrintWriter}
+import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.matching.RegexMatcher
+import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 import edu.uchicago.cs.encsel.util.FileUtils
 import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
 
-/**
-  * Split a column to sub-columns using a given pattern
-  *
-  * The following limitations are applied
-  *
-  * 1. Pattern is a PSeq, as other types cannot be split
-  * 2. Only PUnion/PAny elements in PSeq are treated as subcolumns.
-  * 3. Data type is determined by the pattern element type.
-  * 4. Each line will be matched against the pattern.
-  * Lines that cannot be matched will be put to an additional column
-  */
-object SplitColumn {
-
+object MineColumn {
+  val patternMiner = new PatternMiner
   val matcher = RegexMatcher
+
+  def patternFromFile(file: URI): Pattern = {
+    val lines = Source.fromFile(file).getLines().map(_.trim).filter(_.nonEmpty).take(500)
+    //    val tail = lines.takeRight(100)
+    //    val both = head ++ tail
+    val pattern = patternMiner.mine(lines.map(Tokenizer.tokenize(_).toSeq).toSeq)
+    pattern.naming()
+
+    pattern
+  }
+
+  def numChildren(pattern: Pattern): Int = {
+    val validator = new PatternValidator
+    pattern.visit(validator)
+    validator.isValid match {
+      case false => 0
+      case true => {
+        (pattern match {
+          case seq: PSeq => {
+            seq.content.flatMap(_ match {
+              case union: PUnion => Some(union)
+              case any: PAny => Some(any)
+              case _ => None
+            })
+          }
+          case _ => Seq()
+        }).size
+      }
+    }
+  }
 
   def split(column: Column, pattern: Pattern): Seq[Column] = {
     if (column.dataType != DataType.STRING)
@@ -74,7 +96,7 @@ object SplitColumn {
 
         val source = Source.fromFile(column.colFile)
         try {
-          source.getLines().foreach(line => {
+          source.getLines().map(_.trim).foreach(line => {
             if (!StringUtils.isEmpty(line)) {
               // Match the line against pattern
               val matched = matcher.matchon(pattern, line)
@@ -134,5 +156,29 @@ object SplitColumn {
       case _ => DataType.STRING
     }
   }
+}
 
+/**
+  * There are currently several requirements to the pattern
+  * 1. No too large unions
+  * 2. No too long sequences
+  *
+  * Note: these rules are temporary and subject to change
+  */
+class PatternValidator extends PatternVisitor {
+
+  var valid = true
+
+  val unionThreshold = 50
+  val seqThreshold = 15
+
+  override def on(ptn: Pattern): Unit = {
+    valid &= (ptn match {
+      case union: PUnion => !path.isEmpty && union.content.size <= unionThreshold
+      case seq: PSeq => seq.content.filter(!_.isInstanceOf[PToken]).size <= seqThreshold
+      case _ => !path.isEmpty
+    })
+  }
+
+  def isValid: Boolean = valid
 }

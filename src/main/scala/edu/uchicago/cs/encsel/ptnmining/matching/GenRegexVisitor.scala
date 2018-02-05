@@ -94,7 +94,7 @@ class GenRegexVisitor extends PatternVisitor {
       }
       case dany: PDoubleAny => {
         list += dany.name
-        history.put(dany.name, "(\\d+\\.\\d+)")
+        history.put(dany.name, "(\\d+\\.?\\d*)")
       }
       case irng: PIntRange => {
         list += irng.name

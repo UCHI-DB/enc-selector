@@ -63,46 +63,64 @@ class UseAnyRule extends DataRewriteRule {
       }
     ).groupBy(_.getClass)
 
-    anyed.size == 1 &&
-      anyed.forall(p => classOf[PAny].isAssignableFrom(p._1)) match {
-      case true => {
-        happen()
-        val any = anyed.map(kv => {
-          kv._1 match {
-            case wa if wa == classOf[PWordAny] => {
-              kv._2.reduce((a, b) => {
-                val aw = a.asInstanceOf[PWordAny]
-                val bw = b.asInstanceOf[PWordAny]
-                new PWordAny(Math.min(aw.minLength, bw.minLength),
-                  Math.max(aw.maxLength, bw.maxLength))
-              })
-            }
-            case ia if ia == classOf[PIntAny] => {
-              kv._2.reduce((a, b) => {
-                val ai = a.asInstanceOf[PIntAny]
-                val bi = b.asInstanceOf[PIntAny]
-                new PIntAny(Math.min(ai.minLength, bi.minLength),
-                  Math.max(ai.maxLength, bi.maxLength),
-                  ai.hasHex || bi.hasHex)
-              })
-            }
-            case da if da == classOf[PDoubleAny] => {
-              kv._2.reduce((a, b) => {
-                val ad = a.asInstanceOf[PDoubleAny]
-                val bd = b.asInstanceOf[PDoubleAny]
-                new PDoubleAny(Math.min(ad.minLength, bd.minLength),
-                  Math.max(ad.maxLength, bd.maxLength))
-              })
-            }
-            case _ => throw new IllegalArgumentException
+    if ((anyed.size == 1 && classOf[PAny].isAssignableFrom(anyed.head._1)) ||
+      (anyed.size == 2 && anyed.contains(classOf[PIntAny]) && anyed.contains(classOf[PDoubleAny]))) {
+      val shrinked = anyed.map(kv => {
+        kv._1 match {
+          case wa if wa == classOf[PWordAny] => {
+            kv._2.reduce((a, b) => {
+              val aw = a.asInstanceOf[PWordAny]
+              val bw = b.asInstanceOf[PWordAny]
+              new PWordAny(Math.min(aw.minLength, bw.minLength),
+                Math.max(aw.maxLength, bw.maxLength))
+            })
           }
-        }).head
+          case ia if ia == classOf[PIntAny] => {
+            kv._2.reduce((a, b) => {
+              val ai = a.asInstanceOf[PIntAny]
+              val bi = b.asInstanceOf[PIntAny]
+              new PIntAny(Math.min(ai.minLength, bi.minLength),
+                Math.max(ai.maxLength, bi.maxLength),
+                ai.hasHex || bi.hasHex)
+            })
+          }
+          case da if da == classOf[PDoubleAny] => {
+            kv._2.reduce((a, b) => {
+              val ad = a.asInstanceOf[PDoubleAny]
+              val bd = b.asInstanceOf[PDoubleAny]
+              new PDoubleAny(Math.min(ad.minLength, bd.minLength),
+                Math.max(ad.maxLength, bd.maxLength))
+            })
+          }
+          case _ => throw new IllegalArgumentException
+        }
+      })
+      val any = shrinked.size match {
+        case 1 => shrinked.head
+        case 2 => {
+          // Double merge with int
+          shrinked.reduce((a, b) => {
+            val (iany, dany) = a match {
+              case ia: PIntAny => (ia, b.asInstanceOf[PDoubleAny])
+              case da: PDoubleAny => (b.asInstanceOf[PIntAny], da)
+            }
+            if (!iany.hasHex) {
+              new PDoubleAny(Math.min(iany.minLength, dany.minLength), Math.max(iany.maxLength, dany.maxLength))
+            } else
+              null
+          })
+        }
+      }
+      if (any != null) {
+        happen()
         hasEmpty match {
           case true => new PUnion(Seq(any, PEmpty))
           case false => any
         }
-      }
-      case _ => ptn
+      } else
+        union
+    } else {
+      union
     }
   }
 }

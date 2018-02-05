@@ -24,15 +24,10 @@ package edu.uchicago.cs.encsel.ptnmining
 
 import java.io.{FileOutputStream, PrintWriter}
 import java.net.URI
-import javax.persistence.NoResultException
 
-import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.MineFromColumn.patternMiner
-import edu.uchicago.cs.encsel.ptnmining.SplitColumn.typeof
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
-import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
 import scala.io.Source
@@ -40,7 +35,7 @@ import scala.io.Source
 /**
   * This tool fix the column type that is incorrectly marked as string
   */
-object SplitColumTypeFixer extends App {
+object SplitColumnTypeFixer extends App {
 
   val persist = new JPAPersistence
   val patternMiner = new PatternMiner
@@ -53,14 +48,14 @@ object SplitColumTypeFixer extends App {
     // Infer the pattern
     val pattern = patternFromFile(col.colFile)
 
-    if (MineFromColumn.validate(pattern)) {
+    if (MineColumn.numChildren(pattern) > 0) {
       val seq = pattern.asInstanceOf[PSeq]
       val colPatterns = seq.content.flatMap(_ match {
         case union: PUnion => Some(union)
         case any: PAny => Some(any)
         case _ => None
       }).toList
-      val newtype = colPatterns.map(SplitColumn.typeof)
+      val newtype = colPatterns.map(MineColumn.typeof)
       val oldtype = colPatterns.map(oldTypeof)
 
       oldtype.indices.foreach(i => {

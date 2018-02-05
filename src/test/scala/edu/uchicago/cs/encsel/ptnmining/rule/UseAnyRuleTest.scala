@@ -65,6 +65,33 @@ class UseAnyRuleTest {
   }
 
   @Test
+  def testRewriteIntAndDouble: Unit = {
+    val ptn = PSeq.collect(
+      new PToken(new TInt("23432")),
+      PUnion.collect(
+        new PToken(new TInt("323")),
+        new PToken(new TInt("32322")),
+        new PToken(new TDouble("333.27")),
+        new PToken(new TInt("1231"))
+      ),
+      new PToken(new TWord("dasfdfa")))
+
+    val rule = new UseAnyRule
+    rule.generateOn((0 to 10).map(i => String.valueOf(i)).map(Tokenizer.tokenize(_).toSeq))
+    val result = rule.rewrite(ptn)
+    assertTrue(rule.happened)
+
+    assertTrue(result.isInstanceOf[PSeq])
+    val resq = result.asInstanceOf[PSeq]
+    assertEquals(3, resq.content.size)
+
+    assertEquals(new PToken(new TInt("23432")), resq.content(0))
+    assertEquals(new PDoubleAny(3, 6), resq.content(1))
+    assertEquals(new PToken(new TWord("dasfdfa")), resq.content(2))
+
+  }
+
+  @Test
   def testRewriteWord: Unit = {
     val ptn = PSeq.collect(
       new PToken(new TInt("23432")),

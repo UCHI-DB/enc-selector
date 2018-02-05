@@ -24,23 +24,19 @@
 package edu.uchicago.cs.encsel.ptnmining
 
 import java.io.File
-import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.ptnmining.MineColumn._
 import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
-import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 
 import scala.collection.JavaConverters._
-import scala.io.Source
 
-object MineFromColumn extends App {
+object MineFromFiles extends App {
 
-  val patternMiner = new PatternMiner
-
-  //  mineSingleFile
-  mineAllFiles
+  mineSingleFile
+  //  mineAllFiles
 
   def mineAllFiles: Unit = {
     val start = args.length match {
@@ -55,9 +51,9 @@ object MineFromColumn extends App {
     loadcols.asScala.foreach(column => {
       val colid = column.id
       val pattern = patternFromFile(column.colFile)
-      val valid = validate(pattern)
+      val valid = numChildren(pattern) > 0
       if (valid) {
-        val subcols = SplitColumn.split(column, pattern)
+        val subcols = split(column, pattern)
         if (!subcols.isEmpty)
           persist.save(subcols)
       }
@@ -70,57 +66,17 @@ object MineFromColumn extends App {
   def mineSingleFile: Unit = {
     val file = new File("/home/harper/pattern/test").toURI
     val pattern = patternFromFile(file)
-    val valid = validate(pattern)
+    val valid = numChildren(pattern) > 0
     val regex = new GenRegexVisitor
     pattern.visit(regex)
     println("%s:%s".format(regex.get, valid))
     if (valid) {
       val col = new Column(null, -1, "demo", DataType.STRING)
       col.colFile = file
-      val subcols = SplitColumn.split(col, pattern)
+      val subcols = MineColumn.split(col, pattern)
       println(subcols.size)
     }
   }
 
-  def patternFromFile(file: URI): Pattern = {
-    val lines = Source.fromFile(file).getLines().filter(!_.trim.isEmpty).toIterable
-    val head = lines.take(500)
-    //    val tail = lines.takeRight(100)
-    //    val both = head ++ tail
-    val pattern = patternMiner.mine(head.map(Tokenizer.tokenize(_).toSeq).toSeq)
-    pattern.naming()
-
-    pattern
-  }
-
-  def validate(pattern: Pattern): Boolean = {
-    val validator = new PatternValidator
-    pattern.visit(validator)
-    validator.isValid
-  }
 }
 
-/**
-  * There are currently several requirements to the pattern
-  * 1. No too large unions
-  * 2. No too long sequences
-  *
-  * Note: these rules are temporary and subject to change
-  */
-class PatternValidator extends PatternVisitor {
-
-  var valid = true
-
-  val unionThreshold = 50
-  val seqThreshold = 15
-
-  override def on(ptn: Pattern): Unit = {
-    valid &= (ptn match {
-      case union: PUnion => !path.isEmpty && union.content.size <= unionThreshold
-      case seq: PSeq => seq.content.size <= seqThreshold
-      case _ => !path.isEmpty
-    })
-  }
-
-  def isValid: Boolean = valid
-}

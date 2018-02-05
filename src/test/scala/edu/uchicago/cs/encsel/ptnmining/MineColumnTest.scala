@@ -27,11 +27,12 @@ import java.io.File
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.parser.{TSymbol, TWord}
-import org.junit.Test
 import org.junit.Assert._
+import org.junit.Test
+
 import scala.io.Source
 
-class SplitColumnTest {
+class MineColumnTest {
 
   @Test
   def testSplit: Unit = {
@@ -49,7 +50,7 @@ class SplitColumnTest {
       new PToken(new TSymbol("+")),
       new PIntAny
     )
-    val subcolumns = SplitColumn.split(col, pattern)
+    val subcolumns = MineColumn.split(col, pattern)
     assertEquals(4, subcolumns.size)
 
     assertEquals(DataType.INTEGER, subcolumns(0).dataType)
@@ -75,7 +76,7 @@ class SplitColumnTest {
   @Test
   def testTypeOf: Unit = {
     val pattern = PUnion.collect(PEmpty, new PIntAny(5, true))
-    assertEquals(DataType.INTEGER, SplitColumn.typeof(pattern))
+    assertEquals(DataType.INTEGER, MineColumn.typeof(pattern))
 
 
   }
