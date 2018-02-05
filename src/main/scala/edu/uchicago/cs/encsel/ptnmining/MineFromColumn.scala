@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import java.io.{File, FileOutputStream, PrintWriter}
+import java.io.File
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
@@ -32,8 +32,8 @@ import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
 
-import scala.io.Source
 import scala.collection.JavaConverters._
+import scala.io.Source
 
 object MineFromColumn extends App {
 
@@ -112,7 +112,7 @@ class PatternValidator extends PatternVisitor {
   var valid = true
 
   val unionThreshold = 50
-  val seqThreshold = 50
+  val seqThreshold = 15
 
   override def on(ptn: Pattern): Unit = {
     valid &= (ptn match {
