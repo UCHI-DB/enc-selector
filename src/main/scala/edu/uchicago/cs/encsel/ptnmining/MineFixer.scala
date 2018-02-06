@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
+import java.io.File
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
@@ -52,29 +54,38 @@ object MineFixer extends App {
     val loadcols = persist.em.createQuery("SELECT p FROM Column p WHERE p.dataType = :dt AND p.id <= :id", classOf[ColumnWrapper])
       .setParameter("dt", DataType.STRING).setParameter("id", MAX_ID).getResultList
 
-    loadcols.asScala.foreach(col => {
-      val column = col.asInstanceOf[ColumnWrapper]
+    loadcols.asScala.foreach(column => {
       val colid = column.id
       val pattern = patternFromFile(column.colFile)
       val valid = numChildren(pattern)
-      val children = getChild(column)
+      val children = getChildren(column)
       if (valid != children.size) {
         val regex = new GenRegexVisitor
         pattern.visit(regex)
         println("%d:%s:%s:%s".format(colid, valid, children.size, regex.get))
-        //        val subcols = SplitColumn.split(column, pattern)
-        //        if (!subcols.isEmpty)
-        //          persist.save(subcols)
+
+        removeChildren(children)
+
+        if (valid > 0) {
+          val subcols = MineColumn.split(column, pattern)
+          if (!subcols.isEmpty)
+            persist.save(subcols)
+        }
       }
     })
   }
 
-  def getChild(col: Column): Seq[Column] = {
+  def getChildren(col: Column): Seq[Column] = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"
     persist.em.createQuery(sql, classOf[ColumnWrapper]).setParameter("parent", col).getResultList.asScala
   }
 
-  def removeChild(col: Column): Unit = {
-
+  def removeChildren(cols: Iterable[Column]): Unit = {
+    persist.em.getTransaction.begin()
+    cols.foreach(c => {
+      new File(c.colFile).delete()
+      persist.em.remove(c)
+    })
+    persist.em.getTransaction.commit()
   }
 }
