@@ -43,6 +43,7 @@ object EncodeSubColumn extends App {
     if (colw.id >= start) {
       println(colw.id)
       colw.features.asScala ++= Features.extract(colw)
+      persist.save(Seq(colw))
     }
   })
 }
