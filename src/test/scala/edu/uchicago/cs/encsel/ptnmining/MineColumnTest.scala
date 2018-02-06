@@ -77,7 +77,24 @@ class MineColumnTest {
   def testTypeOf: Unit = {
     val pattern = PUnion.collect(PEmpty, new PIntAny(5, true))
     assertEquals(DataType.INTEGER, MineColumn.typeof(pattern))
+  }
 
+  @Test
+  def testSplitDouble:Unit = {
+    val col = new Column(null, 1, "sample", DataType.DOUBLE)
+    col.colFile = new File("src/test/resource/colsplit/double_col").toURI
+
+    val subs = MineColumn.splitDouble(col)
+
+    assertEquals(2,subs.length)
+    assertEquals(DataType.LONG,subs(0).dataType)
+    assertEquals(DataType.INTEGER,subs(1).dataType)
+
+    assertArrayEquals(Array[AnyRef]("234234", "2424", "", "42232344234233243423", "", "423245"),
+      Source.fromFile("src/test/resource/colsplit/double_col.0").getLines().toArray[AnyRef])
+
+    assertArrayEquals(Array[AnyRef]("42", "0", "", "423", "", "423"),
+      Source.fromFile("src/test/resource/colsplit/double_col.1").getLines().toArray[AnyRef])
 
   }
 }
