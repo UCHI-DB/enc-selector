@@ -37,7 +37,8 @@ import scala.collection.JavaConversions._
 
 object LoadTPCH extends App {
 
-  val folder = "/home/harper/TPCH/"
+  //val folder = "/home/harper/TPCH/"
+  val folder = "/Users/chunwei/research/tpch/"
   //  val folder = args(0)
   val inputsuffix = ".tbl"
   val outputsuffix = ".parquet"
