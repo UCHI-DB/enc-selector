@@ -22,8 +22,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
+import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord}
-import edu.uchicago.cs.encsel.ptnmining.{PSeq, PToken, PUnion, Pattern}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -54,33 +54,53 @@ class SameLenMergeRule extends RewriteRule {
     ptn.isInstanceOf[PUnion] && {
       val union = ptn.asInstanceOf[PUnion]
       // Contains only seq or token
-      // Contains at least one seq (a union contains only tokens has nothing to reassign)
-      // Seq contains only token (at most 2 layer, this is for simplicity)
+      // Contains at least one seq (a union contains only tokens can be processed by UseAny, no need here)
+      // Seq contains only token (at most 2 layer, for simplicity)
       // all content has same length
-      val content = union.content.view
+      val content = union.content.view.filter(_ != PEmpty)
       content.size > 1 && {
         val res = content.map(_ match {
           case seq: PSeq => {
             val sc = seq.content.view
-            (sc.forall(_.isInstanceOf[PToken]), true,sc.map(_.numChar).sum)
+            (sc.forall(_.isInstanceOf[PToken]), true)
           }
           case token: PToken => {
-            (token.token.isInstanceOf[TInt] || token.token.isInstanceOf[TWord],false, token.numChar)
+            (token.token.isInstanceOf[TInt] || token.token.isInstanceOf[TWord], false)
           }
           case _ => {
-            (false,false, -1)
+            (false, false)
           }
         })
-        res.forall(_._1) && res.exists(_._2) && res.map(_._3).toSet.size == 1
+        res.forall(_._1) && res.exists(_._2)
       }
     }
   }
 
   override protected def update(ptn: Pattern): Pattern = {
     val union = ptn.asInstanceOf[PUnion]
+    val hasEmpty = union.content.contains(PEmpty)
+    // Group the tokens by length
+    val grouped = union.content.filter(_ != PEmpty).map(p => (p, p.numChar)).groupBy(_._2).map(_._2.map(_._1))
 
+    val unionedGroup = grouped.flatMap(p => unify(p) match {
+      case Some(unified) => Seq(unified)
+      case None => p
+    }).toSeq ++ (if (hasEmpty) Seq(PEmpty) else Seq())
+
+    if (happened) {
+      PUnion(unionedGroup)
+    } else {
+      ptn
+    }
+  }
+
+  def unify(input: Seq[Pattern]): Option[Pattern] = {
+    if (input.size == 0)
+      return None
+    if (input.size == 1)
+      return Some(input.head)
     // Scan the chars one by one
-    val rawData = union.content.view.map(_.flatten.map(_.asInstanceOf[PToken].token.value).mkString)
+    val rawData = input.view.map(_.flatten.map(_.asInstanceOf[PToken].token.value).mkString)
     val length = rawData.head.length
 
     val stopPoint = new ArrayBuffer[Int]
@@ -126,25 +146,25 @@ class SameLenMergeRule extends RewriteRule {
         !foundException
       })
     }
-    foundException match {
-      case true => union
-      case false => {
-        happen()
-        val to = stopPoint.view.map(_ + 1)
-        val from = 0 +: to.dropRight(1)
-        val ranges = from.zip(to).zip(wordToken)
-        // map the partition to original data to rebuild token
-        val tokens = rawData.map(line => {
-          ranges.map(r => {
-            val value = line.substring(r._1._1, r._1._2)
-            new PToken(r._2 match {
-              case true => new TInt(value)
-              case false => new TWord(value)
-            })
+    if (foundException) {
+      None
+    } else {
+      happen()
+      val to = stopPoint.view.map(_ + 1)
+      val from = 0 +: to.dropRight(1)
+      val ranges = from.zip(to).zip(wordToken)
+      // map the partition to original data to rebuild token
+      val tokens = rawData.map(line => {
+        ranges.map(r => {
+          val value = line.substring(r._1._1, r._1._2)
+          new PToken(r._2 match {
+            case true => new TInt(value)
+            case false => new TWord(value)
           })
         })
-        PSeq(ranges.indices.map(i => PUnion(tokens.map(_ (i)))))
-      }
+      })
+      Some(PSeq(ranges.indices.map(i => PUnion(tokens.map(_ (i))))))
     }
   }
+
 }

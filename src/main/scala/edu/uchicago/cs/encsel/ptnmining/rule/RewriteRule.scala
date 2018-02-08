@@ -25,12 +25,16 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 
 import edu.uchicago.cs.encsel.ptnmining._
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * Created by harper on 3/27/17.
   */
 trait RewriteRule {
 
   private var modified: Boolean = false
+
+  protected val path = new ArrayBuffer[Pattern]
 
   protected def happen() = modified = true
 
@@ -45,38 +49,44 @@ trait RewriteRule {
     * @return pattern after rewritten
     */
   def rewrite(root: Pattern): Pattern = {
-    root match {
-      case union: PUnion => condition(union) match {
-        case true => update(union)
-        case false => {
-          // Look for match in the union, replace it with rewritten if any
-          val modified_content = union.content.map(p => rewrite(p)).toList
-          val modified_union = modified match {
-            case true => new PUnion(modified_content)
-            case false => union
-          }
-          modified_union
-        }
-      }
-      case seq: PSeq => {
-        condition(seq) match {
-          case true => update(seq)
+    path += root
+    try {
+      root match {
+        case union: PUnion => condition(union) match {
+          case true => update(union)
           case false => {
-            val modified_content = seq.content.map(p => rewrite(p)).toList
-            val modified_seq = modified match {
-              case true => new PSeq(modified_content)
-              case false => seq
+            // Look for match in the union, replace it with rewritten if any
+            val modified_content = union.content.map(p => rewrite(p))
+            val modified_union = modified match {
+              case true => new PUnion(modified_content)
+              case false => union
             }
-            modified_seq
+            modified_union
+          }
+        }
+        case seq: PSeq => {
+          condition(seq) match {
+            case true => update(seq)
+            case false => {
+              val modified_content = seq.content.map(p => rewrite(p))
+              val modified_seq = modified match {
+                case true => new PSeq(modified_content)
+                case false => seq
+              }
+              modified_seq
+            }
+          }
+        }
+        case pattern => {
+          condition(pattern) match {
+            case true => update(pattern)
+            case false => pattern
           }
         }
       }
-      case pattern => {
-        condition(pattern) match {
-          case true => update(pattern)
-          case false => pattern
-        }
-      }
+    }
+    finally {
+      path.remove(path.size - 1)
     }
   }
 

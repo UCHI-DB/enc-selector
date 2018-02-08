@@ -81,6 +81,55 @@ class SameLenMergeRuleTest {
     assertTrue(u6.contains(new PToken(new TInt("1355009"))))
   }
 
+  @Test
+  def testRewriteMultipleGroup: Unit = {
+    val data = PUnion(Array("40000", "00080", "04C80", "I4", "00080", "I2", "7B371")
+      .map(rs => PSeq(Tokenizer.tokenize(rs).map(new PToken(_)).toSeq)))
+    val rule = new SameLenMergeRule
+    val output = rule.rewrite(data)
+    assertTrue(rule.happened)
+
+    assertTrue(output.isInstanceOf[PUnion])
+    val outputUnion = output.asInstanceOf[PUnion]
+    assertEquals(2, outputUnion.content.size)
+
+    val seq0 = outputUnion.content(0).asInstanceOf[PSeq]
+    val cand = PSeq.collect(new PToken(new TWord("I")),
+      PUnion.collect(new PToken(new TInt("4")), new PToken(new TInt("2"))))
+    assertEquals(seq0, cand)
+
+    val union1 = outputUnion.content(1).asInstanceOf[PUnion]
+    assertTrue(union1.content.contains(new PToken(new TInt("40000"))))
+    assertTrue(union1.content.contains(new PToken(new TInt("00080"))))
+    assertTrue(union1.content.contains(new PToken(new TInt("04C80"))))
+    assertTrue(union1.content.contains(new PToken(new TInt("7B371"))))
+  }
+
+  @Test
+  def testRewriteWithEmpty: Unit = {
+    val data = PUnion(Array("40000", "00080", "04C80", "I4", "00080", "I2", "7B371")
+      .map(rs => PSeq(Tokenizer.tokenize(rs).map(new PToken(_)).toSeq)) :+ PEmpty)
+    val rule = new SameLenMergeRule
+    val output = rule.rewrite(data)
+    assertTrue(rule.happened)
+
+    assertTrue(output.isInstanceOf[PUnion])
+    val outputUnion = output.asInstanceOf[PUnion]
+    assertEquals(3, outputUnion.content.size)
+
+    assertTrue(outputUnion.content.contains(PEmpty))
+
+    val seq0 = outputUnion.content(0).asInstanceOf[PSeq]
+    val cand = PSeq.collect(new PToken(new TWord("I")),
+      PUnion.collect(new PToken(new TInt("4")), new PToken(new TInt("2"))))
+    assertEquals(seq0, cand)
+
+    val union1 = outputUnion.content(1).asInstanceOf[PUnion]
+    assertTrue(union1.content.contains(new PToken(new TInt("40000"))))
+    assertTrue(union1.content.contains(new PToken(new TInt("00080"))))
+    assertTrue(union1.content.contains(new PToken(new TInt("04C80"))))
+    assertTrue(union1.content.contains(new PToken(new TInt("7B371"))))
+  }
 
   @Test
   def testRewriteInvalid: Unit = {

@@ -33,7 +33,8 @@ class PatternMiner {
 
   val rules = Array(new CommonSymbolRule, new SameLenMergeRule,
     new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _),
-    new SuccinctRule, new MergeSeqRule, new UseAnyRule)
+    new SuccinctRule, new MergeSeqRule, new UseAnyRule,
+    new GeneralizeTokenRule)
 
   def mine(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens

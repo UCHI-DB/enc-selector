@@ -34,13 +34,16 @@ import edu.uchicago.cs.encsel.util.FileUtils
 import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
+import scala.util.Random
 
 object MineColumn {
   val patternMiner = new PatternMiner
   val matcher = RegexMatcher
 
   def patternFromFile(file: URI): Pattern = {
-    val lines = Source.fromFile(file).getLines().map(_.trim).filter(_.nonEmpty).take(500)
+    val lines = Source.fromFile(file).getLines().map(_.trim).filter(_.nonEmpty).take(5000).filter(p => {
+      Random.nextDouble() < 0.1
+    })
     //    val tail = lines.takeRight(100)
     //    val both = head ++ tail
     val pattern = patternMiner.mine(lines.map(Tokenizer.tokenize(_).toSeq).toSeq)
