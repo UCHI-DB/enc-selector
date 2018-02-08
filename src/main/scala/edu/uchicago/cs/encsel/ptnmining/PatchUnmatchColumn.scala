@@ -33,19 +33,25 @@ import scala.collection.JavaConverters._
 
 object PatchUnmatchColumn extends App {
 
-  val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
 
-  columns.foreach(col => {
-    val unmatchFile = FileUtils.addExtension(col.colFile, "unmatch")
+  def encodeUnmatchColumn: Unit = {
+  }
 
-    if (Files.exists(Paths.get(unmatchFile))) {
-      val unmatchCol = new Column(null, -1, "unmatch", DataType.STRING)
-      unmatchCol.colFile = FileUtils.addExtension(col.colFile, "unmatch")
-      unmatchCol.parent = col
+  def createUnmatchColumn: Unit = {
+    val persist = new JPAPersistence
+    val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
 
-      persist.save(Seq(unmatchCol))
-    }
-  })
+    columns.foreach(col => {
+      val unmatchFile = FileUtils.addExtension(col.colFile, "unmatch")
 
+      if (Files.exists(Paths.get(unmatchFile))) {
+        val unmatchCol = new Column(null, -1, "unmatch", DataType.STRING)
+        unmatchCol.colFile = FileUtils.addExtension(col.colFile, "unmatch")
+        unmatchCol.parent = col
+
+        persist.save(Seq(unmatchCol))
+      }
+    })
+
+  }
 }

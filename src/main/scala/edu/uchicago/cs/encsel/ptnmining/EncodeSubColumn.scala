@@ -30,6 +30,7 @@ import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 
 import scala.collection.JavaConverters._
+
 object EncodeSubColumn extends App {
 
   val start = args.length match {
@@ -37,7 +38,7 @@ object EncodeSubColumn extends App {
     case _ => args(0).toInt
   }
   val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL",classOf[ColumnWrapper]).getResultList.asScala
+  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.colIndex = :ci", classOf[ColumnWrapper]).setParameter("ci", -1).getResultList.asScala
 
   columns.foreach(colw => {
     if (colw.id >= start) {
