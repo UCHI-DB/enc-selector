@@ -151,7 +151,7 @@ object PSeq {
 }
 
 class PSeq(cnt: Seq[Pattern]) extends Pattern {
-  val content = cnt
+  val content = cnt.toList
 
   override def flatten: Seq[Pattern] = content.flatMap(_.flatten)
 
@@ -193,7 +193,7 @@ object PUnion {
 }
 
 class PUnion(cnt: Seq[Pattern]) extends Pattern {
-  val content = cnt.toSet.toSeq
+  val content = cnt.toSet.toList
 
   override def flatten: Seq[Pattern] = content.flatMap(_.flatten)
 

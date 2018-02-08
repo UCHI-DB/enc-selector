@@ -27,8 +27,9 @@ import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
 
 /**
-  *
-  * Use <code>PAny</code> to replace big Union of tokens
+  * Use <code>PAny</code> to replace
+  * 1. big Union of tokens
+  * 2. single token at top level
   */
 object UseAnyRule {
   // Execute the rule if union size is greater than threshold * data size
@@ -38,11 +39,16 @@ object UseAnyRule {
 class UseAnyRule extends DataRewriteRule {
 
   override def condition(ptn: Pattern): Boolean = {
-    ptn.isInstanceOf[PUnion] && {
+    val qualifiedUnion = ptn.isInstanceOf[PUnion] && {
       val union = ptn.asInstanceOf[PUnion]
       union.content.length >= UseAnyRule.threshold * originData.length &&
         union.content.view.forall(p => p.isInstanceOf[PToken] || p == PEmpty)
     }
+    val qualifiedSingle = ptn.isInstanceOf[PToken] && ptn.asInstanceOf[PToken].token match {
+
+    }
+
+    qualifiedUnion
   }
 
 

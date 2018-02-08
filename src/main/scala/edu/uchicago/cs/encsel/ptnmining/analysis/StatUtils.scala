@@ -22,6 +22,18 @@
 
 package edu.uchicago.cs.encsel.ptnmining.analysis
 
-class StatUtils {
+import java.io.File
+
+import edu.uchicago.cs.encsel.dataset.column.Column
+
+import sys.process._
+
+object StatUtils {
+
+  def numLine(col: Column): Int = {
+    val result: String = ("wc -l %s".format(new File(col.colFile).getAbsolutePath)) !!;
+    result.split("\\s+")(0).toInt
+  }
+
 
 }

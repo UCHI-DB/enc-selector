@@ -75,6 +75,7 @@ class GenRegexVisitor extends PatternVisitor {
         history.put(wany.name,
           "(%s)".format((wany.minLength, wany.maxLength) match {
             case (1, -1) => "\\w+"
+            case (i, -1) => "\\w{%d,}".format(i)
             case (i, j) if i == j => "\\w{%d}".format(i)
             case (i, j) => "\\w{%d,%d}".format(i, j)
           }))
@@ -88,6 +89,7 @@ class GenRegexVisitor extends PatternVisitor {
         history.put(iany.name,
           "(%s)".format((iany.minLength, iany.maxLength) match {
             case (1, -1) => "%s+".format(digit)
+            case (i, -1) => "%s{%d,}".format(digit, i)
             case (i, j) if i == j => "%s{%d}".format(digit, i)
             case (i, j) => "%s{%d,%d}".format(digit, i, j)
           }))

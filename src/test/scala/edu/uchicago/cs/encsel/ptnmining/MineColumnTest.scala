@@ -80,15 +80,15 @@ class MineColumnTest {
   }
 
   @Test
-  def testSplitDouble:Unit = {
+  def testSplitDouble: Unit = {
     val col = new Column(null, 1, "sample", DataType.DOUBLE)
     col.colFile = new File("src/test/resource/colsplit/double_col").toURI
 
     val subs = MineColumn.splitDouble(col)
 
-    assertEquals(2,subs.length)
-    assertEquals(DataType.LONG,subs(0).dataType)
-    assertEquals(DataType.INTEGER,subs(1).dataType)
+    assertEquals(2, subs.length)
+    assertEquals(DataType.LONG, subs(0).dataType)
+    assertEquals(DataType.INTEGER, subs(1).dataType)
 
     assertArrayEquals(Array[AnyRef]("234234", "2424", "", "42232344234233243423", "", "423245"),
       Source.fromFile("src/test/resource/colsplit/double_col.0").getLines().toArray[AnyRef])
