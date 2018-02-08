@@ -51,7 +51,7 @@ class MineColumnTest {
       new PIntAny
     )
     val subcolumns = MineColumn.split(col, pattern)
-    assertEquals(4, subcolumns.size)
+    assertEquals(5, subcolumns.size)
 
     assertEquals(DataType.INTEGER, subcolumns(0).dataType)
     assertEquals(DataType.STRING, subcolumns(1).dataType)
