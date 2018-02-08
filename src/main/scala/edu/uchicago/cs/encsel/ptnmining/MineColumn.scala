@@ -125,7 +125,7 @@ object MineColumn {
               outputs.foreach(_.println(""))
             }
           })
-          childColumns
+          childColumns :+ unmatchCol
         } finally {
           source.close
           outputs.foreach(_.close)
