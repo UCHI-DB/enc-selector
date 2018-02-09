@@ -22,9 +22,10 @@
 
 package edu.uchicago.cs.encsel.ptnmining.matching
 
-import edu.uchicago.cs.encsel.ptnmining.{PIntAny, PSeq, PUnion, PWordAny}
-import org.junit.Test
+import edu.uchicago.cs.encsel.ptnmining._
+import edu.uchicago.cs.encsel.ptnmining.parser.TSymbol
 import org.junit.Assert._
+import org.junit.Test
 
 class RegexMatcherTest {
 
@@ -66,5 +67,32 @@ class RegexMatcherTest {
     val match3 = RegexMatcher.matchon(ptn, test3)
 
     assertTrue(match3.isEmpty)
+  }
+
+  @Test
+  def testVarLength: Unit = {
+    val pattern = PSeq.collect(
+      new PWordAny(0, 3),
+      new PToken(new TSymbol("*")),
+      new PIntAny(4, 7),
+      new PToken(new TSymbol("-")),
+      new PWordDigitAny(1, -1)
+    )
+
+    val testFailureData = Array("123*3132-DAFS", "WDPA*3141-KKMP", "WWD*323-AAAFA",
+      "WMP*43234253-KKDSFW", "WMP*WFWE-32423", "WWK*1234-_#@$").map(RegexMatcher.matchon(pattern, _))
+    assertTrue(testFailureData.forall(_.isEmpty))
+
+    val testSuccessData = Array("*3132-DAFS", "WP*3141-1234", "WWD*323000-AAA2FA", "*3323123-1")
+      .map(RegexMatcher.matchon(pattern, _))
+    assertTrue(testSuccessData.forall(_.nonEmpty))
+
+    val g0 = testSuccessData.map(m => m.get.get("_0_0")).toArray[AnyRef]
+    val g1 = testSuccessData.map(m => m.get.get("_0_2")).toArray[AnyRef]
+    val g2 = testSuccessData.map(m => m.get.get("_0_4")).toArray[AnyRef]
+
+    assertArrayEquals(Array[AnyRef]("", "WP", "WWD", ""), g0)
+    assertArrayEquals(Array[AnyRef]("3132", "3141", "323000", "3323123"), g1)
+    assertArrayEquals(Array[AnyRef]("DAFS", "1234", "AAA2FA", "1"), g2)
   }
 }

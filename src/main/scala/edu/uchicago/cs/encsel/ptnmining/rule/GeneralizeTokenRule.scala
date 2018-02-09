@@ -23,15 +23,15 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord}
 import edu.uchicago.cs.encsel.ptnmining._
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord}
 
 /**
   * This rule looks at top-level tokens and decide whether to upgrade them into <code>PAny</code>
   * we need to check tokens at top level (tokens incldued in the final sequence).
   * The following cases will be processed:
   * 1. TInt will be rewritten as PIntAny as we don't think numbers are representative.
-  * 2. Union will be rewritten as PWordAny.
+  * 2. Union that contains only int/word will be rewritten as PWordAny.
   *
   * For the second case, we can do this as Unions of single tokens will be processed
   * by rule UseAny. The only thing left is unions of mixture, which contains only int
@@ -45,7 +45,7 @@ class GeneralizeTokenRule extends RewriteRule {
 
   override protected def condition(ptn: Pattern): Boolean = {
     path.size == 2 && (ptn match {
-      case union: PUnion => true
+      case union: PUnion => GeneralizeTokenRule.check(union)
       case token: PToken => token.token.isInstanceOf[TInt]
       case _ => false
     })
@@ -53,9 +53,35 @@ class GeneralizeTokenRule extends RewriteRule {
 
   override protected def update(ptn: Pattern): Pattern = {
     ptn match {
-      case token: PToken => new PIntAny(1, -1)
-      case union: PUnion => new PWordDigitAny(1, -1)
+      case token: PToken => {
+        happen()
+        new PIntAny(token.numChar._1)
+      }
+      case union: PUnion => {
+        happen()
+        val childRange = union.numChar
+        if (union.content.contains(PEmpty))
+          new PWordDigitAny(0, childRange._2)
+        else if (childRange._1 == childRange._2)
+          new PWordDigitAny(childRange._1)
+        else
+          new PWordDigitAny(1, -1)
+      }
       case _ => ptn
+    }
+  }
+}
+
+object GeneralizeTokenRule {
+  def check(target: Pattern): Boolean = {
+
+    target match {
+      case u: PUnion => u.content.map(check).forall(_ == true)
+      case s: PSeq => s.content.map(check).forall(_ == true)
+      case t: PToken => t.token.isInstanceOf[TWord] || t.token.isInstanceOf[TInt]
+      case PEmpty => true
+      case any: PAny => true
+      case _ => false
     }
   }
 }

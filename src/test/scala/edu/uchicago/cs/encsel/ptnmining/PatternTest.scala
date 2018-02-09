@@ -70,8 +70,6 @@ class PatternTest {
     })
 
     val pattern = Pattern.generate(input.map(Tokenizer.tokenize(_).toSeq))
-    val content = pattern.asInstanceOf[PUnion].content
-    assertTrue(content.contains(PEmpty))
-    assertTrue(content.contains(new PWordAny(3, 3)))
+    assertEquals(new PWordAny(0, 3), pattern)
   }
 }

@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.matching.{NamingVisitor, Record, RegexMatcher}
+import edu.uchicago.cs.encsel.ptnmining.matching.NamingVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser._
 import edu.uchicago.cs.encsel.ptnmining.rule._
 
@@ -116,13 +116,13 @@ trait Pattern {
 
   def naming() = visit(new NamingVisitor)
 
-  def numChar: Int
+  def numChar: (Int, Int)
 }
 
 class PToken(t: Token) extends Pattern {
   val token = t
 
-  override def numChar: Int = token.numChar
+  override def numChar: (Int, Int) = (token.numChar, token.numChar)
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[PToken]
 
@@ -162,7 +162,11 @@ class PSeq(cnt: Seq[Pattern]) extends Pattern {
     visitor.exit(this)
   }
 
-  override def numChar: Int = content.map(_.numChar).sum
+  override def numChar: (Int, Int) = {
+    content.map(_.numChar).reduce((a, b) => {
+      (a._1 + b._1, a._2 + b._2)
+    })
+  }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[PSeq]
 
@@ -204,7 +208,11 @@ class PUnion(cnt: Seq[Pattern]) extends Pattern {
     visitor.exit(this)
   }
 
-  override def numChar: Int = content.map(_.numChar).max
+  override def numChar: (Int, Int) = {
+    content.map(_.numChar).reduce((a, b) => {
+      (Math.min(a._1, b._1), Math.max(a._2, b._2))
+    })
+  }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[PUnion]
 
@@ -222,16 +230,12 @@ class PUnion(cnt: Seq[Pattern]) extends Pattern {
 }
 
 object PEmpty extends Pattern {
-  override def numChar: Int = 0
+  override def numChar: (Int, Int) = (0, 0)
 }
 
-trait PAny extends Pattern {
+abstract class PAny(var minLength: Int, var maxLength: Int) extends Pattern {
 
-  override def numChar: Int = maxLength
-
-  def maxLength: Int
-
-  def minLength: Int
+  override def numChar: (Int, Int) = (minLength, maxLength)
 
   def canEqual(other: Any): Boolean = other.getClass.eq(this.getClass)
 
@@ -249,20 +253,18 @@ trait PAny extends Pattern {
   }
 }
 
-class PWordAny(val minLength: Int = 1, val maxLength: Int = -1) extends PAny {
-
+class PWordAny(minLength: Int = 1, maxLength: Int = -1)
+  extends PAny(minLength, maxLength) {
   def this(limit: Int) = this(limit, limit)
-
 }
 
-class PDoubleAny(var minLength: Int = 1, var maxLength: Int = -1) extends PAny {
-
-  def this(ml: Int) = this(ml, ml);
-
+class PDoubleAny(minLength: Int = 1, maxLength: Int = -1)
+  extends PAny(minLength, maxLength) {
+  def this(ml: Int) = this(ml, ml)
 }
 
-class PIntAny(var minLength: Int = 1, var maxLength: Int = -1,
-              var hasHex: Boolean = false) extends PAny {
+class PIntAny(minLength: Int = 1, maxLength: Int = -1,
+              var hasHex: Boolean = false) extends PAny(minLength, maxLength) {
 
   def this(limit: Int) = this(limit, limit)
 
@@ -283,10 +285,9 @@ class PIntAny(var minLength: Int = 1, var maxLength: Int = -1,
   }
 }
 
-class PWordDigitAny(var minLength: Int = 1, var maxLength: Int = -1) extends PAny {
-
+class PWordDigitAny(minLength: Int = 1, maxLength: Int = -1)
+  extends PAny(minLength, maxLength) {
   def this(limit: Int) = this(limit, limit)
-
 }
 
 /**
@@ -323,10 +324,12 @@ class PIntRange extends Pattern {
     }
   }
 
-  override def numChar: Int = {
+  override def numChar: (Int, Int) = {
     val factor = Math.log(2) / Math.log(10)
     val digitCount = (factor * max.bitLength + 1).toInt
-    if (BigInt(10).pow(digitCount - 1).compareTo(max) > 0) return digitCount - 1
-    digitCount
+    if (BigInt(10).pow(digitCount - 1).compareTo(max) > 0)
+      (digitCount - 1, digitCount - 1)
+    else
+      (digitCount, digitCount)
   }
 }

@@ -30,14 +30,10 @@ object RegexMatcher extends PatternMatcher {
   val regexgen = new GenRegexVisitor
 
   override def matchon(pattern: Pattern, input: String): Option[Record] = {
-    regexgen.reset
-    pattern.visit(regexgen)
-    val regexstr = regexgen.get
-    val groupPatterns = regexgen.list
-
-    val regex = regexstr.r
+    val regex = genRegex(pattern).r
     val matched = regex.findFirstMatchIn(input)
 
+    val groupPatterns = regexgen.list
     matched match {
       case Some(mc) => {
         // matched value by index, skip the entire group
@@ -51,5 +47,13 @@ object RegexMatcher extends PatternMatcher {
       }
       case None => None
     }
+  }
+
+  def genRegex(pattern: Pattern): String = {
+    if (pattern.name.isEmpty)
+      pattern.naming()
+    regexgen.reset
+    pattern.visit(regexgen)
+    regexgen.get
   }
 }

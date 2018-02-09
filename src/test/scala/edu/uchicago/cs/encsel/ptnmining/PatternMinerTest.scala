@@ -22,7 +22,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
+import edu.uchicago.cs.encsel.ptnmining.parser.{TSymbol, Tokenizer}
+import org.junit.Assert._
 import org.junit.Test
 
 import scala.io.Source
@@ -39,6 +40,52 @@ class PatternMinerTest {
     val pm = new PatternMiner
     val pattern = pm.mine(input)
 
+    assertEquals(PSeq.collect(
+      new PIntAny(3, 5),
+      new PToken(new TSymbol("-")),
+      new PIntAny(4),
+      new PToken(new TSymbol("-")),
+      new PWordAny(4)
+    ), pattern)
+  }
 
+
+  @Test
+  def testMineFromRealData1: Unit = {
+    val input = Source.fromFile("src/test/resource/colsplit/realdata1")
+      .getLines().map(Tokenizer.tokenize(_).toSeq).toSeq
+    val pm = new PatternMiner
+    val pattern = pm.mine(input)
+
+    val expected = PSeq.collect(
+      new PWordDigitAny(3),
+      new PToken(new TSymbol("-")),
+      new PWordDigitAny(1, -1),
+      PUnion.collect(
+        new PToken(new TSymbol("-")),
+        PEmpty
+      ),
+      new PIntAny(0, 5, true),
+      PUnion.collect(
+        new PToken(new TSymbol("-")),
+        PEmpty
+      ),
+      new PIntAny(0, 4),
+      PUnion.collect(
+        new PToken(new TSymbol("-")),
+        PEmpty
+      ),
+      new PIntAny(0, 4)
+    )
+    assertEquals(expected, pattern)
+  }
+
+  @Test
+  def testMineFromRealData2: Unit = {
+    val input = Source.fromFile("src/test/resource/colsplit/realdata2")
+      .getLines().map(Tokenizer.tokenize(_).toSeq).toSeq
+    val pm = new PatternMiner
+    val pattern = pm.mine(input)
+    fail("Not implemented")
   }
 }

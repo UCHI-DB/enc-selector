@@ -72,7 +72,7 @@ class GenRegexVisitor extends PatternVisitor {
       case token: PToken => history.put(token.name, RegexHelper.escape(token.token.value))
       case wany: PWordAny => {
         list += wany.name
-        history.put(wany.name, boundedRegex("\\w", wany.minLength, wany.maxLength))
+        history.put(wany.name, boundedRegex("[a-zA-Z]", wany.minLength, wany.maxLength))
       }
       case iany: PIntAny => {
         list += iany.name
@@ -88,8 +88,7 @@ class GenRegexVisitor extends PatternVisitor {
       }
       case wdany: PWordDigitAny => {
         list += wdany.name
-        val digit = "[0-9a-zA-Z]"
-        history.put(wdany.name, boundedRegex(digit, wdany.minLength, wdany.maxLength))
+        history.put(wdany.name, boundedRegex("\\w", wdany.minLength, wdany.maxLength))
       }
       case irng: PIntRange => {
         list += irng.name
@@ -127,6 +126,7 @@ class GenRegexVisitor extends PatternVisitor {
 
   private def boundedRegex(digit: String, min: Int, max: Int): String = {
     "(%s)".format((min, max) match {
+      case (0, -1) => "%s*".format(digit)
       case (1, -1) => "%s+".format(digit)
       case (i, -1) => "%s{%d,}".format(digit, i)
       case (i, j) if i == j => "%s{%d}".format(digit, i)

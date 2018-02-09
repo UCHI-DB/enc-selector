@@ -25,7 +25,6 @@ package edu.uchicago.cs.encsel.ptnmining.parser
 
 import java.io.StringReader
 
-import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -37,39 +36,13 @@ object Tokenizer {
   def tokenize(line: String): Iterator[Token] = {
     val lexer = new Lexer(new StringReader(line))
 
-    val tokens = new mutable.Stack[Token]
-
-    val find_match: TPara => Unit = (right: TPara) => {
-      if (tokens.exists(t => t.isInstanceOf[TPara] && t.asInstanceOf[TPara].matches(right))) {
-        val buffer = new ArrayBuffer[Token]
-        while (!tokens.top.isInstanceOf[TPara] || !tokens.top.asInstanceOf[TPara].matches(right)) {
-          buffer.insert(0, tokens.pop)
-        }
-        // Pop up the left pair
-        tokens.pop
-        tokens.push(new TGroup(right.paraType, buffer))
-      }
-    }
+    val tokens = new ArrayBuffer[Token]
 
     var nextsym = lexer.scan()
     while (nextsym != null) {
-      // For parenthetical symbols, look for pairs
-      nextsym match {
-        case para: TPara => {
-          if (!para.left) {
-            find_match(para)
-          }
-          else {
-            tokens.push(nextsym)
-          }
-        }
-        case _ => {
-          tokens.push(nextsym)
-        }
-      }
+      tokens += nextsym
       nextsym = lexer.scan()
     }
-
-    tokens.reverseIterator
+    tokens.iterator
   }
 }

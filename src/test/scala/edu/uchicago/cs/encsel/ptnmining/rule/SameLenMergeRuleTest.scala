@@ -93,12 +93,13 @@ class SameLenMergeRuleTest {
     val outputUnion = output.asInstanceOf[PUnion]
     assertEquals(2, outputUnion.content.size)
 
-    val seq0 = outputUnion.content(0).asInstanceOf[PSeq]
+    val group = outputUnion.content.groupBy(_.getClass)
+    val seq0 = group.get(classOf[PSeq]).get.head
     val cand = PSeq.collect(new PToken(new TWord("I")),
       PUnion.collect(new PToken(new TInt("4")), new PToken(new TInt("2"))))
     assertEquals(seq0, cand)
 
-    val union1 = outputUnion.content(1).asInstanceOf[PUnion]
+    val union1 = group.get(classOf[PUnion]).get.head.asInstanceOf[PUnion]
     assertTrue(union1.content.contains(new PToken(new TInt("40000"))))
     assertTrue(union1.content.contains(new PToken(new TInt("00080"))))
     assertTrue(union1.content.contains(new PToken(new TInt("04C80"))))
@@ -119,12 +120,13 @@ class SameLenMergeRuleTest {
 
     assertTrue(outputUnion.content.contains(PEmpty))
 
-    val seq0 = outputUnion.content(0).asInstanceOf[PSeq]
+    val group = outputUnion.content.groupBy(_.getClass)
+    val seq0 = group.get(classOf[PSeq]).get.head
     val cand = PSeq.collect(new PToken(new TWord("I")),
       PUnion.collect(new PToken(new TInt("4")), new PToken(new TInt("2"))))
     assertEquals(seq0, cand)
 
-    val union1 = outputUnion.content(1).asInstanceOf[PUnion]
+    val union1 = group.get(classOf[PUnion]).get.head.asInstanceOf[PUnion]
     assertTrue(union1.content.contains(new PToken(new TInt("40000"))))
     assertTrue(union1.content.contains(new PToken(new TInt("00080"))))
     assertTrue(union1.content.contains(new PToken(new TInt("04C80"))))

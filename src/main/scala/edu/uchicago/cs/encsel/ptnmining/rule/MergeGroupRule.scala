@@ -32,6 +32,7 @@ import edu.uchicago.cs.encsel.ptnmining.{PSeq, PUnion, Pattern}
   * Seq(Seq(a,b),x,y) => Seq(a,b,x,y)
   * Union(Union(a,b)) => Union(a,b)
   * Union(Union(a,b),x,y) => Union(a,b,x,y)
+  *
   */
 class MergeGroupRule extends RewriteRule {
 

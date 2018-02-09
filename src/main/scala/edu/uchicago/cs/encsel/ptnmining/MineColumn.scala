@@ -108,7 +108,10 @@ object MineColumn {
                   val ptn = colPatterns(i)
                   ptn match {
                     case iany: PIntAny => {
-                      val radix =
+                      val value = matched.get.get(ptn.name)
+                      if (value.isEmpty) {
+                        outputs(i).println("")
+                      } else
                         outputs(i).println(
                           BigInt(matched.get.get(ptn.name), if (iany.hasHex) 16 else 10).toString
                         )

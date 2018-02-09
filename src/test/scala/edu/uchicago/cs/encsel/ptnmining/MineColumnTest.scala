@@ -26,7 +26,8 @@ import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.parser.{TSymbol, TWord}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TSpace, TSymbol, TWord}
+import junitx.framework.FileAssert
 import org.junit.Assert._
 import org.junit.Test
 
@@ -57,6 +58,7 @@ class MineColumnTest {
     assertEquals(DataType.STRING, subcolumns(1).dataType)
     assertEquals(DataType.INTEGER, subcolumns(2).dataType)
     assertEquals(DataType.LONG, subcolumns(3).dataType)
+    assertEquals(DataType.STRING, subcolumns(4).dataType)
     assertArrayEquals(Array[AnyRef]("301401", "228104", "", "323421", "243242", "", "423432"),
       Source.fromFile("src/test/resource/colsplit/column.0").getLines().toArray[AnyRef])
 
@@ -71,6 +73,94 @@ class MineColumnTest {
 
     assertArrayEquals(Array[AnyRef]("WORKHARD", "WORKHARD", "WORKWORKWORKHARD"),
       Source.fromFile("src/test/resource/colsplit/column.unmatch").getLines().toArray[AnyRef])
+  }
+
+  @Test
+  def testSplitRealData1: Unit = {
+    // "^(\\w{3})-(\\w+)(-)?([0-9a-fA-F]{0,5})(-)?(\\d{0,4})(-)?(\\d{0,4})$:"
+    val pattern = PSeq.collect(
+      new PWordDigitAny(3),
+      new PToken(new TSymbol("-")),
+      new PWordDigitAny(1, -1),
+      PUnion.collect(
+        new PToken(new TSymbol("-")),
+        PEmpty
+      ),
+      new PIntAny(0, 5, true),
+      PUnion.collect(
+        new PToken(new TSymbol("-")),
+        PEmpty
+      ),
+      new PIntAny(0, 4),
+      PUnion.collect(
+        new PToken(new TSymbol("-")),
+        PEmpty
+      ),
+      new PIntAny(0, 4)
+    )
+
+    val col = new Column(null, 1, "sample", DataType.STRING)
+    col.colFile = new File("src/test/resource/colsplit/realdata1").toURI
+
+    val subcolumns = MineColumn.split(col, pattern)
+    assertEquals(9, subcolumns.size)
+
+    assertEquals(DataType.STRING, subcolumns(0).dataType)
+    assertEquals(DataType.STRING, subcolumns(1).dataType)
+    assertEquals(DataType.STRING, subcolumns(2).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(3).dataType)
+    assertEquals(DataType.STRING, subcolumns(4).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(5).dataType)
+    assertEquals(DataType.STRING, subcolumns(6).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(7).dataType)
+    assertEquals(DataType.STRING, subcolumns(8).dataType)
+
+    (0 to 7).foreach(i =>
+      FileAssert.assertEquals(new File("src/test/resource/colsplit/realdata1col/realdata1.%d".format(i)),
+        new File("src/test/resource/colsplit/realdata1.%d".format(i)))
+    )
+    FileAssert.assertEquals(new File("src/test/resource/colsplit/realdata1col/realdata1.unmatch"),
+      new File("src/test/resource/colsplit/realdata1.unmatch"))
+  }
+
+  @Test
+  def testSplitRealData2: Unit = {
+    // "^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2}):(\\d+\\.?\\d*)$"
+    val pattern = PSeq.collect(
+      new PIntAny(4),
+      new PToken(new TSymbol("-")),
+      new PIntAny(2),
+      new PToken(new TSymbol("-")),
+      new PIntAny(2),
+      new PToken(new TSpace),
+      new PIntAny(2),
+      new PToken(new TSymbol(":")),
+      new PIntAny(2),
+      new PToken(new TSymbol(":")),
+      new PDoubleAny(1, -1)
+    )
+
+    val col = new Column(null, 1, "sample", DataType.STRING)
+    col.colFile = new File("src/test/resource/colsplit/realdata2").toURI
+
+    val subcolumns = MineColumn.split(col, pattern)
+    assertEquals(7, subcolumns.size)
+
+    assertEquals(DataType.INTEGER, subcolumns(0).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(1).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(2).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(3).dataType)
+    assertEquals(DataType.INTEGER, subcolumns(4).dataType)
+    assertEquals(DataType.DOUBLE, subcolumns(5).dataType)
+    assertEquals(DataType.STRING, subcolumns(6).dataType)
+
+    (0 to 5).foreach(i =>
+      FileAssert.assertEquals(new File("src/test/resource/colsplit/realdata2col/realdata2.%d".format(i)),
+        new File("src/test/resource/colsplit/realdata2.%d".format(i)))
+    )
+    FileAssert.assertEquals(new File("src/test/resource/colsplit/realdata2col/realdata2.unmatch"),
+      new File("src/test/resource/colsplit/realdata2.unmatch"))
+
   }
 
   @Test
@@ -95,6 +185,5 @@ class MineColumnTest {
 
     assertArrayEquals(Array[AnyRef]("42", "0", "", "423", "", "423"),
       Source.fromFile("src/test/resource/colsplit/double_col.1").getLines().toArray[AnyRef])
-
   }
 }

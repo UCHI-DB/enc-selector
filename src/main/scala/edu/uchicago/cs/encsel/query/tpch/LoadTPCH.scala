@@ -27,6 +27,7 @@ import java.io.File
 
 import edu.uchicago.cs.encsel.parquet.{EncContext, EncReaderProcessor, ParquetReaderHelper, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
+import edu.uchicago.cs.encsel.query.tpch.LoadTPCH.{folder, inputsuffix, outputsuffix}
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.Encoding
 import org.apache.parquet.column.impl.ColumnReaderImpl
@@ -58,6 +59,18 @@ object LoadTPCH4Offheap extends App {
   ParquetWriterHelper.write(new File("/home/harper/TPCH/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
     new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, "\\|", false)
 }
+
+object LoadLineItem extends App {
+  val schema = TPCHSchema.orderSchema
+
+  EncContext.encoding.get().put(schema.getColumns()(1).toString, Encoding.PLAIN)
+
+  ParquetWriterHelper.write(
+    new File("%s%s%s".format(folder, schema.getName, inputsuffix)).toURI,
+    schema,
+    new File("%s%s%s".format(folder, schema.getName, outputsuffix)).toURI, "\\|", false)
+}
+
 
 object SelectLineitem extends App {
   val schema = TPCHSchema.lineitemOptSchema
