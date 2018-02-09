@@ -72,13 +72,7 @@ class GenRegexVisitor extends PatternVisitor {
       case token: PToken => history.put(token.name, RegexHelper.escape(token.token.value))
       case wany: PWordAny => {
         list += wany.name
-        history.put(wany.name,
-          "(%s)".format((wany.minLength, wany.maxLength) match {
-            case (1, -1) => "\\w+"
-            case (i, -1) => "\\w{%d,}".format(i)
-            case (i, j) if i == j => "\\w{%d}".format(i)
-            case (i, j) => "\\w{%d,%d}".format(i, j)
-          }))
+        history.put(wany.name, boundedRegex("\\w", wany.minLength, wany.maxLength))
       }
       case iany: PIntAny => {
         list += iany.name
@@ -86,17 +80,16 @@ class GenRegexVisitor extends PatternVisitor {
           case false => "\\d"
           case true => "[0-9a-fA-F]"
         }
-        history.put(iany.name,
-          "(%s)".format((iany.minLength, iany.maxLength) match {
-            case (1, -1) => "%s+".format(digit)
-            case (i, -1) => "%s{%d,}".format(digit, i)
-            case (i, j) if i == j => "%s{%d}".format(digit, i)
-            case (i, j) => "%s{%d,%d}".format(digit, i, j)
-          }))
+        history.put(iany.name, boundedRegex(digit, iany.minLength, iany.maxLength))
       }
       case dany: PDoubleAny => {
         list += dany.name
         history.put(dany.name, "(\\d+\\.?\\d*)")
+      }
+      case wdany: PWordDigitAny => {
+        list += wdany.name
+        val digit = "[0-9a-zA-Z]"
+        history.put(wdany.name, boundedRegex(digit, wdany.minLength, wdany.maxLength))
       }
       case irng: PIntRange => {
         list += irng.name
@@ -130,5 +123,14 @@ class GenRegexVisitor extends PatternVisitor {
       }
       case _ => {}
     }
+  }
+
+  private def boundedRegex(digit: String, min: Int, max: Int): String = {
+    "(%s)".format((min, max) match {
+      case (1, -1) => "%s+".format(digit)
+      case (i, -1) => "%s{%d,}".format(digit, i)
+      case (i, j) if i == j => "%s{%d}".format(digit, i)
+      case (i, j) => "%s{%d,%d}".format(digit, i, j)
+    })
   }
 }

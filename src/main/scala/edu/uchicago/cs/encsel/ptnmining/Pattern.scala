@@ -35,7 +35,7 @@ import scala.collection.mutable
 
 object Pattern {
 
-  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
+  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeGroupRule, new IntegerRangeRule, new UseAnyRule)
 
   def generate(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens
@@ -283,6 +283,11 @@ class PIntAny(var minLength: Int = 1, var maxLength: Int = -1,
   }
 }
 
+class PWordDigitAny(var minLength: Int = 1, var maxLength: Int = -1) extends PAny {
+
+  def this(limit: Int) = this(limit, limit)
+
+}
 
 /**
   * As we are extracting patterns from a small subset, determining range from

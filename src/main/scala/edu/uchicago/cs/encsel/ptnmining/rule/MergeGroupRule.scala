@@ -23,30 +23,42 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.{PSeq, Pattern}
+import edu.uchicago.cs.encsel.ptnmining.{PSeq, PUnion, Pattern}
 
 /**
-  * This rule merges unnecessary PSeq.
+  * This rule merges unnecessary PSeq/PUnion.
   * E.g.,
-  *   Seq(Seq(a,b),Seq(x,y)) => Seq(a,b,x,y)
-  *   Seq(Seq(a,b),x,y) => Seq(a,b,x,y)
+  * Seq(Seq(a,b),Seq(x,y)) => Seq(a,b,x,y)
+  * Seq(Seq(a,b),x,y) => Seq(a,b,x,y)
+  * Union(Union(a,b)) => Union(a,b)
+  * Union(Union(a,b),x,y) => Union(a,b,x,y)
   */
-class MergeSeqRule extends RewriteRule {
+class MergeGroupRule extends RewriteRule {
 
-  protected def condition(ptn: Pattern): Boolean = ptn.isInstanceOf[PSeq]
+  protected def condition(ptn: Pattern): Boolean = {
+    (ptn.isInstanceOf[PSeq] &&
+      ptn.asInstanceOf[PSeq].content.exists(_.isInstanceOf[PSeq])) ||
+      (ptn.isInstanceOf[PUnion] &&
+        ptn.asInstanceOf[PUnion].content.exists(_.isInstanceOf[PUnion]))
+  }
 
   protected def update(ptn: Pattern): Pattern = {
-    val seq = ptn.asInstanceOf[PSeq]
-    val check = seq.content.view.exists(_.isInstanceOf[PSeq])
-    check match {
-      case true => {
+    ptn match {
+      case union: PUnion => {
+        happen()
+        PUnion(union.content.flatMap(_ match {
+          case subu: PUnion => subu.content
+          case x => Seq(x)
+        }))
+      }
+      case seq: PSeq => {
         happen()
         PSeq(seq.content.flatMap(_ match {
           case subs: PSeq => subs.content
           case x => Seq(x)
         }))
       }
-      case false => ptn
+      case _ => ptn
     }
   }
 }

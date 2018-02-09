@@ -23,32 +23,38 @@
 
 package edu.uchicago.cs.encsel.ptnmining.rule
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord}
-import edu.uchicago.cs.encsel.ptnmining.{PIntAny, PToken, PWordAny, Pattern}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TSymbol, TWord}
+import edu.uchicago.cs.encsel.ptnmining._
 
 /**
   * This rule looks at top-level tokens and decide whether to upgrade them into <code>PAny</code>
+  * we need to check tokens at top level (tokens incldued in the final sequence).
+  * The following cases will be processed:
+  * 1. TInt will be rewritten as PIntAny as we don't think numbers are representative.
+  * 2. Union will be rewritten as PWordAny.
+  *
+  * For the second case, we can do this as Unions of single tokens will be processed
+  * by rule UseAny. The only thing left is unions of mixture, which contains only int
+  * or word tokens as symbols are extracted in advance.  In addition, these unions are
+  * not aligned as aligned tokens will be extracted by SameLenMergeRule. So the only
+  * thing left would be combinations of unaligned text/numbers combination, which does
+  * not hurt if we use <code>PAny</code> to represent them.
+  *
   */
 class GeneralizeTokenRule extends RewriteRule {
 
   override protected def condition(ptn: Pattern): Boolean = {
-    path.size == 2 && ptn.isInstanceOf[PToken] && {
-      val ptoken = ptn.asInstanceOf[PToken].token
-      ptoken.isInstanceOf[TInt] || ptoken.isInstanceOf[TWord]
-    }
+    path.size == 2 && (ptn match {
+      case union: PUnion => true
+      case token: PToken => token.token.isInstanceOf[TInt]
+      case _ => false
+    })
   }
 
   override protected def update(ptn: Pattern): Pattern = {
-    val pt = ptn.asInstanceOf[PToken]
-    pt.token match {
-      case int: TInt => {
-        happen()
-        new PIntAny(int.numChar, -1)
-      }
-      case word: TWord => {
-        happen()
-        new PWordAny(word.numChar, -1)
-      }
+    ptn match {
+      case token: PToken => new PIntAny(1, -1)
+      case union: PUnion => new PWordDigitAny(1, -1)
       case _ => ptn
     }
   }
