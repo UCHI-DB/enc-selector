@@ -52,24 +52,26 @@ object MineFixer extends App {
       case _ => args(0).toInt
     }
 
-    val loadcols = persist.em.createQuery("SELECT p FROM Column p WHERE p.dataType = :dt AND p.id <= :id", classOf[ColumnWrapper])
-      .setParameter("dt", DataType.STRING).setParameter("id", MAX_ID).getResultList
+    val loadcols = persist.em.createQuery("SELECT p FROM Column p WHERE p.dataType = :dt AND EXISTS (SELECT c FROM Column c WHERE c.parentWrapper = p)", classOf[ColumnWrapper])
+      .setParameter("dt", DataType.STRING).getResultList
 
     loadcols.asScala.foreach(column => {
       // Check the unmatched file size, if non-zero, perform a rematch
       val children = getChildren(column)
-      val unmatch = children.find(_.colIndex == -1)
+      if (children.nonEmpty) {
+        val unmatch = children.find(_.colIndex == -1)
 
-      unmatch match {
-        case None => println("[Error] column %d has no unmatch".format(column.id))
-        case Some(umcol) => {
-          val numUnmatch = StatUtils.numLine(umcol)
-          if (numUnmatch != 0) {
-            println("[Info ] column %d has error %d, regenerating".format(column.id, numUnmatch))
-            removeChildren(children)
-            val pattern = MineColumn.patternFromFile(column.colFile)
-            val splitResult = MineColumn.split(column, pattern)
-            persist.save(splitResult)
+        unmatch match {
+          case None => println("[Error] column %d has no unmatch".format(column.id))
+          case Some(umcol) => {
+            val numUnmatch = StatUtils.numLine(umcol)
+            if (numUnmatch != 0) {
+              println("[Info ] column %d has error %d, regenerating".format(column.id, numUnmatch))
+              removeChildren(children)
+              val pattern = MineColumn.patternFromFile(column.colFile)
+              val splitResult = MineColumn.split(column, pattern)
+              persist.save(splitResult)
+            }
           }
         }
       }
