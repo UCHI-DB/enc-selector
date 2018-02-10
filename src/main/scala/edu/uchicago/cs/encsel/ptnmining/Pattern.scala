@@ -134,6 +134,8 @@ class PToken(t: Token) extends Pattern {
   }
 
   override def hashCode(): Int = token.hashCode()
+
+  override def toString = token.toString
 }
 
 object PSeq {
@@ -181,6 +183,9 @@ class PSeq(cnt: Seq[Pattern]) extends Pattern {
     val state = Seq(content)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  override def toString = "<S>(%s)".format(content.map(_.toString).mkString(","))
+
 }
 
 object PUnion {
@@ -227,10 +232,14 @@ class PUnion(cnt: Seq[Pattern]) extends Pattern {
     val state = Seq(content)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  override def toString: String = "<U>(%s)".format(content.map(_.toString).mkString(","))
 }
 
 object PEmpty extends Pattern {
   override def numChar: (Int, Int) = (0, 0)
+
+  override def toString = "<empty>"
 }
 
 abstract class PAny(var minLength: Int, var maxLength: Int) extends Pattern {
@@ -253,22 +262,26 @@ abstract class PAny(var minLength: Int, var maxLength: Int) extends Pattern {
   }
 }
 
-class PWordAny(minLength: Int = 1, maxLength: Int = -1)
-  extends PAny(minLength, maxLength) {
+class PWordAny(minl: Int = 1, maxl: Int = -1)
+  extends PAny(minl, maxl) {
   def this(limit: Int) = this(limit, limit)
+
+  override def toString: String = "<wordany>"
 }
 
-class PDoubleAny(minLength: Int = 1, maxLength: Int = -1)
-  extends PAny(minLength, maxLength) {
+class PDoubleAny(minl: Int = 1, maxl: Int = -1)
+  extends PAny(minl, maxl) {
   def this(ml: Int) = this(ml, ml)
+  override def toString: String = "<doubleany>"
 }
 
-class PIntAny(minLength: Int = 1, maxLength: Int = -1,
-              var hasHex: Boolean = false) extends PAny(minLength, maxLength) {
-
-  def this(limit: Int) = this(limit, limit)
+class PIntAny(minl: Int = 1, maxl: Int = -1,
+              var hasHex: Boolean = false) extends PAny(minl, maxl) {
 
   def this(limit: Int, hasHex: Boolean) = this(limit, limit, hasHex)
+
+  def this(limit: Int) = this(limit, false)
+
 
   override def equals(other: Any): Boolean = other match {
     case that: PIntAny =>
@@ -283,11 +296,15 @@ class PIntAny(minLength: Int = 1, maxLength: Int = -1,
     val state = Seq(super.hashCode(), minLength, maxLength, hasHex)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  override def toString: String = "<intany>"
 }
 
-class PWordDigitAny(minLength: Int = 1, maxLength: Int = -1)
-  extends PAny(minLength, maxLength) {
+class PWordDigitAny(minl: Int = 1, maxl: Int = -1)
+  extends PAny(minl, maxl) {
   def this(limit: Int) = this(limit, limit)
+
+  override def toString: String = "<any>"
 }
 
 /**

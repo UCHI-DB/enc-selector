@@ -42,7 +42,7 @@ object MineColumn {
 
   def patternFromFile(file: URI): Pattern = {
     val lines = Source.fromFile(file).getLines().map(_.trim).filter(_.nonEmpty).take(5000).filter(p => {
-      Random.nextDouble() < 0.1
+      Random.nextDouble() <= 0.1
     })
     //    val tail = lines.takeRight(100)
     //    val both = head ++ tail

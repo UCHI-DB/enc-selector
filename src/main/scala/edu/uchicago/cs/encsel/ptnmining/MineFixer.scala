@@ -29,7 +29,9 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.MineColumn._
+import edu.uchicago.cs.encsel.ptnmining.analysis.StatUtils
 import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
+import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
 
@@ -42,34 +44,33 @@ object MineFixer extends App {
   val MAX_ID = 19535
   val persist = new JPAPersistence
 
-  mineAllMissing
+  mineAllError
 
-  def mineAllMissing: Unit = {
+  def mineAllError: Unit = {
     val start = args.length match {
       case 0 => 0
       case _ => args(0).toInt
     }
 
-
     val loadcols = persist.em.createQuery("SELECT p FROM Column p WHERE p.dataType = :dt AND p.id <= :id", classOf[ColumnWrapper])
       .setParameter("dt", DataType.STRING).setParameter("id", MAX_ID).getResultList
 
     loadcols.asScala.foreach(column => {
-      val colid = column.id
-      val pattern = patternFromFile(column.colFile)
-      val valid = numChildren(pattern)
+      // Check the unmatched file size, if non-zero, perform a rematch
       val children = getChildren(column)
-      if (valid != children.size) {
-        val regex = new GenRegexVisitor
-        pattern.visit(regex)
-        println("%d:%s:%s:%s".format(colid, valid, children.size, regex.get))
+      val unmatch = children.find(_.colIndex == -1)
 
-        removeChildren(children)
-
-        if (valid > 0) {
-          val subcols = MineColumn.split(column, pattern)
-          if (!subcols.isEmpty)
-            persist.save(subcols)
+      unmatch match {
+        case None => println("[Error] column %d has no unmatch".format(column.id))
+        case Some(umcol) => {
+          val numUnmatch = StatUtils.numLine(umcol)
+          if (numUnmatch != 0) {
+            println("[Info ] column %d has error %d, regenerating".format(column.id, numUnmatch))
+            removeChildren(children)
+            val pattern = MineColumn.patternFromFile(column.colFile)
+            val splitResult = MineColumn.split(column, pattern)
+            persist.save(splitResult)
+          }
         }
       }
     })

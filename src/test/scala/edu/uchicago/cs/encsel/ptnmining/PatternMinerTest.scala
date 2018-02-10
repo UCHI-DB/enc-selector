@@ -22,7 +22,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{TSymbol, Tokenizer}
+import edu.uchicago.cs.encsel.ptnmining.parser.{TSpace, TSymbol, Tokenizer}
 import org.junit.Assert._
 import org.junit.Test
 
@@ -86,6 +86,21 @@ class PatternMinerTest {
       .getLines().map(Tokenizer.tokenize(_).toSeq).toSeq
     val pm = new PatternMiner
     val pattern = pm.mine(input)
-    fail("Not implemented")
+
+    val expected = PSeq.collect(
+      new PIntAny(4),
+      new PToken(new TSymbol("-")),
+      new PIntAny(2),
+      new PToken(new TSymbol("-")),
+      new PIntAny(2),
+      new PToken(new TSpace),
+      new PIntAny(2),
+      new PToken(new TSymbol(":")),
+      new PIntAny(2),
+      new PToken(new TSymbol(":")),
+      new PDoubleAny(9)
+    )
+
+    assertEquals(expected, pattern)
   }
 }

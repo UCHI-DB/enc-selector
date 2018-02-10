@@ -66,12 +66,12 @@ class SameLenMergeRuleTest {
 
     assertEquals(seq.content(3), new PToken(new TWord("YL")))
 
-    val u4 = seq.content(4).asInstanceOf[PUnion].content
-    assertTrue(u4.contains(new PToken(new TInt("1A"))))
-    assertTrue(u4.contains(new PToken(new TInt("1C"))))
-    assertTrue(u4.contains(new PToken(new TInt("1D"))))
+    assertEquals(seq.content(4), new PToken(new TInt("1")))
+    val u4 = seq.content(5).asInstanceOf[PUnion].content
+    assertTrue(u4.contains(new PToken(new TWord("DK"))))
+    assertTrue(u4.contains(new PToken(new TWord("CK"))))
+    assertTrue(u4.contains(new PToken(new TWord("AK"))))
 
-    assertEquals(seq.content(5), new PToken(new TWord("K")))
 
     val u6 = seq.content(6).asInstanceOf[PUnion].content
     assertTrue(u6.contains(new PToken(new TInt("1352349"))))
@@ -182,5 +182,35 @@ class SameLenMergeRuleTest {
     val result2 = rule.rewrite(ptn2)
 
     assertFalse(rule.happened)
+  }
+
+  @Test
+  def testWithSymbol: Unit = {
+    val data = PUnion(Array("degree(MA", "degree(BA")
+      .map(rs => PSeq(Tokenizer.tokenize(rs).map(new PToken(_)).toSeq)))
+    val rule = new SameLenMergeRule
+    val result = rule.rewrite(data)
+    assertFalse(rule.happened)
+  }
+
+  @Test
+  def testPrioritizeLetter: Unit = {
+    val data = PUnion(Array("degree1", "degree2")
+      .map(rs => PSeq(Tokenizer.tokenize(rs).map(new PToken(_)).toSeq)))
+    val rule = new SameLenMergeRule
+    val result = rule.rewrite(data)
+    assertTrue(rule.happened)
+
+    val expected = PSeq(
+      Seq(
+        new PToken(new TWord("degree")),
+        PUnion.collect(
+          new PToken(new TInt("1")),
+          new PToken(new TInt("2"))
+        )
+      )
+    )
+
+    assertEquals(expected, result)
   }
 }

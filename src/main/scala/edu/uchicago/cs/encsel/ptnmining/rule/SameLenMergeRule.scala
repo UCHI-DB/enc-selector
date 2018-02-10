@@ -32,8 +32,7 @@ object HexNumber {
   def pattern = "^[0-9a-fA-F]+$".r
 
   def isNonHexLetter(char: Char) =
-    Character.isLetter(char) &&
-      ((char > 'f' && char < 'z') || (char > 'F' && char < 'Z'))
+    (char > 'f' && char <= 'z') || (char > 'F' && char <= 'Z')
 
   def isHexDigit(char: Char) =
     Character.isDigit(char) ||
@@ -55,14 +54,19 @@ class SameLenMergeRule extends RewriteRule {
       val union = ptn.asInstanceOf[PUnion]
       // Contains only seq or token
       // Contains at least one seq (a union contains only tokens can be processed by UseAny, no need here)
-      // Seq contains only token (at most 2 layer, for simplicity)
+      // Seq contains only word or int token (at most 2 layer, for simplicity)
       // all content has same length
       val content = union.content.view.filter(_ != PEmpty)
       content.size > 1 && {
         val res = content.map(_ match {
           case seq: PSeq => {
             val sc = seq.content.view
-            (sc.forall(_.isInstanceOf[PToken]), true)
+            (sc.forall(p => {
+              p.isInstanceOf[PToken] && {
+                val tk = p.asInstanceOf[PToken]
+                tk.token.isInstanceOf[TWord] || tk.token.isInstanceOf[TInt]
+              }
+            }), true)
           }
           case token: PToken => {
             (token.token.isInstanceOf[TInt] || token.token.isInstanceOf[TWord], false)
@@ -109,28 +113,29 @@ class SameLenMergeRule extends RewriteRule {
     val wordToken = new ArrayBuffer[Boolean]
     val firstLine = rawData.map(_.head)
 
-    var foundException = false
-    var foundDigit = false
-    var foundNonHex = false
-    firstLine.takeWhile(c => {
-      foundDigit ||= Character.isDigit(c)
-      foundNonHex ||= HexNumber.isNonHexLetter(c)
-      foundException = foundDigit && foundNonHex
-      !foundException
-    }).force
+    var valid = validLine(firstLine)
 
-    if (!foundException) {
-      var numMode = firstLine.forall(HexNumber.isHexDigit)
+    /*
+        firstLine.takeWhile(c => {
+          val foundOther = !Character.isLetter(c) && !Character.isDigit(c)
+          foundDigit ||= Character.isDigit(c)
+          foundNonHex ||= HexNumber.isNonHexLetter(c)
+          foundException = foundOther || (foundDigit && foundNonHex)
+          !foundException
+        }).force
+    */
+    if (valid) {
+      var numMode = firstLine.exists(Character.isDigit)
       wordToken += numMode
 
       // If a vertical line contains both digit and non-hex letter, it is considered invalid
       // and no conversion is performed
       (1 until length).takeWhile(i => {
         val chars = rawData.map(_.charAt(i))
-        foundException = chars.exists(Character.isDigit) && chars.exists(HexNumber.isNonHexLetter)
-        foundException match {
-          case false => {
-            (numMode ^ chars.forall(HexNumber.isHexDigit)) match {
+        valid = validLine(chars)
+        valid match {
+          case true => {
+            (numMode ^ chars.exists(Character.isDigit)) match {
               case false => {
                 stopPoint.update(stopPoint.length - 1, i)
               }
@@ -143,10 +148,10 @@ class SameLenMergeRule extends RewriteRule {
           }
           case _ => {}
         }
-        !foundException
+        valid
       })
     }
-    if (foundException) {
+    if (!valid) {
       None
     } else {
       happen()
@@ -167,4 +172,10 @@ class SameLenMergeRule extends RewriteRule {
     }
   }
 
+  private def validLine(line: Seq[Char]): Boolean = {
+    val allValid = line.forall(c => Character.isLetter(c) || Character.isDigit(c))
+    val hasDigit = line.exists(Character.isDigit)
+    val hasNonHex = line.exists(HexNumber.isNonHexLetter)
+    allValid && !(hasDigit && hasNonHex)
+  }
 }

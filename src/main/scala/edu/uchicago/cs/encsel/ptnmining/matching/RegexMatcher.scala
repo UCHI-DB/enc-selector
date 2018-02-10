@@ -25,12 +25,21 @@ package edu.uchicago.cs.encsel.ptnmining.matching
 
 import edu.uchicago.cs.encsel.ptnmining.Pattern
 
+import scala.util.matching.Regex
+
 object RegexMatcher extends PatternMatcher {
 
   val regexgen = new GenRegexVisitor
 
+  private var cachedPattern: Pattern = null
+
+  private var regex: Regex = null
+
   override def matchon(pattern: Pattern, input: String): Option[Record] = {
-    val regex = genRegex(pattern).r
+    if (cachedPattern != pattern) {
+      regex = genRegex(pattern).r
+      cachedPattern = pattern
+    }
     val matched = regex.findFirstMatchIn(input)
 
     val groupPatterns = regexgen.list
