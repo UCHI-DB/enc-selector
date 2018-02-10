@@ -35,8 +35,8 @@ import scala.collection.JavaConverters._
 
 object MineFromFiles extends App {
 
-  mineSingleFile
-  //  mineAllFiles
+  //  mineSingleFile
+  mineAllFiles
 
   def mineAllFiles: Unit = {
     val start = args.length match {
