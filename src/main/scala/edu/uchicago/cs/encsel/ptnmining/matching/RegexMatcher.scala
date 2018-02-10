@@ -36,7 +36,7 @@ object RegexMatcher extends PatternMatcher {
   private var regex: Regex = null
 
   override def matchon(pattern: Pattern, input: String): Option[Record] = {
-    if (cachedPattern != pattern) {
+    if (cachedPattern == null || !cachedPattern.eq(pattern)) {
       regex = genRegex(pattern).r
       cachedPattern = pattern
     }
