@@ -29,7 +29,8 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.MineColumn._
-import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
+import edu.uchicago.cs.encsel.ptnmining.matching.{GenRegexVisitor, RegexMatcher}
+import edu.uchicago.cs.encsel.ptnmining.persist.{JPAPatternPersistence, PatternWrapper}
 
 import scala.collection.JavaConverters._
 
@@ -54,8 +55,12 @@ object MineFromFiles extends App {
       val valid = numChildren(pattern) > 0
       if (valid) {
         val subcols = split(column, pattern)
-        if (!subcols.isEmpty)
+        if (!subcols.isEmpty) {
           persist.save(subcols)
+          // Also save the pattern
+          val ptnstr = RegexMatcher.genRegex(pattern)
+          JPAPatternPersistence.save(column, ptnstr)
+        }
       }
       val regex = new GenRegexVisitor
       pattern.visit(regex)

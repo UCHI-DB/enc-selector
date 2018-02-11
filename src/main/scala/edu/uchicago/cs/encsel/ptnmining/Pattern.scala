@@ -266,12 +266,13 @@ class PWordAny(minl: Int = 1, maxl: Int = -1)
   extends PAny(minl, maxl) {
   def this(limit: Int) = this(limit, limit)
 
-  override def toString: String = "<wordany>"
+  override def toString: String = "<wordany %d:%d>".format(minLength, maxLength)
 }
 
 class PDoubleAny(minl: Int = 1, maxl: Int = -1)
   extends PAny(minl, maxl) {
   def this(ml: Int) = this(ml, ml)
+
   override def toString: String = "<doubleany>"
 }
 
@@ -297,14 +298,14 @@ class PIntAny(minl: Int = 1, maxl: Int = -1,
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 
-  override def toString: String = "<intany>"
+  override def toString: String = "<intany %d:%d>".format(minLength, maxLength)
 }
 
 class PWordDigitAny(minl: Int = 1, maxl: Int = -1)
   extends PAny(minl, maxl) {
   def this(limit: Int) = this(limit, limit)
 
-  override def toString: String = "<any>"
+  override def toString: String = "<any %d:%d>".format(minLength, maxLength)
 }
 
 /**

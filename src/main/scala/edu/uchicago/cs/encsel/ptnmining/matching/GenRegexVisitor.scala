@@ -24,6 +24,7 @@
 package edu.uchicago.cs.encsel.ptnmining.matching
 
 import edu.uchicago.cs.encsel.ptnmining._
+import edu.uchicago.cs.encsel.ptnmining.parser.TSpace
 
 import scala.collection.mutable.{ArrayBuffer, HashMap}
 
@@ -69,7 +70,15 @@ class GenRegexVisitor extends PatternVisitor {
   override def on(ptn: Pattern): Unit = {
     ptn match {
       case union: PUnion => list += union.name
-      case token: PToken => history.put(token.name, RegexHelper.escape(token.token.value))
+      case token: PToken => {
+        history.put(token.name,
+          if (token.token.isInstanceOf[TSpace]) {
+            "\\s+"
+          } else {
+            RegexHelper.escape(token.token.value)
+          })
+        //history.put(token.name, RegexHelper.escape(token.token.value))
+      }
       case wany: PWordAny => {
         list += wany.name
         history.put(wany.name, boundedRegex("[a-zA-Z]", wany.minLength, wany.maxLength))

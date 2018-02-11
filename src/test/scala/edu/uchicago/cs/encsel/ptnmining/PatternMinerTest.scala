@@ -41,11 +41,11 @@ class PatternMinerTest {
     val pattern = pm.mine(input)
 
     assertEquals(PSeq.collect(
-      new PIntAny(3, 5),
+      new PIntAny(1, -1),
       new PToken(new TSymbol("-")),
-      new PIntAny(4),
+      new PIntAny(1, -1),
       new PToken(new TSymbol("-")),
-      new PWordAny(4)
+      new PWordAny(1, -1)
     ), pattern)
   }
 
@@ -58,24 +58,24 @@ class PatternMinerTest {
     val pattern = pm.mine(input)
 
     val expected = PSeq.collect(
-      new PWordDigitAny(3),
+      new PWordDigitAny(1, -1),
       new PToken(new TSymbol("-")),
       new PWordDigitAny(1, -1),
       PUnion.collect(
         new PToken(new TSymbol("-")),
         PEmpty
       ),
-      new PIntAny(0, 5, true),
+      new PIntAny(0, -1, true),
       PUnion.collect(
         new PToken(new TSymbol("-")),
         PEmpty
       ),
-      new PIntAny(0, 4),
+      new PIntAny(0, -1),
       PUnion.collect(
         new PToken(new TSymbol("-")),
         PEmpty
       ),
-      new PIntAny(0, 4)
+      new PIntAny(0, -1)
     )
     assertEquals(expected, pattern)
   }
@@ -88,17 +88,17 @@ class PatternMinerTest {
     val pattern = pm.mine(input)
 
     val expected = PSeq.collect(
-      new PIntAny(4),
+      new PIntAny(1, -1),
       new PToken(new TSymbol("-")),
-      new PIntAny(2),
+      new PIntAny(1, -1),
       new PToken(new TSymbol("-")),
-      new PIntAny(2),
+      new PIntAny(1, -1),
       new PToken(new TSpace),
-      new PIntAny(2),
+      new PIntAny(1, -1),
       new PToken(new TSymbol(":")),
-      new PIntAny(2),
+      new PIntAny(1, -1),
       new PToken(new TSymbol(":")),
-      new PDoubleAny(9)
+      new PDoubleAny(1, -1)
     )
 
     assertEquals(expected, pattern)

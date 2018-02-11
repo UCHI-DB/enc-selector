@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel.ptnmining.matching
 
 import edu.uchicago.cs.encsel.ptnmining._
-import edu.uchicago.cs.encsel.ptnmining.parser.TSymbol
+import edu.uchicago.cs.encsel.ptnmining.parser.{TSpace, TSymbol}
 import org.junit.Assert._
 import org.junit.Test
 
@@ -94,5 +94,20 @@ class RegexMatcherTest {
     assertArrayEquals(Array[AnyRef]("", "WP", "WWD", ""), g0)
     assertArrayEquals(Array[AnyRef]("3132", "3141", "323000", "3323123"), g1)
     assertArrayEquals(Array[AnyRef]("DAFS", "1234", "AAA2FA", "1"), g2)
+  }
+
+  @Test
+  def testSpaceMatch: Unit = {
+    val pattern = PSeq.collect(
+      new PWordAny(0, 3),
+      new PToken(new TSpace),
+      new PIntAny(4, 7)
+    )
+
+    val testSuccessData = Array("MPQ 3132", "WD    3423312", " 01412").map(RegexMatcher.matchon(pattern, _))
+    assertTrue(testSuccessData.forall(_.nonEmpty))
+
+    assertArrayEquals(Array[AnyRef]("MPQ", "WD", ""), testSuccessData.map(_.get.get("_0_0")).toArray[AnyRef])
+    assertArrayEquals(Array[AnyRef]("3132", "3423312", "01412"), testSuccessData.map(_.get.get("_0_2")).toArray[AnyRef])
   }
 }
