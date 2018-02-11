@@ -18,34 +18,25 @@ class JPAPersistenceTest {
   @Before
   def cleanSchema: Unit = {
     val em = JPAPersistence.emf.createEntityManager()
-    em.getTransaction.begin()
-
-    em.createNativeQuery("DELETE FROM feature WHERE 1 = 1;").executeUpdate()
-    em.createNativeQuery("DELETE FROM col_data WHERE 1 = 1;").executeUpdate()
-    em.flush()
-    em.getTransaction.commit()
 
     em.getTransaction.begin()
-    val col1 = new ColumnWrapper
-    col1.id = 20
-    col1.colName = "a"
-    col1.colIndex = 5
-    col1.dataType = DataType.STRING
-    col1.colFile = new File("aab").toURI
-    col1.origin = new File("ccd").toURI
+    em.createNativeQuery("DELETE FROM col_pattern;").executeUpdate()
+    em.createNativeQuery("DELETE FROM feature;").executeUpdate()
+    em.createNativeQuery("DELETE FROM col_data;").executeUpdate()
 
-    col1.features = new java.util.HashSet[Feature]
-
-    var fea1 = new Feature
-    fea1.name = "M"
-    fea1.featureType = "P"
-    fea1.value = 2.4
-
-    col1.features += fea1
-
-    em.persist(col1)
+    em.createNativeQuery("INSERT INTO col_data (id, file_uri, idx, name, data_type, origin_uri, parent_id) VALUES (?, ?, ?, ?, ?, ?, ?);")
+      .setParameter(1, 20)
+      .setParameter(2, "file:/home/harper/IdeaProjects/enc-selector/aab")
+      .setParameter(3, 5)
+      .setParameter(4, "a")
+      .setParameter(5, "STRING")
+      .setParameter(6, "file:/home/harper/IdeaProjects/enc-selector/ccd")
+      .setParameter(7, null).executeUpdate()
+    em.createNativeQuery("INSERT INTO feature(col_id,type, name, value) VALUES(?, ?, ?, ?);").setParameter(1, 20)
+      .setParameter(2, "P").setParameter(3, "M").setParameter(4, 2.4).executeUpdate()
 
     em.getTransaction.commit()
+    em.getEntityManagerFactory.getCache.evictAll()
     em.close()
   }
 

@@ -31,7 +31,7 @@ import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 class PatternWrapper {
 
   @Id
-  @OneToOne
+  @OneToOne(cascade = Array(CascadeType.ALL))
   @JoinColumn(name = "col_id")
   var column: ColumnWrapper = null
   @Column(name = "pattern")
