@@ -16,7 +16,7 @@ Whitespace     = ({LineTerminator} | [ \t\f])+
 
 IntLiteral=[0-9]+
 DoubleLiteral=[0-9]+\.[0-9]+
-WordLiteral=[a-zA-Z][a-zA-Z\.']*
+WordLiteral=[a-zA-Z]+
 
 %%
 

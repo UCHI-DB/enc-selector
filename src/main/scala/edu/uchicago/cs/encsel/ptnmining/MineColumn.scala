@@ -31,7 +31,7 @@ import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.analysis.StatUtils
 import edu.uchicago.cs.encsel.ptnmining.matching.RegexMatcher
-import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
+import edu.uchicago.cs.encsel.ptnmining.parser.{TSymbol, Tokenizer}
 import edu.uchicago.cs.encsel.ptnmining.persist.JPAPatternPersistence
 import edu.uchicago.cs.encsel.util.FileUtils
 
@@ -85,6 +85,16 @@ object MineColumn {
     }
   }
 
+  def isSymbol(ptn: Pattern): Boolean = {
+    ptn match {
+      case token: PToken => token.token.isInstanceOf[TSymbol]
+      case union: PUnion => {
+        union.content.size == 2 && union.content.contains(PEmpty) &&
+          union.content.exists(p => p.isInstanceOf[PToken] && p.asInstanceOf[PToken].token.isInstanceOf[TSymbol])
+      }
+    }
+  }
+
   def numChildren(pattern: Pattern): Int = {
     //    val validator = new PatternValidator
     //    pattern.visit(validator)
@@ -94,7 +104,13 @@ object MineColumn {
     (pattern match {
       case seq: PSeq => {
         seq.content.flatMap(_ match {
-          case union: PUnion => Some(union)
+          case union: PUnion => {
+            if (isSymbol(union)) {
+              None
+            } else {
+              Some(union)
+            }
+          }
           case any: PAny => Some(any)
           case _ => None
         })
@@ -139,15 +155,21 @@ object MineColumn {
               if (matched.isDefined) {
                 colPatterns.indices.foreach(i => {
                   val ptn = colPatterns(i)
-                  ptn match {
-                    case iany: PIntAny => {
+                  val col = childColumns(i)
+                  col.dataType match {
+                    case DataType.INTEGER | DataType.LONG => {
                       val value = matched.get.get(ptn.name)
                       if (value.isEmpty) {
                         outputs(i).println("")
-                      } else
+                      } else {
+                        val iany = ptn.asInstanceOf[PIntAny]
                         outputs(i).println(
                           BigInt(matched.get.get(ptn.name), if (iany.hasHex) 16 else 10).toString
                         )
+                      }
+                    }
+                    case DataType.BOOLEAN => {
+                      outputs(i).println(if (matched.get.get(ptn.name).isEmpty) 0 else 1)
                     }
                     case _ => {
                       outputs(i).println(matched.get.get(ptn.name))
@@ -186,8 +208,17 @@ object MineColumn {
       case dany: PDoubleAny => DataType.DOUBLE
       case union: PUnion => {
         if (union.content.size == 2 && union.content.contains(PEmpty)) {
-          val remain = union.content.filter(_ != PEmpty).head
-          typeof(remain)
+          union.content.filter(_ != PEmpty).head match {
+            case t: PToken => {
+              if (t.token.isInstanceOf[TSymbol])
+                DataType.BOOLEAN
+              else
+                typeof(t)
+            }
+            case o => {
+              typeof(o)
+            }
+          }
         }
         else
           DataType.STRING

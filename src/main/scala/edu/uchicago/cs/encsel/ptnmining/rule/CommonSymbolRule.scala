@@ -32,6 +32,10 @@ import scala.collection.mutable.ArrayBuffer
   * Look for common separators (non-alphabetic, non-numerical characters) from Union and use them to
   * split data. Rows that does not contain any symbols will be treated as a whole to put to the first group.
   */
+object CommonSymbolRule {
+  val threshold = 0.4
+}
+
 class CommonSymbolRule extends RewriteRule {
 
   /**
@@ -97,8 +101,54 @@ class CommonSymbolRule extends RewriteRule {
     }).flatten
     val n = commonSymbols.length
     commonSymbols.isEmpty match {
-      case true => union
+      case true => {
+        // No common symbol, go for the first major single symbol
+        val majorThreshold = CommonSymbolRule.threshold * validLines.size
+        val majorSymbols = validLines.map(_.groupBy(_._1).map(p => (p._1, p._2.minBy(_._2)._2)))
+          .reduce((mapa, mapb) => {
+            mapa ++ mapb.map(kv => (kv._1, kv._2 + mapa.getOrElse(kv._1, 0)))
+          }).filter(_._2 >= majorThreshold)
+        if (majorSymbols.nonEmpty) {
+          happen()
+          // Use the most common symbol for a partition
+          val majorSymbol = majorSymbols.maxBy(_._2)._1
+
+          val firstGroup = new ArrayBuffer[Pattern]
+          val secondGroup = new ArrayBuffer[Pattern]
+          unionData.indices.foreach(j => {
+            if (noSymbolLines.contains(j)) {
+              firstGroup += PSeq(unionData(j))
+            } else {
+              val symbols = validLines(validIndexMapping.getOrElse(j, -1))
+              val data = unionData(j)
+              // Result will contain only two groups
+              // The lines containing no symbol will be put to the first group
+              // The lines containing some symbol but not the majority will be put to the second group
+              symbols.find(p => p._1 == majorSymbol) match {
+                case Some(found) => {
+                  firstGroup += PSeq(data.view(0, found._2))
+                  secondGroup += PSeq(data.view(found._2 + 1, data.size))
+                }
+                case None => {
+                  secondGroup += PSeq(data)
+                }
+              }
+            }
+          })
+          firstGroup += PEmpty
+          if (noSymbolLines.nonEmpty)
+            secondGroup += PEmpty
+          new PSeq(Seq(
+            PUnion(firstGroup),
+            PUnion.collect(majorSymbol, PEmpty),
+            PUnion(secondGroup)))
+        }
+        else {
+          union
+        }
+      }
       case false => {
+        // use common symbol to partition input
         happen()
         // Use the positions to split data and generate new unions
         // n common symbols split the data to at most n+1 pieces
@@ -111,8 +161,9 @@ class CommonSymbolRule extends RewriteRule {
           if (noSymbolLines.contains(j)) {
             // This line has no symbol, for first column return all, for others return empty
             pieces(0) += PSeq(unionData(j))
-            for (i <- 1 to n)
-              pieces(i) += PEmpty
+            // DO This just once below out of the loop
+            // for (i <- 1 to n)
+            //   pieces(i) += PEmpty
           } else {
             // This line has symbol
             val data = unionData(j)
@@ -131,6 +182,10 @@ class CommonSymbolRule extends RewriteRule {
             })
           }
         })
+        if (noSymbolLines.nonEmpty) {
+          for (i <- 1 to n)
+            pieces(i) += PEmpty
+        }
         // Make a sequence formed of union pieces and common sequences
         val result = PSeq((0 until 2 * n + 1).view.map(i => {
           i % 2 match {

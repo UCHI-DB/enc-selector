@@ -36,6 +36,10 @@ class TokenizerTest {
 
     val tokens = Tokenizer.tokenize(line).toArray
 
-    assertEquals(21, tokens.length)
+    assertEquals(22, tokens.length)
+  }
+
+  def testTokenize2:Unit = {
+
   }
 }

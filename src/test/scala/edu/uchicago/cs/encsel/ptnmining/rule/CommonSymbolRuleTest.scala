@@ -112,4 +112,34 @@ class CommonSymbolRuleTest {
       new PToken(new TInt("35"))))
     assertTrue(u2.content.contains(s22))
   }
+
+  @Test
+  def testRewriteWithMajorSymbol: Unit = {
+    val data = PUnion(Array("ab1.def", "ab2.abc.abc", "ab3", "abc:amp", "ab4.aaak", "ab5.")
+      .map(s => PSeq(Tokenizer.tokenize(s).toList.map(new PToken(_)))))
+    val rule = new CommonSymbolRule()
+    val rr = rule.rewrite(data)
+    assertTrue(rule.happened)
+
+    val expect = PSeq.collect(
+      PUnion.collect(
+        PSeq.collect(new PToken(new TWord("ab")), new PToken(new TInt("1"))),
+        PSeq.collect(new PToken(new TWord("ab")), new PToken(new TInt("2"))),
+        PSeq.collect(new PToken(new TWord("ab")), new PToken(new TInt("3"))),
+        PSeq.collect(new PToken(new TWord("ab")), new PToken(new TInt("4"))),
+        PSeq.collect(new PToken(new TWord("ab")), new PToken(new TInt("5"))),
+        PEmpty
+      ),
+      PUnion.collect(new PToken(new TSymbol(".")), PEmpty),
+      PUnion.collect(
+        PSeq.collect(new PToken(new TWord("def"))),
+        PSeq.collect(new PToken(new TWord("abc")), new PToken(new TSymbol(".")), new PToken(new TWord("abc"))),
+        PEmpty,
+        PSeq.collect(new PToken(new TWord("abc")), new PToken(new TSymbol(":")), new PToken(new TWord("amp"))),
+        new PToken(new TWord("aaak"))
+      )
+    )
+
+    assertEquals(expect, rr)
+  }
 }

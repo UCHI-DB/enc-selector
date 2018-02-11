@@ -95,6 +95,16 @@ class GenRegexVisitorTest {
   }
 
   @Test
+  def testVisitDouble: Unit = {
+    val ptn = PSeq.collect(new PDoubleAny(1, -1), new PDoubleAny(0, -1))
+    ptn.naming()
+    val regexv = new GenRegexVisitor
+    ptn.visit(regexv)
+    assertEquals("^(\\d+\\.?\\d*)(\\d*\\.?\\d*)$",
+      regexv.get)
+  }
+
+  @Test
   def testSpecialChars: Unit = {
     val ptn = PSeq.collect(
       new PIntAny(5),

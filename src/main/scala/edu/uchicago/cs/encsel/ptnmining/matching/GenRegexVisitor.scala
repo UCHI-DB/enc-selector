@@ -93,7 +93,10 @@ class GenRegexVisitor extends PatternVisitor {
       }
       case dany: PDoubleAny => {
         list += dany.name
-        history.put(dany.name, "(\\d+\\.?\\d*)")
+        if (dany.minLength == 0)
+          history.put(dany.name, "(\\d*\\.?\\d*)")
+        else
+          history.put(dany.name, "(\\d+\\.?\\d*)")
       }
       case wdany: PWordDigitAny => {
         list += wdany.name
