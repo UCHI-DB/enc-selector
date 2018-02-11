@@ -30,10 +30,6 @@ import sys.process._
 
 object StatUtils {
 
-  def numLine(col: Column): Int = {
-    val result: String = ("wc -l %s".format(new File(col.colFile).getAbsolutePath)) !!;
-    result.split("\\s+")(0).toInt
-  }
 
 
 }

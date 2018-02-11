@@ -33,18 +33,12 @@ import scala.collection.JavaConverters._
 
 object EncodeSubColumn extends App {
 
-  val start = args.length match {
-    case 0 => 0
-    case _ => args(0).toInt
-  }
   val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.colIndex = :ci", classOf[ColumnWrapper]).setParameter("ci", -1).getResultList.asScala
+  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL", classOf[ColumnWrapper]).getResultList.asScala
 
   columns.foreach(colw => {
-    if (colw.id >= start) {
-      println(colw.id)
-      colw.features.asScala ++= Features.extract(colw)
-      persist.save(Seq(colw))
-    }
+    println(colw.id)
+    colw.features.asScala ++= Features.extract(colw)
+    persist.save(Seq(colw))
   })
 }

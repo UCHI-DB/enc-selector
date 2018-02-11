@@ -27,49 +27,82 @@ import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.ptnmining.analysis.StatUtils
 import edu.uchicago.cs.encsel.ptnmining.matching.RegexMatcher
 import edu.uchicago.cs.encsel.ptnmining.parser.Tokenizer
+import edu.uchicago.cs.encsel.ptnmining.persist.JPAPatternPersistence
 import edu.uchicago.cs.encsel.util.FileUtils
-import org.apache.commons.lang3.StringUtils
 
 import scala.io.Source
+import scala.collection.JavaConverters._
 import scala.util.Random
 
 object MineColumn {
+  val MAX_COLUMN = 15
+
   val patternMiner = new PatternMiner
   val matcher = RegexMatcher
 
-  def patternFromFile(file: URI): Pattern = {
-    val lines = Source.fromFile(file).getLines().map(_.trim).filter(_.nonEmpty).take(5000).filter(p => {
-      Random.nextDouble() <= 0.1
-    })
-    //    val tail = lines.takeRight(100)
-    //    val both = head ++ tail
-    val pattern = patternMiner.mine(lines.map(Tokenizer.tokenize(_).toSeq).toSeq)
-    pattern.naming()
+  def mineColumn(column: Column): (Int, Boolean, String) = {
+    val pattern = patternFromFile(column.colFile)
+    val numc = numChildren(pattern)
+    val valid = numc > 1 && numc <= MAX_COLUMN
+    val persist = new JPAPersistence
+    val patternStr = RegexMatcher.genRegex(pattern)
 
-    pattern
+    if (valid) {
+      cleanChildren(column)
+      val newchildren = MineColumn.split(column, pattern)
+      if (newchildren.nonEmpty) {
+        persist.save(newchildren)
+      }
+      JPAPatternPersistence.save(column, patternStr)
+    }
+    (column match {
+      case cw: ColumnWrapper => cw.id
+      case _ => -100
+    }, valid, patternStr)
+  }
+
+  def patternFromFile(file: URI): Pattern = {
+    val nLine = FileUtils.numNonEmptyLine(file)
+    val rate = 500.toDouble / nLine
+    val source = Source.fromFile(file)
+    try {
+      val lines = source.getLines().map(_.trim).filter(_.nonEmpty).filter(p => {
+        Random.nextDouble() <= rate
+      })
+      //    val tail = lines.takeRight(100)
+      //    val both = head ++ tail
+      val pattern = patternMiner.mine(lines.map(Tokenizer.tokenize(_).toSeq).toSeq)
+      pattern.naming()
+
+      pattern
+    } finally {
+      source.close
+    }
   }
 
   def numChildren(pattern: Pattern): Int = {
-    val validator = new PatternValidator
-    pattern.visit(validator)
-    validator.isValid match {
-      case false => 0
-      case true => {
-        (pattern match {
-          case seq: PSeq => {
-            seq.content.flatMap(_ match {
-              case union: PUnion => Some(union)
-              case any: PAny => Some(any)
-              case _ => None
-            })
-          }
-          case _ => Seq()
-        }).size
+    //    val validator = new PatternValidator
+    //    pattern.visit(validator)
+    //    validator.isValid match {
+    //      case false => 0
+    //      case true => {
+    (pattern match {
+      case seq: PSeq => {
+        seq.content.flatMap(_ match {
+          case union: PUnion => Some(union)
+          case any: PAny => Some(any)
+          case _ => None
+        })
       }
-    }
+      case _ => Seq()
+    }).size
+    //      }
+    //    }
   }
 
   def split(column: Column, pattern: Pattern): Seq[Column] = {
@@ -100,7 +133,7 @@ object MineColumn {
         val source = Source.fromFile(column.colFile)
         try {
           source.getLines().map(_.trim).foreach(line => {
-            if (!StringUtils.isEmpty(line)) {
+            if (line.nonEmpty) {
               // Match the line against pattern
               val matched = matcher.matchon(pattern, line)
               if (matched.isDefined) {
@@ -163,6 +196,23 @@ object MineColumn {
     }
   }
 
+  def cleanChildren(column: Column): Unit = {
+    val persist = new JPAPersistence
+    val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"
+    val children = persist.em.createQuery(sql, classOf[ColumnWrapper])
+      .setParameter("parent", column).getResultList.asScala
+    if (children.nonEmpty) {
+      persist.em.getTransaction.begin()
+      children.foreach(c => {
+        persist.em.remove(c)
+      })
+      persist.em.getTransaction.commit()
+      children.foreach(c => {
+        new File(c.colFile).delete()
+      })
+    }
+  }
+
   def splitDouble(column: Column): Seq[Column] = {
     if (column.dataType != DataType.DOUBLE)
       throw new IllegalArgumentException()
@@ -174,7 +224,7 @@ object MineColumn {
     val source = Source.fromFile(column.colFile)
     try {
       source.getLines().map(_.trim).foreach(line => {
-        if (!StringUtils.isEmpty(line)) {
+        if (line.nonEmpty) {
           // Extract pieces
           val split = line.split("\\.")
           val data = (split.length match {

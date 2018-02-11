@@ -28,6 +28,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.analysis.GetEncodeBenefit.persist
+import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
 
@@ -39,8 +40,8 @@ object GetUnmatchRate extends App {
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
 
   columns.foreach(col => {
-    val originalSize = StatUtils.numLine(col)
-    val unmatchSize = StatUtils.numLine(getUnmatchChild(col))
+    val originalSize = FileUtils.numLine(col.colFile)
+    val unmatchSize = FileUtils.numLine(getUnmatchChild(col).colFile)
     val ratio = unmatchSize.toDouble / originalSize
     if (ratio > 0.3) {
       unmatchRecord.println(col.id, ratio)

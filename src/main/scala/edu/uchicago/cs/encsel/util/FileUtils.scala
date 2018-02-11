@@ -22,28 +22,37 @@
  */
 package edu.uchicago.cs.encsel.util
 
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import java.nio.file.Paths
 import java.net.URI
-import java.util.concurrent.Callable
+import scala.sys.process._
 
 object FileUtils {
   def scanFunction: (Path => Iterable[Path]) = (p: Path) => {
     p match {
-      case nofile if !Files.exists(nofile) => { Iterable[Path]() }
-      case dir if Files.isDirectory(dir) => {
-        Files.list(dir).iterator().toIterable.flatMap { scanFunction(_) }
+      case nofile if !Files.exists(nofile) => {
+        Iterable[Path]()
       }
-      case _ => { Iterable(p) }
+      case dir if Files.isDirectory(dir) => {
+        Files.list(dir).iterator().asScala.toIterable.flatMap {
+          scanFunction(_)
+        }
+      }
+      case _ => {
+        Iterable(p)
+      }
     }
   }
 
   def scan[T](root: URI, function: (Path => T)): Iterable[T] = {
     val target = Paths.get(root)
-    List(target).flatMap(FileUtils.scanFunction(_)).map { function(_) }
+    List(target).flatMap(FileUtils.scanFunction(_)).map {
+      function(_)
+    }
   }
 
   def isDone(file: URI, suffix: String): Boolean = {
@@ -62,5 +71,15 @@ object FileUtils {
   def replaceExtension(source: URI, ext: String): URI = {
     new URI(source.getScheme, source.getHost,
       source.getPath.replaceAll("\\.[\\d\\w]+$", ".%s".format(ext)), null)
+  }
+
+  def numLine(file: URI): Int = {
+    val result: String = ("wc -l %s".format(new File(file).getAbsolutePath)) !!;
+    result.split("\\s+")(0).toInt
+  }
+
+  def numNonEmptyLine(file: URI): Int = {
+    val result: String = ("grep -cve '^\\s*$' %s".format(new File(file).getAbsolutePath)) !!;
+    result.trim.toInt
   }
 }

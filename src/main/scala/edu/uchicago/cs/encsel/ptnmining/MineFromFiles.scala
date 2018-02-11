@@ -29,59 +29,48 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.MineColumn._
+import edu.uchicago.cs.encsel.ptnmining.MineSingleColumn.column
 import edu.uchicago.cs.encsel.ptnmining.matching.{GenRegexVisitor, RegexMatcher}
 import edu.uchicago.cs.encsel.ptnmining.persist.{JPAPatternPersistence, PatternWrapper}
 
 import scala.collection.JavaConverters._
 
-object MineFromFiles extends App {
-
-  //  mineSingleFile
-  mineAllFiles
-
-  def mineAllFiles: Unit = {
-    val start = args.length match {
-      case 0 => 0
-      case _ => args(0).toInt
-    }
-
-    val persist = new JPAPersistence
-
-    val loadcols = persist.em.createQuery("SELECT c FROM Column c where c.id >= :id AND c.dataType = :dt AND c.parentWrapper IS NULL", classOf[ColumnWrapper]).setParameter("id", start).setParameter("dt", DataType.STRING).getResultList
-
-    loadcols.asScala.foreach(column => {
-      val colid = column.id
-      val pattern = patternFromFile(column.colFile)
-      val valid = numChildren(pattern) > 0
-      if (valid) {
-        val subcols = split(column, pattern)
-        if (!subcols.isEmpty) {
-          persist.save(subcols)
-          // Also save the pattern
-          val ptnstr = RegexMatcher.genRegex(pattern)
-          JPAPatternPersistence.save(column, ptnstr)
-        }
-      }
-      val regex = new GenRegexVisitor
-      pattern.visit(regex)
-      println("%d:%s:%s".format(colid, valid, regex.get))
-    })
+object MineAllColumns extends App {
+  val start = args.length match {
+    case 0 => 0
+    case _ => args(0).toInt
   }
 
-  def mineSingleFile: Unit = {
-    val file = new File("/home/harper/pattern/test").toURI
-    val pattern = patternFromFile(file)
-    val valid = numChildren(pattern) > 0
-    val regex = new GenRegexVisitor
-    pattern.visit(regex)
-    println("%s:%s".format(regex.get, valid))
-    if (valid) {
-      val col = new Column(null, -1, "demo", DataType.STRING)
-      col.colFile = file
-      val subcols = MineColumn.split(col, pattern)
-      println(subcols.size)
-    }
-  }
+  val persist = new JPAPersistence
 
+  val loadcols = persist.em.createQuery("SELECT c FROM Column c where c.id >= :id AND c.dataType = :dt AND c.parentWrapper IS NULL", classOf[ColumnWrapper]).setParameter("id", start).setParameter("dt", DataType.STRING).getResultList
+
+  loadcols.asScala.foreach(col => {
+    val result = mineColumn(col)
+    println("%d:%s:%s".format(result._1, result._2, result._3))
+  })
 }
 
+object MineSingleColumn extends App {
+  val colid = args(0).toInt
+  val column = new JPAPersistence().find(colid)
+
+  val result = mineColumn(column)
+  println("%d:%s:%s".format(result._1, result._2, result._3))
+}
+
+object MineSingleLocalFile extends App {
+  val file = new File("/home/harper/pattern/test").toURI
+  val pattern = patternFromFile(file)
+  val numc = numChildren(pattern)
+  val valid = numc > 1 && numc <= MAX_COLUMN
+  val regex = new GenRegexVisitor
+  pattern.visit(regex)
+  println("%s:%s".format(regex.get, valid))
+  if (valid) {
+    val col = new Column(null, -1, "demo", DataType.STRING)
+    col.colFile = file
+    val subcols = MineColumn.split(col, pattern)
+    println(subcols.size)
+  }
+}

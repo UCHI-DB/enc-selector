@@ -24,6 +24,7 @@
 package edu.uchicago.cs.encsel.ptnmining
 
 import java.io.File
+import javax.persistence.NoResultException
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
@@ -57,42 +58,32 @@ object MineFixer extends App {
       .setParameter("dt", DataType.STRING).getResultList
 
     loadcols.asScala.foreach(column => {
-
-      // Persist pattern
-      val pattern = MineColumn.patternFromFile(column.colFile)
-      JPAPatternPersistence.save(column, RegexMatcher.genRegex(pattern))
       // Check the unmatched file size, if non-zero, perform a rematch
-      val children = getChildren(column)
-      if (children.nonEmpty) {
-        val unmatch = children.find(_.colIndex == -1)
-
-        unmatch match {
-          case None => println("[Error] column %d has no unmatch".format(column.id))
-          case Some(umcol) => {
-            val numUnmatch = StatUtils.numLine(umcol)
-            if (numUnmatch != 0) {
-              println("[Info ] column %d has error %d, regenerating".format(column.id, numUnmatch))
-              removeChildren(children)
-              val splitResult = MineColumn.split(column, pattern)
-              persist.save(splitResult)
-            }
+      getUnmatch(column) match {
+        case Some(unmatch) => {
+          val numUnmatch = FileUtils.numLine(unmatch.colFile)
+          if (numUnmatch != 0) {
+            println("[Info ] column %d has error %d, regenerating".format(column.id, numUnmatch))
+            mineColumn(column)
           }
+        }
+        case _ => {
+          println("[Error] column %d has no unmatch".format(column.id))
         }
       }
     })
   }
 
-  def getChildren(col: Column): Seq[Column] = {
-    val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"
-    persist.em.createQuery(sql, classOf[ColumnWrapper]).setParameter("parent", col).getResultList.asScala
+  def getUnmatch(col: Column): Option[Column] = {
+    val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent AND c.idx = :idx"
+    try {
+      Some(persist.em.createQuery(sql, classOf[ColumnWrapper])
+        .setParameter("parent", col)
+        .setParameter("idx", -1)
+        .getSingleResult)
+    } catch {
+      case e: NoResultException => None
+    }
   }
 
-  def removeChildren(cols: Iterable[Column]): Unit = {
-    persist.em.getTransaction.begin()
-    cols.foreach(c => {
-      new File(c.colFile).delete()
-      persist.em.remove(c)
-    })
-    persist.em.getTransaction.commit()
-  }
 }
