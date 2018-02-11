@@ -32,9 +32,9 @@ class CommonSeqTest {
     //noinspection ZeroIndexToHead
     assertEquals((0, 3, 4), commons(0))
     assertEquals((5, 8, 1), commons(1))
-    assertEquals((7, 10, 1), commons(2))
-    assertEquals((9, 12, 1), commons(3))
-    assertEquals((11, 14, 10), commons(4))
+    assertEquals((8, 10, 1), commons(2))
+    assertEquals((10, 12, 1), commons(3))
+    assertEquals((12, 14, 10), commons(4))
   }
 
   @Test
