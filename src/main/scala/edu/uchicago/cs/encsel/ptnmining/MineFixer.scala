@@ -75,7 +75,7 @@ object MineFixer extends App {
   }
 
   def getUnmatch(col: Column): Option[Column] = {
-    val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent AND c.idx = :idx"
+    val sql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent AND c.colIndex = :idx"
     try {
       Some(persist.em.createQuery(sql, classOf[ColumnWrapper])
         .setParameter("parent", col)
