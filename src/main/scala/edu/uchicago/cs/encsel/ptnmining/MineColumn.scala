@@ -207,20 +207,11 @@ object MineColumn {
       }
       case dany: PDoubleAny => DataType.DOUBLE
       case union: PUnion => {
-        if (union.content.size == 2 && union.content.contains(PEmpty)) {
-          union.content.filter(_ != PEmpty).head match {
-            case t: PToken => {
-              if (t.token.isInstanceOf[TSymbol])
-                DataType.BOOLEAN
-              else
-                typeof(t)
-            }
-            case o => {
-              typeof(o)
-            }
-          }
-        }
-        else
+        if (isSymbol(union)) {
+          DataType.BOOLEAN
+        } else if (union.content.size == 2 && union.content.contains(PEmpty)) {
+          typeof(union.content.filter(_ != PEmpty).head)
+        } else
           DataType.STRING
       }
       case _ => DataType.STRING

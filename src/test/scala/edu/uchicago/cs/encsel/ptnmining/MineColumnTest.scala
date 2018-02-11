@@ -107,16 +107,16 @@ class MineColumnTest {
 
     assertEquals(DataType.STRING, subcolumns(0).dataType)
     assertEquals(DataType.STRING, subcolumns(1).dataType)
-    assertEquals(DataType.STRING, subcolumns(2).dataType)
+    assertEquals(DataType.BOOLEAN, subcolumns(2).dataType)
     assertEquals(DataType.INTEGER, subcolumns(3).dataType)
-    assertEquals(DataType.STRING, subcolumns(4).dataType)
+    assertEquals(DataType.BOOLEAN, subcolumns(4).dataType)
     assertEquals(DataType.INTEGER, subcolumns(5).dataType)
-    assertEquals(DataType.STRING, subcolumns(6).dataType)
+    assertEquals(DataType.BOOLEAN, subcolumns(6).dataType)
     assertEquals(DataType.INTEGER, subcolumns(7).dataType)
     assertEquals(DataType.STRING, subcolumns(8).dataType)
 
     (0 to 7).foreach(i =>
-      FileAssert.assertEquals(new File("src/test/resource/colsplit/realdata1col/realdata1.%d".format(i)),
+      FileAssert.assertEquals(i.toString, new File("src/test/resource/colsplit/realdata1col/realdata1.%d".format(i)),
         new File("src/test/resource/colsplit/realdata1.%d".format(i)))
     )
     FileAssert.assertEquals(new File("src/test/resource/colsplit/realdata1col/realdata1.unmatch"),
@@ -167,6 +167,9 @@ class MineColumnTest {
   def testTypeOf: Unit = {
     val pattern = PUnion.collect(PEmpty, new PIntAny(5, true))
     assertEquals(DataType.INTEGER, MineColumn.typeof(pattern))
+
+    val pattern2 = PUnion.collect(PEmpty, new PToken(new TSymbol("-")))
+    assertEquals(DataType.BOOLEAN, MineColumn.typeof(pattern2))
   }
 
   @Test
