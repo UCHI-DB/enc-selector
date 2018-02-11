@@ -30,7 +30,8 @@ import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.MineColumn._
 import edu.uchicago.cs.encsel.ptnmining.analysis.StatUtils
-import edu.uchicago.cs.encsel.ptnmining.matching.GenRegexVisitor
+import edu.uchicago.cs.encsel.ptnmining.matching.{GenRegexVisitor, RegexMatcher}
+import edu.uchicago.cs.encsel.ptnmining.persist.JPAPatternPersistence
 import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
@@ -56,6 +57,10 @@ object MineFixer extends App {
       .setParameter("dt", DataType.STRING).getResultList
 
     loadcols.asScala.foreach(column => {
+
+      // Persist pattern
+      val pattern = MineColumn.patternFromFile(column.colFile)
+      JPAPatternPersistence.save(column, RegexMatcher.genRegex(pattern))
       // Check the unmatched file size, if non-zero, perform a rematch
       val children = getChildren(column)
       if (children.nonEmpty) {
@@ -68,7 +73,6 @@ object MineFixer extends App {
             if (numUnmatch != 0) {
               println("[Info ] column %d has error %d, regenerating".format(column.id, numUnmatch))
               removeChildren(children)
-              val pattern = MineColumn.patternFromFile(column.colFile)
               val splitResult = MineColumn.split(column, pattern)
               persist.save(splitResult)
             }
