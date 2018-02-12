@@ -80,4 +80,46 @@ class EncFileSizeTest {
     assertEquals(new File("src/test/resource/coldata/test_col_double.data.DICT").length(), fa(1).value, 0.001)
 
   }
+
+  @Test
+  def testExtractString:Unit = {
+    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.STRING)
+    col.colFile = new File("src/test/resource/coldata/test_col_str.data").toURI
+
+    val feature = ParquetEncFileSize.extract(col)
+    assertEquals(4, feature.size)
+    val fa = feature.toArray
+
+    assertTrue(fa(0).featureType.equals("EncFileSize"))
+    assertEquals("PLAIN_file_size", fa(0).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_str.data.PLAIN").length(), fa(0).value, 0.001)
+
+    assertTrue(fa(1).featureType.equals("EncFileSize"))
+    assertEquals("DICT_file_size", fa(1).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_str.data.DICT").length(), fa(1).value, 0.001)
+
+    assertTrue(fa(2).featureType.equals("EncFileSize"))
+    assertEquals("DELTA_file_size", fa(2).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_str.data.DELTA").length(), fa(2).value, 0.001)
+
+    assertTrue(fa(3).featureType.equals("EncFileSize"))
+    assertEquals("DELTAL_file_size", fa(3).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_str.data.DELTAL").length(), fa(3).value, 0.001)
+
+  }
+
+  @Test
+  def testExtractBoolean:Unit = {
+    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.BOOLEAN)
+    col.colFile = new File("src/test/resource/coldata/test_col_boolean.data").toURI
+
+    val feature = ParquetEncFileSize.extract(col)
+    assertEquals(1, feature.size)
+    val fa = feature.toArray
+
+    assertTrue(fa(0).featureType.equals("EncFileSize"))
+    assertEquals("PLAIN_file_size", fa(0).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_boolean.data.PLAIN").length(), fa(0).value, 0.001)
+
+  }
 }

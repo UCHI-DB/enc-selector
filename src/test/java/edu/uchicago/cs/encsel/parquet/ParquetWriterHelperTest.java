@@ -123,4 +123,13 @@ public class ParquetWriterHelperTest {
     public void testDetermineBitLength() {
         assertEquals(13, ParquetWriterHelper.scanIntBitLength(new File("src/test/resource/coldata/bitlength_test").toURI()));
     }
+
+    @Test
+    public void testEncodeBoolean() throws IOException {
+        String file = "src/test/resource/coldata/test_col_boolean.data";
+
+        ParquetWriterHelper.singleColumnBoolean(new File(file).toURI());
+        assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_boolean.data.PLAIN")));
+
+    }
 }

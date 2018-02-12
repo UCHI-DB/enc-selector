@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.dataset.feature.Features
+import edu.uchicago.cs.encsel.dataset.feature.{Features, ParquetEncFileSize}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model._
@@ -35,10 +35,9 @@ object EncodeSubColumn extends App {
 
   val persist = new JPAPersistence
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL", classOf[ColumnWrapper]).getResultList.asScala
-
   columns.foreach(colw => {
     println(colw.id)
-    colw.features.asScala ++= Features.extract(colw)
+    colw.features.asScala ++= ParquetEncFileSize.extract(colw)
     persist.save(Seq(colw))
   })
 }

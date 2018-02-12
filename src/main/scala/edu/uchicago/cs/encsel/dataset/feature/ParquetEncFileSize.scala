@@ -107,7 +107,9 @@ object ParquetEncFileSize extends FeatureExtractor {
         }
         }.filter(_ != null)
       }
-      case DataType.BOOLEAN => Iterable[Feature]() // Ignore BOOLEAN type
+      case DataType.BOOLEAN =>
+        val f = ParquetWriterHelper.singleColumnBoolean(col.colFile)
+        Iterable(new Feature(fType, "PLAIN_file_size", new File(f).length))
     }
   }
 

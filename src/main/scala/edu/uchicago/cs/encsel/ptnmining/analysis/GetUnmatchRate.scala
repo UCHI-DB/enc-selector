@@ -43,9 +43,7 @@ object GetUnmatchRate extends App {
     val originalSize = FileUtils.numLine(col.colFile)
     val unmatchSize = FileUtils.numLine(getUnmatchChild(col).colFile)
     val ratio = unmatchSize.toDouble / originalSize
-    if (ratio > 0.3) {
-      unmatchRecord.println(col.id, ratio)
-    }
+    unmatchRecord.println("%s,%f".format(col.id, ratio));
   })
 
   unmatchRecord.close

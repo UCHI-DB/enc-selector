@@ -126,7 +126,7 @@ public class ParquetWriterHelper {
     }
 
     public static URI singleColumnBoolean(URI input) throws IOException {
-        File output = genOutput(input, "BOOLEAN");
+        File output = genOutput(input, "PLAIN");
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
