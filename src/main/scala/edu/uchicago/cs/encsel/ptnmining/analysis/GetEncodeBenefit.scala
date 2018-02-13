@@ -26,7 +26,6 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.MineFixer.persist
 
 import scala.collection.JavaConverters._
 
@@ -35,13 +34,17 @@ object GetEncodeBenefit extends App {
 
   val persist = new JPAPersistence
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
-
   columns.foreach(col => {
     val originalSize = columnSize(col)
     val childrenSize = getChildren(col).map(columnSize).sum
-    println(childrenSize / originalSize)
+    if (originalSize > 0 && childrenSize > 0) {
+      val ratio = childrenSize / originalSize;
+      if (ratio != 0) {
+        col.infos.put("subattr_benefit", ratio)
+        persist.save(Seq(col))
+      }
+    }
   })
-
 
   def getChildren(col: Column): Seq[Column] = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"
@@ -49,13 +52,10 @@ object GetEncodeBenefit extends App {
   }
 
   def columnSize(col: Column): Double = {
-    try {
-      col.findFeatures(ParquetEncFileSize.featureType).map(_.value).min
-    } catch {
-      case e: Exception => {
-        e.printStackTrace
-        0
-      }
+    val features = col.findFeatures(ParquetEncFileSize.featureType).map(_.value).filter(_ > 0)
+    features.size match {
+      case 0 => 0
+      case _ => features.min
     }
   }
 }

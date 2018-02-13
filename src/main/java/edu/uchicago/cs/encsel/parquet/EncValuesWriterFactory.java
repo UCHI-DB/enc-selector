@@ -30,6 +30,7 @@ import org.apache.parquet.column.values.bitpacking.BitPackingValuesWriter;
 import org.apache.parquet.column.values.bitpacking.ByteBitPackingValuesWriter;
 import org.apache.parquet.column.values.bitpacking.Packer;
 import org.apache.parquet.column.values.delta.DeltaBinaryPackingValuesWriterForInteger;
+import org.apache.parquet.column.values.delta.DeltaBinaryPackingValuesWriterForLong;
 import org.apache.parquet.column.values.deltalengthbytearray.DeltaLengthByteArrayValuesWriter;
 import org.apache.parquet.column.values.deltastrings.DeltaByteArrayWriter;
 import org.apache.parquet.column.values.dictionary.DictionaryValuesWriter;
@@ -40,6 +41,7 @@ import org.apache.parquet.column.values.rle.RunLengthBitPackingHybridValuesWrite
 
 import static org.apache.parquet.column.Encoding.PLAIN;
 import static org.apache.parquet.column.Encoding.RLE_DICTIONARY;
+import static org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.BOOLEAN;
 
 /**
  * This Factory reads information from ThreadLocal to choose encodings
@@ -68,6 +70,9 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
     public ValuesWriter newValuesWriter(ColumnDescriptor descriptor) {
         Encoding enc = EncContext.encoding.get().get(descriptor.toString());
         if (null == enc) {
+            if (descriptor.getType() == BOOLEAN) {
+                return getBooleanValuesWriter();
+            }
             return delegate.newValuesWriter(descriptor);
         }
         if (enc.usesDictionary()) {
@@ -85,7 +90,7 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
             case INT32:
                 return getInt32ValuesWriter(descriptor, enc);
             case INT64:
-                return getInt64ValuesWriter(descriptor);
+                return getInt64ValuesWriter(descriptor, enc);
             case INT96:
                 return getInt96ValuesWriter(descriptor);
             case DOUBLE:
@@ -149,8 +154,17 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
         }
     }
 
-    private ValuesWriter getInt64ValuesWriter(ColumnDescriptor path) {
-        return delegate.newValuesWriter(path);
+    private ValuesWriter getInt64ValuesWriter(ColumnDescriptor path, Encoding enc) {
+        switch (enc) {
+            case DELTA_BINARY_PACKED:
+                return new DeltaBinaryPackingValuesWriterForLong(parquetProperties.getInitialSlabSize(),
+                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+            case PLAIN:
+                return new PlainValuesWriter(parquetProperties.getInitialSlabSize(),
+                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+            default:
+                throw new IllegalArgumentException("Unsupported type " + path.getType());
+        }
     }
 
     private ValuesWriter getInt96ValuesWriter(ColumnDescriptor path) {

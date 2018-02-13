@@ -28,7 +28,6 @@ import java.util
 import edu.uchicago.cs.encsel.dataset.feature.Feature
 import edu.uchicago.cs.encsel.model.DataType
 
-import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
 
 class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
@@ -38,6 +37,7 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   var colFile: URI = _
   var dataType = dt
   var features: java.util.Set[Feature] = new util.HashSet[Feature]()
+  var infos: java.util.Map[String, Double] = new util.HashMap[String, Double]();
   private var _parent: Column = null
 
   def parent: Column = _parent
@@ -59,4 +59,6 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   }
 
   def hasFeature(t: String): Boolean = features.asScala.exists(f => f.featureType.equals(t))
+
+  def getInfo(n: String): Double = infos.getOrDefault(n, Double.MinValue)
 }

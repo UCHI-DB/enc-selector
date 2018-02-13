@@ -75,6 +75,16 @@
                 </collection-table>
                 <batch-fetch type="JOIN"/>
             </element-collection>
+
+            <element-collection name="infos" fetch="LAZY" target-class="java.lang.String">
+                <map-key-column name="name"/>
+                <column name="value"/>
+                <collection-table name="col_info">
+                    <join-column name="col_id"/>
+                </collection-table>
+                <batch-fetch type="JOIN"/>
+            </element-collection>
+
         </attributes>
 
     </entity>

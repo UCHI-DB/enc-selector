@@ -1,13 +1,10 @@
 package edu.uchicago.cs.encsel.dataset.persist.jpa
 
 import java.io.File
-import java.util.ArrayList
-import javax.persistence.PersistenceException
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
 import edu.uchicago.cs.encsel.model.DataType
-import org.eclipse.persistence.exceptions.DatabaseException
 import org.junit.Assert._
 import org.junit.{Before, Test}
 
@@ -148,7 +145,15 @@ class JPAPersistenceTest {
   }
 
   @Test
-  def testClean: Unit = {
+  def testGetInfo: Unit = {
+    val jpa = new JPAPersistence
+    val col = jpa.find(20)
+    col.infos.put("abc", 12312.52)
 
+    jpa.save(Seq(col))
+
+    val col2 = jpa.find(20)
+    assertEquals(12312.52, col.getInfo("abc"), 0.01);
   }
+
 }

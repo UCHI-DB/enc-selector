@@ -37,6 +37,7 @@ trait Persistence {
   def lookup(dataType: DataType): Iterator[Column]
 
   def clean()
+
 }
 
 object Persistence {
