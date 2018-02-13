@@ -22,19 +22,14 @@
 
 package edu.uchicago.cs.encsel.ptnmining.analysis
 
-import java.io.{FileOutputStream, PrintWriter}
-
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.analysis.GetEncodeBenefit.persist
 import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
 
 object GetUnmatchRate extends App {
-
-  val unmatchRecord = new PrintWriter(new FileOutputStream("high_unmatch"))
 
   val persist = new JPAPersistence
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
@@ -43,10 +38,11 @@ object GetUnmatchRate extends App {
     val originalSize = FileUtils.numLine(col.colFile)
     val unmatchSize = FileUtils.numLine(getUnmatchChild(col).colFile)
     val ratio = unmatchSize.toDouble / originalSize
-    unmatchRecord.println("%s,%f".format(col.id, ratio));
+    if (ratio != 0) {
+      col.infos.put("unmatch_ratio", ratio)
+      persist.save(Seq(col))
+    }
   })
-
-  unmatchRecord.close
 
   def getUnmatchChild(col: Column): Column = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent AND c.colIndex = -1"

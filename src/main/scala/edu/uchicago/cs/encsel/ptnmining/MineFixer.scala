@@ -23,16 +23,12 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import java.io.File
 import javax.persistence.NoResultException
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.MineColumn._
-import edu.uchicago.cs.encsel.ptnmining.analysis.StatUtils
-import edu.uchicago.cs.encsel.ptnmining.matching.{GenRegexVisitor, RegexMatcher}
-import edu.uchicago.cs.encsel.ptnmining.persist.JPAPatternPersistence
 import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
@@ -43,7 +39,6 @@ import scala.collection.JavaConverters._
   */
 object MineFixer extends App {
 
-  val MAX_ID = 19535
   val persist = new JPAPersistence
 
   mineAllError
@@ -86,4 +81,14 @@ object MineFixer extends App {
     }
   }
 
+  // Some (most) integer columns was encoded as long and will not be well encoded,
+  // Find them and fix them
+  def retypeColumnAndEncode: Unit = {
+    val potColumns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND c.parentWrapper IS NOT NULL")
+      .setParameter("dt", DataType.LONG).getResultList.asScala
+
+    potColumns.foreach(col => {
+
+    })
+  }
 }
