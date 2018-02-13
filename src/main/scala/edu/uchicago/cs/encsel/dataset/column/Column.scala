@@ -58,6 +58,13 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
     features.asScala.filter(_.featureType.equals(t))
   }
 
+  def replaceFeatures(fs: Iterable[Feature]) = {
+    fs.foreach(f => {
+      features.remove(f)
+      features.add(f)
+    })
+  }
+
   def hasFeature(t: String): Boolean = features.asScala.exists(f => f.featureType.equals(t))
 
   def getInfo(n: String): Double = infos.getOrDefault(n, Double.MinValue)
