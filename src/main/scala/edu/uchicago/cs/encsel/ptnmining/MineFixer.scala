@@ -26,12 +26,14 @@ package edu.uchicago.cs.encsel.ptnmining
 import javax.persistence.NoResultException
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.ptnmining.MineColumn._
 import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
+import scala.io.Source
 
 /**
   * This tool is used to mine from columns that were missing before
@@ -41,7 +43,7 @@ object MineFixer extends App {
 
   val persist = new JPAPersistence
 
-  mineAllError
+  retypeColumnAndEncode
 
   def mineAllError: Unit = {
     val start = args.length match {
@@ -84,11 +86,22 @@ object MineFixer extends App {
   // Some (most) integer columns was encoded as long and will not be well encoded,
   // Find them and fix them
   def retypeColumnAndEncode: Unit = {
-    val potColumns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND c.parentWrapper IS NOT NULL")
+    val potColumns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND c.parentWrapper IS NOT NULL", classOf[ColumnWrapper])
       .setParameter("dt", DataType.LONG).getResultList.asScala
 
     potColumns.foreach(col => {
-
+      val source = Source.fromFile(col.colFile)
+      val hasLong = source.getLines().filter(!_.isEmpty).exists(line => {
+        val bint = BigInt(line)
+        bint.toInt != bint.toLong
+      })
+      source.close()
+      if (!hasLong) {
+        println(col.id)
+        col.dataType = DataType.INTEGER
+        col.replaceFeatures(ParquetEncFileSize.extract(col))
+        persist.save(Seq(col))
+      }
     })
   }
 }

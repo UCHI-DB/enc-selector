@@ -29,14 +29,13 @@ import java.net.URI
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.ptnmining.analysis.StatUtils
 import edu.uchicago.cs.encsel.ptnmining.matching.RegexMatcher
 import edu.uchicago.cs.encsel.ptnmining.parser.{TSymbol, Tokenizer}
 import edu.uchicago.cs.encsel.ptnmining.persist.JPAPatternPersistence
 import edu.uchicago.cs.encsel.util.FileUtils
 
-import scala.io.Source
 import scala.collection.JavaConverters._
+import scala.io.Source
 import scala.util.Random
 
 object MineColumn {
@@ -132,18 +131,19 @@ object MineColumn {
           case any: PAny => Some(any)
           case _ => None
         })
-        val childColumns = colPatterns.zipWithIndex.map(pi => {
-          val col = new Column(null, pi._2, String.valueOf(pi._2), typeof(pi._1))
-          col.colFile = FileUtils.addExtension(column.colFile, pi._2.toString)
-          col.parent = column
-          col
-        }).toList
+
+        val colTypes = colPatterns.map(p => {
+          typeof(p)
+        })
+
+
         // columns for unmatched lines
         val unmatchCol = new Column(null, -1, "unmatch", DataType.STRING)
         unmatchCol.colFile = FileUtils.addExtension(column.colFile, "unmatch")
         unmatchCol.parent = column
 
-        val outputs = childColumns.map(col => new PrintWriter(new FileOutputStream(new File(col.colFile))))
+        val outputs = colPatterns.indices.map(i =>
+          new PrintWriter(new FileOutputStream(new File(FileUtils.addExtension(column.colFile, i.toString)))))
         val umoutput = new PrintWriter(new FileOutputStream(new File(unmatchCol.colFile)))
 
         val source = Source.fromFile(column.colFile)
@@ -155,17 +155,19 @@ object MineColumn {
               if (matched.isDefined) {
                 colPatterns.indices.foreach(i => {
                   val ptn = colPatterns(i)
-                  val col = childColumns(i)
-                  col.dataType match {
+                  colTypes(i) match {
                     case DataType.INTEGER | DataType.LONG => {
                       val value = matched.get.get(ptn.name)
                       if (value.isEmpty) {
                         outputs(i).println("")
                       } else {
+                        val value = matched.get.get(ptn.name)
                         val iany = ptn.asInstanceOf[PIntAny]
-                        outputs(i).println(
-                          BigInt(matched.get.get(ptn.name), if (iany.hasHex) 16 else 10).toString
-                        )
+                        val int = BigInt(value, if(iany.hasHex) 16 else 10)
+                        if(int.toInt != int.toLong && colTypes(i) == DataType.INTEGER) {
+                          colTypes(i) = DataType.LONG
+                        }
+                        outputs(i).println(int.toString)
                       }
                     }
                     case DataType.BOOLEAN => {
@@ -186,6 +188,13 @@ object MineColumn {
               outputs.foreach(_.println(""))
             }
           })
+          val childColumns = colPatterns.zipWithIndex.map(pi => {
+            val col = new Column(null, pi._2, String.valueOf(pi._2), colTypes(pi._2))
+            col.colFile = FileUtils.addExtension(column.colFile, pi._2.toString)
+            col.parent = column
+            col
+          })
+
           childColumns :+ unmatchCol
         } finally {
           source.close
@@ -199,12 +208,7 @@ object MineColumn {
 
   def typeof(pattern: Pattern): DataType = {
     pattern match {
-      case iany: PIntAny => {
-        if (iany.maxLength < 0 || (iany.hasHex && iany.maxLength > 8) || (!iany.hasHex && iany.maxLength > 9))
-          DataType.LONG
-        else
-          DataType.INTEGER
-      }
+      case iany: PIntAny => DataType.INTEGER
       case dany: PDoubleAny => DataType.DOUBLE
       case union: PUnion => {
         if (isSymbol(union)) {
