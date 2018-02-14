@@ -134,7 +134,7 @@ object MineColumn {
 
         val colTypes = colPatterns.map(p => {
           typeof(p)
-        })
+        }).toArray
 
 
         // columns for unmatched lines
