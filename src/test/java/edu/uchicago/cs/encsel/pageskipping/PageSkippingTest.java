@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import edu.uchicago.cs.encsel.parquet.OffheapReadSopport;
 import edu.uchicago.cs.encsel.perf.Profiler;
-import edu.uchicago.cs.encsel.query.offheap.EqualInt;
+import edu.uchicago.cs.encsel.query.offheap.EqualScalar;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.format.converter.ParquetMetadataConverter;
@@ -438,7 +438,7 @@ public class PageSkippingTest {
 			//System.out.println("rowgroupID: "+i);
 			ColumnReaderImpl columnReader = new ColumnReaderImpl(descriptor, columnChunkPageReader, converter, VersionParser.parse(Version.FULL_VERSION));
 
-			EqualInt equalint = new EqualInt(1, 17);
+			EqualScalar equalScalar = new EqualScalar(65486, 17, true);
 
 			//columnReader.consume();
 			System.out.println("getReadValue:" + columnReader.getReadValue());
@@ -463,7 +463,7 @@ public class PageSkippingTest {
 				//  65486 => 1
 
 				System.out.println(offheapinf.getOffset()+" ----  "+offheapinf.getValueCount()+"dictionary:"+ offheapinf.getDictionary().getMaxId());
-				System.out.println(equalint.execute(offheapinf.getBytes(), offheapinf.getOffset(), offheapinf.getValueCount()).toString());
+				System.out.println(equalScalar.execute(offheapinf.getBytes(), offheapinf.getOffset(), offheapinf.getValueCount()).toString());
 				columnReader.consume();
 			}
 			if(columnReader.getReadValue()>=pageReaders.getRowCount()) {

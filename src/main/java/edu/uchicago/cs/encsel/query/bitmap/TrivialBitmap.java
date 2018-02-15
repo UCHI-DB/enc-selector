@@ -38,6 +38,7 @@ public class TrivialBitmap implements Bitmap {
 
     @Override
     public void set(long index, boolean value) {
+        //TODO what if value is flase
         int li = (int) (index / 64);
         int offset = (int) (index % 64);
 

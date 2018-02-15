@@ -56,8 +56,8 @@ object LoadTPCH extends App {
 object LoadTPCH4Offheap extends App {
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.BIT_PACKED)
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("6", "50"))
-  ParquetWriterHelper.write(new File("/home/harper/TPCH/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
-    new File("/home/harper/TPCH/offheap/lineitem.parquet").toURI, "\\|", false)
+  ParquetWriterHelper.write(new File("/Users/chunwei/research/tpch/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
+    new File("/Users/chunwei/research/tpch/offheap/lineitem.parquet").toURI, "\\|", false)
 }
 
 object SelectLineitem extends App {

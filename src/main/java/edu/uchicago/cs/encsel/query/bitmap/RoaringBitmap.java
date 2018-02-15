@@ -35,6 +35,8 @@ public class RoaringBitmap implements Bitmap {
     public void set(long index, boolean value) {
         if (value)
             roaring.add(index);
+        else
+            roaring.removeLong(index);
     }
 
     @Override
