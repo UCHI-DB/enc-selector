@@ -21,61 +21,58 @@ object DatasetCategorier extends App {
 
   cols.foreach(col => {
     if (col.origin.toString.contains("argonne")) {
-      map.getOrElse("NationalLab", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("NationalLab", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("uci")) {
-      map.getOrElse("Machine Learning", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Machine Learning", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("gis")) {
-      map.getOrElse("GIS", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("GIS", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("bike")) {
-      map.getOrElse("GIS", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("GIS", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("bike")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("taxi")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("911")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Government", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("311")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
-    } else if (col.origin.toString.contains("311")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Government", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("tree")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Government", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("tax")) {
-      map.getOrElse("Financial", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Financial", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("payment")) {
-      map.getOrElse("Financial", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Financial", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("permit")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Government", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("fire")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Government", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("vem")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("parking")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("mv")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("pv")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("speed")) {
-      map.getOrElse("Traffic", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Traffic", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("yelp")) {
-      map.getOrElse("Social Network", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Social Network", new ArrayBuffer[Column]) += col
     } else if (col.origin.toString.contains("dp")) {
-      map.getOrElse("Government", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Government", new ArrayBuffer[Column]) += col
     } else {
-      map.getOrElse("Other", new ArrayBuffer[Column]) += col
+      map.getOrElseUpdate("Other", new ArrayBuffer[Column]) += col
     }
   })
 
   map.foreach(stat)
 
 
-
   // Number of tables, number of columns, raw data size
   def stat(entry: (String, Seq[Column])): Unit = {
-    val numTables = cols.map(_.origin.toString).toSet.size
-    val numColumns = cols.size
-    val rawDataSize = cols.map(_.origin.toString).distinct.map(str => new File(str).length).sum
+    val numTables = entry._2.map(_.origin.toString).toSet.size
+    val numColumns = entry._2.size
+    val rawDataSize = entry._2.map(_.origin.toString).distinct.map(str => new File(str).length).sum
 
     println("%s & %d, %d, %d".format(entry._1, numTables, numColumns, rawDataSize))
   }
