@@ -70,11 +70,12 @@ object DatasetCategorier extends App {
   map.foreach(stat)
 
 
+
   // Number of tables, number of columns, raw data size
   def stat(entry: (String, Seq[Column])): Unit = {
     val numTables = cols.map(_.origin.toString).toSet.size
     val numColumns = cols.size
-    val rawDataSize = cols.map(_.origin.toString).toSet.map(new File(_).length()).sum
+    val rawDataSize = cols.map(_.origin.toString).distinct.map(str => new File(str).length).sum
 
     println("%s & %d, %d, %d".format(entry._1, numTables, numColumns, rawDataSize))
   }
