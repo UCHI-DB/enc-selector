@@ -1,6 +1,7 @@
 package edu.uchicago.cs.encsel.report
 
 import java.io.File
+import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
@@ -72,7 +73,7 @@ object DatasetCategorier extends App {
   def stat(entry: (String, Seq[Column])): Unit = {
     val numTables = entry._2.map(_.origin.toString).toSet.size
     val numColumns = entry._2.size
-    val rawDataSize = entry._2.map(_.origin.toString).distinct.map(str => new File(str).length).sum
+    val rawDataSize = entry._2.map(_.origin.toString).distinct.map(str => new File(new URI(str)).length).sum
 
     println("%s & %d, %d, %d".format(entry._1, numTables, numColumns, rawDataSize))
   }
