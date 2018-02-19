@@ -1,0 +1,15 @@
+edu/uchicago/cs/encsel/pageskipping/PageSkippingTest$1.class
+edu/uchicago/cs/encsel/query/bitmap/RoaringBitmapTest.class
+edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest$2.class
+edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest$3.class
+edu/uchicago/cs/encsel/query/bitmap/TrivialBitmapTest.class
+edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.class
+edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest$1.class
+edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest$2.class
+edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.class
+edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.class
+edu/uchicago/cs/encsel/parquet/EncReaderProcessorTest$1.class
+edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest$1.class
+edu/uchicago/cs/encsel/pageskipping/PageSkippingTest$ValidatingConverter.class
+edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest$ValidatingConverter.class
+edu/uchicago/cs/encsel/parquet/EncReaderProcessorTest.class

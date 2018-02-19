@@ -242,7 +242,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -323,7 +323,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -393,7 +393,7 @@ public class PageSkippingTest {
 		System.out.println("bitmaponheap\t"+profiler.usersum()+"\t"+profiler.cpusum()+"\t"+profiler.wcsum());
 	}
 
-	@Test
+	/*@Test
 	public void testFilterSkippingOffheap() throws Exception{
 		//TODO Initialize new filter
 		int predvalue = 1;
@@ -407,7 +407,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -454,12 +454,7 @@ public class PageSkippingTest {
 				System.out.println("getReadValue:"+columnReader.getReadValue());
 				System.out.println("getPageValueCount:"+columnReader.getPageValueCount());
 				OffheapReadSopport offheapinf= columnReader.getoffheapSupport();
-				/*for(int dic = 0; dic < offheapinf.getDictionary().getMaxId(); dic++){
-					if (offheapinf.getDictionary().decodeToInt(dic) == predvalue){
-						System.out.println("encoded value: "+ dic);
-						break;
-					}
-				}*/
+				
 				//  65486 => 1
 
 				System.out.println(offheapinf.getOffset()+" ----  "+offheapinf.getValueCount()+"dictionary:"+ offheapinf.getDictionary().getMaxId());
@@ -495,7 +490,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -539,12 +534,7 @@ public class PageSkippingTest {
 				System.out.println("getReadValue:"+columnReader.getReadValue());
 				System.out.println("getPageValueCount:"+columnReader.getPageValueCount());
 				OffheapReadSopport offheapinf= columnReader.getoffheapSupport();
-				/*for(int dic = 0; dic < offheapinf.getDictionary().getMaxId(); dic++){
-					if (offheapinf.getDictionary().decodeToInt(dic) == predvalue){
-						System.out.println("encoded value: "+ dic);
-						break;
-					}
-				}*/
+				
 				//  65486 => 1
 
 				System.out.println(offheapinf.getOffset()+" ----  "+offheapinf.getValueCount()+"dictionary:"+ offheapinf.getDictionary().getMaxId());
@@ -566,5 +556,5 @@ public class PageSkippingTest {
 		System.out.println("user:"+profiler.usersum()+", CPUsum:"+profiler.cpusum()+", wcsum:"+profiler.wcsum());
 		System.out.println("bitmapoffheap\t"+profiler.usersum()+"\t"+profiler.cpusum()+"\t"+profiler.wcsum());
 
-	}
+	}*/
 }
