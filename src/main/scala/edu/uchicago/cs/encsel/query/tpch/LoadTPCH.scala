@@ -38,7 +38,7 @@ import scala.collection.JavaConversions._
 object LoadTPCH extends App {
 
   //val folder = "/home/harper/TPCH/"
-  val folder = "/Users/chunwei/research/tpch/"
+  val folder = "/home/cc/tpch-generator/dbgen/"
   //  val folder = args(0)
   val inputsuffix = ".tbl"
   val outputsuffix = ".parquet"
@@ -56,14 +56,14 @@ object LoadTPCH extends App {
 object LoadTPCH4Offheap extends App {
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.BIT_PACKED)
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("6", "50"))
-  ParquetWriterHelper.write(new File("/Users/chunwei/research/tpch/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
-    new File("/Users/chunwei/research/tpch/offheap/lineitem.parquet").toURI, "\\|", false)
+  ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
 }
 
 object SelectLineitem extends App {
   val schema = TPCHSchema.lineitemOptSchema
   val start = System.currentTimeMillis()
-  ParquetReaderHelper.read(new File("/home/harper/TPCH/opt/lineitem.parquet").toURI, new EncReaderProcessor() {
+  ParquetReaderHelper.read(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, new EncReaderProcessor() {
 
     override def processRowGroup(version: VersionParser.ParsedVersion,
                                  meta: BlockMetaData, rowGroup: PageReadStore): Unit = {

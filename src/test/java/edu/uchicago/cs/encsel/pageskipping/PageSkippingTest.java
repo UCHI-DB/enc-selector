@@ -242,7 +242,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/Users/chunwei/research/tpch/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -263,7 +263,7 @@ public class PageSkippingTest {
 		profiler.mark();
 		while(pageReaders != null) {
 			//Use static method to set predicate filter
-			//ParquetFileReader.setColFilter(pageReaders, descriptor, pred);
+			ParquetFileReader.setColFilter(pageReaders, descriptor, pred);
 			//Use static method to set predicate filter
 			//ParquetFileReader.setColBitmap(pageReaders, descriptor, bitmap, 0);
 
@@ -323,7 +323,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/Users/chunwei/research/tpch/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -346,7 +346,7 @@ public class PageSkippingTest {
 			//Use static method to set predicate filter
 			//ParquetFileReader.setColFilter(pageReaders, descriptor, pred);
 			//Use static method to set predicate filter
-			//ParquetFileReader.setColBitmap(pageReaders, descriptor, bitmap, 0);
+			ParquetFileReader.setColBitmap(pageReaders, descriptor, bitmap, 0);
 
 			PageReader columnChunkPageReader = pageReaders.getPageReader(descriptor);
 			PrimitiveConverter converter = new ValidatingConverter();
@@ -381,7 +381,7 @@ public class PageSkippingTest {
 
 			}
 			if(columnReader.getReadValue()>=pageReaders.getRowCount()) {
-				System.out.println("End detected!");
+				System.out.println("End detected!"+"  Pageskipped"+ columnReader.getPageskipped());
 				pageReaders=fileReader.readNextRowGroup();
 				continue;
 			}
@@ -407,7 +407,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/Users/chunwei/research/tpch/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -495,7 +495,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/Users/chunwei/research/tpch/orders.parquet");
+		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});

@@ -9,6 +9,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.page.PageReadStore;
+import org.apache.parquet.filter2.compat.FilterCompat;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
@@ -63,6 +64,39 @@ public class ParquetReaderHelper {
             VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
 
             ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());
+            PageReadStore rowGroup = null;
+            int blockCounter = 0;
+            List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();
+            while ((rowGroup = fileReader.readNextRowGroup()) != null) {
+                BlockMetaData blockMeta = footer.getParquetMetadata().getBlocks().get(blockCounter);
+                profiler.mark();
+                processor.processRowGroup(version, blockMeta, rowGroup);
+                profiler.pause();
+                blockCounter++;
+            }
+        }
+        return profiler.stop();
+    }
+
+    public static ProfileBean filterProfile(URI file, FilterCompat.Filter filter, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {
+        Configuration conf = new Configuration();
+        Path path = new Path(file);
+        FileSystem fs = path.getFileSystem(conf);
+        List<FileStatus> statuses = Arrays.asList(fs.listStatus(path, HiddenFileFilter.INSTANCE));
+        List<Footer> footers = ParquetFileReader.readAllFootersInParallelUsingSummaryFiles(conf, statuses, false);
+        if (footers.isEmpty()) {
+            return null;
+        }
+
+        Profiler profiler = new Profiler();
+        for (Footer footer : footers) {
+            profiler.mark();
+            processor.processFooter(footer);
+            profiler.pause();
+            VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
+
+            ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());
+            fileReader.filterOutRow(filter);
             PageReadStore rowGroup = null;
             int blockCounter = 0;
             List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();

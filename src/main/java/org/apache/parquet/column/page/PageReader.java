@@ -46,4 +46,5 @@ public interface PageReader {
    * @return number of rows skipped
    */
   int checkSkipped();
+
 }

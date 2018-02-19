@@ -2,17 +2,20 @@
 <project version="4">
   <component name="BookmarkManager">
     <bookmark url="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" line="49" />
-    <bookmark url="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" line="532" />
+    <bookmark url="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" line="534" />
     <bookmark url="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" line="46" />
     <bookmark url="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" line="550" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="abb4bcca-2e50-4b34-8bd8-51cdd640cbee" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare-v2.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/RoaringBitmap.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/RoaringBitmap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmap.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare.scala" afterPath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/BitmapPageFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/BitmapPageFilter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/page/PageReader.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/page/PageReader.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" afterPath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" afterPath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" />
     </list>
@@ -26,108 +29,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PageSkippingTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-214">
-              <caret line="291" column="54" lean-forward="false" selection-start-line="291" selection-start-column="54" selection-end-line="291" selection-end-column="54" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#testBitmapPageSkipping#0;class#PageSkippingTest#0" expanded="false" />
-                <element signature="method#testPredPageSkipping#0;class#PageSkippingTest#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TPCHQueryTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="70" column="9" lean-forward="true" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+            <state relative-caret-position="-2519">
+              <caret line="44" column="21" lean-forward="true" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2175#2176#0" expanded="true" />
-                <element signature="e#2202#2203#0" expanded="true" />
-                <element signature="e#2612#2613#0" expanded="true" />
-                <element signature="e#2636#2637#0" expanded="true" />
-                <element signature="e#3768#6658#0" expanded="true" />
-                <element signature="e#5130#5138#0" expanded="true" />
-                <element signature="e#6657#6658#0" expanded="true" />
+                <element signature="e#2137#2138#0" expanded="true" />
+                <element signature="e#2164#2165#0" expanded="true" />
+                <element signature="e#2574#2575#0" expanded="true" />
+                <element signature="e#2598#2599#0" expanded="true" />
                 <element signature="method#testOriginOnheap#0;class#TPCHQueryTest#0" expanded="false" />
-                <element signature="e#7480#8163#0" expanded="true" />
-                <element signature="e#8162#8163#0" expanded="true" />
-                <element signature="method#testQ6Onheap#0;class#TPCHQueryTest#0" expanded="false" />
-                <element signature="e#9244#12134#0" expanded="true" />
-                <element signature="e#10606#10614#0" expanded="true" />
-                <element signature="e#12133#12134#0" expanded="true" />
+                <element signature="e#3469#4152#0" expanded="true" />
+                <element signature="e#4151#4152#0" expanded="true" />
+                <element signature="e#5923#8807#0" expanded="true" />
+                <element signature="e#7283#7291#0" expanded="true" />
+                <element signature="e#8806#8807#0" expanded="true" />
+                <element signature="e#10580#15867#0" expanded="true" />
+                <element signature="e#13127#13135#0" expanded="true" />
+                <element signature="e#15866#15867#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ParquetReaderHelper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
+      <file leaf-file-name="LoadTPCH.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LongConsumer.java" pinned="false" current-in-tab="false">
-        <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/util/function/LongConsumer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="48" column="9" lean-forward="false" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RoaringBitmap.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/RoaringBitmap.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="38" column="38" lean-forward="true" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="38" />
-              <folding>
-                <element signature="e#1358#1359#0" expanded="true" />
-                <element signature="e#1404#1405#0" expanded="true" />
-                <element signature="e#1468#1469#0" expanded="true" />
-                <element signature="e#1534#1535#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TrivialBitmapTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmapTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ColumnReaderImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="315" column="40" lean-forward="false" selection-start-line="315" selection-start-column="40" selection-end-line="315" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Select.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/operator/Select.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-874">
-              <caret line="64" column="6" lean-forward="false" selection-start-line="64" selection-start-column="6" selection-end-line="64" selection-end-column="6" />
+            <state relative-caret-position="323">
+              <caret line="58" column="60" lean-forward="false" selection-start-line="58" selection-start-column="60" selection-end-line="58" selection-end-column="60" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -135,21 +66,103 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BinaryPlainValuesReader.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/BinaryPlainValuesReader.java">
+      <file leaf-file-name="ParquetWriterHelper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="37" column="14" lean-forward="false" selection-start-line="37" selection-start-column="14" selection-end-line="37" selection-end-column="14" />
+            <state relative-caret-position="254">
+              <caret line="112" column="74" lean-forward="true" selection-start-line="112" selection-start-column="74" selection-end-line="112" selection-end-column="74" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Binary.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/io/api/Binary.java">
+      <file leaf-file-name="ParquetWriterBuilder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="588" column="22" lean-forward="false" selection-start-line="588" selection-start-column="16" selection-end-line="588" selection-end-column="22" />
+            <state relative-caret-position="370">
+              <caret line="92" column="66" lean-forward="false" selection-start-line="92" selection-start-column="66" selection-end-line="92" selection-end-column="66" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColumnReaderImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="558" column="30" lean-forward="false" selection-start-line="558" selection-start-column="30" selection-end-line="558" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#9508#9509#0" expanded="true" />
+                <element signature="e#9566#9567#0" expanded="true" />
+                <element signature="e#15783#15784#0" expanded="true" />
+                <element signature="e#15814#15815#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PageReader.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/page/PageReader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="358">
+              <caret line="47" column="16" lean-forward="false" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColumnChunkPageReadStore.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="253">
+              <caret line="138" column="18" lean-forward="false" selection-start-line="138" selection-start-column="18" selection-end-line="138" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#9106#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#2839#2840#0" expanded="true" />
+                <element signature="e#2868#2869#0" expanded="true" />
+                <element signature="e#2936#2937#0" expanded="true" />
+                <element signature="e#2981#2982#0" expanded="true" />
+                <element signature="e#3064#3065#0" expanded="true" />
+                <element signature="e#3084#3085#0" expanded="true" />
+                <element signature="e#3125#3126#0" expanded="true" />
+                <element signature="e#3152#3153#0" expanded="true" />
+                <element signature="e#3210#3211#0" expanded="true" />
+                <element signature="e#3232#3233#0" expanded="true" />
+                <element signature="e#3275#3276#0" expanded="true" />
+                <element signature="e#3306#3307#0" expanded="true" />
+                <element signature="e#4473#4474#0" expanded="true" />
+                <element signature="e#4504#4505#0" expanded="true" />
+                <element signature="e#7991#7992#0" expanded="true" />
+                <element signature="e#8013#8014#0" expanded="true" />
+                <element signature="e#8053#8054#0" expanded="true" />
+                <element signature="e#8083#8084#0" expanded="true" />
+                <element signature="e#8276#8317#0" expanded="true" />
+                <element signature="e#8402#8403#0" expanded="true" />
+                <element signature="e#8436#8437#0" expanded="true" />
+                <element signature="e#8479#8480#0" expanded="true" />
+                <element signature="e#8504#8505#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BitmapPageFilter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/BitmapPageFilter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="43" column="12" lean-forward="false" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StatisticsPageFilter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="75" column="6" lean-forward="false" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -159,10 +172,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cust_key</find>
-      <find>write</find>
-      <find>33130</find>
-      <find>PageValueCount</find>
       <find>getPageValueCount</find>
       <find>length</find>
       <find>encoded</find>
@@ -180,7 +189,19 @@
       <find>string</find>
       <find>writevalue</find>
       <find>cd1</find>
+      <find>got</find>
+      <find>setSkipped</find>
       <find>boole</find>
+      <find>readNextRowGroup</find>
+      <find>int</find>
+      <find>readpage</find>
+      <find>bit</find>
+      <find>dot</find>
+      <find>discount</find>
+      <find>tru</find>
+      <find>false</find>
+      <find>getSkipped</find>
+      <find>true</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -197,13 +218,19 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" />
         <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare-v2.scala" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/RoaringBitmap.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/page/PageReader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" />
+        <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/BitmapPageFilter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java" />
       </list>
     </option>
@@ -214,11 +241,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="1603" />
-    <option name="y" value="93" />
-    <option name="width" value="1440" />
-    <option name="height" value="805" />
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="width" value="716" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -298,6 +323,53 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="parquet" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="parquet" type="462c0819:PsiDirectoryNode" />
+              <item name="bytes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="parquet" type="462c0819:PsiDirectoryNode" />
+              <item name="column" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="parquet" type="462c0819:PsiDirectoryNode" />
+              <item name="column" type="462c0819:PsiDirectoryNode" />
+              <item name="impl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="parquet" type="462c0819:PsiDirectoryNode" />
+              <item name="column" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="parquet" type="462c0819:PsiDirectoryNode" />
+              <item name="hadoop" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
@@ -433,15 +505,15 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.TPCHQueryTest.testQ6Onheap">
-    <configuration name="MyOffheap" type="Application" factoryName="Application" temporary="true">
+  <component name="RunManager" selected="JUnit.TPCHQueryTest">
+    <configuration name="LoadTPCH4Offheap" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="edu.uchicago.cs.encsel.query.offheap.*" />
+          <option name="PATTERN" value="edu.uchicago.cs.encsel.query.tpch.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.query.offheap.MyOffheap" />
+      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.query.tpch.LoadTPCH4Offheap" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -472,7 +544,7 @@
       <module name="enc-selector" />
       <envs />
     </configuration>
-    <configuration name="TPCHQueryTest.binaryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PageSkippingTest.testFilterSkippingOnheap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="edu.uchicago.cs.encsel.pageskipping.*" />
@@ -483,8 +555,8 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="edu.uchicago.cs.encsel.pageskipping" />
-      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.pageskipping.TPCHQueryTest" />
-      <option name="METHOD_NAME" value="binaryTest" />
+      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.pageskipping.PageSkippingTest" />
+      <option name="METHOD_NAME" value="testFilterSkippingOnheap" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -497,7 +569,7 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="TPCHQueryTest.testOriginOnheap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TPCHQueryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="edu.uchicago.cs.encsel.pageskipping.*" />
@@ -509,8 +581,8 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="edu.uchicago.cs.encsel.pageskipping" />
       <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.pageskipping.TPCHQueryTest" />
-      <option name="METHOD_NAME" value="testOriginOnheap" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -547,19 +619,19 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="TrivialBitmapTest.testForeach" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TPCHQueryTest.testQ6SkipOnheap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="edu.uchicago.cs.encsel.query.bitmap.*" />
+          <option name="PATTERN" value="edu.uchicago.cs.encsel.pageskipping.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="enc-selector" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="edu.uchicago.cs.encsel.query.bitmap" />
-      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.query.bitmap.TrivialBitmapTest" />
-      <option name="METHOD_NAME" value="testForeach" />
+      <option name="PACKAGE_NAME" value="edu.uchicago.cs.encsel.pageskipping" />
+      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.pageskipping.TPCHQueryTest" />
+      <option name="METHOD_NAME" value="testQ6SkipOnheap" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -655,19 +727,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Application.MyOnheap" />
-      <item index="1" class="java.lang.String" itemvalue="Application.MyOffheap" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testOriginOnheap" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.binaryTest" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.TrivialBitmapTest.testForeach" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6SkipOnheap" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.PageSkippingTest.testFilterSkippingOnheap" />
+      <item index="3" class="java.lang.String" itemvalue="Application.LoadTPCH4Offheap" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.TrivialBitmapTest.testForeach" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.binaryTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testOriginOnheap" />
-        <item index="4" class="java.lang.String" itemvalue="Application.MyOffheap" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6SkipOnheap" />
+        <item index="3" class="java.lang.String" itemvalue="Application.LoadTPCH4Offheap" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.PageSkippingTest.testFilterSkippingOnheap" />
       </list>
     </recent_temporary>
   </component>
@@ -688,70 +760,78 @@
       <updated>1517857361797</updated>
       <workItem from="1517857365615" duration="33824000" />
       <workItem from="1518450900965" duration="3562000" />
-      <workItem from="1518575360011" duration="36728000" />
+      <workItem from="1518575360011" duration="56393000" />
     </task>
+    <task id="LOCAL-00001" summary="TPCH q6">
+      <created>1518708979584</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1518708979584</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 00h 59m 21s.xml">
+    <history-entry file="TPCHQueryTest - 2018.02.16 at 14h 12m 57s.xml">
+      <configuration name="TPCHQueryTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.16 at 14h 05m 51s.xml">
       <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 01h 00m 15s.xml">
+    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.16 at 14h 09m 22s.xml">
       <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 01h 01m 00s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 13h 52m 43s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 01h 01m 41s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 13h 58m 32s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 01h 02m 41s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 14h 00m 48s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 01h 04m 43s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 14h 03m 23s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 01h 06m 16s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 14h 04m 33s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 09h 16m 50s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 14h 06m 27s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 09h 18m 18s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="TPCHQueryTest_testQ6Onheap - 2018.02.15 at 09h 31m 30s.xml">
-      <configuration name="TPCHQueryTest.testQ6Onheap" configurationId="JUnit" />
+    <history-entry file="TPCHQueryTest_testQ6SkipOnheap - 2018.02.16 at 14h 08m 05s.xml">
+      <configuration name="TPCHQueryTest.testQ6SkipOnheap" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74114000" />
+    <option name="totallyTimeSpent" value="93779000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1603" y="93" width="1440" height="805" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37529412" sideWeight="0.49722221" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37411764" sideWeight="0.49722221" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44747612" sideWeight="0.50555557" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3860846" sideWeight="0.49444443" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33294117" sideWeight="0.49444443" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24930556" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24930556" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39972714" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39882353" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -767,67 +847,17 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="TPCH q6" />
+    <option name="LAST_COMMIT_MESSAGE" value="TPCH q6" />
+  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/DataUtils.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="28" column="7" lean-forward="false" selection-start-line="28" selection-start-column="7" selection-end-line="28" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/Predicate.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2040">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3">
-          <caret line="106" column="28" lean-forward="false" selection-start-line="106" selection-start-column="23" selection-end-line="106" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.12.4/scala-library-2.12.4.jar!/scala/Array.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="12" lean-forward="false" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/io/api/PrimitiveConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/lang/Float.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1032">
-          <caret line="849" column="31" lean-forward="false" selection-start-line="849" selection-start-column="31" selection-end-line="849" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-encoding/1.9.0/parquet-encoding-1.9.0.jar!/org/apache/parquet/bytes/LittleEndianDataInputStream.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1242">
-          <caret line="158" column="31" lean-forward="true" selection-start-line="158" selection-start-column="31" selection-end-line="158" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/column/values/plain/PlainValuesReader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="90" column="36" lean-forward="true" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/ValuesType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -961,22 +991,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/EqualScalar.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="43" column="22" lean-forward="false" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/PredicateVisitor.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -989,22 +1003,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="55" column="13" lean-forward="false" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="231" column="20" lean-forward="false" selection-start-line="231" selection-start-column="20" selection-end-line="231" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ParquetFileReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="509" column="29" lean-forward="true" selection-start-line="509" selection-start-column="29" selection-end-line="509" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -1069,14 +1067,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="70" column="72" lean-forward="false" selection-start-line="70" selection-start-column="72" selection-end-line="70" selection-end-column="72" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/BinaryPlainValuesReader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="128">
@@ -1089,14 +1079,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="588" column="22" lean-forward="false" selection-start-line="588" selection-start-column="16" selection-end-line="588" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="315" column="40" lean-forward="false" selection-start-line="315" selection-start-column="40" selection-end-line="315" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -1117,7 +1099,7 @@
         <state relative-caret-position="-874">
           <caret line="64" column="6" lean-forward="false" selection-start-line="64" selection-start-column="6" selection-end-line="64" selection-end-column="6" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1130,18 +1112,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/util/function/LongConsumer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="48" column="9" lean-forward="false" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
           <caret line="40" column="37" lean-forward="false" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmapTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/util/function/LongConsumer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="48" column="9" lean-forward="false" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -1159,20 +1151,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmapTest.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/filter2/predicate/FilterApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="-1247">
+          <caret line="100" column="87" lean-forward="false" selection-start-line="100" selection-start-column="87" selection-end-line="100" selection-end-column="87" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/filter2/compat/FilterCompat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="80" column="0" lean-forward="true" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="98" column="40" lean-forward="false" selection-start-line="98" selection-start-column="40" selection-end-line="98" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-108">
+          <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/EqualScalar.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1076">
+          <caret line="126" column="51" lean-forward="true" selection-start-line="126" selection-start-column="51" selection-end-line="126" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-214">
-          <caret line="291" column="54" lean-forward="false" selection-start-line="291" selection-start-column="54" selection-end-line="291" selection-end-column="54" />
+        <state relative-caret-position="308">
+          <caret line="348" column="38" lean-forward="true" selection-start-line="348" selection-start-column="38" selection-end-line="348" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#testBitmapPageSkipping#0;class#PageSkippingTest#0" expanded="false" />
@@ -1181,34 +1203,139 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ParquetFileReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+        <state relative-caret-position="164">
+          <caret line="514" column="21" lean-forward="false" selection-start-line="514" selection-start-column="21" selection-end-line="514" selection-end-column="21" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/ParquetWriter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="22" column="55" lean-forward="false" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/BitmapPageFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="43" column="12" lean-forward="false" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="75" column="6" lean-forward="false" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="138" column="18" lean-forward="false" selection-start-line="138" selection-start-column="18" selection-end-line="138" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#9106#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#2839#2840#0" expanded="true" />
+            <element signature="e#2868#2869#0" expanded="true" />
+            <element signature="e#2936#2937#0" expanded="true" />
+            <element signature="e#2981#2982#0" expanded="true" />
+            <element signature="e#3064#3065#0" expanded="true" />
+            <element signature="e#3084#3085#0" expanded="true" />
+            <element signature="e#3125#3126#0" expanded="true" />
+            <element signature="e#3152#3153#0" expanded="true" />
+            <element signature="e#3210#3211#0" expanded="true" />
+            <element signature="e#3232#3233#0" expanded="true" />
+            <element signature="e#3275#3276#0" expanded="true" />
+            <element signature="e#3306#3307#0" expanded="true" />
+            <element signature="e#4473#4474#0" expanded="true" />
+            <element signature="e#4504#4505#0" expanded="true" />
+            <element signature="e#7991#7992#0" expanded="true" />
+            <element signature="e#8013#8014#0" expanded="true" />
+            <element signature="e#8053#8054#0" expanded="true" />
+            <element signature="e#8083#8084#0" expanded="true" />
+            <element signature="e#8276#8317#0" expanded="true" />
+            <element signature="e#8402#8403#0" expanded="true" />
+            <element signature="e#8436#8437#0" expanded="true" />
+            <element signature="e#8479#8480#0" expanded="true" />
+            <element signature="e#8504#8505#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/page/PageReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="47" column="16" lean-forward="false" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="558" column="30" lean-forward="false" selection-start-line="558" selection-start-column="30" selection-end-line="558" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#9508#9509#0" expanded="true" />
+            <element signature="e#9566#9567#0" expanded="true" />
+            <element signature="e#15783#15784#0" expanded="true" />
+            <element signature="e#15814#15815#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="112" column="74" lean-forward="true" selection-start-line="112" selection-start-column="74" selection-end-line="112" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="92" column="66" lean-forward="false" selection-start-line="92" selection-start-column="66" selection-end-line="92" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="58" column="60" lean-forward="false" selection-start-line="58" selection-start-column="60" selection-end-line="58" selection-end-column="60" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="70" column="9" lean-forward="true" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+        <state relative-caret-position="-2519">
+          <caret line="44" column="21" lean-forward="true" selection-start-line="44" selection-start-column="21" selection-end-line="44" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2175#2176#0" expanded="true" />
-            <element signature="e#2202#2203#0" expanded="true" />
-            <element signature="e#2612#2613#0" expanded="true" />
-            <element signature="e#2636#2637#0" expanded="true" />
-            <element signature="e#3768#6658#0" expanded="true" />
-            <element signature="e#5130#5138#0" expanded="true" />
-            <element signature="e#6657#6658#0" expanded="true" />
+            <element signature="e#2137#2138#0" expanded="true" />
+            <element signature="e#2164#2165#0" expanded="true" />
+            <element signature="e#2574#2575#0" expanded="true" />
+            <element signature="e#2598#2599#0" expanded="true" />
             <element signature="method#testOriginOnheap#0;class#TPCHQueryTest#0" expanded="false" />
-            <element signature="e#7480#8163#0" expanded="true" />
-            <element signature="e#8162#8163#0" expanded="true" />
-            <element signature="method#testQ6Onheap#0;class#TPCHQueryTest#0" expanded="false" />
-            <element signature="e#9244#12134#0" expanded="true" />
-            <element signature="e#10606#10614#0" expanded="true" />
-            <element signature="e#12133#12134#0" expanded="true" />
+            <element signature="e#3469#4152#0" expanded="true" />
+            <element signature="e#4151#4152#0" expanded="true" />
+            <element signature="e#5923#8807#0" expanded="true" />
+            <element signature="e#7283#7291#0" expanded="true" />
+            <element signature="e#8806#8807#0" expanded="true" />
+            <element signature="e#10580#15867#0" expanded="true" />
+            <element signature="e#13127#13135#0" expanded="true" />
+            <element signature="e#15866#15867#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -34,12 +34,14 @@ public class BitmapPageFilter {
     public static Boolean BitmapPageFilter(Bitmap bm, DataPage page, long startCount) {
     	  long endCount = startCount + page.getValueCount();
     	  boolean drop = true;
-    	  for (long i = startCount; i < endCount; i++) {
+		  long i;
+    	  for ( i = startCount; i < endCount; i++) {
     		if (bm.test(i) == true) {
     		  drop = false;
     		  break;
     		}
     	  }
+		  //System.out.println(i + " between " +startCount + " and "+endCount +" bitmap skipped "+drop);
     	  return drop;
     }
 

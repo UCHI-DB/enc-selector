@@ -73,6 +73,7 @@ public class StatisticsPageFilter implements FilterPredicate.Visitor<Boolean> {
   public static boolean canDrop(FilterPredicate pred, DataPage dataPage) {
     checkNotNull(pred, "pred");
     checkNotNull(dataPage, "dataPage");
+    //System.out.println(pred.accept(new StatisticsPageFilter(dataPage)) + " " + pred.toString() + " " + getStatisticsFromPageHeader(dataPage).toString());
     return pred.accept(new StatisticsPageFilter(dataPage));
   }
   

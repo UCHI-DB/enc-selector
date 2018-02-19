@@ -110,7 +110,7 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
     	  this.skipped = 0;
     	  this.filterPredicate = filterPredicate;
       }
-    
+
     ColumnChunkPageReader(BytesDecompressor decompressor, List<DataPage> compressedPages, DictionaryPage compressedDictionaryPage, Bitmap bitmap, long startpos) {
   	  this(decompressor, compressedPages, compressedDictionaryPage);
   	  this.skipped = 0;
@@ -130,15 +130,18 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
       while(!compressedPages.isEmpty()) {
     	    DataPage compressedPage = compressedPages.remove(0);
     	    if (filterPredicate != null && StatisticsPageFilter.canDrop(filterPredicate, compressedPage)) {
-    	    	  this.setSkipped(getSkipped()+compressedPage.getValueCount());
+				this.setSkipped(getSkipped()+compressedPage.getValueCount());
+				//System.out.println("filter skipped");
+				startpos += compressedPage.getValueCount();
     	    }
     	    else if (bitmap != null && BitmapPageFilter.BitmapPageFilter(bitmap, compressedPage, startpos)) {
-    	    	  this.setSkipped(getSkipped()+compressedPage.getValueCount());
-    	    	  startpos += compressedPage.getValueCount();
+				this.setSkipped(getSkipped()+compressedPage.getValueCount());
+				//System.out.println("bitmap skipped");
+				startpos += compressedPage.getValueCount();
     	    }
-    	    	else{
-    	    	  startpos += compressedPage.getValueCount();
-	    	  return compressedPage.accept(new DataPage.Visitor<DataPage>() {
+			else{
+    	    	startpos += compressedPage.getValueCount();
+    	    	return compressedPage.accept(new DataPage.Visitor<DataPage>() {
 	    	          @Override
 	    	          public DataPage visit(DataPageV1 dataPageV1) {
 	    	            try {
@@ -154,7 +157,7 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
 	    	              throw new ParquetDecodingException("could not decompress page", e);
 	    	            }
 	    	          }
-	    	          
+
 	    	          @Override
 	    	          public DataPage visit(DataPageV2 dataPageV2) {
 	    	            if (!dataPageV2.isCompressed()) {
@@ -207,7 +210,7 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
 	public void setSkipped(int skipped) {
 	  this.skipped = skipped;
 	}
-	
+
 	@Override
 	public int checkSkipped() {
 	  int ret = getSkipped();

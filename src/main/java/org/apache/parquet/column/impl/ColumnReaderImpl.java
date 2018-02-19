@@ -154,6 +154,8 @@ public class ColumnReaderImpl implements ColumnReader {
   private long endOfPageValueCount;
   private long readValues = 0;
   private int pageValueCount = 0;
+  private int pageintotal = 0;
+  private int pageskipped = 0;
 
   private final PrimitiveConverter converter;
   private Binding binding;
@@ -549,10 +551,15 @@ public class ColumnReaderImpl implements ColumnReader {
 	  return this.pageValueCount;
   }
 
+  public int getPageskipped(){ return  this.pageskipped;}
+
   private void readPage() {
     LOG.debug("loading page");
     DataPage page = pageReader.readPage();
     int skipping = pageReader.checkSkipped();
+    /*if (skipping != 0){
+      this.pageskipped++;
+    }*/
     this.readValues += skipping;
     this.endOfPageValueCount += skipping;
     //System.out.println("skipping:" + skipping+", readValues:"+readValues+", endOfPageValueCount:"+endOfPageValueCount);
