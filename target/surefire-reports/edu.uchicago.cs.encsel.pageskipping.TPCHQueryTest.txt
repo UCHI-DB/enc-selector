@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: edu.uchicago.cs.encsel.pageskipping.TPCHQueryTest
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 49.781 sec

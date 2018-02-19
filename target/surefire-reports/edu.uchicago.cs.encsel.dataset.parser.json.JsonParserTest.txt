@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: edu.uchicago.cs.encsel.dataset.parser.json.JsonParserTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.075 sec

@@ -1,6 +1,0 @@
-/home/cc/enc-selector/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java
-/home/cc/enc-selector/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java
-/home/cc/enc-selector/src/test/java/edu/uchicago/cs/encsel/query/bitmap/TrivialBitmapTest.java
-/home/cc/enc-selector/src/test/java/edu/uchicago/cs/encsel/parquet/EncReaderProcessorTest.java
-/home/cc/enc-selector/src/test/java/edu/uchicago/cs/encsel/query/bitmap/RoaringBitmapTest.java
-/home/cc/enc-selector/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java
