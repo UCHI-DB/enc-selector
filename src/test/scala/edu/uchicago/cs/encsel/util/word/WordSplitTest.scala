@@ -64,7 +64,6 @@ class WordSplitTest {
   def testSplitCombined: Unit = {
     val split = new WordSplit()
     val res = split.split("actualcmd")
-    println(res)
     assertEquals(2, res._1.length)
     //noinspection ZeroIndexToHead
     assertEquals("actual", res._1(0))

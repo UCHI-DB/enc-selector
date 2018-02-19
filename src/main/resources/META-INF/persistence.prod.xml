@@ -28,7 +28,7 @@
     <persistence-unit name="enc-selector" transaction-type="RESOURCE_LOCAL">
         <mapping-file>META-INF/eclipselink-orm.xml</mapping-file>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper</class>
-
+        <class>edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper</class>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.URIConverter</class>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.DataTypeConverter</class>
         <properties>

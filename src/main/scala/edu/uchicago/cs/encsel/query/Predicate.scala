@@ -161,9 +161,11 @@ class VColumnPredicate(predicate: Any => Boolean, colIndex: Int)
     with VPredicate {
   def bitmap: Bitmap = {
     val bitmap = new RoaringBitmap()
+
     for (i <- 0L until column.getTotalValueCount) {
       bitmap.set(i, test())
     }
+
     bitmap
   }
 }

@@ -19,25 +19,25 @@ class FeaturesTest {
     val features = Features.extract(col)
     val fa = features.toArray
 
-    assertTrue(fa(0).featureType.equals("Sparsity"))
-    assertEquals("count", fa(0).name)
-    assertEquals(13.0, fa(0).value, 0.001)
+    assertTrue(fa(5).featureType.equals("Sparsity"))
+    assertEquals("count", fa(5).name)
+    assertEquals(13.0, fa(5).value, 0.001)
 
-    assertTrue(fa(1).featureType.equals("Sparsity"))
-    assertEquals("empty_count", fa(1).name)
-    assertEquals(0.0, fa(1).value, 0.001)
+    assertTrue(fa(6).featureType.equals("Sparsity"))
+    assertEquals("empty_count", fa(6).name)
+    assertEquals(0.0, fa(6).value, 0.001)
 
-    assertTrue(fa(2).featureType.equals("Sparsity"))
-    assertEquals("valid_ratio", fa(2).name)
-    assertEquals(1.0, fa(2).value, 0.001)
+    assertTrue(fa(7).featureType.equals("Sparsity"))
+    assertEquals("valid_ratio", fa(7).name)
+    assertEquals(1.0, fa(7).value, 0.001)
 
-    assertTrue(fa(3).featureType.equals("Entropy"))
-    assertEquals("line_max", fa(3).name)
-    assertEquals(1.332, fa(3).value, 0.001)
+    assertTrue(fa(8).featureType.equals("Entropy"))
+    assertEquals("line_max", fa(8).name)
+    assertEquals(1.332, fa(8).value, 0.001)
 
-    assertTrue(fa(4).featureType.equals("Entropy"))
-    assertEquals("line_min", fa(4).name)
-    assertEquals(0.636, fa(4).value, 0.001)
+    assertTrue(fa(9).featureType.equals("Entropy"))
+    assertEquals("line_min", fa(9).name)
+    assertEquals(0.636, fa(9).value, 0.001)
 
   }
 

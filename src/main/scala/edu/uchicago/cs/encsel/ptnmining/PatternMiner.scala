@@ -23,8 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.parser.{Token, Tokenizer}
-import edu.uchicago.cs.encsel.ptnmining.preprocess.FrequentWord
+import edu.uchicago.cs.encsel.ptnmining.parser.Token
 import edu.uchicago.cs.encsel.ptnmining.rule._
 
 /**
@@ -32,12 +31,15 @@ import edu.uchicago.cs.encsel.ptnmining.rule._
   */
 class PatternMiner {
 
-  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
+  val rules = Array(new CommonSymbolRule, new SameLenMergeRule,
+    new CommonSeqRule(CommonSeqEqualFunc.patternFuzzyEquals _),
+    new UseAnyRule, new SuccinctRule, new MergeGroupRule,
+    new GeneralizeTokenRule, new ExpandBoundRule)
 
   def mine(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens
 
-    val translated = new PUnion(in.map(l => new PSeq(l.map(new PToken(_)): _*)))
+    val translated = new PUnion(in.filter(_.nonEmpty).map(l => new PSeq(l.map(new PToken(_)))))
 
     rules.foreach(rule => {
       rule match {
@@ -51,7 +53,7 @@ class PatternMiner {
     var refineResult: Pattern = toRefine
     while (needRefine) {
       val refined = refine(toRefine)
-      if (refined._2) {
+      if (refined._2.isDefined) {
         toRefine = refined._1
       } else {
         needRefine = false
@@ -63,18 +65,18 @@ class PatternMiner {
     validated
   }
 
-  protected def refine(root: Pattern): (Pattern, Boolean) = {
+  protected def refine(root: Pattern): (Pattern, Option[RewriteRule]) = {
     var current = root
 
-    rules.indices.foreach(i => {
-      rules(i).reset
-      current = rules(i).rewrite(current)
-      if (rules(i).happened) {
+    rules.foreach(rule => {
+      rule.reset
+      current = rule.rewrite(current)
+      if (rule.happened) {
         // Apply the first valid rule
-        return (current, true)
+        return (current, Some(rule))
       }
     })
-    (root, false)
+    (root, None)
   }
 
   def validate(ptn: Pattern): Pattern = {

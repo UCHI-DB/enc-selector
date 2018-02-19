@@ -45,11 +45,17 @@ import javax.persistence.TableGenerator
 class ColumnWrapper extends Column {
 
   var id: Int = 0
+  var parentWrapper: ColumnWrapper = null
 
+  override def parent: Column = parentWrapper
+
+  override def parent_=(col: Column) = parentWrapper = col
 }
 
 object ColumnWrapper {
-  def fromColumn(col: Column): ColumnWrapper = {
+  implicit def fromColumn(col: Column): ColumnWrapper = {
+    if (null == col)
+      return null
     if (col.isInstanceOf[ColumnWrapper])
       return col.asInstanceOf[ColumnWrapper]
     val wrapper = new ColumnWrapper
@@ -58,7 +64,7 @@ object ColumnWrapper {
     wrapper.colIndex = col.colIndex
     wrapper.dataType = col.dataType
     wrapper.origin = col.origin
-
+    wrapper.parentWrapper = fromColumn(col.parent)
     wrapper.features = col.features
 
     wrapper

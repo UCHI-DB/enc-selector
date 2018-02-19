@@ -23,25 +23,31 @@
 
 package edu.uchicago.cs.encsel.ptnmining.matching
 
-import edu.uchicago.cs.encsel.ptnmining.parser.Token
-
-import scala.collection.mutable
+import scala.collection.mutable.HashMap
 
 /**
   * Mapping between pattern node and token
   */
 class Record {
-  val values: mutable.HashMap[String, Token] = new mutable.HashMap[String, Token]
+  private val values = new HashMap[String, String]
 
-  val choices: mutable.HashMap[String, (Int, Int)] = new mutable.HashMap[String, (Int, Int)]
+  def this(vs: Map[String, String]) {
+    this()
+    values ++= vs
+  }
+
+  val choices = new HashMap[String, (Int, Int)]
 
   // The delta towards min value of range
-  val rangeDeltas: mutable.HashMap[String, Int] = new mutable.HashMap[String, Int]
+  val rangeDeltas = new HashMap[String, BigInt]
 
-  def add(name: String, value: Token) = {
+  def add(name: String, value: String) = {
     values += ((name, value))
   }
 
-  def get(name: String): Option[Token] = values.get(name)
+  def has(name: String): Boolean = values.contains(name)
+
+  def get(name: String): String = values.getOrElse(name, "<err>")
+
 }
 

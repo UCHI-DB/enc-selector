@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining.eval
 
-import edu.uchicago.cs.encsel.ptnmining.parser.Token
+import edu.uchicago.cs.encsel.ptnmining.matching.{PatternMatcher, RegexMatcher}
 import edu.uchicago.cs.encsel.ptnmining.{PAny, Pattern}
 import org.apache.commons.lang3.StringUtils
 
@@ -33,7 +33,9 @@ import org.apache.commons.lang3.StringUtils
   *
   */
 object PatternEvaluator {
-  def evaluate(ptn: Pattern, dataset: Seq[Seq[Token]]): Double = {
+  val matcher: PatternMatcher = RegexMatcher
+
+  def evaluate(ptn: Pattern, dataset: Traversable[String]): Double = {
 
     if (StringUtils.isEmpty(ptn.getName))
       ptn.naming()
@@ -46,7 +48,7 @@ object PatternEvaluator {
     val anyNames = ptn.flatten.filter(_.isInstanceOf[PAny]).map(_.getName).distinct
 
     // Encoded Data Size
-    val matched = dataset.map(di => (ptn.matchon(di), di))
+    val matched = dataset.map(di => (matcher.matchon(ptn, di), di))
 
     val encodedSize = matched.map(item => {
       val record = item._1
@@ -58,8 +60,8 @@ object PatternEvaluator {
             .map(x => intSize(x._2)).sum
           val anys = anyNames.map(name => {
             content.get(name) match {
-              case Some(token) => token.length
-              case None => 0
+              case "" => 0
+              case a => a.length
             }
           })
           val intRange = content.rangeDeltas.values.map(intSize).sum
@@ -68,7 +70,7 @@ object PatternEvaluator {
             case false => anys.sum + anys.size
           }) + intRange
         }
-        case false => origin.map(_.value.length).sum
+        case false => origin.length
       }
     })
 
@@ -76,4 +78,6 @@ object PatternEvaluator {
   }
 
   def intSize(input: Int): Int = Math.ceil(Math.log(input) / (8 * Math.log(2))).toInt
+
+  def intSize(input: BigInt): Int = Math.ceil(Math.log(input.doubleValue()) / (8 * Math.log(2))).toInt
 }

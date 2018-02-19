@@ -26,18 +26,29 @@ package edu.uchicago.cs.encsel.ptnmining.rule
 import edu.uchicago.cs.encsel.ptnmining._
 
 /**
-  * Reduce unnecessary seq or union structure
+  * Reduce unnecessary seq or union structure and squeeze structure size
   * Seq(a) => a
   * Union(a) => a
   * Seq(a,PEmpty) => Seq(a)
   * Seq() => PEmpty
   * Union() => PEmpty
+  * Union(PEmpty, PUnion) = PUnion(PEmpty, _)
+  * Union(PEmpty, PSeq) = PSeq(PUnion(PEmpty, _))
+  * Union(PEmpty, PAny) => PAny(0,_)
   */
 class SuccinctRule extends RewriteRule {
 
   protected def condition(p: Pattern): Boolean = {
     p match {
-      case u: PUnion => u.content.size <= 1
+      case u: PUnion => {
+        val uc = u.content
+        uc.size <= 1 || (uc.size == 2 && uc.exists(_ == PEmpty) && uc.exists(_ match {
+          case union: PUnion => true
+          case seq: PSeq => true
+          case any: PAny => true
+          case _ => false
+        }))
+      }
       case s: PSeq => s.content.length <= 1 || s.content.contains(PEmpty)
       case _ => false
     }
@@ -61,6 +72,16 @@ class SuccinctRule extends RewriteRule {
           case 0 => PEmpty
           case 1 => //noinspection ZeroIndexToHead
             union.content(0)
+          case 2 => {
+            union.content.filter(_ != PEmpty).head match {
+              case cseq: PSeq => PSeq(cseq.content.map(p => PUnion.collect(p, PEmpty)))
+              case cunion: PUnion => PUnion(cunion.content :+ PEmpty)
+              case cany: PAny => {
+                cany.minLength = 0
+                cany
+              }
+            }
+          }
         }
       }
       case _ => up

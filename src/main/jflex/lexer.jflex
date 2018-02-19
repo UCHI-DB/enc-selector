@@ -16,7 +16,7 @@ Whitespace     = ({LineTerminator} | [ \t\f])+
 
 IntLiteral=[0-9]+
 DoubleLiteral=[0-9]+\.[0-9]+
-WordLiteral=[a-zA-Z][a-zA-Z\.']*
+WordLiteral=[a-zA-Z]+
 
 %%
 
@@ -27,12 +27,12 @@ WordLiteral=[a-zA-Z][a-zA-Z\.']*
 {Whitespace}        {return new TSpace();}
 "-"                 {return new TSymbol(yytext());}
 "_"                 {return new TSymbol(yytext());}
-"("                 {return new TPara(Sym.PARA, true);}
-")"                 {return new TPara(Sym.PARA, false);}
-"["                 {return new TPara(Sym.BRAK, true);}
-"]"                 {return new TPara(Sym.BRAK, false);}
-"{"                 {return new TPara(Sym.BRAC, true);}
-"}"                 {return new TPara(Sym.BRAC, false);}
+"("                 {return new TSymbol(yytext());}
+")"                 {return new TSymbol(yytext());}
+"["                 {return new TSymbol(yytext());}
+"]"                 {return new TSymbol(yytext());}
+"{"                 {return new TSymbol(yytext());}
+"}"                 {return new TSymbol(yytext());}
 ","                 {return new TSymbol(yytext());}
 "."                 {return new TSymbol(yytext());}
 ":"                 {return new TSymbol(yytext());}

@@ -34,13 +34,16 @@ import scala.io.{Codec, Source}
 
 object LoadWordVectorDb extends App {
 
-  val src = "/home/harper/Downloads/glove.42B.300d.txt"
+  val src = args.length match {
+    case 0 => "/home/harper/Downloads/glove.42B.300d.txt"
+    case _ => args(0)
+  }
 
   // Check dup
   //  val limit = 12795
   var counter = 0
   Class.forName("com.mysql.jdbc.Driver")
-  val connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/glove?characterEncoding=UTF-8", "glove", "glove")
+  val connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/wordvec?characterEncoding=UTF-8", "wordvec", "wordvec")
   connection.setAutoCommit(false)
   val stmt = connection.prepareStatement("insert into word_vec (word, vector) values (?, ?)")
 

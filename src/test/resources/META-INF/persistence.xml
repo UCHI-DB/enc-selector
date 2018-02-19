@@ -6,7 +6,7 @@
         <mapping-file>META-INF/eclipselink-orm.xml</mapping-file>
 
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper</class>
-
+        <class>edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper</class>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.URIConverter</class>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.DataTypeConverter</class>
         <properties>
@@ -17,7 +17,7 @@
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
-            <!-- property name="eclipselink.logging.level" value="FINE"/-->
+            <property name="eclipselink.logging.level" value="FINE"/>
         </properties>
     </persistence-unit>
 

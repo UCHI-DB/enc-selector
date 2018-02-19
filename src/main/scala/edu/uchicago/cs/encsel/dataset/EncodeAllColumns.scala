@@ -23,10 +23,82 @@
 package edu.uchicago.cs.encsel.dataset
 
 
+import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
-import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
+import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
+
+object EncodeColumn {
+  def encode(col: Column) = {
+    col.dataType match {
+      case DataType.STRING => {
+        StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+          try {
+            ParquetWriterHelper.singleColumnString(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+              e.printStackTrace()
+            }
+          }
+        )
+      }
+      case DataType.LONG => {
+        LongEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+          try {
+            ParquetWriterHelper.singleColumnLong(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+              e.printStackTrace()
+            }
+          }
+        )
+      }
+      case DataType.INTEGER => {
+        IntEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+          try {
+            ParquetWriterHelper.singleColumnInt(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+              e.printStackTrace()
+            }
+          }
+        )
+      }
+      case DataType.FLOAT => {
+        FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+          try {
+            ParquetWriterHelper.singleColumnFloat(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+              e.printStackTrace()
+            }
+          }
+        )
+      }
+      case DataType.DOUBLE => {
+        FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
+          try {
+            ParquetWriterHelper.singleColumnDouble(col.colFile, e)
+          } catch {
+            case e: IllegalArgumentException => {
+              e.printStackTrace()
+            }
+          }
+        )
+      }
+      case DataType.BOOLEAN => {}
+    }
+  }
+}
+
+object EncodeSingleColumn extends App {
+  val start = args.length match {
+    case 0 => throw new IllegalArgumentException
+    case _ => args(0).toInt
+  }
+  EncodeColumn.encode(new JPAPersistence().find(start))
+}
 
 object EncodeAllColumns extends App {
 
@@ -39,66 +111,8 @@ object EncodeAllColumns extends App {
   columns.foreach(col => {
     val colw = col.asInstanceOf[ColumnWrapper]
     println(colw.id)
+    if (colw.id >= start)
+      EncodeColumn.encode(colw)
 
-    if (colw.id >= start) {
-      col.dataType match {
-        case DataType.STRING => {
-          StringEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-            try {
-              ParquetWriterHelper.singleColumnString(col.colFile, e)
-            } catch {
-              case e: IllegalArgumentException => {
-                e.printStackTrace()
-              }
-            }
-          )
-        }
-        case DataType.LONG => {
-          LongEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-            try {
-              ParquetWriterHelper.singleColumnLong(col.colFile, e)
-            } catch {
-              case e: IllegalArgumentException => {
-                e.printStackTrace()
-              }
-            }
-          )
-        }
-        case DataType.INTEGER => {
-          IntEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-            try {
-              ParquetWriterHelper.singleColumnInt(col.colFile, e)
-            } catch {
-              case e: IllegalArgumentException => {
-                e.printStackTrace()
-              }
-            }
-          )
-        }
-        case DataType.FLOAT => {
-          FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-            try {
-              ParquetWriterHelper.singleColumnFloat(col.colFile, e)
-            } catch {
-              case e: IllegalArgumentException => {
-                e.printStackTrace()
-              }
-            }
-          )
-        }
-        case DataType.DOUBLE => {
-          FloatEncoding.values().filter(_.parquetEncoding() != null).foreach(e =>
-            try {
-              ParquetWriterHelper.singleColumnDouble(col.colFile, e)
-            } catch {
-              case e: IllegalArgumentException => {
-                e.printStackTrace()
-              }
-            }
-          )
-        }
-        case DataType.BOOLEAN => {}
-      }
-    }
   })
 }

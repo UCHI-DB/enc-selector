@@ -28,7 +28,7 @@ import java.util
 import edu.uchicago.cs.encsel.dataset.feature.Feature
 import edu.uchicago.cs.encsel.model.DataType
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   var origin: URI = o
@@ -37,18 +37,35 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   var colFile: URI = _
   var dataType = dt
   var features: java.util.Set[Feature] = new util.HashSet[Feature]()
+  var infos: java.util.Map[String, Double] = new util.HashMap[String, Double]();
+  private var _parent: Column = null
+
+  def parent: Column = _parent
+
+  def parent_=(col: Column): Unit = {
+    _parent = col
+  }
 
   def this() {
     this(null, -1, null, null)
   }
 
   def findFeature(t: String, name: String): Option[Feature] = {
-    features.find(f => f.featureType.equals(t) && f.name.equals(name))
+    features.asScala.find(f => f.featureType.equals(t) && f.name.equals(name))
   }
 
   def findFeatures(t: String): Iterable[Feature] = {
-    features.filter(_.featureType.equals(t))
+    features.asScala.filter(_.featureType.equals(t))
   }
 
-  def hasFeature(t: String): Boolean = features.exists(f => f.featureType.equals(t))
+  def replaceFeatures(fs: Iterable[Feature]) = {
+    fs.foreach(f => {
+      features.remove(f)
+      features.add(f)
+    })
+  }
+
+  def hasFeature(t: String): Boolean = features.asScala.exists(f => f.featureType.equals(t))
+
+  def getInfo(n: String): Double = infos.getOrDefault(n, Double.MinValue)
 }

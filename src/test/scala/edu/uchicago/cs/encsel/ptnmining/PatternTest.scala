@@ -23,8 +23,8 @@
 package edu.uchicago.cs.encsel.ptnmining
 
 import edu.uchicago.cs.encsel.ptnmining.parser.{TInt, TWord, Tokenizer}
-import org.junit.Test
 import org.junit.Assert._
+import org.junit.Test
 
 import scala.io.Source
 
@@ -35,9 +35,11 @@ class PatternTest {
 
   @Test
   def testNaming: Unit = {
-    val pattern = new PSeq(new PToken(new TWord("real")),
-      new PUnion(new PWordAny, new PIntAny),
-      new PToken(new TInt("3324")))
+    val pattern = PSeq.collect(
+      new PToken(new TWord("real")),
+      PUnion.collect(new PWordAny, new PIntAny),
+      new PToken(new TInt("3324"))
+    ).asInstanceOf[PSeq]
 
     pattern.naming()
 
@@ -65,13 +67,9 @@ class PatternTest {
     val input = (1 to 10).map(i => i % 2 match {
       case 1 => ""
       case 0 => "abc"
-    }).toSeq
+    })
 
     val pattern = Pattern.generate(input.map(Tokenizer.tokenize(_).toSeq))
-    assertTrue(pattern.isInstanceOf[PUnion])
-    val content = pattern.asInstanceOf[PUnion].content
-    assertEquals(PEmpty,content(0))
-    assertTrue(content(1).isInstanceOf[PToken])
-    assertEquals("abc",content(1).asInstanceOf[PToken].token.value)
+    assertEquals(new PWordAny(0, 3), pattern)
   }
 }

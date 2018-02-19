@@ -57,6 +57,11 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
 
     val commons = new ArrayBuffer[Seq[T]]()
     commons += lines.head
+
+    if (lines.length == 1) {
+      positions += Seq((0, lines.head.size))
+      return commons
+    }
     var firstLine = true
     lines.drop(1).foreach(line => {
       if (commons.nonEmpty) {
@@ -118,7 +123,9 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
   /**
     * Find Common sub-sequence in two sequences
     *
-    * This method will choose longer sequence for two overlapped sequences.
+    * This method will find the longest subsequence with minimal separations.
+    * E.g., if there are two candidates (0,1,2,3) and ((-1,4) (8,5)).
+    * Although both has size 4, the first one will be chosen as it has no separation.
     *
     * @param a     the first sequence
     * @param b     the second sequence
@@ -129,42 +136,65 @@ class CommonSeq(val seqLength: Int = CommonSeq.DEFAULT_SEQ_LENGTH,
   def between[T](a: Seq[T], b: Seq[T], equal: (T, T) => Boolean): Seq[(Int, Int, Int)] = {
     if (a.isEmpty || b.isEmpty)
       return Seq[(Int, Int, Int)]()
-    val data = a.indices.map(i => new Array[Int](b.length))
-    a.indices.foreach(i => data(i)(0) = equal(a(i), b.head))
-    b.indices.foreach(i => data(0)(i) = equal(a.head, b(i)))
+    val data = Array.fill(a.length + 1)(Array.fill(b.length + 1)(0))
+    val longest = Array.fill(a.length + 1)(Array.fill(b.length + 1)((0, 0)))
+    val path = Array.fill(a.length + 1)(new Array[(Int, Int, Int)](b.length + 1))
 
-    val candidates = new ArrayBuffer[(Int, Int, Int)]
+    (0 to a.length).foreach(i => {
+      data(i)(0) = 0
+      longest(i)(0) = (0, 0)
+      path(i)(0) = (i, 0, 0)
+    })
+    (0 to b.length).foreach(i => {
+      data(0)(i) = 0
+      longest(0)(i) = (0, 0)
+      path(0)(i) = (0, i, 0)
+    })
 
-    for (i <- 1 until a.length;
-         j <- 1 until b.length) {
-      data(i)(j) = equal(a(i), b(j)) match {
+    // Find the longest common in order subsequences
+
+    // Ways to construct a longest subsequence
+    // 1. Use the current sequence end at (i,j) of length l, together with L(i-l,j-l)
+    // 2. Do not use the current sequence at (i,j), use max(L(i,j-1), L(i-1,j))
+    for (i <- 1 to a.length; j <- 1 to b.length) {
+      data(i)(j) = equal(a(i - 1), b(j - 1)) match {
         case true => data(i - 1)(j - 1) + 1
         case false => 0
       }
-    }
-    // Collecting results
-    for (i <- a.indices;
-         j <- b.indices) {
-      if (data(i)(j) >= seqLength) {
-        candidates += ((i - data(i)(j) + 1, j - data(i)(j) + 1, data(i)(j)))
+
+      val l1 = data(i)(j) match {
+        case 0 => (-1, 0)
+        case l => {
+          val prev = longest(i - data(i)(j))(j - data(i)(j))
+          (prev._1 + l, prev._2 + 1)
+        }
+      }
+      val l2 = longest(i - 1)(j)
+      val l3 = longest(i)(j - 1)
+      longest(i)(j) = Array(l1, l2, l3).maxBy(a => (a._1, -a._2))
+      // Record path
+      longest(i)(j) match {
+        case c2 if c2 == l2 => path(i)(j) = (i - 1, j, 0)
+        case c3 if c3 == l3 => path(i)(j) = (i, j - 1, 0)
+        case c1 if c1 == l1 => path(i)(j) = (i - data(i)(j), j - data(i)(j), data(i)(j))
       }
     }
 
-    // Removing overlap
-    val pha = Array.fill(a.length)(0)
-    val phb = Array.fill(b.length)(0)
-    val not_overlap = new ArrayBuffer[(Int, Int, Int)]
-    // From long to short
-    candidates.sortBy(x => (-x._3, x._1, x._2)).foreach(c => {
-      val afree = !pha.slice(c._1, c._1 + c._3).toSet.exists(_ >= c._3)
-      val bfree = !phb.slice(c._2, c._2 + c._3).toSet.exists(_ >= c._3)
-      if (afree && bfree) {
-        not_overlap += c
-        (c._1 until c._1 + c._3).foreach(pha(_) = c._3)
-        (c._2 until c._2 + c._3).foreach(phb(_) = c._3)
-      }
-    })
-    not_overlap.sortBy(_._1)
+    val result = new ArrayBuffer[(Int, Int, Int)]()
+
+    // Construct the longest sequence from path
+    var i = a.length
+    var j = b.length
+    while (i != 0 && j != 0) {
+      val step = path(i)(j)
+      if (step._3 != 0)
+        result += step
+      i = step._1
+      j = step._2
+    }
+    if (path(i)(j)._3 != 0)
+      result += path(i)(j)
+    result.reverse
   }
 }
 

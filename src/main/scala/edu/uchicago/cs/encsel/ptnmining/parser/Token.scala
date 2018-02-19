@@ -36,18 +36,20 @@ trait Token {
     */
   def length: Int = 1
 
+  def numChar = value.length
+
   override def toString = value
 
-  override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[Token]) {
-      val token = obj.asInstanceOf[Token]
-      return token.getClass == getClass && token.value.equals(value)
-    }
-    super.equals(obj)
+  def canEqual(other: Any): Boolean = other.getClass.eq(this.getClass)
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Token =>
+      (that canEqual this) &&
+        value == that.value
+    case _ => false
   }
 
-  override def hashCode(): Int = getClass.hashCode() * 13 + value.hashCode
-
+  override def hashCode(): Int = value.hashCode
 }
 
 class TWord(v: AnyRef) extends Token {
@@ -60,12 +62,16 @@ class TWord(v: AnyRef) extends Token {
 
 class TInt(v: AnyRef) extends Token {
   val value = v.toString
+  val isHex = "[A-Fa-f]".r.findFirstMatchIn(value).isDefined
 
   override def isData = true
 
-  def intValue = value.toInt
+  def intValue = isHex match {
+    case true => BigInt(value, 16)
+    case false => BigInt(value)
+  }
 
-  override def length = 2
+  override def length = 4
 }
 
 class TDouble(v: AnyRef) extends Token {
@@ -73,22 +79,24 @@ class TDouble(v: AnyRef) extends Token {
 
   override def isData = true
 
-  def doubleValue = value.toDouble
+  def doubleValue = BigDecimal(value)
 
-  override def length = doubleValue == doubleValue.toFloat match {
-    case true => 4
-    case false => 8
+  override def length = {
+    val double = doubleValue.toDouble
+    double == double.toFloat match {
+      case true => 4
+      case false => 8
+    }
   }
-}
-
-class TSpace extends Token {
-  val value = " "
 }
 
 class TSymbol(v: AnyRef) extends Token {
   val value = v.toString
 }
 
+class TSpace extends TSymbol(" ")
+
+@deprecated("not in use right now")
 class TPara(t: Int, l: Boolean) extends Token {
   val paraType = t
   val left = l
@@ -102,6 +110,7 @@ class TPara(t: Int, l: Boolean) extends Token {
   }
 }
 
+@deprecated("deprecated with TPara, grouping is done in parser")
 class TGroup(t: Int, l: Seq[Token]) extends Token {
   val sym = t
   val content = l

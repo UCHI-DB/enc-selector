@@ -61,6 +61,12 @@
                 <column name="data_type"/>
                 <convert>dataTypeConverter</convert>
             </basic>
+            <one-to-one name="parentWrapper">
+                <join-column name="parent_id"/>
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-one>
 
             <element-collection name="features"
                                 target-class="edu.uchicago.cs.encsel.dataset.feature.Feature" fetch="LAZY">
@@ -69,6 +75,16 @@
                 </collection-table>
                 <batch-fetch type="JOIN"/>
             </element-collection>
+
+            <element-collection name="infos" fetch="LAZY" target-class="java.lang.String">
+                <map-key-column name="name"/>
+                <column name="value"/>
+                <collection-table name="col_info">
+                    <join-column name="col_id"/>
+                </collection-table>
+                <batch-fetch type="JOIN"/>
+            </element-collection>
+
         </attributes>
 
     </entity>

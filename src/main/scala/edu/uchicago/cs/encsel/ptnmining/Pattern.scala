@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.ptnmining.matching.{NamingVisitor, PatternMatcher, Record}
+import edu.uchicago.cs.encsel.ptnmining.matching.NamingVisitor
 import edu.uchicago.cs.encsel.ptnmining.parser._
 import edu.uchicago.cs.encsel.ptnmining.rule._
 
@@ -35,12 +35,12 @@ import scala.collection.mutable
 
 object Pattern {
 
-  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeSeqRule, new IntegerRangeRule, new UseAnyRule)
+  val rules = Array(new CommonSeqRule, new SuccinctRule, new MergeGroupRule, new IntegerRangeRule, new UseAnyRule)
 
   def generate(in: Seq[Seq[Token]]): Pattern = {
     // Generate a direct pattern by translating tokens
 
-    val translated = new PUnion(in.map(l => new PSeq(l.map(new PToken(_)): _*)))
+    val translated = PUnion(in.map(l => PSeq(l.map(new PToken(_)))))
 
     rules.foreach(rule => {
       rule match {
@@ -69,10 +69,10 @@ object Pattern {
   protected def refine(root: Pattern): (Pattern, Boolean) = {
     var current = root
 
-    rules.indices.foreach(i => {
-      rules(i).reset
-      current = rules(i).rewrite(current)
-      if (rules(i).happened) {
+    rules.foreach(rule => {
+      rule.reset
+      current = rule.rewrite(current)
+      if (rule.happened) {
         // Apply the first valid rule
         return (current, true)
       }
@@ -107,63 +107,53 @@ trait Pattern {
     */
   def flatten: Seq[Pattern] = Seq(this)
 
-  def matchon(tokens: Seq[Token]): Option[Record] = PatternMatcher.matchon(this, tokens)
-
-  def naming() = visit(new NamingVisitor)
-
   /**
     * Recursively visit the pattern elements starting from the root
     *
     * @param visitor
     */
   def visit(visitor: PatternVisitor): Unit = visitor.on(this)
+
+  def naming() = visit(new NamingVisitor)
+
+  def numChar: (Int, Int)
 }
 
 class PToken(t: Token) extends Pattern {
   val token = t
 
-  override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
-      return true
-    if (obj.isInstanceOf[PToken]) {
-      val t = obj.asInstanceOf[PToken]
-      return t.token.equals(token)
-    }
-    super.equals(obj)
+  override def numChar: (Int, Int) = (token.numChar, token.numChar)
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[PToken]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: PToken =>
+      (that canEqual this) &&
+        token == that.token
+    case _ => false
   }
 
   override def hashCode(): Int = token.hashCode()
+
+  override def toString = token.toString
 }
 
 object PSeq {
-  def make(content: Seq[Pattern]): Pattern =
-    content.length match {
+
+  def apply(content: Seq[Pattern]): Pattern = {
+    val filtered = content.filter(_ != PEmpty)
+    filtered.length match {
       case 0 => PEmpty
-      case 1 => content.head
-      case _ => new PSeq(content)
+      case 1 => filtered.head
+      case _ => new PSeq(filtered)
     }
-}
-
-class PSeq(cnt: Pattern*) extends Pattern {
-  val content = cnt
-
-  def this(ps: Traversable[Pattern]) = this(ps.toSeq: _*)
-
-  override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
-      return true
-    if (obj.isInstanceOf[PSeq]) {
-      val seq = obj.asInstanceOf[PSeq]
-      return seq.content.equals(content)
-    }
-    super.equals(obj)
   }
 
-  override def hashCode(): Int =
-    content.isEmpty match {
-      case true => 0
-      case false => content.map(_.hashCode).sum
-    }
+  def collect(content: Pattern*): Pattern = apply(content)
+}
+
+class PSeq(cnt: Seq[Pattern]) extends Pattern {
+  val content = cnt.toList
 
   override def flatten: Seq[Pattern] = content.flatMap(_.flatten)
 
@@ -173,32 +163,46 @@ class PSeq(cnt: Pattern*) extends Pattern {
     content.foreach(_.visit(visitor))
     visitor.exit(this)
   }
+
+  override def numChar: (Int, Int) = {
+    content.map(_.numChar).reduce((a, b) => {
+      (a._1 + b._1, a._2 + b._2)
+    })
+  }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[PSeq]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: PSeq =>
+      (that canEqual this) &&
+        content == that.content
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(content)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
+
+  override def toString = "<S>(%s)".format(content.map(_.toString).mkString(","))
+
 }
 
 object PUnion {
-  def make(content: Seq[Pattern]) = {
-    content.length match {
+
+  def apply(content: Seq[Pattern]): Pattern = {
+    content.toSet.size match {
       case 0 => PEmpty
       case 1 => content.head
       case _ => new PUnion(content)
     }
   }
+
+  def collect(content: Pattern*): Pattern = apply(content)
 }
 
-class PUnion(cnt: Pattern*) extends Pattern {
-  val content = cnt.toSet.toSeq
-
-  def this(c: Traversable[Pattern]) = this(c.toSeq: _*)
-
-  override def equals(obj: scala.Any): Boolean = {
-    if (obj == this)
-      return true
-    if (obj.isInstanceOf[PUnion]) {
-      val union = obj.asInstanceOf[PUnion]
-      return union.content.equals(content)
-    }
-    super.equals(obj)
-  }
+class PUnion(cnt: Seq[Pattern]) extends Pattern {
+  val content = cnt.toSet.toList
 
   override def flatten: Seq[Pattern] = content.flatMap(_.flatten)
 
@@ -209,88 +213,126 @@ class PUnion(cnt: Pattern*) extends Pattern {
     visitor.exit(this)
   }
 
-  override def hashCode(): Int = content.isEmpty match {
-    case true => 0
-    case false => content.map(_.hashCode()).sum
+  override def numChar: (Int, Int) = {
+    content.map(_.numChar).reduce((a, b) => {
+      (Math.min(a._1, b._1), Math.max(a._2, b._2))
+    })
+  }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[PUnion]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: PUnion =>
+      (that canEqual this) &&
+        content == that.content
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(content)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
+
+  override def toString: String = "<U>(%s)".format(content.map(_.toString).mkString(","))
+}
+
+object PEmpty extends Pattern {
+  override def numChar: (Int, Int) = (0, 0)
+
+  override def toString = "<empty>"
+}
+
+abstract class PAny(var minLength: Int, var maxLength: Int) extends Pattern {
+
+  override def numChar: (Int, Int) = (minLength, maxLength)
+
+  def canEqual(other: Any): Boolean = other.getClass.eq(this.getClass)
+
+  override def equals(other: Any): Boolean = other match {
+    case that: PAny =>
+      (that canEqual this) &&
+        minLength == that.minLength &&
+        maxLength == that.maxLength
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(super.hashCode(), minLength, maxLength)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 }
 
-object PEmpty extends Pattern
-
-trait PAny extends Pattern {
-  override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
-      return true
-    obj match {
-      case any: PAny => getClass == any.getClass
-      case _ => super.equals(obj)
-    }
-  }
-
-  override def hashCode(): Int = getClass.hashCode()
-
-  def maxLength: Int
-}
-
-class PWordAny extends PAny {
-  var _minLength = 1
-  var _maxLength = -1
-
-  def this(min: Int, max: Int) = {
-    this()
-    _minLength = min
-    _maxLength = max
-  }
-
+class PWordAny(minl: Int = 1, maxl: Int = -1)
+  extends PAny(minl, maxl) {
   def this(limit: Int) = this(limit, limit)
 
-  def minLength: Int = _minLength
-
-  def maxLength: Int = _maxLength
+  override def toString: String = "<wordany %d:%d>".format(minLength, maxLength)
 }
 
-class PIntAny extends PAny {
-  var _minLength = 1
-  var _maxLength = -1
+class PDoubleAny(minl: Int = 1, maxl: Int = -1)
+  extends PAny(minl, maxl) {
+  def this(ml: Int) = this(ml, ml)
 
-  def this(min: Int, max: Int) = {
-    this()
-    _maxLength = max
-    _minLength = min
+  override def toString: String = "<doubleany>"
+}
+
+class PIntAny(minl: Int = 1, maxl: Int = -1,
+              var hasHex: Boolean = false) extends PAny(minl, maxl) {
+
+  def this(limit: Int, hasHex: Boolean) = this(limit, limit, hasHex)
+
+  def this(limit: Int) = this(limit, false)
+
+
+  override def equals(other: Any): Boolean = other match {
+    case that: PIntAny =>
+      (that.canEqual(this)) &&
+        minLength == that.minLength &&
+        maxLength == that.maxLength &&
+        hasHex == that.hasHex
+    case _ => false
   }
 
+  override def hashCode(): Int = {
+    val state = Seq(super.hashCode(), minLength, maxLength, hasHex)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
+
+  override def toString: String = "<intany %d:%d>".format(minLength, maxLength)
+}
+
+class PWordDigitAny(minl: Int = 1, maxl: Int = -1)
+  extends PAny(minl, maxl) {
   def this(limit: Int) = this(limit, limit)
 
-  def maxLength: Int = _maxLength
-
-  def minLength: Int = _minLength
+  override def toString: String = "<any %d:%d>".format(minLength, maxLength)
 }
 
-class PDoubleAny extends PAny {
-  var maxLength = 8
-
-  def this(ml: Int) = {
-    this()
-    maxLength = ml
-  }
-}
-
+/**
+  * As we are extracting patterns from a small subset, determining range from
+  * that is prone to error
+  *
+  * @deprecated
+  */
+@deprecated
 class PIntRange extends Pattern {
-  var min: Int = 0
-  var max: Int = 0
+  var min: BigInt = BigInt(0)
+  var max: BigInt = BigInt(0)
 
-  def this(min: Int, max: Int) {
+  def this(min: BigInt, max: BigInt) {
     this()
     this.min = min
     this.max = max
   }
 
-  def range(): Range = (min to max)
+  def this(min: Int, max: Int) {
+    this(BigInt(min), BigInt(max))
+  }
 
   override def hashCode(): Int = this.min.hashCode() * 13 + this.max.hashCode()
 
   override def equals(obj: scala.Any): Boolean = {
-    if (obj.isInstanceOf[AnyRef] && obj.asInstanceOf[AnyRef].eq(this))
+    if (eq(obj.asInstanceOf[AnyRef]))
       return true
     obj match {
       case range: PIntRange => {
@@ -298,5 +340,14 @@ class PIntRange extends Pattern {
       }
       case _ => super.equals(obj)
     }
+  }
+
+  override def numChar: (Int, Int) = {
+    val factor = Math.log(2) / Math.log(10)
+    val digitCount = (factor * max.bitLength + 1).toInt
+    if (BigInt(10).pow(digitCount - 1).compareTo(max) > 0)
+      (digitCount - 1, digitCount - 1)
+    else
+      (digitCount, digitCount)
   }
 }

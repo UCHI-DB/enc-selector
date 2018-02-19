@@ -27,53 +27,100 @@ import edu.uchicago.cs.encsel.ptnmining._
 import edu.uchicago.cs.encsel.ptnmining.parser.{TDouble, TInt, TWord}
 
 /**
-  * If the union size is too large, e.g., 90% of total size
-  * Use Any to replace big Union
+  * Use <code>PAny</code> to replace big Union of tokens
   */
 object UseAnyRule {
   // Execute the rule if union size is greater than threshold * data size
-  val threshold = 0.3
+  val threshold = 0.001
 }
 
 class UseAnyRule extends DataRewriteRule {
 
-  override def condition(ptn: Pattern): Boolean =
-    ptn.isInstanceOf[PUnion] && ptn.asInstanceOf[PUnion].content.length >= UseAnyRule.threshold * originData.length
+  override def condition(ptn: Pattern): Boolean = {
+    val qualifiedUnion = ptn.isInstanceOf[PUnion] && {
+      val union = ptn.asInstanceOf[PUnion]
+      union.content.length >= UseAnyRule.threshold * originData.length &&
+        union.content.view.forall(p => p.isInstanceOf[PToken] || p == PEmpty)
+    }
+    qualifiedUnion
+  }
 
 
   override protected def update(ptn: Pattern): Pattern = {
     val union = ptn.asInstanceOf[PUnion]
-    toAny(union)
-  }
+    val hasEmpty = union.content.contains(PEmpty)
+    val anyed = union.content.view.filter(_ != PEmpty).map(
+      _ match {
+        case token: PToken => {
+          token.token match {
+            case word: TWord => new PWordAny(word.numChar)
+            case int: TInt => new PIntAny(int.numChar, int.isHex)
+            case double: TDouble => new PDoubleAny(double.numChar)
+            case other => token
+          }
+        }
+        case other => other
+      }
+    ).groupBy(_.getClass)
 
-  protected def toAny(ptn: Pattern): Pattern = {
-    ptn match {
-      case union: PUnion => PUnion.make(union.content.map(toAny))
-      case seq: PSeq => PSeq.make(seq.content.map(toAny))
-      case token: PToken => {
-        token.token match {
-          case word: TWord => new PWordAny
-          case int: TInt => new PIntAny
-          case double: TDouble => new PDoubleAny
-          case _ => token
+    if ((anyed.size == 1 && classOf[PAny].isAssignableFrom(anyed.head._1)) ||
+      (anyed.size == 2 && anyed.contains(classOf[PIntAny]) && anyed.contains(classOf[PDoubleAny]))) {
+      val shrinked = anyed.map(kv => {
+        kv._1 match {
+          case wa if wa == classOf[PWordAny] => {
+            kv._2.reduce((a, b) => {
+              val aw = a.asInstanceOf[PWordAny]
+              val bw = b.asInstanceOf[PWordAny]
+              new PWordAny(Math.min(aw.minLength, bw.minLength),
+                Math.max(aw.maxLength, bw.maxLength))
+            })
+          }
+          case ia if ia == classOf[PIntAny] => {
+            kv._2.reduce((a, b) => {
+              val ai = a.asInstanceOf[PIntAny]
+              val bi = b.asInstanceOf[PIntAny]
+              new PIntAny(Math.min(ai.minLength, bi.minLength),
+                Math.max(ai.maxLength, bi.maxLength),
+                ai.hasHex || bi.hasHex)
+            })
+          }
+          case da if da == classOf[PDoubleAny] => {
+            kv._2.reduce((a, b) => {
+              val ad = a.asInstanceOf[PDoubleAny]
+              val bd = b.asInstanceOf[PDoubleAny]
+              new PDoubleAny(Math.min(ad.minLength, bd.minLength),
+                Math.max(ad.maxLength, bd.maxLength))
+            })
+          }
+          case _ => throw new IllegalArgumentException
+        }
+      })
+      val any = shrinked.size match {
+        case 1 => shrinked.head
+        case 2 => {
+          // Double merge with int
+          shrinked.reduce((a, b) => {
+            val (iany, dany) = a match {
+              case ia: PIntAny => (ia, b.asInstanceOf[PDoubleAny])
+              case da: PDoubleAny => (b.asInstanceOf[PIntAny], da)
+            }
+            if (!iany.hasHex) {
+              new PDoubleAny(Math.min(iany.minLength, dany.minLength), Math.max(iany.maxLength, dany.maxLength))
+            } else
+              null
+          })
         }
       }
-      case _ => ptn
-    }
-  }
-
-  def fuzzyCompare(a: Pattern, b: Pattern): Boolean = {
-    (a, b) match {
-      case (at: PToken, bt: PToken) => {
-        at.token.isData match {
-          case true => at.token.getClass == bt.token.getClass
-          case false => at.token.equals(bt.token)
+      if (any != null) {
+        happen()
+        hasEmpty match {
+          case true => new PUnion(Seq(any, PEmpty))
+          case false => any
         }
-      }
-      case (_, _) => {
-        a.equals(b)
-      }
+      } else
+        union
+    } else {
+      union
     }
   }
 }
-

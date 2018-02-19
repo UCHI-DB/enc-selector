@@ -36,9 +36,10 @@ class TokenizerTest {
 
     val tokens = Tokenizer.tokenize(line).toArray
 
-    assertEquals(19, tokens.length)
-    assertTrue(tokens(14).isInstanceOf[TGroup])
-    val t14 = tokens(14).asInstanceOf[TGroup]
-    assertEquals(1, t14.content.length)
+    assertEquals(22, tokens.length)
+  }
+
+  def testTokenize2:Unit = {
+
   }
 }

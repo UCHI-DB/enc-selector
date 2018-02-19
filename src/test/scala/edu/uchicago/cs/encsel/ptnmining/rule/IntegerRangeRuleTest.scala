@@ -13,14 +13,14 @@ class IntegerRangeRuleTest {
   @Test
   def testRewrite: Unit = {
 
-    val pattern = new PSeq(
+    val pattern = PSeq.collect(
       new PToken(new TInt("323")),
-      new PUnion(
+      PUnion.collect(
         new PToken(new TInt("43")),
         new PToken(new TInt("332")),
         new PToken(new TInt("242"))
       ),
-      new PUnion(
+      PUnion.collect(
         new PToken(new TWord("wm")),
         new PToken(new TInt("24"))
       )
@@ -39,8 +39,8 @@ class IntegerRangeRuleTest {
     assertTrue(content(1).isInstanceOf[PIntRange])
     val range = content(1).asInstanceOf[PIntRange]
 
-    assertEquals(43, range.min)
-    assertEquals(332, range.max)
+    assertEquals(BigInt(43), range.min)
+    assertEquals(BigInt(332), range.max)
   }
 
 }
