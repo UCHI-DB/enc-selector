@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.dataset.feature.report
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 
+import edu.uchicago.cs.encsel.Config
 import edu.uchicago.cs.encsel.classify.nn.NNPredictor
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor, Features}
@@ -37,8 +38,8 @@ import org.apache.commons.io.IOUtils
 object SelTimeUsage extends FeatureExtractor {
 
   val profiler = new Profiler
-  val intPredictor = new NNPredictor("src/main/nnmodel/int_model", 19)
-  val stringPredictor = new NNPredictor("src/main/nnmodel/string_model", 19)
+  val intPredictor = new NNPredictor(Config.predictIntModelPath, Config.predictNumFeature)
+  val stringPredictor = new NNPredictor(Config.predictStringModelPath, Config.predictNumFeature)
 
   override def featureType: String = "SelTimeUsage"
 

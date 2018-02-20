@@ -73,9 +73,9 @@ object AddMissingFeature extends App {
     System.out.println("Processing %d / %d : %s".format(counter, size, column.colFile))
     try {
       if (filter == null) {
-        column.features ++= Features.extract(column)
+        column.replaceFeatures(Features.extract(column))
       } else {
-        column.features ++= Features.extract(column, filter, prefix)
+        column.replaceFeatures(Features.extract(column, filter, prefix))
       }
       persistence.save(Seq(column))
     } catch {

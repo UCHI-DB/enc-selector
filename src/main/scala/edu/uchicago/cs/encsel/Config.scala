@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel
 
 import java.util.Properties
-import java.io.FileNotFoundException
+
 import org.slf4j.LoggerFactory
 
 object Config {
@@ -36,6 +36,10 @@ object Config {
   val tempFolder = "./temp"
 
   var distJmsHost = "vm://localhost"
+
+  var predictIntModelPath = "./int_model"
+  var predictStringModelPath = "./string_model"
+  var predictNumFeature = 19
 
   load()
 
@@ -52,6 +56,10 @@ object Config {
       columnFolder = p.getProperty("column.folder")
 
       distJmsHost = p.getProperty("dist.jms.host")
+
+      predictIntModelPath = p.getProperty("predict.model.int.path")
+      predictStringModelPath = p.getProperty("predict.model.string.path")
+      predictNumFeature = Integer.parseInt(p.getProperty("predict.numFeature"))
     } catch {
       case e: Exception => {
         logger.warn("Failed to load configuration", e)

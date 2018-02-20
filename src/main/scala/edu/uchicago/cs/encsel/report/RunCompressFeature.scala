@@ -64,7 +64,7 @@ object RunCompressFeature extends App {
     System.out.println("Processing %d : %s".format(counter, column.colFile))
     if (Random.nextDouble() <= rate) {
       try {
-        column.features ++= Features.extract(column)
+        column.replaceFeatures(Features.extract(column))
         persist.save(Seq(column))
       } catch {
         case e: Exception => {
