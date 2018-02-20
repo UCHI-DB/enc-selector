@@ -38,10 +38,10 @@ object Distinct extends FeatureExtractor {
     var source: Source = Source.fromInputStream(input)
     val fType = "%s%s".format(prefix, featureType)
     try {
-      val sum = source.getLines().size
+      val lines = source.getLines().toStream
+      val sum = lines.size
       if (sum != 0) {
-        source = source.reset()
-        val size = DistinctCounter.count(source.getLines(), sum)
+        val size = DistinctCounter.count(lines, sum)
         match {
           case gt if gt >= sum => sum
           case lt => lt
@@ -60,7 +60,7 @@ object Distinct extends FeatureExtractor {
 
 object DistinctCounter {
 
-  def count(input: Iterator[String], size: Int): Int = {
+  def count(input: Iterable[String], size: Int): Int = {
     val bitmapSize = 4 * Math.ceil(size.toDouble / 64).toInt
     val bitsize = bitmapSize * 64
     val bitmap = new Array[Long](bitmapSize)
@@ -70,7 +70,7 @@ object DistinctCounter {
       val hash = Math.abs(line.hashCode) % bitsize
       bitmap(hash / 64) |= (1L << (hash % 64))
     })
-    val occupy = bitmap.map(java.lang.Long.bitCount).sum.toDouble
+    val occupy = bitmap.map(l => java.lang.Long.bitCount(l)).sum.toDouble
     val empty = 1d - occupy / bitsize
     (-bitsize * Math.log(empty)).toInt
   }

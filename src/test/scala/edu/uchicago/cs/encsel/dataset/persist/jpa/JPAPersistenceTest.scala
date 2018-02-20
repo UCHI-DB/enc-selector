@@ -17,6 +17,7 @@ class JPAPersistenceTest {
     val em = JPAPersistence.emf.createEntityManager()
 
     em.getTransaction.begin()
+    em.createNativeQuery("DELETE FROM col_info;").executeUpdate()
     em.createNativeQuery("DELETE FROM col_pattern;").executeUpdate()
     em.createNativeQuery("DELETE FROM feature;").executeUpdate()
     em.createNativeQuery("DELETE FROM col_data;").executeUpdate()
