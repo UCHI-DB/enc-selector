@@ -23,20 +23,16 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
-import java.lang.reflect.Field
+import java.io.InputStream
 import java.net.URI
 
-import com.sun.tools.attach.{AttachNotSupportedException, VirtualMachine}
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model._
-import edu.uchicago.cs.encsel.tool.mem.JMXMemoryMonitor
+import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import org.apache.commons.io.IOUtils
 import org.apache.commons.io.output.StringBuilderWriter
 import org.slf4j.LoggerFactory
-
-import scala.collection.JavaConversions._
 
 object EncMemoryUsage extends FeatureExtractor {
   val logger = LoggerFactory.getLogger(getClass)
@@ -45,7 +41,7 @@ object EncMemoryUsage extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  def extract(col: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     // Ignore filter
     val fType = "%s%s".format(prefix, featureType)
     col.dataType match {
@@ -98,7 +94,7 @@ object EncMemoryUsage extends FeatureExtractor {
       "-cp", "/local/hajiang/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar",
       "edu.uchicago.cs.encsel.dataset.feature.EncMemoryUsageProcess",
       col.colFile.toString, col.dataType.name(), encoding)
-//    pb.redirectErrorStream(true)
+    //    pb.redirectErrorStream(true)
     val process = pb.start()
 
     process.waitFor();

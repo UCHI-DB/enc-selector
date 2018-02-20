@@ -22,6 +22,8 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 
 import scala.io.Source
@@ -36,9 +38,9 @@ object AdjInvertPair extends FeatureExtractor {
 
   def supportFilter: Boolean = true
 
-  def extract(input: Column, prefix: String): Iterable[Feature] = {
-    val source = Source.fromFile(input.colFile)
-    val comparator = input.dataType.comparator()
+  def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
+    val source = Source.fromInputStream(input)
+    val comparator = column.dataType.comparator()
     var numPair = 0
     var numInverted = 0
     val fType = featureType(prefix)

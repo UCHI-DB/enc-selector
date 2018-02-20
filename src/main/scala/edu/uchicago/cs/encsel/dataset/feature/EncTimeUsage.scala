@@ -23,11 +23,12 @@
 package edu.uchicago.cs.encsel.dataset.feature
 
 
+import java.io.InputStream
 import java.lang.management.ManagementFactory
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.model._
+import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import org.slf4j.LoggerFactory
 
 object EncTimeUsage extends FeatureExtractor {
@@ -38,7 +39,7 @@ object EncTimeUsage extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  def extract(col: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val threadBean = ManagementFactory.getThreadMXBean
     // Ignore filter
     val fType = "%s%s".format(prefix, featureType)

@@ -22,25 +22,23 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
-import java.io.File
+import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.encoding.{Encoding, EncodingException}
-import org.apache.commons.lang.StringUtils
-import org.apache.parquet.hadoop.ParquetWriter
+import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 
 class MiscEncFileSize(enc: Encoding) extends FeatureExtractor {
   override def featureType = "EncFileSize"
 
   override def supportFilter = false
 
-  override def extract(input: Column, prefix: String) = {
+  override def extract(col: Column, input: InputStream, prefix: String) = {
     try {
-      val enctype = enc.enctype(input.dataType)
-      val outputFile = ParquetWriterHelper.genOutput(input.colFile, enctype);
+      val enctype = enc.enctype(col.dataType)
+      val outputFile = ParquetWriterHelper.genOutput(col.colFile, enctype);
       try {
-        enc.encode(input, outputFile.toURI)
+        enc.encode(col, outputFile.toURI)
         Iterable(new Feature(featureType, "%s_file_size".format(enctype), outputFile.length))
       } catch {
         case e: EncodingException => {

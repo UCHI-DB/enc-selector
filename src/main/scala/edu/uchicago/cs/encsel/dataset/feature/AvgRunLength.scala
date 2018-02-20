@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 
 import scala.collection.mutable.ArrayBuffer
@@ -34,9 +36,9 @@ object AvgRunLength extends FeatureExtractor {
 
   override def supportFilter = true
 
-  override def extract(input: Column, prefix: String): Iterable[Feature] = {
+  def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
-    val source = Source.fromFile(input.colFile)
+    val source = Source.fromInputStream(input)
     try {
       var rlength = new ArrayBuffer[Int];
       var current = "";

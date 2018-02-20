@@ -23,6 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
 import java.util.Comparator
 
 import edu.uchicago.cs.encsel.common.Conversions._
@@ -41,16 +42,18 @@ class Sortness(val windowSize: Int) extends FeatureExtractor {
 
   def supportFilter: Boolean = true
 
-  def extract(input: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
 
-    val lineCount = FeatureExtractorUtils.lineCount(input)
+    val source = Source.fromInputStream(input)
+
+    val stream = source.getLines().toStream
+    val lineCount = stream.size
 
     val selection = lineCount > windowSize * windowSize match {
       case true => 2.0 / windowSize
       case false => 2.0 * windowSize / lineCount
     }
 
-    val source = Source.fromFile(input.colFile)
     // The ratio of selection makes sure the operation is n
     try {
       var total_pair = 0
@@ -59,26 +62,24 @@ class Sortness(val windowSize: Int) extends FeatureExtractor {
       var rankdiff = 0
 
       if (windowSize != -1) {
-        source.getLines().sliding(windowSize, windowSize)
+        stream.sliding(windowSize, windowSize)
           .filter(p => Random.nextDouble() <= selection)
           .foreach(group => {
-            val (invert, total) = Sortness.computeInvertPair(group, input.dataType.comparator())
+            val (invert, total) = Sortness.computeInvertPair(group, col.dataType.comparator())
             total_pair += total
             inverted_pair += invert
 
-            val diffrank = Sortness.computeDiffRank(group, input.dataType.comparator())
+            val diffrank = Sortness.computeDiffRank(group, col.dataType.comparator())
             counter += group.length
             rankdiff += diffrank
           })
       } else {
-        val group = source.getLines().toSeq
-
-        val (invert, total) = Sortness.computeInvertPair(group, input.dataType.comparator())
+        val (invert, total) = Sortness.computeInvertPair(stream, col.dataType.comparator())
         total_pair += total
         inverted_pair += invert
 
-        rankdiff += Sortness.computeDiffRank(group, input.dataType.comparator())
-        counter += group.size
+        rankdiff += Sortness.computeDiffRank(stream, col.dataType.comparator())
+        counter += stream.size
       }
       val fType = featureType(prefix)
       if (0 != total_pair) {
@@ -139,5 +140,4 @@ object Sortness {
       }).sum
     counter
   }
-
 }

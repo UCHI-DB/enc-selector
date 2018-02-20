@@ -20,11 +20,12 @@
  *     Hao Jiang - initial API and implementation
  *
  */
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.report
 
-import java.io.File
+import java.io.{File, InputStream}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetCompressedWriterHelper
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
@@ -40,7 +41,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
 
   val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.LZO, CompressionCodecName.GZIP)
 
-  def extract(col: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     // Ignore filter
     val fType = "%s%s".format(prefix, featureType)
     col.dataType match {

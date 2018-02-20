@@ -23,6 +23,8 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 
 import scala.io.Source
@@ -33,10 +35,10 @@ object Sparsity extends FeatureExtractor {
 
   def supportFilter: Boolean = true
 
-  def extract(input: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     var counter = 0
     var emptyCount = 0
-    val source = Source.fromFile(input.colFile)
+    val source = Source.fromInputStream(input)
     try {
       source.getLines().foreach(line => {
         counter += 1

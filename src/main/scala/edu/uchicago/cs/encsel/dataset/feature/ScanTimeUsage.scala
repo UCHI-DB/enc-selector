@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset.feature
 
-import java.io.File
+import java.io.{File, InputStream}
 import java.lang.management.ManagementFactory
 import java.net.URI
 
@@ -44,7 +44,7 @@ object ScanTimeUsage extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  def extract(col: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
 
     val select = new VerticalSelect();
     val predicate = new VColumnPredicate((data) => true, 0)

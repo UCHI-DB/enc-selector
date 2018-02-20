@@ -22,6 +22,8 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 
 /**
@@ -35,7 +37,7 @@ object ColumnName extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  def extract(input: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     throw new UnsupportedOperationException("Not implemented")
   }
 }

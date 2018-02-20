@@ -22,11 +22,11 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature
 
-import java.io.File
+import java.io.{File, InputStream}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.model._
+import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 
 /**
   * Encode files using Parquet
@@ -37,7 +37,7 @@ object ParquetEncFileSize extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  def extract(col: Column, prefix: String): Iterable[Feature] = {
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     // Ignore filter
     val fType = "%s%s".format(prefix, featureType)
     col.dataType match {

@@ -22,6 +22,7 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
 import java.util
 
 import edu.uchicago.cs.encsel.dataset.column.Column
@@ -33,8 +34,8 @@ object Distinct extends FeatureExtractor {
 
   def supportFilter: Boolean = true
 
-  def extract(col: Column, prefix: String): Iterable[Feature] = {
-    var source: Source = Source.fromFile(col.colFile)
+  def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
+    var source: Source = Source.fromInputStream(input)
     val fType = "%s%s".format(prefix, featureType)
     try {
       val sum = source.getLines().size

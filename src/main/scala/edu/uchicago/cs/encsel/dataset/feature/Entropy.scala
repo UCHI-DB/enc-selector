@@ -22,6 +22,8 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.InputStream
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.util.DataUtils
 import org.apache.commons.lang.StringUtils
@@ -37,11 +39,11 @@ object Entropy extends FeatureExtractor {
 
   def supportFilter: Boolean = true
 
-  def extract(input: Column, prefix: String): Iterable[Feature] = {
+  def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val allcalc = new EntropyCalc()
     val linecalc = new EntropyCalc()
 
-    val source = Source.fromFile(input.colFile)
+    val source = Source.fromInputStream(input)
     try {
       val lineEntropy = source.getLines().filter(StringUtils.isNotEmpty)
         .map(line => {
