@@ -22,7 +22,7 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature.report
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, InputStream}
 
 import edu.uchicago.cs.encsel.Config
 import edu.uchicago.cs.encsel.classify.nn.NNPredictor
@@ -38,8 +38,15 @@ import org.apache.commons.io.IOUtils
 object SelTimeUsage extends FeatureExtractor {
 
   val profiler = new Profiler
-  val intPredictor = new NNPredictor(Config.predictIntModelPath, Config.predictNumFeature)
-  val stringPredictor = new NNPredictor(Config.predictStringModelPath, Config.predictNumFeature)
+
+  val intPredictor = {
+    val intModelPath = Thread.currentThread().getContextClassLoader.getResource(Config.predictIntModelPath)
+    new NNPredictor(new File(intModelPath.toURI).getAbsolutePath, Config.predictNumFeature)
+  }
+  val stringPredictor = {
+    val stringModelPath = Thread.currentThread().getContextClassLoader.getResource(Config.predictStringModelPath)
+    new NNPredictor(new File(stringModelPath.toURI).getAbsolutePath, Config.predictNumFeature)
+  }
 
   override def featureType: String = "SelTimeUsage"
 
@@ -53,6 +60,8 @@ object SelTimeUsage extends FeatureExtractor {
       case DataType.INTEGER => {
         val buffer = new ByteArrayOutputStream
         IOUtils.copy(input, buffer)
+        buffer.close()
+
         val data = buffer.toByteArray
 
         profiler.reset

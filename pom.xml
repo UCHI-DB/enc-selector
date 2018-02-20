@@ -9,12 +9,12 @@
         <sourceDirectory>src/main/java</sourceDirectory>
 
         <resources>
-            <resource>
+            <!--resource>
                 <directory>src/main/scala</directory>
                 <includes>
                     <include>**/*.scala</include>
                 </includes>
-            </resource>
+            </resource-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
@@ -23,17 +23,23 @@
                     <include>**/*.txt</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>src/main/nnmodel</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
         </resources>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <testResources>
-            <testResource>
+            <!--testResource>
                 <directory>src/test/scala</directory>
                 <includes>
                     <include>**/*.scala</include>
                 </includes>
                 <excludes>
                 </excludes>
-            </testResource>
+            </testResource-->
             <testResource>
                 <directory>src/test/resources</directory>
                 <includes>

@@ -81,6 +81,9 @@ object Features {
     val buffer = new ByteArrayOutputStream()
 
     IOUtils.copy(reader, buffer)
+    reader.close()
+    buffer.close()
+
     val bufferArray = buffer.toByteArray
 
     val extracted = extractors.filter(_.supportFilter).flatMap(ex => {

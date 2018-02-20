@@ -22,9 +22,14 @@
  */
 package edu.uchicago.cs.encsel
 
+import java.io.{File, FileOutputStream}
 import java.util.Properties
+import java.util.zip.ZipFile
 
+import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConverters._
 
 object Config {
 
@@ -42,6 +47,7 @@ object Config {
   var predictNumFeature = 19
 
   load()
+  extract()
 
   val logger = LoggerFactory.getLogger(getClass)
 
@@ -65,5 +71,42 @@ object Config {
         logger.warn("Failed to load configuration", e)
       }
     }
+  }
+
+  // Extract Resources from jar to current folder
+  def extract(): Unit = {
+    try {
+      val jarURI = Config.getClass.getResource("/edu/uchicago/cs/encsel/Config.class").toURI
+      if (jarURI.toString.endsWith(".jar")) {
+        val zipFile = new ZipFile(new File(jarURI))
+
+        ZipUtils.extractFolder(zipFile, "int_model", new File("int_model"))
+        ZipUtils.extractFolder(zipFile, "string_model", new File("string_model"))
+      }
+    } catch {
+      case e:Exception => {
+        logger.error("Failed to load resources")
+        System.exit(1)
+      }
+    }
+  }
+}
+
+object ZipUtils {
+  def extractFolder(zipFile: ZipFile, path: String, parent: File): Unit = {
+    zipFile.entries().asScala.foreach(entry => {
+      if (entry.getName.startsWith(path)) {
+        val realPath = entry.getName.replaceFirst("^" + path, parent.getAbsolutePath)
+        if(entry.isDirectory) {
+          new File(realPath).mkdir()
+        } else {
+          val inputstream = zipFile.getInputStream(entry)
+          val outputstream = new FileOutputStream(realPath)
+          IOUtils.copy(inputstream,outputstream)
+          inputstream.close()
+          outputstream.close()
+        }
+      }
+    })
   }
 }
