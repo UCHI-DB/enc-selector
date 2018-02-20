@@ -45,7 +45,7 @@ import java.util.List;
 public class ParquetCompressedWriterHelper {
 
     public static URI singleColumnBoolean(URI input, CompressionCodecName codec) throws IOException {
-        File output = ParquetWriterHelper.genOutput(input, "PLAIN");
+        File output = ParquetWriterHelper.genOutput(input, String.format("PLAIN_%s", codec.name()));
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
@@ -71,7 +71,7 @@ public class ParquetCompressedWriterHelper {
     }
 
     public static URI singleColumnInt(URI input, IntEncoding encoding, CompressionCodecName codec) throws IOException {
-        File output = ParquetWriterHelper.genOutput(input, encoding.name());
+        File output = ParquetWriterHelper.genOutput(input, String.format("%s_%s", encoding.name(), codec.name()));
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
@@ -104,7 +104,7 @@ public class ParquetCompressedWriterHelper {
 
     public static URI singleColumnLong(URI input, LongEncoding encoding, CompressionCodecName codec)
             throws IOException {
-        File output = ParquetWriterHelper.genOutput(input, encoding.name());
+        File output = ParquetWriterHelper.genOutput(input, String.format("%s_%s", encoding.name(), codec.name()));
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
@@ -137,7 +137,7 @@ public class ParquetCompressedWriterHelper {
 
     public static URI singleColumnString(URI input, StringEncoding encoding, CompressionCodecName codec)
             throws IOException {
-        File output = ParquetWriterHelper.genOutput(input, encoding.name());
+        File output = ParquetWriterHelper.genOutput(input, String.format("%s_%s", encoding.name(), codec.name()));
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
@@ -168,7 +168,7 @@ public class ParquetCompressedWriterHelper {
 
     public static URI singleColumnDouble(URI input, FloatEncoding encoding, CompressionCodecName codec)
             throws IOException {
-        File output = ParquetWriterHelper.genOutput(input, encoding.name());
+        File output = ParquetWriterHelper.genOutput(input, String.format("%s_%s", encoding.name(), codec.name()));
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
@@ -198,7 +198,7 @@ public class ParquetCompressedWriterHelper {
 
     public static URI singleColumnFloat(URI input, FloatEncoding encoding, CompressionCodecName codec)
             throws IOException {
-        File output = ParquetWriterHelper.genOutput(input, encoding.name());
+        File output = ParquetWriterHelper.genOutput(input, String.format("%s_%s", encoding.name(), codec.name()));
         if (output.exists())
             output.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));

@@ -121,7 +121,6 @@ object ScanTimeUsage extends FeatureExtractor {
           .flatMap(encoding => encFunction(encoding.name(), schema))
       }
     }
-
   }
 
 }
