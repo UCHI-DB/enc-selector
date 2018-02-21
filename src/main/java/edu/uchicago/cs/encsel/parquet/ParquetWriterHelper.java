@@ -83,6 +83,28 @@ public class ParquetWriterHelper {
         }
     }
 
+    public static int scanIntMaxInTab(URI input,int index) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(new File(input)));
+            int maxBitLength = 0;
+            String line;
+            String[] list;
+            while ((line = br.readLine()) != null) {
+                list = line.split("\\|");
+                if (line.isEmpty())
+                    continue;
+                int number = Integer.parseInt(list[index]);
+                if (number > maxBitLength)
+                    //System.out.println(list.length);
+                    maxBitLength = number;
+            }
+            br.close();
+            return maxBitLength;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static int scanLongBitLength(URI input) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File(input)));

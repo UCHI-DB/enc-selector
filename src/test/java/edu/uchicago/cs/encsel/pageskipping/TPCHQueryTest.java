@@ -396,4 +396,6 @@ public class TPCHQueryTest {
 		ColumnDescriptor l_quantity = TPCHSchema.lineitemSchema().getColumns().get(4);
 		System.out.println(Strings.join(l_quantity.getPath(), "."));
 	}
+	
+	
 }
