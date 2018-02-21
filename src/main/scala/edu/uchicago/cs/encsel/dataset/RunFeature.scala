@@ -34,7 +34,7 @@ import scala.collection.JavaConversions._
 /**
   * Created by harper on 4/23/17.
   */
-object AddMissingFeature extends App {
+object RunFeature extends App {
 
   val logger = LoggerFactory.getLogger(getClass)
 
