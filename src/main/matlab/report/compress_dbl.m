@@ -1,21 +1,42 @@
-DOUBLECOMPRESS.minEnc = min(DOUBLECOMPRESS{:,1:2},[],2);
-DOUBLECOMPRESS.minCom = min(DOUBLECOMPRESS{:,3:5},[],2);
-DOUBLECOMPRESS.compare = DOUBLECOMPRESS.minEnc./DOUBLECOMPRESS.minCom;
+minEnc = min(DOUBLECOMPRESS{:,1:2},[],2);
+minCom = min(DOUBLECOMPRESS{:,3:5},[],2);
+compare = minCom./minEnc;
 
-fig=cdfplot(DOUBLECOMPRESS.minEnc);
+cdfplot(minEnc);
 hold on
-cdfplot(DOUBLECOMPRESS.minCom);
-cdfplot(INTCOMPRESS.gz);
-cdfplot(INTCOMPRESS.lz);
-cdfplot(INTCOMPRESS.sn);
+h1=cdfplot(minCom);
+h2=cdfplot(DOUBLECOMPRESS.gz);
+set(h1, 'LineStyle','--','Color','blue');
+set(h2, 'LineStyle',':');
+cdfplot(DOUBLECOMPRESS.lz);
+cdfplot(DOUBLECOMPRESS.sn);
+title('');
 xlabel('Compression Ratio');
 ylabel('Percentage');
-legend('Selected Encoding', 'Best Compression', 'GZip','LZO','Snappy');
+legend('Selected Encoding', 'Best Compression', 'GZip','LZO','Snappy','Location','southeast');
 hold off
-saveas(fig,'compress_dbl_cdf.eps','epsc');
+saveas(gcf,'compress_dbl_cdf.eps','epsc');
 close(gcf);
-cdfplot(DOUBLECOMPRESS.compare);
-xlabel('Encoding / Compression');
+
+
+threshold=5;
+compare(compare>threshold)=threshold;
+h1=cdfplot(compare);
+hold on
+set(h1, 'LineStyle','--','color','r');
+gzc = DOUBLECOMPRESS.gz./minEnc;
+gzc(gzc>threshold)=threshold;
+h2=cdfplot(gzc);
+set(h2, 'LineStyle',':','color','black');
+lzc = DOUBLECOMPRESS.lz./minEnc;
+lzc(lzc>threshold)=threshold;
+cdfplot(lzc);
+snc = DOUBLECOMPRESS.sn./minEnc;
+snc(snc>threshold)=threshold;
+cdfplot(snc);
+title('');
+xlabel('Compression / Encoding Ratio');
 ylabel('Percentage');
+legend('Best Compression', 'GZip','LZO','Snappy','Location','southeast');
 saveas(gcf, 'compress_dbl_compare.eps','epsc');
 close(gcf);

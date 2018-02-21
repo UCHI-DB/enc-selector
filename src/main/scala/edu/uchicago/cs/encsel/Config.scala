@@ -47,10 +47,12 @@ object Config {
   var predictStringModelPath = "./string_model"
   var predictNumFeature = 19
 
+
+  val logger = LoggerFactory.getLogger(getClass)
+
   load()
   extract()
 
-  val logger = LoggerFactory.getLogger(getClass)
 
   def load(): Unit = {
     try {
@@ -92,7 +94,7 @@ object Config {
       }
     } catch {
       case e: Exception => {
-        logger.error("Failed to load resources")
+        logger.error("Failed to load resources", e)
         System.exit(1)
       }
     }
