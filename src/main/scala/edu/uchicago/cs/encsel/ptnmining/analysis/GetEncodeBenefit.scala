@@ -34,17 +34,36 @@ object GetEncodeBenefit extends App {
 
   val persist = new JPAPersistence
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
-  columns.foreach(col => {
-    val originalSize = columnSize(col)
-    val childrenSize = getChildren(col).map(columnSize).sum
-    if (originalSize > 0 && childrenSize > 0) {
-      val ratio = childrenSize / originalSize;
-      if (ratio != 0) {
-        col.infos.put("subattr_benefit", ratio)
-        persist.save(Seq(col))
+
+  benefitVsRaw
+
+  def benefitVsEncode: Unit = {
+    columns.foreach(col => {
+      val originalSize = columnSize(col)
+      val childrenSize = getChildren(col).map(columnSize).sum
+      if (originalSize > 0 && childrenSize > 0) {
+        val ratio = childrenSize / originalSize;
+        if (ratio != 0) {
+          col.infos.put("subattr_benefit", ratio)
+          persist.save(Seq(col))
+        }
       }
-    }
-  })
+    })
+  }
+
+  def benefitVsRaw: Unit = {
+    columns.foreach(col => {
+      val pSize = plainSize(col)
+      val childrenSize = getChildren(col).map(columnSize).sum
+      if (pSize > 0 && childrenSize > 0) {
+        val ratio = childrenSize / pSize;
+        if (ratio != 0) {
+          col.infos.put("subattr_benefit_plain", ratio)
+          persist.save(Seq(col))
+        }
+      }
+    })
+  }
 
   def getChildren(col: Column): Seq[Column] = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"
@@ -56,6 +75,14 @@ object GetEncodeBenefit extends App {
     features.size match {
       case 0 => 0
       case _ => features.min
+    }
+  }
+
+  def plainSize(col: Column): Double = {
+    val feature = col.findFeature(ParquetEncFileSize.featureType, "PLAIN_file_size")
+    feature match {
+      case None => 0
+      case Some(s) => s.value
     }
   }
 }
