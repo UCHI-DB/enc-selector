@@ -43,14 +43,30 @@ class AbadiDecisionTree {
     }
   }
 
+  def classifyString(arl: Feature, card: Feature, sort: Feature): StringEncoding = {
+    if (arl.value >= 4) {
+      // No RLE for String Encoding
+      return StringEncoding.DICT;
+    }
+    if (card.value >= 50000) {
+      return StringEncoding.PLAIN;
+    } else if (card.value > 50) {
+      return StringEncoding.DICT;
+    } else {
+      return StringEncoding.BITVECTOR;
+    }
+  }
 }
 
 object AbadiDecisionTree extends App {
 
   val store = Persistence.get
 
-  var counter = 0;
-  var success = 0;
+  var intCounter = 0;
+  var intSuccess = 0;
+
+  var strCounter = 0;
+  var strSuccess = 0;
 
   val decTree = new AbadiDecisionTree
 
@@ -63,16 +79,33 @@ object AbadiDecisionTree extends App {
       case DataType.INTEGER => {
         if (avl.isDefined && card.isDefined) {
           val encodedSize = col.findFeatures("EncFileSize").toList
+          val validSize = encodedSize.filter(_.value > 0)
+          if (validSize.isEmpty) {
+            LoggerFactory.getLogger(getClass).warn("Invalid context for column:%s".format(col.colFile))
+          } else {
+            val smallestSize = validSize.minBy(_.value)
+            intCounter += 1
+            val treeDecision = decTree.classifyInt(avl.get, card.get, null)
+
+            if ("%s_file_size".format(treeDecision.name()).equals(smallestSize.name)) {
+              intSuccess += 1
+            }
+          }
+        }
+      }
+      case DataType.STRING => {
+        if (avl.isDefined && card.isDefined) {
+          val encodedSize = col.findFeatures("EncFileSize").toList
           val validSize = encodedSize.filter(_.value >= 0)
           if (validSize.isEmpty) {
             LoggerFactory.getLogger(getClass).warn("Invalid context for column:%s".format(col.colFile))
           } else {
             val smallestSize = validSize.minBy(_.value)
-            counter += 1
+            strCounter += 1
             val treeDecision = decTree.classifyInt(avl.get, card.get, null)
 
             if ("%s_file_size".format(treeDecision.name()).equals(smallestSize.name)) {
-              success += 1
+              strSuccess += 1
             }
           }
         }
@@ -83,5 +116,6 @@ object AbadiDecisionTree extends App {
     }
   })
 
-  System.out.println("Success Rate: %d/%d".format(success, counter))
+  System.out.println("Int Success Rate: %d/%d".format(intSuccess, intCounter))
+  System.out.println("Str Success Rate: %d/%d".format(strSuccess, strCounter))
 }
