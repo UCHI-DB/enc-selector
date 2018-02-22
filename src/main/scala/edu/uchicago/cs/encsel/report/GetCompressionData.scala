@@ -57,7 +57,7 @@ object GetCompressionData extends App {
             case None => ""
           }
         )
-        val data = (bestEnc +: compressed).mkString(",")
+        val data = (bestEncSize +: compressed).mkString(",")
         types.getOrElse(col.dataType, null).println(data)
       }
     }

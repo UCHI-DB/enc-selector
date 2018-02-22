@@ -39,10 +39,30 @@ object SelTimeUsage extends FeatureExtractor {
 
   val profiler = new Profiler
 
-  val intPredictor =
-    new NNPredictor(new File(Config.predictIntModelPath).getAbsolutePath, Config.predictNumFeature)
-  val stringPredictor =
-    new NNPredictor(new File(Config.predictStringModelPath).getAbsolutePath, Config.predictNumFeature)
+  val intPredictor = {
+    val intModelPath = Thread.currentThread().getContextClassLoader.getResource(Config.predictIntModelPath).toURI
+    val modelFile =
+      if (intModelPath.getScheme == "jar") {
+        new File(Config.predictIntModelPath)
+      } else if (intModelPath.getScheme == "file") {
+        new File(intModelPath)
+      } else {
+        throw new IllegalArgumentException(intModelPath.toString)
+      }
+    new NNPredictor(modelFile.getAbsolutePath, Config.predictNumFeature)
+  }
+  val stringPredictor = {
+    val stringModelPath = Thread.currentThread().getContextClassLoader.getResource(Config.predictStringModelPath).toURI
+    val modelFile =
+      if (stringModelPath.getScheme == "jar") {
+        new File(Config.predictIntModelPath)
+      } else if (stringModelPath.getScheme == "file") {
+        new File(stringModelPath)
+      } else {
+        throw new IllegalArgumentException(stringModelPath.toString)
+      }
+    new NNPredictor(modelFile.getAbsolutePath, Config.predictNumFeature)
+  }
 
   override def featureType: String = "SelTimeUsage"
 
