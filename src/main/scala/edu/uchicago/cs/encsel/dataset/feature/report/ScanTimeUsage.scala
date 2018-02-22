@@ -21,13 +21,14 @@
  *
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.report
 
 import java.io.{File, InputStream}
 import java.lang.management.ManagementFactory
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
 import edu.uchicago.cs.encsel.query.VColumnPredicate

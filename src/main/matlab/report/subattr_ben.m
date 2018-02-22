@@ -1,4 +1,7 @@
+clear;
+load('subattr.mat');
 % value 
+value=subattrben.value5;
 
 threshold = 1000;
 value2 = value(value<threshold);
