@@ -123,7 +123,7 @@ object SelTimeUsage extends FeatureExtractor {
         profiler.mark
 
         // Instead of reding file from disk for each features, load file in memory for reuse
-        val features = Features.extractors.flatMap(ex => {
+        val features = fes.flatMap(ex => {
           ex.extract(column, new ByteArrayInputStream(data), prefix)
         }).map(_.value).toArray
         profiler.pause
