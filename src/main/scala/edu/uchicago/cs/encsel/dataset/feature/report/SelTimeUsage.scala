@@ -27,7 +27,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, InputStream}
 import edu.uchicago.cs.encsel.Config
 import edu.uchicago.cs.encsel.classify.nn.NNPredictor
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor, Features}
+import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.perf.Profiler
 import org.apache.commons.io.IOUtils
@@ -38,6 +38,15 @@ import org.apache.commons.io.IOUtils
 object SelTimeUsage extends FeatureExtractor {
 
   val profiler = new Profiler
+
+  val fes = Array(
+    Sparsity,
+    Entropy,
+    Length,
+    Distinct,
+    new Sortness(50),
+    new Sortness(100),
+    new Sortness(200))
 
   val intPredictor = {
     val intModelPath = Thread.currentThread().getContextClassLoader.getResource(Config.predictIntModelPath).toURI
@@ -82,9 +91,11 @@ object SelTimeUsage extends FeatureExtractor {
 
         profiler.reset
         profiler.mark
-        val features = Features.extractors.flatMap(ex => {
+
+        val features = fes.flatMap(ex => {
           ex.extract(column, new ByteArrayInputStream(data), prefix)
         }).map(_.value).toArray
+
         profiler.pause
         val time1 = profiler.stop
 
