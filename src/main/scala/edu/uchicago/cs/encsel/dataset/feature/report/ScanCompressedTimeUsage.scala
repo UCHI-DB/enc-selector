@@ -33,6 +33,7 @@ import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
+import edu.uchicago.cs.encsel.query.tpch.NostoreColumnTempTable
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 import org.apache.parquet.schema.Type.Repetition
 import org.apache.parquet.schema.{MessageType, PrimitiveType}
@@ -46,7 +47,9 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
   def supportFilter: Boolean = false
 
 
-  val select = new VerticalSelect();
+  val select = new VerticalSelect() {
+    override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
+  };
   val predicate = new VColumnPredicate((data) => true, 0)
   val codecs = Array("GZIP", "LZO", "SNAPPY")
 
