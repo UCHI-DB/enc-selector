@@ -47,46 +47,47 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
   def supportFilter: Boolean = false
 
 
-  val select = new VerticalSelect() {
-    override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
-  };
   val predicate = new VColumnPredicate((data) => true, 0)
   val codecs = Array("GZIP", "LZO", "SNAPPY")
 
+  def encFunction(col: Column, encoding: String, schema: MessageType): Iterable[Feature] = {
+    try {
+      val select = new VerticalSelect() {
+        override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
+      };
+      val timembean = ManagementFactory.getThreadMXBean;
+
+      val fileName = col.colFile + "." + encoding;
+      val encfile = new URI(fileName)
+
+      if (!new File(encfile).exists())
+        return Iterable[Feature]()
+
+      val startcpu = timembean.getCurrentThreadCpuTime
+      val startuser = timembean.getCurrentThreadUserTime
+      val startwc = System.currentTimeMillis()
+      select.select(encfile, predicate, schema, Array(0))
+
+      val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
+      val userconsumption = timembean.getCurrentThreadUserTime - startuser
+      val wcconsumption = System.currentTimeMillis() - startwc
+
+      Iterable(
+        new Feature(featureType, "%s_wallclock".format(encoding), wcconsumption),
+        new Feature(featureType, "%s_cpu".format(encoding), cpuconsumption),
+        new Feature(featureType, "%s_user".format(encoding), userconsumption)
+      )
+    } catch {
+      case e: Exception => {
+        e.printStackTrace()
+        Iterable[Feature]()
+      }
+    }
+  }
+
+
   def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
 
-    val timembean = ManagementFactory.getThreadMXBean;
-
-    val encFunction: (String, MessageType) => Iterable[Feature] =
-      (encoding: String, schema: MessageType) => {
-        try {
-          val fileName = col.colFile + "." + encoding;
-          val encfile = new URI(fileName)
-
-          if (!new File(encfile).exists())
-            return Iterable[Feature]()
-
-          val startcpu = timembean.getCurrentThreadCpuTime
-          val startuser = timembean.getCurrentThreadUserTime
-          val startwc = System.currentTimeMillis()
-          select.select(encfile, predicate, schema, Array(0))
-
-          val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-          val userconsumption = timembean.getCurrentThreadUserTime - startuser
-          val wcconsumption = System.currentTimeMillis() - startwc
-
-          Iterable(
-            new Feature(featureType, "%s_wallclock".format(encoding), wcconsumption),
-            new Feature(featureType, "%s_cpu".format(encoding), cpuconsumption),
-            new Feature(featureType, "%s_user".format(encoding), userconsumption)
-          )
-        } catch {
-          case e: Exception => {
-            e.printStackTrace()
-            Iterable[Feature]()
-          }
-        }
-      }
     if (col.hasFeature(ParquetCompressFileSize.featureType)) {
       col.dataType match {
         case INTEGER => {
@@ -96,7 +97,7 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
           IntEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding => {
               codecs.flatMap(codec => {
-                encFunction("%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
               })
             })
         }
@@ -107,7 +108,7 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
           StringEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction("%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
               })
             )
         }
@@ -118,7 +119,7 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
           FloatEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction("%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
               })
             )
         }
@@ -129,7 +130,7 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
           LongEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction("%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
               })
             )
         }
@@ -143,7 +144,7 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
           FloatEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction("%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
               })
             )
         }
