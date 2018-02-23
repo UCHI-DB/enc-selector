@@ -1,9 +1,11 @@
 clear;
 load('subattr.mat');
+load('classify_model.mat');
 % value 
 
 value=subattrben.value5;
 % value 
+subattrben.value5=[];
 
 predict = trainedModel.predictFcn(subattrben);
 
