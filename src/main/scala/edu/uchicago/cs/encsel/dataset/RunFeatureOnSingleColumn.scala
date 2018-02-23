@@ -33,7 +33,7 @@ import scala.collection.JavaConverters._
 /**
   * Created by harper on 4/23/17.
   */
-object RunFeatureOnMainColumn extends App {
+object RunFeatureOnSingleColumn extends App {
 
   val logger = LoggerFactory.getLogger(getClass)
 
