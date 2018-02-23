@@ -1,0 +1,3 @@
+load('subattr_classify.mat');
+SUBATTRCLASSIFY.value5(SUBATTRCLASSIFY.value5<1)=0;
+SUBATTRCLASSIFY.value5(SUBATTRCLASSIFY.value5>=1)=1;

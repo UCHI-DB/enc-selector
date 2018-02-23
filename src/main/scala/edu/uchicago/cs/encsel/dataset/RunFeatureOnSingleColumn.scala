@@ -42,41 +42,24 @@ object RunFeatureOnMainColumn extends App {
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
   val missed = Seq(ScanCompressedTimeUsage)
 
-  val prefix = args.length match {
-    case gt if gt > 0 => args(0)
-    case _ => ""
-  }
-
-  val filter = args.length match {
-    case gt if gt > 0 =>
-      args(1) match {
-        case "none" => null
-        case "firstn" => Filter.firstNFilter(args(2).toInt)
-        case "iid" => Filter.iidSamplingFilter(args(2).toDouble)
-        case "size" => Filter.sizeFilter(args(2).toInt)
-        case "minsize" => Filter.minSizeFilter(args(2).toInt, args(3).toDouble)
-        case _ => throw new IllegalArgumentException(args(1))
-      }
-    case _ => null
-  }
+  val from = args(0).toInt
+  val to = args(1).toInt
 
   Features.extractors.clear()
   Features.extractors ++= missed
 
   val persistence = Persistence.get
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL",
-    classOf[ColumnWrapper]).getResultList.asScala.toList
+  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL and c.id BETWEEN :a and :b",
+    classOf[ColumnWrapper])
+    .setParameter("a", from)
+    .setParameter("b", to).getResultList.asScala.toList
   val size = columns.size
   var counter = 0
   columns.foreach(column => {
     counter += 1
     System.out.println("Processing %d, %d / %d : %s".format(column.id, counter, size, column.colFile))
     try {
-      if (filter == null) {
-        column.replaceFeatures(Features.extract(column))
-      } else {
-        column.replaceFeatures(Features.extract(column, filter, prefix))
-      }
+      column.replaceFeatures(Features.extract(column))
       persistence.save(Seq(column))
     } catch {
       case e: Exception => {
