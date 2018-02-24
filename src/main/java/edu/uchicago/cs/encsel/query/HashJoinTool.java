@@ -27,6 +27,7 @@ import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
 import edu.uchicago.cs.encsel.perf.Profiler;
 import edu.uchicago.cs.encsel.query.operator.HashJoin;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
+import edu.uchicago.cs.encsel.parquet.EncContext;
 import scala.Tuple2;
 
 import java.io.File;
@@ -35,7 +36,9 @@ import java.io.File;
 public class HashJoinTool {
 
     public static void main(String[] args) {
-        int repeat = 5;
+    		EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Integer[]{23,6000000});
+        EncContext.context.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), new Integer[]{23,6000000});
+        int repeat = 3;
         long clocktime = 0L;
         long cputime = 0L;
         long usertime = 0L;

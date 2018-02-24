@@ -9,12 +9,12 @@
         <sourceDirectory>src/main/java</sourceDirectory>
 
         <resources>
-            <resource>
+            <!--resource>
                 <directory>src/main/scala</directory>
                 <includes>
                     <include>**/*.scala</include>
                 </includes>
-            </resource>
+            </resource-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
@@ -23,17 +23,23 @@
                     <include>**/*.txt</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>src/main/nnmodel</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
         </resources>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <testResources>
-            <testResource>
+            <!--testResource>
                 <directory>src/test/scala</directory>
                 <includes>
                     <include>**/*.scala</include>
                 </includes>
                 <excludes>
                 </excludes>
-            </testResource>
+            </testResource-->
             <testResource>
                 <directory>src/test/resources</directory>
                 <includes>
@@ -218,6 +224,33 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.hadoop.gplcompression</groupId>
+                                    <artifactId>hadoop-lzo</artifactId>
+                                    <version>0.4.20</version>
+                                    <includes>**/*.so</includes>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -227,6 +260,15 @@
         <nd4j.version>0.9.1</nd4j.version>
         <scala.version>2.12.4</scala.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>twitter</id>
+            <name>Twitter</name>
+            <url>http://maven.twttr.com/</url>
+        </repository>
+
+    </repositories>
 
     <dependencies>
 
@@ -391,5 +433,12 @@
             <artifactId>RoaringBitmap</artifactId>
             <version>0.6.66</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.hadoop.gplcompression/hadoop-lzo -->
+        <dependency>
+            <groupId>com.hadoop.gplcompression</groupId>
+            <artifactId>hadoop-lzo</artifactId>
+            <version>0.4.20</version>
+        </dependency>
+
     </dependencies>
 </project>
