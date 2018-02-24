@@ -24,13 +24,14 @@
 package edu.uchicago.cs.encsel.dataset.feature.report
 
 import java.io.{File, InputStream}
+import java.lang.management.ManagementFactory
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.report.ScanCompressedTimeUsageNoSnappy.profiler
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
+import edu.uchicago.cs.encsel.perf.Profiler
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
 import edu.uchicago.cs.encsel.query.tpch.NostoreColumnTempTable
@@ -39,16 +40,16 @@ import org.apache.parquet.schema.Type.Repetition
 import org.apache.parquet.schema.{MessageType, PrimitiveType}
 import org.slf4j.LoggerFactory
 
-object ScanCompressedTimeUsage extends FeatureExtractor {
+object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
   val logger = LoggerFactory.getLogger(getClass)
 
   def featureType = "ScanTimeUsage"
 
   def supportFilter: Boolean = false
 
-
   val predicate = new VColumnPredicate((data) => true, 0)
-  val codecs = Array("GZIP", "LZO", "SNAPPY")
+  val codecs = Array("GZIP", "LZO")
+  val profiler = new Profiler
 
   def encFunction(col: Column, encoding: String, schema: MessageType): Iterable[Feature] = {
     try {

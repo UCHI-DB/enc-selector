@@ -24,13 +24,13 @@
 package edu.uchicago.cs.encsel.dataset.feature.report
 
 import java.io.{File, InputStream}
-import java.lang.management.ManagementFactory
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
+import edu.uchicago.cs.encsel.perf.Profiler
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
 import edu.uchicago.cs.encsel.query.tpch.NostoreColumnTempTable
@@ -52,7 +52,7 @@ object ScanTimeUsage extends FeatureExtractor {
       override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
     };
     val predicate = new VColumnPredicate((data) => true, 0)
-    val timembean = ManagementFactory.getThreadMXBean;
+    val profiler = new Profiler
 
     val encFunction: (String, MessageType) => Iterable[Feature] =
       (encoding: String, schema: MessageType) => {
@@ -63,19 +63,16 @@ object ScanTimeUsage extends FeatureExtractor {
           if (!new File(encfile).exists())
             return Iterable[Feature]()
 
-          val startcpu = timembean.getCurrentThreadCpuTime
-          val startuser = timembean.getCurrentThreadUserTime
-          val startwc = System.currentTimeMillis()
+          profiler.reset
+          profiler.mark
           select.select(encfile, predicate, schema, Array(0))
-
-          val cpuconsumption = timembean.getCurrentThreadCpuTime - startcpu
-          val userconsumption = timembean.getCurrentThreadUserTime - startuser
-          val wcconsumption = System.currentTimeMillis() - startwc
+          profiler.pause
+          val time = profiler.stop
 
           Iterable(
-            new Feature(featureType, "%s_wallclock".format(encoding), wcconsumption),
-            new Feature(featureType, "%s_cpu".format(encoding), cpuconsumption),
-            new Feature(featureType, "%s_user".format(encoding), userconsumption)
+            new Feature(featureType, "%s_wallclock".format(encoding), time.wallclock),
+            new Feature(featureType, "%s_cpu".format(encoding), time.cpu),
+            new Feature(featureType, "%s_user".format(encoding), time.user)
           )
         } catch {
           case e: Exception => {

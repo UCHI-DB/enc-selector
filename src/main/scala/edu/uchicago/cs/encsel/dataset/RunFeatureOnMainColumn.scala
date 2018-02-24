@@ -64,7 +64,7 @@ object RunFeatureOnMainColumn extends App {
   Features.extractors ++= missed
 
   val persistence = Persistence.get
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL",
+  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL ORDER BY c.id",
     classOf[ColumnWrapper]).getResultList.asScala.toList
   val size = columns.size
   var counter = 0

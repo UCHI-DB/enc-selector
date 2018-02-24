@@ -22,24 +22,42 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature.report
 
-import java.io.{File, InputStream}
+import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetCompressedWriterHelper
+import edu.uchicago.cs.encsel.perf.Profiler
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 
 /**
   * Encode files using Parquet
   */
-object ParquetCompressFileSize extends FeatureExtractor {
+object ParquetCompressTimeUsage extends FeatureExtractor {
 
-  def featureType = "CompressEncFileSize"
+  def featureType = "CompressTimeUsage"
 
   def supportFilter: Boolean = false
 
   val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.LZO, CompressionCodecName.GZIP)
+  val profiler = new Profiler
+
+  def runTask(fType: String, name: String, task: () => Unit): Iterable[Feature] = {
+
+    profiler.reset
+    profiler.mark
+
+    task()
+
+    profiler.pause
+    val time = profiler.stop
+
+    Iterable(
+      new Feature(fType, "%s_wctime".format(name), time.wallclock),
+      new Feature(fType, "%s_cputime".format(name), time.cpu),
+      new Feature(fType, "%s_usertime".format(name), time.user))
+  }
 
   def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     // Ignore filter
@@ -47,79 +65,91 @@ object ParquetCompressFileSize extends FeatureExtractor {
     col.dataType match {
       case DataType.STRING => {
         StringEncoding.values().filter(_.parquetEncoding() != null).flatMap(e => {
-          codecs.map(codec => {
+          codecs.flatMap(codec => {
             try {
-              val f = ParquetCompressedWriterHelper.singleColumnString(col.colFile, e, codec)
-              new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
+              runTask(fType, "%s_%s".format(e.name(), codec.name()), () => {
+                ParquetCompressedWriterHelper.singleColumnString(col.colFile, e, codec)
+              })
             } catch {
               case ile: IllegalArgumentException => {
                 // Unsupported Encoding, ignore
-                null
+                Iterable()
               }
             }
           })
-        }).filter(_ != null)
+        })
       }
       case DataType.LONG => {
-        LongEncoding.values().filter(_.parquetEncoding() != null).filter(_ == LongEncoding.DICT).flatMap(e => {
-          codecs.map(codec => {
+        LongEncoding.values().filter(_.parquetEncoding() != null).flatMap(e => {
+          codecs.flatMap(codec => {
             try {
-              val f = ParquetCompressedWriterHelper.singleColumnLong(col.colFile, e, codec)
-              new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
+              runTask(fType, "%s_%s".format(e.name(), codec.name()), () => {
+                ParquetCompressedWriterHelper.singleColumnLong(col.colFile, e, codec)
+              })
             } catch {
               case ile: IllegalArgumentException => {
-                null
+                Iterable()
               }
             }
           })
-        }).filter(_ != null)
+        })
       }
       case DataType.INTEGER => {
         IntEncoding.values().filter(_.parquetEncoding() != null).flatMap(e => {
-          codecs.map(codec => {
+          codecs.flatMap(codec => {
             try {
-              val f = ParquetCompressedWriterHelper.singleColumnInt(col.colFile, e, codec)
-              new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
+              runTask(fType, "%s_%s".format(e.name(), codec.name()), () => {
+                ParquetCompressedWriterHelper.singleColumnInt(col.colFile, e, codec)
+              })
             } catch {
               case ile: IllegalArgumentException => {
-                null
+                Iterable()
               }
             }
           })
-        }).filter(_ != null)
+        })
       }
       case DataType.FLOAT => {
         FloatEncoding.values().filter(_.parquetEncoding() != null).flatMap(e => {
-          codecs.map(codec => {
+          codecs.flatMap(codec => {
             try {
-              val f = ParquetCompressedWriterHelper.singleColumnFloat(col.colFile, e, codec)
-              new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
+              runTask(fType, "%s_%s".format(e.name(), codec.name()), () => {
+                ParquetCompressedWriterHelper.singleColumnFloat(col.colFile, e, codec)
+              })
             } catch {
               case ile: IllegalArgumentException => {
-                null
+                Iterable()
               }
             }
           })
-        }).filter(_ != null)
+        })
       }
       case DataType.DOUBLE => {
         FloatEncoding.values().filter(_.parquetEncoding() != null).flatMap(e => {
-          codecs.map(codec => {
+          codecs.flatMap(codec => {
             try {
-              val f = ParquetCompressedWriterHelper.singleColumnDouble(col.colFile, e, codec)
-              new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
+              runTask(fType, "%s_%s".format(e.name(), codec.name()), () => {
+                ParquetCompressedWriterHelper.singleColumnDouble(col.colFile, e, codec)
+              })
             } catch {
               case ile: IllegalArgumentException => {
-                null
+                Iterable()
               }
             }
           })
-        }).filter(_ != null)
+        })
       }
       case DataType.BOOLEAN =>
-        codecs.map(codec => {
-          val f = ParquetCompressedWriterHelper.singleColumnBoolean(col.colFile, codec)
-          new Feature(fType, "PLAIN_%s_file_size".format(codec.name()), new File(f).length)
+        codecs.flatMap(codec => {
+          try {
+            runTask(fType, "PLAIN_%s".format(codec.name()), () => {
+              ParquetCompressedWriterHelper.singleColumnBoolean(col.colFile, codec)
+            })
+          } catch {
+            case e: Exception => {
+              Iterable()
+            }
+          }
         })
     }
   }
