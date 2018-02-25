@@ -65,7 +65,7 @@ class EncFileSizeTest {
   @Test
   def testExtractDouble: Unit = {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.DOUBLE)
-    col.colFile = new File("src/test/resource/coldata/double.data").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_double.data").toURI
 
     val feature = ParquetEncFileSize.extract(col)
     assertEquals(2, feature.size)
@@ -73,11 +73,11 @@ class EncFileSizeTest {
 
     assertTrue(fa(0).featureType.equals("EncFileSize"))
     assertEquals("PLAIN_file_size", fa(0).name)
-    assertEquals(new File("src/test/resource/coldata/double.data.PLAIN").length(), fa(0).value, 0.001)
+    assertEquals(new File("src/test/resource/coldata/test_col_double.data.PLAIN").length(), fa(0).value, 0.001)
 
     assertTrue(fa(1).featureType.equals("EncFileSize"))
     assertEquals("DICT_file_size", fa(1).name)
-    assertEquals(new File("src/test/resource/coldata/double.data.DICT").length(), fa(1).value, 0.001)
+    assertEquals(new File("src/test/resource/coldata/test_col_double.data.DICT").length(), fa(1).value, 0.001)
 
   }
 
