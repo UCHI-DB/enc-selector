@@ -25,57 +25,40 @@ package edu.uchicago.cs.encsel.query;
 
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.parquet.EncContext;
-
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.Encoding;
 
-
 import java.io.File;
 import java.io.IOException;
 
 
-public class JoinFileProducer {
+public class ScanFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"BP","RLE"};
+        //args = new String[]{"4","RLE"};
         if (args.length == 0) {
-            System.out.println("JoinFileProducer PPencoding LPencoding");
+            System.out.println("ScanFileProducer pos enc");
             return;
         }
-        String PPencoding = args[0];
-        String LPencoding = args[1];
+        int col = Integer.parseInt(args[0]);
+        String enc = args[1];
         String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
-        String part = "/home/cc/tpch-generator/dbgen/part";
 
-        int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 1);
+        int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);
         System.out.println("lineitem intBitLength: "+ bitLength +" lineitem intBound: "+intbound);
 
-        EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), IntEncoding.valueOf(LPencoding).parquetEncoding());
-        EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Integer[]{bitLength,intbound});
+        EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
+        EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{bitLength,intbound});
+        EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(4).toString(), new Integer[]{bitLength,intbound});
 
         //System.out.println(Encoding.valueOf("PLAIN"));
         ParquetWriterHelper.write(new File(lineitem+".tbl").toURI(), TPCHSchema.lineitemSchema(),
                 new File(lineitem+".parquet").toURI(), "\\|", false);
-
-
-
-        int pib = ParquetWriterHelper.scanIntMaxInTab(new File(part+".tbl").toURI(), 0);
-        int pbl = 32 - Integer.numberOfLeadingZeros(intbound);
-        System.out.println("part intBitLength: "+ bitLength +" part intBound: "+intbound);
-
-        EncContext.encoding.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), IntEncoding.valueOf(PPencoding).parquetEncoding());
-        EncContext.context.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), new Integer[]{pbl,pib});
-
-        ParquetWriterHelper.write(new File(part+".tbl").toURI(), TPCHSchema.partSchema(),
-                new File(part+".parquet").toURI(), "\\|", false);
-        long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), 1);
-        //System.out.println("lineitem col " + 1 + " size: "+colsize);
-        long pcolsize = ParquetReaderHelper.getColSize(new File(part+".parquet").toURI(), 0);
-        //System.out.println("part col " + 0 + " size:"+pcolsize);
+        long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), col);
+        //System.out.println("col " + col + " size: "+colsize);
     }
 }
-

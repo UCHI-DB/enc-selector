@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.io.File;
 
 public class ParquetReaderHelper {
     public static void read(URI file, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {
@@ -76,6 +77,32 @@ public class ParquetReaderHelper {
             }
         }
         return profiler.stop();
+    }
+
+    public static long getColSize(URI file, int col) throws IOException, VersionParser.VersionParseException {
+        Configuration conf = new Configuration();
+        Path path = new Path(file);
+        FileSystem fs = path.getFileSystem(conf);
+        List<FileStatus> statuses = Arrays.asList(fs.listStatus(path, HiddenFileFilter.INSTANCE));
+        List<Footer> footers = ParquetFileReader.readAllFootersInParallelUsingSummaryFiles(conf, statuses, false);
+        if (footers.isEmpty()) {
+            return -1;
+        }
+        String colEncoding = null;
+        long colsize = 0;
+        for (Footer footer : footers) {
+            List<BlockMetaData> blockMetas = footer.getParquetMetadata().getBlocks();
+            for (BlockMetaData block : blockMetas){
+                colsize += block.getColumns().get(col).getTotalSize();
+                colEncoding =block.getColumns().get(col).toString();
+            }
+        }
+        System.out.println(file);
+        System.out.println("Filesize:" + new File(file).length());
+        System.out.println(colEncoding);
+        System.out.println("col " + col + " size:"+colsize);
+
+        return colsize;
     }
 
     public static ProfileBean filterProfile(URI file, FilterCompat.Filter filter, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {

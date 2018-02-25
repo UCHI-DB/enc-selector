@@ -798,3 +798,853 @@ user:125850000000, CPUsum:128735788327, wcsum:542082
 179998372
 user:122920000000, CPUsum:124917127838, wcsum:424496
 Hashjoin,515660,128808532818,125950000000
+*********p_key: BP l_key: BP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:23050000000, CPUsum:23839900687, wcsum:50033
+3
+29999795
+user:21010000000, CPUsum:21610235933, wcsum:30438
+3
+29999795
+user:19960000000, CPUsum:20287344380, wcsum:34421
+3
+29999795
+user:21480000000, CPUsum:21763670401, wcsum:24373
+3
+29999795
+user:18920000000, CPUsum:19187097929, wcsum:22612
+3
+29999795
+user:19840000000, CPUsum:20078645708, wcsum:24529
+3
+29999795
+user:19850000000, CPUsum:20145503345, wcsum:32386
+3
+29999795
+user:20280000000, CPUsum:20550211400, wcsum:24991
+3
+29999795
+user:19480000000, CPUsum:19768231022, wcsum:32087
+3
+29999795
+user:19560000000, CPUsum:19788528768, wcsum:25733
+Hashjoin,30160,20701936957,20343000000
+*********p_key: BP l_key: RLE********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:22870000000, CPUsum:23535770097, wcsum:40017
+3
+29999795
+user:20100000000, CPUsum:20498335357, wcsum:33959
+3
+29999795
+user:20360000000, CPUsum:20657710809, wcsum:52870
+3
+29999795
+user:22440000000, CPUsum:23082738934, wcsum:33703
+3
+29999795
+user:20650000000, CPUsum:21010660471, wcsum:30698
+3
+29999795
+user:20720000000, CPUsum:21238702745, wcsum:27063
+3
+29999795
+user:20550000000, CPUsum:20966625247, wcsum:24311
+3
+29999795
+user:20180000000, CPUsum:20458449502, wcsum:52320
+3
+29999795
+user:19910000000, CPUsum:20218482768, wcsum:27657
+3
+29999795
+user:20690000000, CPUsum:20943143665, wcsum:26311
+Hashjoin,34890,21261061959,20847000000
+*********p_key: BP l_key: PLAIN********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21680000000, CPUsum:22453091235, wcsum:43516
+3
+29999795
+user:20080000000, CPUsum:20482322843, wcsum:26460
+3
+29999795
+user:20930000000, CPUsum:21157734675, wcsum:28097
+3
+29999795
+user:20270000000, CPUsum:20624767694, wcsum:34606
+3
+29999795
+user:21700000000, CPUsum:22170073590, wcsum:33267
+3
+29999795
+user:19610000000, CPUsum:19884820178, wcsum:23514
+3
+29999795
+user:20970000000, CPUsum:21329510355, wcsum:25144
+3
+29999795
+user:22060000000, CPUsum:22851331745, wcsum:33244
+3
+29999795
+user:22690000000, CPUsum:23014775727, wcsum:26778
+3
+29999795
+user:22170000000, CPUsum:22480847267, wcsum:32168
+Hashjoin,30679,21644927530,21216000000
+*********p_key: BP l_key: DICT********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:24550000000, CPUsum:25462255749, wcsum:40456
+3
+29999795
+user:22780000000, CPUsum:23466297414, wcsum:41176
+3
+29999795
+user:23750000000, CPUsum:24378709635, wcsum:43752
+3
+29999795
+user:21670000000, CPUsum:22008483949, wcsum:34230
+3
+29999795
+user:21830000000, CPUsum:22109013093, wcsum:33065
+3
+29999795
+user:23370000000, CPUsum:23648581748, wcsum:26345
+3
+29999795
+user:22650000000, CPUsum:22936261909, wcsum:40138
+3
+29999795
+user:23180000000, CPUsum:23535960055, wcsum:27860
+3
+29999795
+user:23050000000, CPUsum:23410102227, wcsum:47737
+3
+29999795
+user:23240000000, CPUsum:23525101037, wcsum:26999
+Hashjoin,36175,23448076681,23007000000
+*********p_key: BP l_key: DELTABP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:23360000000, CPUsum:24092885371, wcsum:40131
+3
+29999795
+user:22150000000, CPUsum:22467307092, wcsum:32444
+3
+29999795
+user:22120000000, CPUsum:22539868052, wcsum:36627
+3
+29999795
+user:21300000000, CPUsum:21688464501, wcsum:24918
+3
+29999795
+user:21780000000, CPUsum:22050766929, wcsum:26551
+3
+29999795
+user:22930000000, CPUsum:23202292194, wcsum:49065
+3
+29999795
+user:22120000000, CPUsum:22389335097, wcsum:24721
+3
+29999795
+user:21490000000, CPUsum:21799992959, wcsum:26291
+3
+29999795
+user:22260000000, CPUsum:22914927386, wcsum:31113
+3
+29999795
+user:21270000000, CPUsum:21542520481, wcsum:29249
+Hashjoin,32111,22468836006,22078000000
+*********p_key: RLE l_key: BP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:20970000000, CPUsum:21567991228, wcsum:37872
+3
+29999795
+user:21980000000, CPUsum:22456055065, wcsum:35544
+3
+29999795
+user:21290000000, CPUsum:22116623230, wcsum:36534
+3
+29999795
+user:22120000000, CPUsum:22387219657, wcsum:50014
+3
+29999795
+user:20810000000, CPUsum:21101395758, wcsum:23915
+3
+29999795
+user:20160000000, CPUsum:20428506666, wcsum:25420
+3
+29999795
+user:21080000000, CPUsum:21509556390, wcsum:26135
+3
+29999795
+user:19800000000, CPUsum:20167980163, wcsum:23966
+3
+29999795
+user:20230000000, CPUsum:20633029522, wcsum:27901
+3
+29999795
+user:19550000000, CPUsum:19758973099, wcsum:29510
+Hashjoin,31681,21212733077,20799000000
+*********p_key: RLE l_key: RLE********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:22010000000, CPUsum:22917842593, wcsum:39166
+3
+29999795
+user:20780000000, CPUsum:21284438857, wcsum:31014
+3
+29999795
+user:21150000000, CPUsum:21541827822, wcsum:29087
+3
+29999795
+user:20220000000, CPUsum:20556540594, wcsum:31509
+3
+29999795
+user:20510000000, CPUsum:20879294696, wcsum:38617
+3
+29999795
+user:20110000000, CPUsum:20566753781, wcsum:25740
+3
+29999795
+user:20720000000, CPUsum:21009235114, wcsum:45216
+3
+29999795
+user:21630000000, CPUsum:21916623994, wcsum:26432
+3
+29999795
+user:20690000000, CPUsum:20957223451, wcsum:26389
+3
+29999795
+user:19510000000, CPUsum:19792905575, wcsum:32140
+Hashjoin,32531,21142268647,20733000000
+*********p_key: RLE l_key: PLAIN********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21680000000, CPUsum:22385345567, wcsum:39264
+3
+29999795
+user:20360000000, CPUsum:20675662282, wcsum:35697
+3
+29999795
+user:21590000000, CPUsum:22435665609, wcsum:50214
+3
+29999795
+user:21370000000, CPUsum:21732648081, wcsum:29311
+3
+29999795
+user:21420000000, CPUsum:21783592903, wcsum:33328
+3
+29999795
+user:20710000000, CPUsum:21150665395, wcsum:47264
+3
+29999795
+user:20700000000, CPUsum:21295165652, wcsum:24865
+3
+29999795
+user:21230000000, CPUsum:21537838470, wcsum:52185
+3
+29999795
+user:21910000000, CPUsum:22273431010, wcsum:25955
+3
+29999795
+user:22340000000, CPUsum:23218191822, wcsum:58419
+Hashjoin,39650,21848820679,21331000000
+*********p_key: RLE l_key: DICT********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:23470000000, CPUsum:24120196489, wcsum:40536
+3
+29999795
+user:21650000000, CPUsum:22471078770, wcsum:33764
+3
+29999795
+user:22590000000, CPUsum:23519543397, wcsum:30538
+3
+29999795
+user:21350000000, CPUsum:21652514985, wcsum:29009
+3
+29999795
+user:22620000000, CPUsum:23081004621, wcsum:39381
+3
+29999795
+user:21560000000, CPUsum:22217696491, wcsum:32742
+3
+29999795
+user:21380000000, CPUsum:21644215690, wcsum:45460
+3
+29999795
+user:20960000000, CPUsum:21214284210, wcsum:39816
+3
+29999795
+user:20850000000, CPUsum:21047466362, wcsum:30754
+3
+29999795
+user:22350000000, CPUsum:22621568974, wcsum:26472
+Hashjoin,34847,22358956998,21878000000
+*********p_key: RLE l_key: DELTABP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:22940000000, CPUsum:23564866623, wcsum:41257
+3
+29999795
+user:20440000000, CPUsum:21114992333, wcsum:31700
+3
+29999795
+user:20540000000, CPUsum:21003360620, wcsum:31953
+3
+29999795
+user:21600000000, CPUsum:21983864201, wcsum:25313
+3
+29999795
+user:21120000000, CPUsum:21464313414, wcsum:46512
+3
+29999795
+user:21800000000, CPUsum:22273785170, wcsum:27074
+3
+29999795
+user:21770000000, CPUsum:22076102508, wcsum:28367
+3
+29999795
+user:21220000000, CPUsum:21775423130, wcsum:32591
+3
+29999795
+user:20580000000, CPUsum:20858751757, wcsum:23866
+3
+29999795
+user:19910000000, CPUsum:20205618160, wcsum:45289
+Hashjoin,33392,21632107791,21192000000
+*********p_key: PLAIN l_key: BP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21380000000, CPUsum:22244508853, wcsum:38664
+3
+29999795
+user:22410000000, CPUsum:22707814170, wcsum:27859
+3
+29999795
+user:21670000000, CPUsum:22083861097, wcsum:27981
+3
+29999795
+user:21260000000, CPUsum:22505225615, wcsum:31760
+3
+29999795
+user:20430000000, CPUsum:20947113777, wcsum:25710
+3
+29999795
+user:20580000000, CPUsum:21094826408, wcsum:30744
+3
+29999795
+user:21600000000, CPUsum:21879287606, wcsum:27889
+3
+29999795
+user:20830000000, CPUsum:21099160817, wcsum:30039
+3
+29999795
+user:19610000000, CPUsum:19921176669, wcsum:31590
+3
+29999795
+user:20160000000, CPUsum:20387186106, wcsum:23826
+Hashjoin,29606,21487016111,20993000000
+*********p_key: PLAIN l_key: RLE********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21340000000, CPUsum:22367392688, wcsum:41128
+3
+29999795
+user:20170000000, CPUsum:20508441993, wcsum:29887
+3
+29999795
+user:20860000000, CPUsum:21143855535, wcsum:28665
+3
+29999795
+user:19950000000, CPUsum:20274158085, wcsum:31192
+3
+29999795
+user:21620000000, CPUsum:21850384571, wcsum:49424
+3
+29999795
+user:21420000000, CPUsum:21656187498, wcsum:23992
+3
+29999795
+user:20440000000, CPUsum:20699573519, wcsum:24241
+3
+29999795
+user:21050000000, CPUsum:21327332570, wcsum:28385
+3
+29999795
+user:20740000000, CPUsum:21017284961, wcsum:26391
+3
+29999795
+user:20580000000, CPUsum:20861568135, wcsum:37871
+Hashjoin,32117,21170617955,20817000000
+*********p_key: PLAIN l_key: PLAIN********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:23510000000, CPUsum:24261958133, wcsum:38396
+3
+29999795
+user:22240000000, CPUsum:22669578632, wcsum:48646
+3
+29999795
+user:22060000000, CPUsum:22838527280, wcsum:41681
+3
+29999795
+user:21820000000, CPUsum:22099532502, wcsum:27523
+3
+29999795
+user:22250000000, CPUsum:23052785396, wcsum:57278
+3
+29999795
+user:22120000000, CPUsum:22444955923, wcsum:35082
+3
+29999795
+user:21210000000, CPUsum:21509820787, wcsum:28274
+3
+29999795
+user:21550000000, CPUsum:21866436605, wcsum:32442
+3
+29999795
+user:21670000000, CPUsum:21971364036, wcsum:26769
+3
+29999795
+user:21660000000, CPUsum:21930042499, wcsum:31668
+Hashjoin,36775,22464500179,22009000000
+*********p_key: PLAIN l_key: DICT********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:22500000000, CPUsum:23295174522, wcsum:40009
+3
+29999795
+user:21810000000, CPUsum:22195017163, wcsum:30323
+3
+29999795
+user:21660000000, CPUsum:22005084556, wcsum:38961
+3
+29999795
+user:21900000000, CPUsum:22129195243, wcsum:26343
+3
+29999795
+user:22420000000, CPUsum:22755768919, wcsum:52924
+3
+29999795
+user:22530000000, CPUsum:22769512894, wcsum:32026
+3
+29999795
+user:23080000000, CPUsum:23477977554, wcsum:29683
+3
+29999795
+user:22020000000, CPUsum:22294981831, wcsum:34425
+3
+29999795
+user:21390000000, CPUsum:21763283599, wcsum:46193
+3
+29999795
+user:22690000000, CPUsum:22988149302, wcsum:25384
+Hashjoin,35627,22567414558,22200000000
+*********p_key: PLAIN l_key: DELTABP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21790000000, CPUsum:22592469136, wcsum:40664
+3
+29999795
+user:21570000000, CPUsum:22178294272, wcsum:28261
+3
+29999795
+user:22330000000, CPUsum:22897420955, wcsum:35817
+3
+29999795
+user:20670000000, CPUsum:21104219041, wcsum:32543
+3
+29999795
+user:19870000000, CPUsum:20197396729, wcsum:24553
+3
+29999795
+user:20800000000, CPUsum:21058347545, wcsum:24343
+3
+29999795
+user:21740000000, CPUsum:22040315339, wcsum:35183
+3
+29999795
+user:20890000000, CPUsum:21171617981, wcsum:26463
+3
+29999795
+user:21080000000, CPUsum:21539929928, wcsum:40784
+3
+29999795
+user:21600000000, CPUsum:21894150260, wcsum:25190
+Hashjoin,31380,21667416118,21234000000
+*********p_key: DICT l_key: BP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:23070000000, CPUsum:23610274951, wcsum:40140
+3
+29999795
+user:20730000000, CPUsum:21217887430, wcsum:34213
+3
+29999795
+user:20770000000, CPUsum:21206466978, wcsum:35543
+3
+29999795
+user:21020000000, CPUsum:21381343376, wcsum:26416
+3
+29999795
+user:19730000000, CPUsum:20133299717, wcsum:26542
+3
+29999795
+user:22130000000, CPUsum:22679330007, wcsum:27568
+3
+29999795
+user:21890000000, CPUsum:22360156733, wcsum:29176
+3
+29999795
+user:21570000000, CPUsum:21795223012, wcsum:28494
+3
+29999795
+user:22120000000, CPUsum:22814526157, wcsum:33116
+3
+29999795
+user:22720000000, CPUsum:22973737740, wcsum:32391
+Hashjoin,31359,22017224610,21575000000
+*********p_key: DICT l_key: RLE********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:20890000000, CPUsum:21648910770, wcsum:39668
+3
+29999795
+user:22210000000, CPUsum:22624372428, wcsum:29450
+3
+29999795
+user:20420000000, CPUsum:20738665325, wcsum:35820
+3
+29999795
+user:20540000000, CPUsum:20794721448, wcsum:24082
+3
+29999795
+user:20110000000, CPUsum:20405916591, wcsum:26602
+3
+29999795
+user:21540000000, CPUsum:21814916510, wcsum:28537
+3
+29999795
+user:20730000000, CPUsum:20977072913, wcsum:26989
+3
+29999795
+user:20800000000, CPUsum:21044648017, wcsum:30157
+3
+29999795
+user:19230000000, CPUsum:19483003193, wcsum:23757
+3
+29999795
+user:21100000000, CPUsum:21554396512, wcsum:33785
+Hashjoin,29884,21108662370,20757000000
+*********p_key: DICT l_key: PLAIN********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:23190000000, CPUsum:23986254681, wcsum:39601
+3
+29999795
+user:19880000000, CPUsum:20195988247, wcsum:31446
+3
+29999795
+user:19820000000, CPUsum:20045263019, wcsum:40613
+3
+29999795
+user:20480000000, CPUsum:20754737748, wcsum:25322
+3
+29999795
+user:19810000000, CPUsum:20111434688, wcsum:38382
+3
+29999795
+user:21700000000, CPUsum:21969881443, wcsum:45727
+3
+29999795
+user:20000000000, CPUsum:20256556571, wcsum:23828
+3
+29999795
+user:21160000000, CPUsum:21466569623, wcsum:37990
+3
+29999795
+user:20170000000, CPUsum:20474678127, wcsum:25003
+3
+29999795
+user:19690000000, CPUsum:19987848408, wcsum:36208
+Hashjoin,34412,20924921255,20590000000
+*********p_key: DICT l_key: DICT********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:22560000000, CPUsum:23287020568, wcsum:39695
+3
+29999795
+user:23020000000, CPUsum:23304901092, wcsum:30609
+3
+29999795
+user:21850000000, CPUsum:22287314455, wcsum:29394
+3
+29999795
+user:21400000000, CPUsum:21744751155, wcsum:49649
+3
+29999795
+user:22780000000, CPUsum:23027771719, wcsum:27494
+3
+29999795
+user:21020000000, CPUsum:21349165170, wcsum:33979
+3
+29999795
+user:20550000000, CPUsum:20833256670, wcsum:25266
+3
+29999795
+user:20620000000, CPUsum:20900162304, wcsum:24341
+3
+29999795
+user:20110000000, CPUsum:20360079518, wcsum:29248
+3
+29999795
+user:20360000000, CPUsum:20612646942, wcsum:24331
+Hashjoin,31400,21770706959,21427000000
+*********p_key: DICT l_key: DELTABP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21430000000, CPUsum:22077428814, wcsum:40314
+3
+29999795
+user:19590000000, CPUsum:19892393482, wcsum:27146
+3
+29999795
+user:20170000000, CPUsum:20448522675, wcsum:35938
+3
+29999795
+user:19840000000, CPUsum:20101742809, wcsum:23124
+3
+29999795
+user:20010000000, CPUsum:20323212967, wcsum:36469
+3
+29999795
+user:21150000000, CPUsum:21424832343, wcsum:25289
+3
+29999795
+user:19370000000, CPUsum:19653497040, wcsum:32957
+3
+29999795
+user:19580000000, CPUsum:19858520635, wcsum:26429
+3
+29999795
+user:19920000000, CPUsum:20212944653, wcsum:36735
+3
+29999795
+user:22090000000, CPUsum:22384555805, wcsum:30679
+Hashjoin,31508,20637765122,20315000000
+*********p_key: DELTABP l_key: BP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21010000000, CPUsum:21714881668, wcsum:39913
+3
+29999795
+user:19650000000, CPUsum:19902795185, wcsum:27740
+3
+29999795
+user:21200000000, CPUsum:21553607457, wcsum:38504
+3
+29999795
+user:20440000000, CPUsum:20777827603, wcsum:25444
+3
+29999795
+user:20000000000, CPUsum:20486767115, wcsum:32399
+3
+29999795
+user:21300000000, CPUsum:21644114801, wcsum:37767
+3
+29999795
+user:21130000000, CPUsum:21386312428, wcsum:24954
+3
+29999795
+user:20810000000, CPUsum:21228656425, wcsum:45749
+3
+29999795
+user:21570000000, CPUsum:22332860493, wcsum:25577
+3
+29999795
+user:21190000000, CPUsum:21705664003, wcsum:30181
+Hashjoin,32822,21273348717,20830000000
+*********p_key: DELTABP l_key: RLE********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21270000000, CPUsum:21906521768, wcsum:40450
+3
+29999795
+user:20930000000, CPUsum:21339885543, wcsum:32774
+3
+29999795
+user:19500000000, CPUsum:20045006588, wcsum:30074
+3
+29999795
+user:21640000000, CPUsum:21935189177, wcsum:25474
+3
+29999795
+user:19920000000, CPUsum:20223542065, wcsum:34007
+3
+29999795
+user:19660000000, CPUsum:19884663866, wcsum:23527
+3
+29999795
+user:20670000000, CPUsum:20919467745, wcsum:31127
+3
+29999795
+user:22180000000, CPUsum:23094461824, wcsum:29165
+3
+29999795
+user:19770000000, CPUsum:20387251842, wcsum:32163
+3
+29999795
+user:19490000000, CPUsum:19753017200, wcsum:25548
+Hashjoin,30430,20948900761,20503000000
+*********p_key: DELTABP l_key: PLAIN********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:22930000000, CPUsum:23945566071, wcsum:41738
+3
+29999795
+user:20640000000, CPUsum:21284419024, wcsum:68303
+3
+29999795
+user:22020000000, CPUsum:22273274505, wcsum:28668
+3
+29999795
+user:20070000000, CPUsum:20372124626, wcsum:32787
+3
+29999795
+user:21800000000, CPUsum:22204882898, wcsum:37318
+3
+29999795
+user:21020000000, CPUsum:21314160238, wcsum:48417
+3
+29999795
+user:20130000000, CPUsum:20861133175, wcsum:23053
+3
+29999795
+user:21360000000, CPUsum:21632630387, wcsum:24797
+3
+29999795
+user:19730000000, CPUsum:19982690338, wcsum:26188
+3
+29999795
+user:19740000000, CPUsum:19954953104, wcsum:24816
+Hashjoin,35608,21382583436,20944000000
+*********p_key: DELTABP l_key: DICT********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:24430000000, CPUsum:25111766806, wcsum:42193
+3
+29999795
+user:23050000000, CPUsum:23506483201, wcsum:33363
+3
+29999795
+user:21640000000, CPUsum:22153930432, wcsum:40406
+3
+29999795
+user:21840000000, CPUsum:22126069789, wcsum:25483
+3
+29999795
+user:21430000000, CPUsum:21752368021, wcsum:28468
+3
+29999795
+user:21200000000, CPUsum:21516834596, wcsum:27023
+3
+29999795
+user:21680000000, CPUsum:21973116717, wcsum:31258
+3
+29999795
+user:20400000000, CPUsum:20735002971, wcsum:24316
+3
+29999795
+user:21710000000, CPUsum:22020963960, wcsum:47243
+3
+29999795
+user:20280000000, CPUsum:20554193044, wcsum:24498
+Hashjoin,32425,22145072953,21766000000
+*********p_key: DELTABP l_key: DELTABP********
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+3
+29999795
+user:21450000000, CPUsum:22312300319, wcsum:37188
+3
+29999795
+user:21830000000, CPUsum:22159255461, wcsum:26933
+3
+29999795
+user:21400000000, CPUsum:21919421028, wcsum:34495
+3
+29999795
+user:21270000000, CPUsum:21625235270, wcsum:47989
+3
+29999795
+user:21690000000, CPUsum:22335026655, wcsum:24786
+3
+29999795
+user:21760000000, CPUsum:22078397625, wcsum:34205
+3
+29999795
+user:21570000000, CPUsum:21854803576, wcsum:26109
+3
+29999795
+user:21490000000, CPUsum:21814949771, wcsum:25363
+3
+29999795
+user:20160000000, CPUsum:20781845189, wcsum:28284
+3
+29999795
+user:19290000000, CPUsum:19535714846, wcsum:25437
+Hashjoin,31078,21641694974,21191000000

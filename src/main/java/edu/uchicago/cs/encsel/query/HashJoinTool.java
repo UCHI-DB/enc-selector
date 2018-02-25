@@ -23,11 +23,12 @@
 
 package edu.uchicago.cs.encsel.query;
 
+import edu.uchicago.cs.encsel.model.IntEncoding;
+import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
 import edu.uchicago.cs.encsel.perf.Profiler;
 import edu.uchicago.cs.encsel.query.operator.HashJoin;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
-import edu.uchicago.cs.encsel.parquet.EncContext;
 import scala.Tuple2;
 
 import java.io.File;
@@ -36,9 +37,22 @@ import java.io.File;
 public class HashJoinTool {
 
     public static void main(String[] args) {
-    		EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Integer[]{23,6000000});
-        EncContext.context.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), new Integer[]{23,6000000});
-        int repeat = 3;
+        String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
+        String part = "/home/cc/tpch-generator/dbgen/part";
+
+        int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 1);
+        int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);
+        System.out.println("lineitem intBitLength: "+ bitLength +" lineitem intBound: "+intbound);
+
+        int pib = ParquetWriterHelper.scanIntMaxInTab(new File(part+".tbl").toURI(), 0);
+        int pbl = 32 - Integer.numberOfLeadingZeros(intbound);
+        System.out.println("part intBitLength: "+ bitLength +" part intBound: "+intbound);
+
+
+        EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Object[]{bitLength,intbound});
+        EncContext.context.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), new Object[]{pbl,pib});
+
+        int repeat = 10;
         long clocktime = 0L;
         long cputime = 0L;
         long usertime = 0L;
@@ -46,9 +60,10 @@ public class HashJoinTool {
         for (int i = 0; i < repeat; i++) {
             Profiler profiler = new Profiler();
             profiler.mark();
-            TempTable result = new HashJoin().join(new File("/home/cc/tpch-generator/dbgen/part.parquet").toURI(), TPCHSchema.partSchema(),
-                    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI(), TPCHSchema.lineitemSchema(),
-                    joinindex, new int[] {0}, new int[] {5,6});
+            System.out.println(EncContext.context.get().get(TPCHSchema.partSchema().getColumns().get(0).toString())[1]);
+            TempTable result = new HashJoin().join(new File(part+".parquet").toURI(), TPCHSchema.partSchema(),
+                    new File(lineitem+".parquet").toURI(), TPCHSchema.lineitemSchema(),
+                    joinindex, new int[]{0}, new int[]{5, 6});
             profiler.pause();
             ColumnTempTable tab = (ColumnTempTable) result;
 
@@ -59,11 +74,9 @@ public class HashJoinTool {
             clocktime = clocktime + profiler.wcsum();
             cputime = cputime + profiler.cpusum();
             usertime = usertime + profiler.usersum();
-            System.out.println("user:" + profiler.usersum() + ", CPUsum:" + profiler.cpusum() + ", wcsum:" + profiler.wcsum());
-
+            System.out.println(String.format("%s,%d,%d,%d", "round"+i, profiler.wcsum(), profiler.cpusum(),profiler.usersum()));
         }
         System.out.println(String.format("%s,%d,%d,%d", "Hashjoin", clocktime / repeat, cputime / repeat, usertime / repeat));
     }
 }
-
 
