@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel.report
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.report.ParquetCompressFileSize
+import edu.uchicago.cs.encsel.dataset.feature.report.{ParquetCompressFileSize, ParquetCompressFileSizeAndTime}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
@@ -42,20 +42,14 @@ object RunCompressFeature extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(ParquetCompressFileSize)
+  val missed = Seq(ParquetCompressFileSizeAndTime)
 
   Features.extractors.clear()
   Features.extractors ++= missed
 
   val sql = "SELECT c FROM Column c WHERE c.parentWrapper IS NULL"
 
-  val map = Map((DataType.DOUBLE, 3218),
-    (DataType.INTEGER, 5183),
-    (DataType.STRING, 9435),
-    (DataType.BOOLEAN, 922),
-    (DataType.LONG, 482),
-    (DataType.FLOAT, 18))
-  val rate = 0.1
+  val rate = 0.2
 
   val columns = persist.em.createQuery(sql, classOf[ColumnWrapper]).getResultList
   var counter = 0

@@ -3,32 +3,119 @@ package edu.uchicago.cs.encsel.dataset.feature.report
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, ParquetEncFileSize}
 import edu.uchicago.cs.encsel.model.{DataType, IntEncoding}
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import org.junit.Assert._
 import org.junit.{BeforeClass, Test}
 
-object ScanTimeUsageTest {
-  @BeforeClass
-  def encodeFile: Unit = {
-    val file = new File("src/test/resource/scantime/data").toURI
-
-    IntEncoding.values.filter(_.parquetEncoding() != null).foreach(enc => {
-      ParquetWriterHelper.singleColumnInt(file, enc)
-    })
-
-  }
-}
-
 class ScanTimeUsageTest {
   @Test
-  def testExtract: Unit = {
-    val col = new Column(null, -1, "", DataType.INTEGER)
-    col.colFile = new File("src/test/resource/scantime/data").toURI
-    val features = ScanTimeUsage.extract(col).toArray
+  def testExtractInt: Unit = {
+    val encs = Array("PLAIN", "DICT", "BP", "RLE", "DELTABP")
 
-    assertEquals(15, features.size);
+    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
+    col.colFile = new File("src/test/resource/scantime/int.data").toURI
 
-    // TODO More checks
+    val feature = ScanTimeUsage.extract(col)
+    assertEquals(encs.size * 3, feature.size)
+    val fa = feature.toArray
+
+
+    encs.zipWithIndex.foreach(p => {
+      val name = "%s".format(p._1)
+
+      assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
+      assertTrue(fa(p._2 * 3).value > 0)
+      assertTrue(fa(p._2 * 3 + 1).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
+    })
   }
+
+  @Test
+  def testExtractString: Unit = {
+    val encs = Array("PLAIN", "DICT", "DELTA", "DELTAL")
+
+    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.STRING)
+    col.colFile = new File("src/test/resource/scantime/str.data").toURI
+
+    ParquetEncFileSize.extract(col)
+
+    val feature = ScanTimeUsage.extract(col)
+    assertEquals(encs.size * 3, feature.size)
+    val fa = feature.toArray
+
+    encs.zipWithIndex.foreach(p => {
+      val name = p._1
+
+      assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
+      assertTrue(fa(p._2 * 3).value > 0)
+      assertTrue(fa(p._2 * 3 + 1).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
+    })
+  }
+
+  @Test
+  def testExtractLong: Unit = {
+    val encs = Array("PLAIN", "DICT", "DELTABP")
+
+    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.LONG)
+    col.colFile = new File("src/test/resource/scantime/long.data").toURI
+
+    val feature = ScanTimeUsage.extract(col)
+    assertEquals(encs.size * 3, feature.size)
+    val fa = feature.toArray
+
+    encs.zipWithIndex.foreach(p => {
+      val name = p._1
+
+      assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
+      assertTrue(fa(p._2 * 3).value > 0)
+      assertTrue(fa(p._2 * 3 + 1).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
+    })
+  }
+
+  @Test
+  def testExtractDouble: Unit = {
+    val encs = Array("PLAIN", "DICT")
+
+    val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.DOUBLE)
+    col.colFile = new File("src/test/resource/scantime/double.data").toURI
+
+    val feature = ScanTimeUsage.extract(col)
+    assertEquals(encs.size * 3, feature.size)
+    val fa = feature.toArray
+
+    encs.zipWithIndex.foreach(p => {
+      val name = p._1
+
+      assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
+      assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
+      assertTrue(fa(p._2 * 3).value > 0)
+      assertTrue(fa(p._2 * 3 + 1).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
+    })
+  }
+
+
 }

@@ -3,6 +3,7 @@ package edu.uchicago.cs.encsel.dataset.feature.report
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.Feature
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
 import org.junit.Test
@@ -18,7 +19,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
     col.colFile = new File("src/test/resource/scantime/int.data").toURI
 
-    ParquetCompressFileSize.extract(col)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
     val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
@@ -32,12 +33,12 @@ class ScanCompressedTimeUsageNoSnappyTest {
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
-      assertEquals("%s_wctime".format(name), fa(p._2 * 3).name)
-      assertEquals("%s_cputime".format(name), fa(p._2 * 3 + 1).name)
-      assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -48,7 +49,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.STRING)
     col.colFile = new File("src/test/resource/scantime/str.data").toURI
 
-    ParquetCompressFileSize.extract(col)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
     val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
@@ -62,12 +63,12 @@ class ScanCompressedTimeUsageNoSnappyTest {
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
-      assertEquals("%s_wctime".format(name), fa(p._2 * 3).name)
-      assertEquals("%s_cputime".format(name), fa(p._2 * 3 + 1).name)
-      assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -78,7 +79,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.LONG)
     col.colFile = new File("src/test/resource/scantime/long.data").toURI
 
-    ParquetCompressFileSize.extract(col)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
     val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
@@ -92,12 +93,12 @@ class ScanCompressedTimeUsageNoSnappyTest {
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
-      assertEquals("%s_wctime".format(name), fa(p._2 * 3).name)
-      assertEquals("%s_cputime".format(name), fa(p._2 * 3 + 1).name)
-      assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -106,9 +107,9 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val encs = Array("PLAIN", "DICT")
 
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.DOUBLE)
-    col.colFile = new File("src/test/resource/coldata/double.data").toURI
+    col.colFile = new File("src/test/resource/scantime/double.data").toURI
 
-    ParquetCompressFileSize.extract(col)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
     val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
@@ -122,12 +123,12 @@ class ScanCompressedTimeUsageNoSnappyTest {
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 2).featureType)
-      assertEquals("%s_wctime".format(name), fa(p._2 * 3).name)
-      assertEquals("%s_cputime".format(name), fa(p._2 * 3 + 1).name)
-      assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
+      assertEquals("%s_wallclock".format(name), fa(p._2 * 3).name)
+      assertEquals("%s_cpu".format(name), fa(p._2 * 3 + 1).name)
+      assertEquals("%s_user".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 }

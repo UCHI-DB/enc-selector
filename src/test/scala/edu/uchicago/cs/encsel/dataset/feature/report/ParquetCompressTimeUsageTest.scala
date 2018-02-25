@@ -7,9 +7,9 @@ import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
 import org.junit.Test
 
-class ParquetCompressTimeTest {
+class ParquetCompressTimeUsageTest {
 
-  val codecs = Array("SNAPPY", "LZO", "GZIP")
+  val codecs = Array("SNAPPY", "GZIP", "LZO")
 
   @Test
   def testExtractInt: Unit = {
@@ -35,7 +35,7 @@ class ParquetCompressTimeTest {
       assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -63,7 +63,7 @@ class ParquetCompressTimeTest {
       assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -91,7 +91,7 @@ class ParquetCompressTimeTest {
       assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -100,7 +100,7 @@ class ParquetCompressTimeTest {
     val encs = Array("PLAIN", "DICT")
 
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.DOUBLE)
-    col.colFile = new File("src/test/resource/coldata/double.data").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_double.data").toURI
 
     val feature = ParquetCompressTimeUsage.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
@@ -119,7 +119,7 @@ class ParquetCompressTimeTest {
       assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 
@@ -147,7 +147,7 @@ class ParquetCompressTimeTest {
       assertEquals("%s_usertime".format(name), fa(p._2 * 3 + 2).name)
       assertTrue(fa(p._2 * 3).value > 0)
       assertTrue(fa(p._2 * 3 + 1).value > 0)
-      assertTrue(fa(p._2 * 3 + 2).value > 0)
+      assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
 }

@@ -40,7 +40,7 @@ object ParquetCompressTimeUsage extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.LZO, CompressionCodecName.GZIP)
+  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
   val profiler = new Profiler
 
   def runTask(fType: String, name: String, task: () => Unit): Iterable[Feature] = {

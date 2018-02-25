@@ -9,7 +9,7 @@ import org.junit.Test
 
 class ParquetCompressFileSizeTest {
 
-  val codecs = Array("SNAPPY", "LZO", "GZIP")
+  val codecs = Array("SNAPPY", "GZIP", "LZO")
 
   @Test
   def testExtractInt: Unit = {
@@ -77,7 +77,7 @@ class ParquetCompressFileSizeTest {
   @Test
   def testExtractDouble: Unit = {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.DOUBLE)
-    col.colFile = new File("src/test/resource/coldata/double.data").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_double.data").toURI
 
     val feature = ParquetCompressFileSize.extract(col)
     assertEquals(6, feature.size)
@@ -91,7 +91,7 @@ class ParquetCompressFileSizeTest {
       val name = "%s_%s".format(p._1._1, p._1._2)
       assertTrue(fa(p._2).featureType.equals("CompressEncFileSize"))
       assertEquals("%s_file_size".format(name), fa(p._2).name)
-      assertEquals(new File("src/test/resource/coldata/double.data.%s".format(name)).length(), fa(p._2).value, 0.001)
+      assertEquals(new File("src/test/resource/coldata/test_col_double.data.%s".format(name)).length(), fa(p._2).value, 0.001)
     })
   }
 
@@ -120,7 +120,7 @@ class ParquetCompressFileSizeTest {
   @Test
   def testExtractFloat: Unit = {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.FLOAT)
-    col.colFile = new File("src/test/resource/coldata/double.data").toURI
+    col.colFile = new File("src/test/resource/coldata/test_col_double.data").toURI
 
     val feature = ParquetCompressFileSize.extract(col)
     assertEquals(6, feature.size)
@@ -134,7 +134,7 @@ class ParquetCompressFileSizeTest {
       val name = "%s_%s".format(p._1._1, p._1._2)
       assertTrue(fa(p._2).featureType.equals("CompressEncFileSize"))
       assertEquals("%s_file_size".format(name), fa(p._2).name)
-      assertEquals(new File("src/test/resource/coldata/double.data.%s".format(name)).length(), fa(p._2).value, 0.001)
+      assertEquals(new File("src/test/resource/coldata/test_col_double.data.%s".format(name)).length(), fa(p._2).value, 0.001)
     })
   }
 }

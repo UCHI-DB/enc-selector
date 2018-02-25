@@ -48,7 +48,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
   def supportFilter: Boolean = false
 
   val predicate = new VColumnPredicate((data) => true, 0)
-  val codecs = Array("GZIP", "LZO")
+  val codecs = Array("LZO", "GZIP")
   val profiler = new Profiler
 
   def encFunction(col: Column, encoding: String, schema: MessageType): Iterable[Feature] = {

@@ -48,20 +48,18 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
 
 
   val predicate = new VColumnPredicate((data) => true, 0)
-  val codecs = Array("GZIP", "LZO", "SNAPPY")
+  val codecs = Array("SNAPPY", "GZIP", "LZO")
+  val select = new VerticalSelect() {
+    override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
+  };
 
   def encFunction(col: Column, encoding: String, schema: MessageType): Iterable[Feature] = {
     try {
-      val select = new VerticalSelect() {
-        override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
-      };
-
       val fileName = col.colFile + "." + encoding;
       val encfile = new URI(fileName)
 
       if (!new File(encfile).exists())
         return Iterable[Feature]()
-
       profiler.reset
       profiler.mark
       select.select(encfile, predicate, schema, Array(0))

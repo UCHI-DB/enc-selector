@@ -39,7 +39,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.LZO, CompressionCodecName.GZIP)
+  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
 
   def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     // Ignore filter
@@ -61,7 +61,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
         }).filter(_ != null)
       }
       case DataType.LONG => {
-        LongEncoding.values().filter(_.parquetEncoding() != null).filter(_ == LongEncoding.DICT).flatMap(e => {
+        LongEncoding.values().filter(_.parquetEncoding() != null).flatMap(e => {
           codecs.map(codec => {
             try {
               val f = ParquetCompressedWriterHelper.singleColumnLong(col.colFile, e, codec)
