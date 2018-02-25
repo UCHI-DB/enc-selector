@@ -43,4 +43,5 @@ for i in 1 5 10 15 20; do
         done
 
 cd $BASEDIR
-done 
+done
+echo "query ended!" 
