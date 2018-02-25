@@ -1,7 +1,7 @@
 #! /bin/sh
 # Chunwei Liu
 BASEDIR=$(pwd)
-for i in 1 5 10 15; do
+for i in 1 5 10 15 20; do
 	cd ~/tpch-generator/dbgen/
         ./dbgen -f -s $i
 	echo "scale:$i"
