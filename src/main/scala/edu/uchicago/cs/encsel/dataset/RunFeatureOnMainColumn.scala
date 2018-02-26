@@ -40,7 +40,7 @@ object RunFeatureOnMainColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(ScanCompressedTimeUsageSnappy)
+  val missed = Seq(ScanCompressedTimeUsageNoSnappy)
 
   val prefix = args.length match {
     case gt if gt > 0 => args(0)
