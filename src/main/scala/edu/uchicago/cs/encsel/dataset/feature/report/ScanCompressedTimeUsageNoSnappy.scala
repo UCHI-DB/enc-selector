@@ -24,7 +24,6 @@
 package edu.uchicago.cs.encsel.dataset.feature.report
 
 import java.io.{File, InputStream}
-import java.lang.management.ManagementFactory
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
@@ -48,7 +47,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
   def supportFilter: Boolean = false
 
   val predicate = new VColumnPredicate((data) => true, 0)
-  val codecs = Array("LZO", "GZIP")
+  val codecs = Array("_LZO", "_GZIP", "")
   val profiler = new Profiler
 
   def encFunction(col: Column, encoding: String, schema: MessageType): Iterable[Feature] = {
@@ -95,7 +94,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
           IntEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding => {
               codecs.flatMap(codec => {
-                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s%s".format(encoding.name(), codec), schema)
               })
             })
         }
@@ -106,7 +105,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
           StringEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s%s".format(encoding.name(), codec), schema)
               })
             )
         }
@@ -117,7 +116,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
           FloatEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s%s".format(encoding.name(), codec), schema)
               })
             )
         }
@@ -128,7 +127,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
           LongEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s%s".format(encoding.name(), codec), schema)
               })
             )
         }
@@ -142,7 +141,7 @@ object ScanCompressedTimeUsageNoSnappy extends FeatureExtractor {
           FloatEncoding.values().filter(_.parquetEncoding() != null)
             .flatMap(encoding =>
               codecs.flatMap(codec => {
-                encFunction(col, "%s_%s".format(encoding.name(), codec), schema)
+                encFunction(col, "%s%s".format(encoding.name(), codec), schema)
               })
             )
         }

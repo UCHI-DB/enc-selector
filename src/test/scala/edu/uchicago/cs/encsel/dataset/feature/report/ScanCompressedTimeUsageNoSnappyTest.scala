@@ -10,7 +10,7 @@ import org.junit.Test
 
 
 class ScanCompressedTimeUsageNoSnappyTest {
-  val codecs = Array("LZO", "GZIP")
+  val codecs = Array("_LZO", "_GZIP", "")
 
   @Test
   def testExtractInt: Unit = {
@@ -28,7 +28,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -58,7 +58,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -88,7 +88,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -118,7 +118,7 @@ class ScanCompressedTimeUsageNoSnappyTest {
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
