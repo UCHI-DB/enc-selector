@@ -9,7 +9,7 @@ import scala.collection.JavaConverters._
 
 object RunCompressOnSubAttrs extends App {
 
-  val sql = "SELECT c FROM Column c WHERE c.parentWrapper IS NULL AND c.dataType = :dt AND c.id >= :start ORDER BY c.id ASC"
+  val sql = "SELECT c FROM Column c WHERE c.parentWrapper IS NULL AND c.dataType = :dt AND c.id >= :id ORDER BY c.id ASC"
   val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
 
   val persist = new JPAPersistence
