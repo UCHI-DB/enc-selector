@@ -25,6 +25,7 @@ object RunCompressOnSubAttrs extends App {
       childrenCols.foreach(child=>{
         val features = ParquetCompressFileSize.extract(col)
         col.replaceFeatures(features)
+        persist.save(Seq(col))
       })
     }
   })
