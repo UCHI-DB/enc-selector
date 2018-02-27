@@ -1,4 +1,5 @@
 SELECT 
+	cd.id,
     f1.value AS 'Sparsity_valid_ratio',
     f2.value AS 'Entropy_line_max',
     f3.value AS 'Entropy_line_min',
@@ -19,10 +20,10 @@ SELECT
     f18.value AS 'Sortness_kendalltau_200',
     f19.value AS 'Sortness_spearmanrho_200',
     (CASE mine.name
-        WHEN 'DICT_file_size' THEN 1
         WHEN 'PLAIN_file_size' THEN 0
-        WHEN 'RLE_file_size' THEN 3
+        WHEN 'DICT_file_size' THEN 1
         WHEN 'BP_file_size' THEN 2
+        WHEN 'RLE_file_size' THEN 3
         WHEN 'DELTABP_file_size' THEN 4
         ELSE 0
     END) AS 'Encoding'
@@ -117,3 +118,4 @@ FROM
         minenc.type = 'EncFileSize') mine ON mine.col_id = cd.id
 WHERE
     cd.data_type = 'INTEGER' and 'Encoding' <> 5
+limit 60000
