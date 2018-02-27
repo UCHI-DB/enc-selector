@@ -68,4 +68,8 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   def hasFeature(t: String): Boolean = features.asScala.exists(f => f.featureType.equals(t))
 
   def getInfo(n: String): Double = infos.getOrDefault(n, java.math.BigDecimal.valueOf(-1)).doubleValue()
+
+  def putInfo(n: String, num: Double) = {
+    infos.put(n, java.math.BigDecimal.valueOf(num))
+  }
 }

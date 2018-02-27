@@ -39,7 +39,7 @@ object GetUnmatchRate extends App {
     val unmatchSize = FileUtils.numLine(getUnmatchChild(col).colFile)
     val ratio = unmatchSize.toDouble / originalSize
     if (ratio != 0) {
-      col.infos.put("unmatch_ratio", ratio)
+      col.putInfo("unmatch_ratio", ratio)
       persist.save(Seq(col))
     }
   })
