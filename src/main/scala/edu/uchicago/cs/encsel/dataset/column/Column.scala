@@ -37,7 +37,7 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   var colFile: URI = _
   var dataType = dt
   var features: java.util.Set[Feature] = new util.HashSet[Feature]()
-  var infos: java.util.Map[String, BigDecimal] = new util.HashMap[String, BigDecimal]();
+  var infos: java.util.Map[String, java.math.BigDecimal] = new util.HashMap[String, java.math.BigDecimal]();
   private var _parent: Column = null
 
   def parent: Column = _parent
@@ -67,5 +67,5 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
 
   def hasFeature(t: String): Boolean = features.asScala.exists(f => f.featureType.equals(t))
 
-  def getInfo(n: String): Double = infos.getOrDefault(n, BigDecimal(-1)).toDouble
+  def getInfo(n: String): Double = infos.getOrDefault(n, java.math.BigDecimal.valueOf(-1)).doubleValue()
 }
