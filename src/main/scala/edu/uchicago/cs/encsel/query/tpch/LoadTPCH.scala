@@ -75,10 +75,49 @@ object LoadTPCH4Plain extends App {
     new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
 }
 
+object LoadTPCH4AllPlain extends App {
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(0).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(1).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(2).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(3).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(7).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(8).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(9).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(11).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(12).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(13).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(14).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(15).toString, Encoding.PLAIN)
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(0).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(1).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(2).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(3).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(7).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(8).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(9).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(11).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(12).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(13).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(14).toString, Array[AnyRef]("21", "2000000"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(15).toString, Array[AnyRef]("21", "2000000"))
+  ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+  ParquetReaderHelper.getColSize(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, 4)
+}
+
 object LoadTPCH4Default extends App {
 
   ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
     new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+  ParquetReaderHelper.getColSize(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, 4)
 }
 
 object LoadLineItem extends App {
