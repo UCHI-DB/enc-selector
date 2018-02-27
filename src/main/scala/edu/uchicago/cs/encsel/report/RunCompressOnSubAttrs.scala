@@ -24,9 +24,9 @@ object RunCompressOnSubAttrs extends App {
       println("%d:%d".format(counter, col.id))
       val childrenCols = getChildren(col)
       childrenCols.foreach(child => {
-        val features = ParquetCompressFileSize.extract(col)
-        col.replaceFeatures(features)
-        persist.save(Seq(col))
+        val features = ParquetCompressFileSize.extract(child)
+        child.replaceFeatures(features)
+        persist.save(Seq(child))
       })
     }
   })
