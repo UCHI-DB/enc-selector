@@ -23,6 +23,15 @@ class SelTimeUsageTest {
       assertEquals("SelTimeUsage", fa(i).featureType)
       assertEquals(names(i), fa(i).name)
     }
+    // Do it again
+    val feature2 = SelTimeUsage.extract(col)
+    assertEquals(6, feature2.size)
+    val fa2 = feature2.toArray
+
+    for (i <- 0 to 5) {
+      assertEquals("SelTimeUsage", fa2(i).featureType)
+      assertEquals(names(i), fa2(i).name)
+    }
   }
 
   @Test
