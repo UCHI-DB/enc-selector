@@ -44,7 +44,7 @@ object GetEncodeBenefit extends App {
       if (originalSize > 0 && childrenSize > 0) {
         val ratio = childrenSize / originalSize;
         if (ratio != 0) {
-          col.infos.put("subattr_benefit", ratio)
+          col.putInfo("subattr_benefit", ratio)
           persist.save(Seq(col))
         }
       }
@@ -58,7 +58,7 @@ object GetEncodeBenefit extends App {
       if (pSize > 0 && childrenSize > 0) {
         val ratio = childrenSize / pSize;
         if (ratio != 0) {
-          col.infos.put("subattr_benefit_plain", ratio)
+          col.putInfo("subattr_benefit_plain", ratio)
           persist.save(Seq(col))
         }
       }
