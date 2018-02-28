@@ -39,7 +39,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
 
   def supportFilter: Boolean = false
 
-  val codecs = Array(CompressionCodecName.GZIP, CompressionCodecName.LZO)
+  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
 
   def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     // Ignore filter
