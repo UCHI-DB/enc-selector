@@ -38,7 +38,7 @@ import scala.util.Random
   */
 class Sortness(val windowSize: Int) extends FeatureExtractor {
 
-  def featureType: String = "Sortness"
+  def featureType = Sortness.featureType
 
   def supportFilter: Boolean = true
 
@@ -114,6 +114,8 @@ class Sortness(val windowSize: Int) extends FeatureExtractor {
 }
 
 object Sortness {
+  val featureType: String = "Sortness"
+
   def computeInvertPair(input: Seq[String],
                         comparator: Comparator[String]): (Int, Int) = {
     if (input.isEmpty)
