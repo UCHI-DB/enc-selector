@@ -30,7 +30,7 @@ import edu.uchicago.cs.encsel.model.DataType
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 
-class RawColumnSizeStat extends App {
+object RawColumnSizeStat extends App {
 
   val sql = "SELECT c FROM Column c WHERE c.parentWrapper IS NULL"
   val em = new JPAPersistence().em
