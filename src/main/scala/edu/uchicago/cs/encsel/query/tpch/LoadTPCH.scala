@@ -75,6 +75,35 @@ object LoadTPCH4Plain extends App {
     new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
 }
 
+object LoadTPCH4Best extends App {
+
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.PLAIN_DICTIONARY)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Encoding.PLAIN_DICTIONARY)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Encoding.PLAIN_DICTIONARY)
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("50", "50"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Array[AnyRef]("0.4", "0.4"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Array[AnyRef]("0.4", "0.4"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Array[AnyRef]("string", "string"))
+  ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+}
+
+object LoadTPCH4Worst extends App {
+
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Encoding.PLAIN)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Encoding.PLAIN_DICTIONARY)
+  EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Encoding.PLAIN)
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("50", "50"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Array[AnyRef]("0.4", "0.4"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Array[AnyRef]("0.4", "0.4"))
+  EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Array[AnyRef]("string", "string"))
+  ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+}
+
+
 object LoadTPCH4AllPlain extends App {
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(0).toString, Encoding.PLAIN)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(1).toString, Encoding.PLAIN)

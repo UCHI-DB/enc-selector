@@ -1648,3 +1648,437 @@ user:20160000000, CPUsum:20781845189, wcsum:28284
 29999795
 user:19290000000, CPUsum:19535714846, wcsum:25437
 Hashjoin,31078,21641694974,21191000000
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:1
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2382,2378516381,2330000000
+round1,1882,1880449990,1880000000
+round2,1858,1857236408,1860000000
+round3,1859,1857666825,1840000000
+round4,1858,1856957169,1850000000
+round5,1871,1869003385,1850000000
+round6,1856,1854233617,1850000000
+round7,1880,1878890542,1860000000
+round8,1860,1858370455,1820000000
+round9,1855,1853619825,1860000000
+ScanOnheap,1916,1914494459,1900000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2441,2436643458,2400000000
+round1,1990,1988052061,1960000000
+round2,2088,2086419724,2080000000
+round3,1986,1985666158,1980000000
+round4,1964,1962926457,1950000000
+round5,1967,1965476582,1930000000
+round6,1963,1963065458,1930000000
+round7,1970,1969173995,1940000000
+round8,1976,1974175180,1940000000
+round9,1942,1940563978,1950000000
+ScanOnheap,2028,2027216305,2006000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2260,2254981537,2230000000
+round1,1817,1815733793,1810000000
+round2,1782,1779705898,1770000000
+round3,1790,1787223132,1780000000
+round4,1788,1786018889,1770000000
+round5,1782,1779833469,1770000000
+round6,1763,1762351502,1750000000
+round7,1802,1800830388,1780000000
+round8,1795,1795505537,1790000000
+round9,1772,1771765064,1760000000
+ScanOnheap,1835,1833394920,1821000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:5
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,9655,9644142648,9540000000
+round1,10589,9134488001,9100000000
+round2,9129,9123277075,9140000000
+round3,9127,9118732676,9120000000
+round4,9230,9220412187,9230000000
+round5,9117,9111753779,9100000000
+round6,9116,9111864975,9080000000
+round7,9137,9133796186,9090000000
+round8,9161,9154934165,9150000000
+round9,9462,9456691925,9450000000
+ScanOnheap,9372,9221009361,9200000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,10463,10451598504,10430000000
+round1,9972,9966126108,9930000000
+round2,9919,9913084016,9890000000
+round3,10000,9993477792,9990000000
+round4,10068,10062029549,10050000000
+round5,9886,9880203417,9850000000
+round6,10266,9886177181,9820000000
+round7,9967,9958668413,9910000000
+round8,9907,9897879423,9910000000
+round9,9888,9883040030,9840000000
+ScanOnheap,10033,9989228443,9962000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,9604,9592395437,9560000000
+round1,9134,9129895281,9110000000
+round2,9110,9107663128,9090000000
+round3,9452,9130421195,9150000000
+round4,9201,9195070088,9220000000
+round5,9129,9124920788,9110000000
+round6,9130,9123953153,9080000000
+round7,9252,9246700134,9250000000
+round8,9114,9110625347,9110000000
+round9,9161,9155285218,9150000000
+ScanOnheap,9228,9191692976,9183000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:10
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,19016,19001965511,18970000000
+round1,18353,18342180042,18330000000
+round2,18438,18424522164,18410000000
+round3,18823,18434641515,18460000000
+round4,18433,18421329067,18400000000
+round5,18319,18308504557,18290000000
+round6,18632,18336227113,18330000000
+round7,18414,18402131260,18380000000
+round8,18487,18477320460,18370000000
+round9,18335,18327149172,18330000000
+ScanOnheap,18525,18447597086,18427000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,20393,20382333808,20390000000
+round1,19864,19852804590,19800000000
+round2,20702,19844017066,19830000000
+round3,19779,19770658084,19760000000
+round4,19762,19750757678,19720000000
+round5,19986,19748152319,19730000000
+round6,19760,19749566781,19720000000
+round7,19744,19734091670,19720000000
+round8,19749,19740950952,19740000000
+round9,19687,19677678009,19650000000
+ScanOnheap,19942,19825101095,19806000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,19604,19591233924,19540000000
+round1,19192,19182142851,19160000000
+round2,19078,19066468608,19070000000
+round3,19090,19073580410,19090000000
+round4,19190,19175617253,19210000000
+round5,19178,19168441269,19150000000
+round6,19112,19102511649,19050000000
+round7,19164,19155948573,19160000000
+round8,19107,19098653036,19080000000
+round9,19101,19089513961,19080000000
+ScanOnheap,19181,19170411153,19159000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:15
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,28126,28112415435,28070000000
+round1,27969,27487514725,27480000000
+round2,27650,27425287451,27460000000
+round3,27513,27495700174,27500000000
+round4,27508,27493094993,27440000000
+round5,27482,27467742689,27530000000
+round6,27465,27445117012,27520000000
+round7,27433,27415669845,27380000000
+round8,27417,27400781502,27390000000
+round9,27461,27451211565,27480000000
+ScanOnheap,27602,27519453539,27525000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,30528,30508006178,30440000000
+round1,30416,29998863750,30010000000
+round2,29953,29936048264,29940000000
+round3,30079,29843360480,29840000000
+round4,29928,29912673274,29930000000
+round5,30065,30044668214,30040000000
+round6,30243,30139348147,30140000000
+round7,29910,29894965556,29860000000
+round8,30201,29950889856,29920000000
+round9,29990,29973874062,29960000000
+ScanOnheap,30131,30020269778,30008000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,29529,29507681845,29480000000
+round1,28948,28933026082,28960000000
+round2,28970,28956511590,28980000000
+round3,29071,29053184797,29100000000
+round4,29033,29016671611,28950000000
+round5,29143,29126225037,28930000000
+round6,29031,29017063234,28950000000
+round7,29078,29063631912,28900000000
+round8,29022,29007371035,28940000000
+round9,29130,28894254243,28900000000
+ScanOnheap,29095,29057562138,29009000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:20
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,39665,39640159785,39460000000
+round1,39068,39047649081,38930000000
+round2,38978,38956503286,38960000000
+round3,38996,38975060070,38930000000
+round4,39145,38891062228,38820000000
+round5,39092,38941957052,38900000000
+round6,38917,38892717557,38910000000
+round7,38857,38838660049,38820000000
+round8,38895,38870749106,38850000000
+round9,39068,38978453933,38960000000
+ScanOnheap,39068,39003297214,38954000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,41607,41578536606,41510000000
+round1,41014,40987826734,40960000000
+round2,41150,41130575200,41080000000
+round3,41025,41005752481,41010000000
+round4,41128,41104710609,41080000000
+round5,40959,40939993858,40900000000
+round6,41431,41208637622,41090000000
+round7,41335,41178044405,41210000000
+round8,41346,41065822571,40900000000
+round9,41168,40954095135,41000000000
+ScanOnheap,41216,41115399522,41074000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,39525,39502119337,39510000000
+round1,38904,38886796106,38780000000
+round2,39057,39038620156,38730000000
+round3,38806,38791452186,38740000000
+round4,38754,38735926236,38810000000
+round5,39085,39062818065,38780000000
+round6,38800,38778464995,38640000000
+round7,38703,38680755236,38680000000
+round8,38733,38719120868,38710000000
+round9,38692,38676867910,38680000000
+ScanOnheap,38905,38887294109,38806000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:25
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,49071,49046529251,49000000000
+round1,48521,48338546187,48360000000
+round2,48348,48319140114,48260000000
+round3,48319,48290806046,48250000000
+round4,48264,48238343030,48210000000
+round5,48230,48210156730,48210000000
+round6,48409,48110219906,48120000000
+round7,48389,48363587573,48350000000
+round8,48425,48210432116,48220000000
+round9,48345,48321840626,48330000000
+ScanOnheap,48432,48344960157,48331000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,52039,51479258123,51430000000
+round1,50784,50397947432,50370000000
+round2,50410,50382045797,50410000000
+round3,50384,50363300592,50360000000
+round4,50702,50376937359,50350000000
+round5,50526,50438397370,50440000000
+round6,50658,50431073376,50430000000
+round7,50626,50320121417,50290000000
+round8,50388,50360147721,50360000000
+round9,50491,50460760646,50420000000
+ScanOnheap,50700,50500998983,50486000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,49065,48770911862,48750000000
+round1,48406,48373878108,48330000000
+round2,48597,48397233038,48450000000
+round3,48216,48183979925,48230000000
+round4,48259,48227492861,48260000000
+round5,48434,48224146005,48280000000
+round6,48536,48448106503,48400000000
+round7,48558,48242029671,48260000000
+round8,48280,48257374063,48250000000
+round9,48524,48292253749,48340000000
+ScanOnheap,48487,48341740578,48355000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:30
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,54829,54620645203,54610000000
+round1,54435,54184151152,54080000000
+round2,54245,54222346563,54170000000
+round3,54392,54363713937,54170000000
+round4,54376,54347439661,54220000000
+round5,54325,54143525677,54120000000
+round6,54321,54122098416,54170000000
+round7,54285,54176760811,54170000000
+round8,54165,54134130872,54030000000
+round9,54065,54045628133,54100000000
+ScanOnheap,54343,54236044042,54184000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,61306,61265447066,61060000000
+round1,60483,60455772144,60510000000
+round2,60482,60456539048,60430000000
+round3,60539,60503819153,60540000000
+round4,60461,60423541312,60440000000
+round5,60650,60617487056,60510000000
+round6,60403,60367416522,60390000000
+round7,60347,60259468826,60310000000
+round8,60377,60265118267,60320000000
+round9,60487,60383633738,60290000000
+ScanOnheap,60553,60499824313,60480000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,58907,58586910417,58480000000
+round1,57873,57843445861,57790000000
+round2,57982,57940335081,57910000000
+round3,57928,57890493461,57900000000
+round4,58067,57834968013,57830000000
+round5,58159,58131209324,58130000000
+round6,58082,58046644918,57960000000
+round7,58022,57861370792,57790000000
+round8,58195,57956637102,57900000000
+round9,57828,57794736526,57850000000
+ScanOnheap,58104,57988675149,57954000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:35
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,68770,68356583294,68370000000
+round1,67866,67829220317,67640000000
+round2,67759,67718601738,67690000000
+round3,67873,67838083771,67790000000
+round4,68051,67880883090,67860000000
+round5,68059,67875586394,67790000000
+round6,67781,67747304805,67760000000
+round7,68032,67854670606,67800000000
+round8,68043,67836092176,67880000000
+round9,67853,67818459699,67690000000
+ScanOnheap,68008,67875548589,67827000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,70542,70492443378,70470000000
+round1,69891,69857413485,69880000000
+round2,69880,69841405859,69830000000
+round3,69865,69825995299,69790000000
+round4,70026,69983941896,69850000000
+round5,69895,69855162121,69850000000
+round6,70060,70029236234,69990000000
+round7,69819,69687890056,69680000000
+round8,70000,69843788312,69830000000
+round9,69932,69697968738,69690000000
+ScanOnheap,69991,69911524537,69886000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,68386,68347560293,68300000000
+round1,67774,67744755398,67660000000
+round2,67900,67862419446,67720000000
+round3,67867,67827775059,67680000000
+round4,67611,67578694992,67590000000
+round5,67642,67610815192,67670000000
+round6,67902,67488012250,67490000000
+round7,67565,67534585400,67570000000
+round8,67595,67555095559,67580000000
+round9,67515,67479727447,67510000000
+ScanOnheap,67775,67702944103,67677000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:40
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,78927,78238366931,78170000000
+round1,77522,77478799969,77320000000
+round2,77515,77476665758,77480000000
+round3,77636,77597991868,77560000000
+round4,77364,77328221666,77410000000
+round5,77397,77290351018,77300000000
+round6,77617,77367845336,77400000000
+round7,77519,77281404489,77280000000
+round8,77545,77275676493,77240000000
+round9,77531,77492859239,77570000000
+ScanOnheap,77657,77482818276,77473000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,81635,80582441626,80330000000
+round1,79797,79753667560,79600000000
+round2,79666,79621096933,79580000000
+round3,79990,79575241184,79600000000
+round4,79858,79650454994,79640000000
+round5,80263,79604230757,79640000000
+round6,80158,79963052756,79610000000
+round7,80248,79694538134,79630000000
+round8,79573,79528310996,79550000000
+round9,79912,79402474182,79450000000
+ScanOnheap,80110,79737550912,79663000000
+Best (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,72216,72172272225,72030000000
+round1,71462,71421965796,71390000000
+round2,71239,71199104546,71200000000
+round3,71137,71097193782,71080000000
+round4,71518,71359596748,71340000000
+round5,71471,71186014328,71230000000
+round6,71542,71505808187,71320000000
+round7,71269,71228597902,71190000000
+round8,71326,71238093670,71310000000
+round9,71350,71313935455,71320000000
+ScanOnheap,71453,71372258263,71341000000
+query ended!
