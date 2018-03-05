@@ -26,7 +26,7 @@ counter = counter ./ counter(:,num_bins);
 counter = counter';
 fileID = fopen('comp_size_plain_int.data','w');
 for i = 1: num_bins
-    fprintf(fileID,'%s,%d,%d,%d\n',name(i),counter(i,:));
+    fprintf(fileID,'%d,%d,%d,%d\n',i,counter(i,:));
 end
 fclose(fileID);
 
