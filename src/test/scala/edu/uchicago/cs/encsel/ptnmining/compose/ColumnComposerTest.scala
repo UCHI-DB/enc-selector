@@ -22,6 +22,38 @@
 
 package edu.uchicago.cs.encsel.ptnmining.compose
 
+import org.junit.Test
+import org.junit.Assert._
+
 class ColumnComposerTest {
 
+  @Test
+  def testCompose: Unit = {
+    val colComposer = new ColumnComposer("^MIR-([0-9a-fA-F]+)-([0-9a-fA-F]+)-(\\d+)(-)?(\\d*)$",
+      new ChildColumnLoader {
+        var counter = 0
+
+        override def next: Seq[String] = {
+          counter += 1
+          Seq(counter.toString,
+            (counter * 100).toString,
+            (counter * 1000).toString,
+            if (counter % 2 == 0) "true" else "false",
+            (counter % 2).toString)
+        }
+
+        override def skip: Unit = {}
+      })
+    val result = (0 to 10).map(i =>
+      colComposer.getString)
+
+    val expect = Array("MIR-1-100-10001", "MIR-2-200-2000-0",
+      "MIR-3-300-30001", "MIR-4-400-4000-0", "MIR-5-500-50001",
+      "MIR-6-600-6000-0", "MIR-7-700-70001", "MIR-8-800-8000-0",
+      "MIR-9-900-90001", "MIR-10-1000-10000-0","MIR-11-1100-110001")
+
+    (0 to 10).foreach(i => {
+      assertEquals(expect(i), result(i))
+    })
+  }
 }

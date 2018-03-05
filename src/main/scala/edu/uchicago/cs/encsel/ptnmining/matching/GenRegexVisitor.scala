@@ -44,6 +44,10 @@ object RegexHelper {
       case _ => input
     }
   }
+
+  def isEscape(input: Char): Boolean = {
+    "[\\^$.|?*+(){}".contains(input)
+  }
 }
 
 class GenRegexVisitor extends PatternVisitor {

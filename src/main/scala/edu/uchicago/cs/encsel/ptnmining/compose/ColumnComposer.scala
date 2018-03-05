@@ -26,7 +26,7 @@ class ColumnComposer(val pattern: String, val loader: ChildColumnLoader) {
 
   private var current: String = null
 
-  private val currentPosition = 0L
+  private var currentPosition = 0L
 
   private val composer: PatternComposer = new PatternComposer(pattern)
 
@@ -36,10 +36,12 @@ class ColumnComposer(val pattern: String, val loader: ChildColumnLoader) {
 
   def getString: String = {
     current = composer.compose(loader.next)
+    currentPosition += 1
     return current
   }
 
   def skip: Unit = {
     loader.skip
+    currentPosition += 1
   }
 }
