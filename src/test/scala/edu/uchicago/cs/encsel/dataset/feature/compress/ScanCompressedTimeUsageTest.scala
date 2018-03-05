@@ -1,17 +1,34 @@
-package edu.uchicago.cs.encsel.dataset.feature.report
+package edu.uchicago.cs.encsel.dataset.feature.compress
 
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
-import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ScanCompressedTimeUsageNoSnappy}
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
 import org.junit.Test
 
 
-class ScanCompressedTimeUsageNoSnappyTest {
-  val codecs = Array("_LZO", "_GZIP", "")
+//object ScanCompressedTimeUsageTest {
+//
+//  @BeforeClass
+//  def warmup: Unit = {
+//    val select = new VerticalSelect() {
+//      override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
+//    };
+//    val anyfile = new File("src/test/resource/scantime/double.data.DICT").toURI
+//    val schema = new MessageType("default",
+//      new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.DOUBLE, "value")
+//    )
+//    val p = (data: Any) => {
+//      true
+//    }
+//    select.select(anyfile, new VColumnPredicate(p, 0), schema, Array(0))
+//  }
+//}
+
+class ScanCompressedTimeUsageTest {
+  val codecs = Array("SNAPPY", "GZIP", "LZO")
 
   @Test
   def testExtractInt: Unit = {
@@ -22,14 +39,14 @@ class ScanCompressedTimeUsageNoSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
+    val feature = ScanCompressedTimeUsage.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s%s".format(p._1._1, p._1._2)
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -52,14 +69,14 @@ class ScanCompressedTimeUsageNoSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
+    val feature = ScanCompressedTimeUsage.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s%s".format(p._1._1, p._1._2)
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -82,14 +99,14 @@ class ScanCompressedTimeUsageNoSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
+    val feature = ScanCompressedTimeUsage.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s%s".format(p._1._1, p._1._2)
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -112,14 +129,14 @@ class ScanCompressedTimeUsageNoSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
+    val feature = ScanCompressedTimeUsage.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s%s".format(p._1._1, p._1._2)
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)

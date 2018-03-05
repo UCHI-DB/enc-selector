@@ -1,16 +1,39 @@
-package edu.uchicago.cs.encsel.dataset.feature.report
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ * Contributors:
+ *     Hao Jiang - initial API and implementation
+ */
+
+package edu.uchicago.cs.encsel.dataset.feature.compress
 
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
-import edu.uchicago.cs.encsel.dataset.feature.resource.{ParquetEncFileSize, ScanTimeUsage}
-import edu.uchicago.cs.encsel.model.{DataType, IntEncoding}
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
+import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
-import org.junit.{BeforeClass, Test}
+import org.junit.Test
 
-class ScanTimeUsageTest {
+
+class ScanCompressedTimeUsageSnappyTest {
+  val codecs = Array("SNAPPY")
+
   @Test
   def testExtractInt: Unit = {
     val encs = Array("PLAIN", "DICT", "BP", "RLE", "DELTABP")
@@ -18,13 +41,16 @@ class ScanTimeUsageTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
     col.colFile = new File("src/test/resource/scantime/int.data").toURI
 
-    val feature = ScanTimeUsage.extract(col)
-    assertEquals(encs.size * 3, feature.size)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
+
+    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
+    val cross = for (i <- encs; j <- codecs) yield (i, j)
 
-    encs.zipWithIndex.foreach(p => {
-      val name = "%s".format(p._1)
+    cross.zipWithIndex.foreach(p => {
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -45,14 +71,16 @@ class ScanTimeUsageTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.STRING)
     col.colFile = new File("src/test/resource/scantime/str.data").toURI
 
-    ParquetEncFileSize.extract(col)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanTimeUsage.extract(col)
-    assertEquals(encs.size * 3, feature.size)
+    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
-    encs.zipWithIndex.foreach(p => {
-      val name = p._1
+    val cross = for (i <- encs; j <- codecs) yield (i, j)
+
+    cross.zipWithIndex.foreach(p => {
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -73,12 +101,16 @@ class ScanTimeUsageTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.LONG)
     col.colFile = new File("src/test/resource/scantime/long.data").toURI
 
-    val feature = ScanTimeUsage.extract(col)
-    assertEquals(encs.size * 3, feature.size)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
+
+    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
-    encs.zipWithIndex.foreach(p => {
-      val name = p._1
+    val cross = for (i <- encs; j <- codecs) yield (i, j)
+
+    cross.zipWithIndex.foreach(p => {
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -99,12 +131,16 @@ class ScanTimeUsageTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.DOUBLE)
     col.colFile = new File("src/test/resource/scantime/double.data").toURI
 
-    val feature = ScanTimeUsage.extract(col)
-    assertEquals(encs.size * 3, feature.size)
+    col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
+
+    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
-    encs.zipWithIndex.foreach(p => {
-      val name = p._1
+    val cross = for (i <- encs; j <- codecs) yield (i, j)
+
+    cross.zipWithIndex.foreach(p => {
+      val name = "%s_%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -117,6 +153,4 @@ class ScanTimeUsageTest {
       assertTrue(fa(p._2 * 3 + 2).value >= 0)
     })
   }
-
-
 }

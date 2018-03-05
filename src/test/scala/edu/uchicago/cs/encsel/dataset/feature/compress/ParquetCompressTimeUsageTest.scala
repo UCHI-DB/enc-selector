@@ -1,9 +1,8 @@
-package edu.uchicago.cs.encsel.dataset.feature.report
+package edu.uchicago.cs.encsel.dataset.feature.compress
 
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressTimeUsage
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
 import org.junit.Test

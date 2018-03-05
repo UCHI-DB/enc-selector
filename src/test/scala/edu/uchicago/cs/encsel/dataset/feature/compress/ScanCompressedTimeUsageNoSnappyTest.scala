@@ -1,39 +1,16 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements. See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership. The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- *
- * Contributors:
- *     Hao Jiang - initial API and implementation
- */
-
-package edu.uchicago.cs.encsel.dataset.feature.report
+package edu.uchicago.cs.encsel.dataset.feature.compress
 
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
-import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ScanCompressedTimeUsageSnappy}
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
 import org.junit.Test
 
 
-class ScanCompressedTimeUsageSnappyTest {
-  val codecs = Array("SNAPPY")
+class ScanCompressedTimeUsageNoSnappyTest {
+  val codecs = Array("_LZO", "_GZIP", "")
 
   @Test
   def testExtractInt: Unit = {
@@ -44,14 +21,14 @@ class ScanCompressedTimeUsageSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -74,14 +51,14 @@ class ScanCompressedTimeUsageSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -104,14 +81,14 @@ class ScanCompressedTimeUsageSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)
@@ -134,14 +111,14 @@ class ScanCompressedTimeUsageSnappyTest {
 
     col.features.add(new Feature(ParquetCompressFileSize.featureType, "demo", 0))
 
-    val feature = ScanCompressedTimeUsageSnappy.extract(col)
+    val feature = ScanCompressedTimeUsageNoSnappy.extract(col)
     assertEquals(encs.size * codecs.size * 3, feature.size)
     val fa = feature.toArray
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
     cross.zipWithIndex.foreach(p => {
-      val name = "%s_%s".format(p._1._1, p._1._2)
+      val name = "%s%s".format(p._1._1, p._1._2)
 
       assertEquals("ScanTimeUsage", fa(p._2 * 3).featureType)
       assertEquals("ScanTimeUsage", fa(p._2 * 3 + 1).featureType)

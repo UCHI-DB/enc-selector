@@ -20,12 +20,11 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.classify
 
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.classify.AdjInvertPair
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -20,10 +20,9 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.resource
 
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
-import edu.uchicago.cs.encsel.model.{IntEncoding}
 import org.junit.Test
 
 class EncMemoryUsageTest {

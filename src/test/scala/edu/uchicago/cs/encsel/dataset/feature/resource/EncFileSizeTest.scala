@@ -1,13 +1,11 @@
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.resource
 
-import org.junit.Test
-import org.junit.Assert._
 import java.io.File
 
-import ch.qos.logback.core.util.FileSize
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.model.DataType
+import org.junit.Assert._
+import org.junit.Test
 
 class EncFileSizeTest {
 
