@@ -4,6 +4,7 @@ import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
+import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ScanCompressedTimeUsageNoSnappy}
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert._
 import org.junit.Test

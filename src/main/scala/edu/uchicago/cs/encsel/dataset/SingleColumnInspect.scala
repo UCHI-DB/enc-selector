@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset
 
-import edu.uchicago.cs.encsel.dataset.feature.Sortness
+import edu.uchicago.cs.encsel.dataset.feature.classify.Sortness
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
 

@@ -3,7 +3,8 @@ package edu.uchicago.cs.encsel.dataset.feature.report
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.{Feature, ParquetEncFileSize}
+import edu.uchicago.cs.encsel.dataset.feature.Feature
+import edu.uchicago.cs.encsel.dataset.feature.resource.{ParquetEncFileSize, ScanTimeUsage}
 import edu.uchicago.cs.encsel.model.{DataType, IntEncoding}
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import org.junit.Assert._

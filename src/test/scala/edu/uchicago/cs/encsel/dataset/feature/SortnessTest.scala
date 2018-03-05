@@ -3,6 +3,7 @@ package edu.uchicago.cs.encsel.dataset.feature
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.classify.Sortness
 import edu.uchicago.cs.encsel.model.DataType
 import org.junit.Assert.assertEquals
 import org.junit.Test

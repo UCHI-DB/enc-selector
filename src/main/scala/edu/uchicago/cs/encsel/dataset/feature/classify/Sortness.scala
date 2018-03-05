@@ -21,13 +21,14 @@
  *
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.classify
 
 import java.io.InputStream
 import java.util.Comparator
 
 import edu.uchicago.cs.encsel.common.Conversions._
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 
 import scala.io.Source
 import scala.util.Random

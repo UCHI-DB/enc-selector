@@ -23,8 +23,8 @@ package edu.uchicago.cs.encsel.report
 
 import java.io.{FileOutputStream, PrintWriter}
 
-import edu.uchicago.cs.encsel.dataset.feature.ParquetEncFileSize
-import edu.uchicago.cs.encsel.dataset.feature.report.ParquetCompressFileSize
+import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
+import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 

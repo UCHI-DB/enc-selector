@@ -21,44 +21,43 @@
  *
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.classify
 
 import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
+import edu.uchicago.cs.encsel.util.DataUtils
+import org.apache.commons.lang.StringUtils
 
-import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
-object AvgRunLength extends FeatureExtractor {
+object Length extends FeatureExtractor {
 
-  override def featureType = "AvgRunLength"
+  def featureType = "Length"
 
-  override def supportFilter = true
+  def supportFilter: Boolean = true
 
   def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
+
     val fType = "%s%s".format(prefix, featureType)
     val source = Source.fromInputStream(input)
     try {
-      var rlength = new ArrayBuffer[Int];
-      var current = "";
-      var currentCount = 0;
-      source.getLines().foreach(line => {
-        if (current.equals(line)) {
-          currentCount += 1;
-        } else {
-          if (currentCount != 0) {
-            rlength += currentCount;
-          }
-          currentCount = 1;
-          current = line;
-        }
-      });
-      rlength += currentCount;
-      val rlengthmean = rlength.sum.toDouble / rlength.size;
-
-      Iterable(
-        new Feature(fType, "value", rlengthmean))
+      val length = source.getLines()
+        .filter(StringUtils.isNotEmpty).map(_.length().toDouble).toSeq
+      if (0 == length.size) {
+        Iterable(new Feature(fType, "max", 0),
+          new Feature(fType, "min", 0),
+          new Feature(fType, "mean", 0),
+          new Feature(fType, "variance", 0))
+      } else {
+        val statforlen = DataUtils.stat(length)
+        Iterable(
+          new Feature(fType, "max", length.max),
+          new Feature(fType, "min", length.min),
+          new Feature(fType, "mean", statforlen._1),
+          new Feature(fType, "variance", statforlen._2))
+      }
     } finally {
       source.close()
     }

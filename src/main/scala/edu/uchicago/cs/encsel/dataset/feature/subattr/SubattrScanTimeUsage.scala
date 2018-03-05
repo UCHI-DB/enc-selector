@@ -21,7 +21,7 @@
  *
  */
 
-package edu.uchicago.cs.encsel.dataset.feature.report
+package edu.uchicago.cs.encsel.dataset.feature.subattr
 
 import java.io.{File, InputStream}
 import java.net.URI
@@ -39,10 +39,10 @@ import org.apache.parquet.schema.Type.Repetition
 import org.apache.parquet.schema.{MessageType, PrimitiveType}
 import org.slf4j.LoggerFactory
 
-object ScanTimeUsage extends FeatureExtractor {
+object SubattrScanTimeUsage extends FeatureExtractor {
   val logger = LoggerFactory.getLogger(getClass)
 
-  def featureType = "ScanTimeUsage"
+  def featureType = "SubattrScanTimeUsage"
 
   def supportFilter: Boolean = false
 

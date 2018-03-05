@@ -2,7 +2,9 @@ package edu.uchicago.cs.encsel.report
 
 import edu.uchicago.cs.encsel.classify.AbadiDecisionTree
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.{AvgRunLength, Distinct, ParquetEncFileSize}
+import edu.uchicago.cs.encsel.dataset.feature.classify.{AvgRunLength, Distinct}
+import edu.uchicago.cs.encsel.dataset.feature.AvgRunLength
+import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 

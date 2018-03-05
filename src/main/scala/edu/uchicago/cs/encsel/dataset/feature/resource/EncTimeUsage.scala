@@ -20,13 +20,13 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
-
+package edu.uchicago.cs.encsel.dataset.feature.resource
 
 import java.io.InputStream
 import java.lang.management.ManagementFactory
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 import org.slf4j.LoggerFactory

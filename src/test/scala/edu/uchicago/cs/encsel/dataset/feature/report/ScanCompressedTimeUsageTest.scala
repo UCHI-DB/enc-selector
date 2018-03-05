@@ -4,6 +4,7 @@ import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
+import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ScanCompressedTimeUsage}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect

@@ -20,7 +20,7 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.dataset.feature.report
+package edu.uchicago.cs.encsel.dataset.feature.compress
 
 import java.io.{File, InputStream}
 import java.net.URI

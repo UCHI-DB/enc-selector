@@ -20,12 +20,13 @@
  *     Hao Jiang - initial API and implementation
  *
  */
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.classify
 
 import java.io.InputStream
 import java.util
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 
 import scala.io.Source
 

@@ -23,7 +23,8 @@
 package edu.uchicago.cs.encsel.report
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.report.{ParquetCompressFileSize, ParquetCompressFileSizeAndTime}
+import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSizeAndTime
+import edu.uchicago.cs.encsel.dataset.feature.report.ParquetCompressFileSizeAndTime
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType

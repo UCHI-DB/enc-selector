@@ -21,12 +21,13 @@
  *
  */
 
-package edu.uchicago.cs.encsel.dataset.feature
+package edu.uchicago.cs.encsel.dataset.feature.resource
 
 import java.io.InputStream
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper

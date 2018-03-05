@@ -28,6 +28,8 @@ import java.net.URI
 import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.classify._
+import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 

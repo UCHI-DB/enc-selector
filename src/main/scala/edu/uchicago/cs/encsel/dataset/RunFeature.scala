@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.report.ScanTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
 import edu.uchicago.cs.encsel.encoding.BitVectorEncoding

@@ -21,13 +21,13 @@
  *
  */
 
-package edu.uchicago.cs.encsel.dataset.feature.report
+package edu.uchicago.cs.encsel.dataset.feature.compress
 
 import java.io.{File, InputStream}
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.report.ScanCompressedTimeUsageNoSnappy.profiler
+import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsageNoSnappy.profiler
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
