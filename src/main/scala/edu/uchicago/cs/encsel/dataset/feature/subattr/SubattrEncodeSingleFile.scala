@@ -11,11 +11,8 @@ import edu.uchicago.cs.encsel.parquet.{EncContext, EncReaderProcessor, ParquetWr
 import edu.uchicago.cs.encsel.ptnmining.compose.PatternComposer
 import edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper
 import edu.uchicago.cs.encsel.util.FileUtils
-import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.parquet.column.Encoding
-import org.apache.parquet.format.converter.ParquetMetadataConverter
-import org.apache.parquet.hadoop.ParquetFileReader
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName._
 import org.apache.parquet.schema.Type.Repetition
@@ -26,7 +23,7 @@ import scala.collection.JavaConverters._
 object SubattrEncodeSingleFile extends App {
 
   val em = new JPAPersistence().em
-  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c)"
+  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) ORDER BY c.id"
   val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
   val patternSql = "SELECT p FROM Pattern p WHERE p.column = :col"
 
@@ -55,10 +52,10 @@ object SubattrEncodeSingleFile extends App {
   }
 
   def parquetLineCount(col: Column): Long = {
-//    val footer = ParquetFileReader.readFooter(new Configuration,
-//      new Path(col.colFile),
-//      ParquetMetadataConverter.NO_FILTER)
-//    footer.getBlocks.asScala.map(_.getRowCount).sum
+    //    val footer = ParquetFileReader.readFooter(new Configuration,
+    //      new Path(col.colFile),
+    //      ParquetMetadataConverter.NO_FILTER)
+    //    footer.getBlocks.asScala.map(_.getRowCount).sum
     FileUtils.numLine(col.colFile)
   }
 
@@ -82,7 +79,7 @@ object SubattrEncodeSingleFile extends App {
           case DataType.DOUBLE => PrimitiveTypeName.DOUBLE
           case DataType.FLOAT => PrimitiveTypeName.FLOAT
         }
-        new PrimitiveType(rep, typeName, col.colName)
+        new PrimitiveType(rep, typeName, c.colName)
       }): _*
     )
 
@@ -105,7 +102,8 @@ object SubattrEncodeSingleFile extends App {
 
       EncContext.encoding.get().put(cd.toString, encoding)
       val context = EncReaderProcessor.getContext(encodedFile)(0).asInstanceOf[Array[AnyRef]]
-      EncContext.context.get().put(cd.toString, context);
+      if (context != null)
+        EncContext.context.get().put(cd.toString, context);
     })
 
     val writer = ParquetWriterBuilder.buildForTable(new Path(file), schema)
@@ -117,8 +115,9 @@ object SubattrEncodeSingleFile extends App {
     var valid = true
     while (valid) {
       val data = readers.map(_.readLine())
-      writer.write(data.asJava)
-      valid = data.exists(_ == null)
+      valid = !data.exists(_ == null)
+      if (valid)
+        writer.write(data.asJava)
     }
     readers.foreach(_.close)
     writer.close()

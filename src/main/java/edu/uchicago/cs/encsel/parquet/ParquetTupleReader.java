@@ -38,6 +38,7 @@ import org.apache.parquet.schema.MessageType;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Map;
 
 
 /**
@@ -75,6 +76,9 @@ public class ParquetTupleReader {
         fileReader = ParquetFileReader.open(conf, inputPath, meta);
         readers = new ColumnReader[meta.getFileMetaData().getSchema().getColumns().size()];
         version = VersionParser.parse(meta.getFileMetaData().getCreatedBy());
+
+        readContext();
+
         readyRead();
     }
 
@@ -84,6 +88,8 @@ public class ParquetTupleReader {
 
     public Object[] read() throws IOException {
         readyRead();
+        if (currentRowGroup == null)
+            return null;
         rowTempTable.start();
         for (int i = 0; i < readers.length; i++) {
             ColumnReader colReader = readers[i];
@@ -104,14 +110,29 @@ public class ParquetTupleReader {
         fileReader.close();
     }
 
+    protected void readContext() {
+        Map<String, String> kvmeta = meta.getFileMetaData().getKeyValueMetaData();
+
+        for (int i = 0; i < schema.getColumns().size(); i++) {
+            ColumnDescriptor col = schema.getColumns().get(i);
+            if (kvmeta.containsKey(String.format("%s.0", col.toString()))) {
+                String data1 = kvmeta.get(String.format("%s.0", col.toString()));
+                String data2 = kvmeta.get(String.format("%s.1", col.toString()));
+                EncContext.context.get().put(col.toString(), new Object[]{data1, data2});
+            }
+        }
+    }
+
     protected void readyRead() throws IOException {
         if (currentRowGroup == null || rowGroupReadCounter == currentRowGroup.getRowCount()) {
             currentRowGroup = fileReader.readNextRowGroup();
-            rowGroupReadCounter = 0;
-            for (int i = 0; i < readers.length; i++) {
-                ColumnDescriptor cd = schema.getColumns().get(i);
-                readers[i] = new ColumnReaderImpl(cd, currentRowGroup.getPageReader(cd),
-                        rowTempTable.getConverter(i).asPrimitiveConverter(), version);
+            if (currentRowGroup != null) {
+                rowGroupReadCounter = 0;
+                for (int i = 0; i < readers.length; i++) {
+                    ColumnDescriptor cd = schema.getColumns().get(i);
+                    readers[i] = new ColumnReaderImpl(cd, currentRowGroup.getPageReader(cd),
+                            rowTempTable.getConverter(i).asPrimitiveConverter(), version);
+                }
             }
         }
     }

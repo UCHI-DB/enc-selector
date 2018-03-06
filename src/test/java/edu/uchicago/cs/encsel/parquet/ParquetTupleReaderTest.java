@@ -34,4 +34,17 @@ public class ParquetTupleReaderTest {
         reader.close();
         originReader.close();
     }
+
+//    @Test
+//    public void testSubtable() throws Exception {
+//        ParquetTupleReader reader = new ParquetTupleReader(new File("/home/harper/subtable").toURI());
+//        Object[] result = null;
+//        while ((result = reader.read()) != null) {
+//            for (int i = 0; i < result.length; i++) {
+//                System.out.print(result[i].toString());
+//                System.out.print(",");
+//            }
+//            System.out.println();
+//        }
+//    }
 }
