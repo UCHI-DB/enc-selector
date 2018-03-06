@@ -55,10 +55,11 @@ object SubattrEncodeSingleFile extends App {
   }
 
   def parquetLineCount(col: Column): Long = {
-    val footer = ParquetFileReader.readFooter(new Configuration,
-      new Path(col.colFile),
-      ParquetMetadataConverter.NO_FILTER)
-    footer.getBlocks.asScala.map(_.getRowCount).sum
+//    val footer = ParquetFileReader.readFooter(new Configuration,
+//      new Path(col.colFile),
+//      ParquetMetadataConverter.NO_FILTER)
+//    footer.getBlocks.asScala.map(_.getRowCount).sum
+    FileUtils.numLine(col.colFile)
   }
 
   def getPattern(col: Column) = {
