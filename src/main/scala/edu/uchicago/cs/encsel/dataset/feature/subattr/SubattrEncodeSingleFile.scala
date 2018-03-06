@@ -1,6 +1,29 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License,
+ *
+ * Contributors:
+ *     Hao Jiang - initial API and implementation
+ *
+ */
 package edu.uchicago.cs.encsel.dataset.feature.subattr
 
 import java.io.{BufferedReader, File, FileReader}
+import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
@@ -28,21 +51,28 @@ object SubattrEncodeSingleFile extends App {
   val patternSql = "SELECT p FROM Pattern p WHERE p.column = :col"
 
   em.createQuery(sql, classOf[ColumnWrapper]).getResultList.asScala.foreach(col => {
-    val children = getChildren(col)
-    children.find(_.colName == "unmatch") match {
-      case Some(um) => {
-        val unmatchedLine = parquetLineCount(um)
-        val total = parquetLineCount(col)
-        val unmatchRate = unmatchedLine.toDouble / total
-        col.replaceFeatures(Iterable(new Feature("SubattrStat", "unmatch_rate", unmatchRate)))
+    println("Processing column %d".format(col.id))
+    val subtableFile = FileUtils.addExtension(col.colFile, "subtable")
+    val path = Paths.get(subtableFile)
+    if (Files.exists(path)) {
+      println("Subtable exists, skipping")
+    } else {
+      val children = getChildren(col)
+      children.find(_.colName == "unmatch") match {
+        case Some(um) => {
+          val unmatchedLine = parquetLineCount(um)
+          val total = parquetLineCount(col)
+          val unmatchRate = unmatchedLine.toDouble / total
+          col.replaceFeatures(Iterable(new Feature("SubattrStat", "unmatch_rate", unmatchRate)))
 
-        // Build a single table
-        val validChildren = children.filter(_.colName != "unmatch").sortBy(_.colIndex)
-        val pattern = getPattern(col).pattern
-        writeChildren(col, new PatternComposer(pattern), validChildren)
-      }
-      case None => {
+          // Build a single table
+          val validChildren = children.filter(_.colName != "unmatch").sortBy(_.colIndex)
+          val pattern = getPattern(col).pattern
+          writeChildren(col, new PatternComposer(pattern), validChildren)
+        }
+        case None => {
 
+        }
       }
     }
   })
@@ -65,6 +95,10 @@ object SubattrEncodeSingleFile extends App {
 
   def writeChildren(col: Column, pattern: PatternComposer, children: Seq[Column]): Unit = {
     val file = FileUtils.addExtension(col.colFile, "subtable")
+    val path = Paths.get(file)
+    if (Files.exists(path)) {
+      Files.delete(path)
+    }
     val optionalColumns = pattern.optionalColumns
 
     // Setup encoding for each column
