@@ -22,7 +22,6 @@
 
 package edu.uchicago.cs.encsel.ptnmining.compose
 
-import scala.collection.immutable.HashSet
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
@@ -78,14 +77,22 @@ class PatternComposer(pattern: String) {
           }
         }
         case '+' => {
-          // Ignore
+          if (layer > 0) {
+            groupBuffer.append('+')
+          } else {
+            // Ignore
+          }
         }
         case '?' => {
-          // Assumption: ? only occurs after group
-          optionalColIndex += groups.length - 1
-          if (isSymbol(groups.last)) {
+          if (layer > 0) {
+            groupBuffer.append('?')
+          } else if (groups.length > 0 && groupBuffer.length == 0 && isSymbol(groups.last)) {
+            // ? occurrs just after group
+            optionalColIndex += groups.length - 1
             // Just done with a group
             booleanColIndex += groups.length - 1
+          } else {
+            // Ignore
           }
         }
         case '^' | '$' => {

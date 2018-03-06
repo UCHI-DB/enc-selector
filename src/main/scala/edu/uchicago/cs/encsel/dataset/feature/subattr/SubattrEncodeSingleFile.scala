@@ -52,27 +52,21 @@ object SubattrEncodeSingleFile extends App {
 
   em.createQuery(sql, classOf[ColumnWrapper]).getResultList.asScala.foreach(col => {
     println("Processing column %d".format(col.id))
-    val subtableFile = FileUtils.addExtension(col.colFile, "subtable")
-    val path = Paths.get(subtableFile)
-    if (Files.exists(path)) {
-      println("Subtable exists, skipping")
-    } else {
-      val children = getChildren(col)
-      children.find(_.colName == "unmatch") match {
-        case Some(um) => {
-          val unmatchedLine = parquetLineCount(um)
-          val total = parquetLineCount(col)
-          val unmatchRate = unmatchedLine.toDouble / total
-          col.replaceFeatures(Iterable(new Feature("SubattrStat", "unmatch_rate", unmatchRate)))
+    val children = getChildren(col)
+    children.find(_.colName == "unmatch") match {
+      case Some(um) => {
+        val unmatchedLine = parquetLineCount(um)
+        val total = parquetLineCount(col)
+        val unmatchRate = unmatchedLine.toDouble / total
+        col.replaceFeatures(Iterable(new Feature("SubattrStat", "unmatch_rate", unmatchRate)))
 
-          // Build a single table
-          val validChildren = children.filter(_.colName != "unmatch").sortBy(_.colIndex)
-          val pattern = getPattern(col).pattern
-          writeChildren(col, new PatternComposer(pattern), validChildren)
-        }
-        case None => {
+        // Build a single table
+        val validChildren = children.filter(_.colName != "unmatch").sortBy(_.colIndex)
+        val pattern = getPattern(col).pattern
+        writeChildren(col, new PatternComposer(pattern), validChildren)
+      }
+      case None => {
 
-        }
       }
     }
   })

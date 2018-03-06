@@ -51,5 +51,10 @@ class PatternComposerTest {
     assertEquals(1, composer.booleanColumns.size)
     assertEquals(5, composer.numGroup)
     assertEquals("MIR-%s-%s-%s%s%s", composer.format)
+
+    composer = new PatternComposer("^\\((\\d+\\.?\\d*),\\s+-(\\d+\\.?\\d*)\\)$")
+    assertEquals(0, composer.booleanColumns.size)
+    assertEquals(2, composer.numGroup)
+    assertEquals("\\(%s, -%s\\)", composer.format)
   }
 }
