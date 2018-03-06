@@ -2,9 +2,7 @@ package edu.uchicago.cs.encsel.report
 
 import java.io.{FileOutputStream, PrintWriter}
 
-import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ParquetCompressTimeUsage, ScanCompressedTimeUsage}
-import edu.uchicago.cs.encsel.dataset.feature.report.{ParquetCompressTimeUsage, ScanCompressedTimeUsage}
 import edu.uchicago.cs.encsel.dataset.feature.resource.{EncTimeUsage, ParquetEncFileSize, ScanTimeUsage}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType

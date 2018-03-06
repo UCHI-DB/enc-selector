@@ -43,12 +43,12 @@ class PatternComposerTest {
   @Test
   def testComposeReal: Unit = {
     var composer = new PatternComposer("^(\\d+)-(\\d+)-(\\d+)\\s+(\\d+):(\\d+):(\\d+\\.?\\d*)$")
-    assertEquals(0, composer.booleanColumns.length)
+    assertEquals(0, composer.booleanColumns.size)
     assertEquals(6, composer.numGroup)
     assertEquals("%s-%s-%s %s:%s:%s", composer.format)
 
     composer = new PatternComposer("^MIR-([0-9a-fA-F]+)-([0-9a-fA-F]+)-(\\d+)(-)?(\\d*)$")
-    assertEquals(1, composer.booleanColumns.length)
+    assertEquals(1, composer.booleanColumns.size)
     assertEquals(5, composer.numGroup)
     assertEquals("MIR-%s-%s-%s%s%s", composer.format)
   }

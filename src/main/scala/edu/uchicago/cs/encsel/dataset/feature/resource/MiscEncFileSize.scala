@@ -25,6 +25,7 @@ package edu.uchicago.cs.encsel.dataset.feature.resource
 import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.encoding.{Encoding, EncodingException}
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
 
