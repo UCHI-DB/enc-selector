@@ -50,7 +50,21 @@ object LoadTPCH extends App {
       schema,
       new File("%s%s%s".format(folder, schema.getName, outputsuffix)).toURI, "\\|", false)
   })
+}
 
+object LoadPart20 extends App {
+  val schema = TPCHSchema.partSchema
+  var counter = 0
+  schema.getColumns.forEach(cd => {
+    EncContext.encoding.get().put(cd.toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.context.get().put(cd.toString, Array[AnyRef](counter.toString, (counter * 10).toString))
+    counter += 1
+  })
+
+  ParquetWriterHelper.write(
+    new File("src/test/resource/parquet/part_20").toURI,
+    schema,
+    new File("src/test/resource/parquet/part_20.parquet").toURI, "\\|", false)
 }
 
 object LoadTPCH4Offheap extends App {

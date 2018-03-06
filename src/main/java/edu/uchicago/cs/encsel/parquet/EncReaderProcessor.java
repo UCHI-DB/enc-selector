@@ -22,14 +22,23 @@
 
 package edu.uchicago.cs.encsel.parquet;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.parquet.column.ColumnDescriptor;
+import org.apache.parquet.format.converter.ParquetMetadataConverter;
 import org.apache.parquet.hadoop.Footer;
+import org.apache.parquet.hadoop.ParquetFileReader;
+import org.apache.parquet.hadoop.metadata.ParquetMetadata;
 import org.apache.parquet.schema.MessageType;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 
 public abstract class EncReaderProcessor implements ReaderProcessor {
     /**
      * Load data from file footer and put that in ThreadLocal for decoding purpose
+     *
      * @param footer
      */
     @Override
@@ -47,4 +56,21 @@ public abstract class EncReaderProcessor implements ReaderProcessor {
 
     }
 
+    public static final Object[] getContext(URI encodedFile) throws IOException {
+        ParquetMetadata footer = ParquetFileReader.readFooter(new Configuration(),
+                new Path(encodedFile), ParquetMetadataConverter.NO_FILTER);
+        MessageType schema = footer.getFileMetaData().getSchema();
+        Map<String, String> meta = footer.getFileMetaData().getKeyValueMetaData();
+
+        Object[] result = new Object[schema.getFields().size()];
+        for (int i = 0; i < result.length; i++) {
+            ColumnDescriptor col = schema.getColumns().get(i);
+            if (meta.containsKey(String.format("%s.0", col.toString()))) {
+                String data1 = meta.get(String.format("%s.0", col.toString()));
+                String data2 = meta.get(String.format("%s.1", col.toString()));
+                result[i] = new Object[]{data1, data2};
+            }
+        }
+        return result;
+    }
 }

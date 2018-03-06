@@ -100,6 +100,10 @@ public class ParquetTupleReader {
         return result;
     }
 
+    public void close() throws IOException {
+        fileReader.close();
+    }
+
     protected void readyRead() throws IOException {
         if (currentRowGroup == null || rowGroupReadCounter == currentRowGroup.getRowCount()) {
             currentRowGroup = fileReader.readNextRowGroup();

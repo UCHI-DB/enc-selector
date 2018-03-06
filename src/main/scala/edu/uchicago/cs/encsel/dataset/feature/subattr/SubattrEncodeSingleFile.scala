@@ -5,14 +5,15 @@ import java.io.{BufferedReader, File, FileReader}
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
-import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.model.DataType._
-import edu.uchicago.cs.encsel.parquet.ParquetWriterBuilder
+import edu.uchicago.cs.encsel.model._
+import edu.uchicago.cs.encsel.parquet.{EncContext, EncReaderProcessor, ParquetWriterBuilder}
 import edu.uchicago.cs.encsel.ptnmining.compose.PatternComposer
 import edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper
 import edu.uchicago.cs.encsel.util.FileUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
+import org.apache.parquet.column.Encoding
 import org.apache.parquet.format.converter.ParquetMetadataConverter
 import org.apache.parquet.hadoop.ParquetFileReader
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
@@ -67,7 +68,9 @@ object SubattrEncodeSingleFile extends App {
   def writeChildren(col: Column, pattern: PatternComposer, children: Seq[Column]): Unit = {
     val file = FileUtils.addExtension(col.colFile, "subtable")
     val optionalColumns = pattern.optionalColumns
-    val writer = ParquetWriterBuilder.buildForTable(new Path(file), new MessageType("table",
+
+    // Setup encoding for each column
+    val schema = new MessageType("table",
       children.map(c => {
         val rep = if (optionalColumns.contains(c.colIndex)) Repetition.OPTIONAL else Repetition.REQUIRED
         val typeName = c.dataType match {
@@ -80,7 +83,31 @@ object SubattrEncodeSingleFile extends App {
         }
         new PrimitiveType(rep, typeName, col.colName)
       }): _*
-    ))
+    )
+
+    schema.getColumns().toArray.zip(children).foreach(pair => {
+      val cd = pair._1
+      val col = pair._2
+      val bestEnc = col.findFeatures("EncFileSize").filter(_.value > 0).minBy(_.value)
+      val encName = bestEnc.name.replace("_file_size", "")
+
+      val encoding = col.dataType match {
+        case DataType.INTEGER => IntEncoding.valueOf(encName).parquetEncoding
+        case DataType.STRING => StringEncoding.valueOf(encName).parquetEncoding
+        case DataType.DOUBLE | DataType.FLOAT => FloatEncoding.valueOf(encName).parquetEncoding
+        case DataType.LONG => LongEncoding.valueOf(encName).parquetEncoding
+        case DataType.BOOLEAN => Encoding.RLE
+      }
+      // Fetch context from encoded file
+      val encodedFile = FileUtils.addExtension(col.colFile, encName)
+
+
+      EncContext.encoding.get().put(cd.toString, encoding)
+      val context = EncReaderProcessor.getContext(encodedFile)(0).asInstanceOf[Array[AnyRef]]
+      EncContext.context.get().put(cd.toString, context);
+    })
+
+    val writer = ParquetWriterBuilder.buildForTable(new Path(file), schema)
 
     val readers = children.map(c => {
       new BufferedReader(new FileReader(new File(c.colFile)))
