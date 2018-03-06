@@ -22,14 +22,15 @@
 
 package edu.uchicago.cs.encsel.ptnmining.compose
 
-import edu.uchicago.cs.encsel.ptnmining.matching.RegexHelper
-
+import scala.collection.immutable.HashSet
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 class PatternComposer(pattern: String) {
 
   private val booleanColIndex = new mutable.HashSet[Int]
+
+  private val optionalColIndex = new mutable.HashSet[Int]
 
   private val groups = new ArrayBuffer[String]
 
@@ -80,7 +81,9 @@ class PatternComposer(pattern: String) {
           // Ignore
         }
         case '?' => {
-          if (groupBuffer.length == 0 && isSymbol(groups.last)) {
+          // Assumption: ? only occurs after group
+          optionalColIndex += groups.length - 1
+          if (isSymbol(groups.last)) {
             // Just done with a group
             booleanColIndex += groups.length - 1
           }
@@ -103,7 +106,9 @@ class PatternComposer(pattern: String) {
     str.length == 1 && !Character.isLetterOrDigit(str.head)
   }
 
-  def booleanColumns: Seq[Int] = booleanColIndex.toList.sorted
+  def booleanColumns: Set[Int] = booleanColIndex.toSet
+
+  def optionalColumns: Set[Int] = optionalColIndex.toSet
 
   def compose(data: Seq[String]): String = {
     if (data.length != numGroup)
