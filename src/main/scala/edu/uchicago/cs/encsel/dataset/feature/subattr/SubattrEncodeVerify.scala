@@ -48,7 +48,7 @@ object SubattrEncodeVerify extends App {
     // Build a single table
     val validChildren = children.filter(_.colName != "unmatch")
     val pattern = new PatternComposer(getPattern(col).pattern)
-
+    val childrenSize = validChildren.map(c => FileUtils.numLine(c.colFile)).toSet
     if (pattern.numGroup != validChildren.size)
       println("%d parsed pattern is inconsistent with extracted columns")
 
@@ -56,10 +56,10 @@ object SubattrEncodeVerify extends App {
     if (Files.exists(Paths.get(subtable))) {
       val parquetReader = new ParquetTupleReader(subtable)
 
-      if (validChildren.size != 1) {
+      if (childrenSize.size != 1) {
         println("%d has different children count".format(col.id))
       }
-      if (parquetReader.getNumOfRecords != validChildren.head) {
+      if (parquetReader.getNumOfRecords != childrenSize.head) {
         println("%d subtable count is different from children count".format(col.id))
       }
     }
