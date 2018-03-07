@@ -45,7 +45,8 @@ import scala.collection.JavaConverters._
 
 object SubattrEncodeSingleFile extends App {
 
-  val em = new JPAPersistence().em
+  val persist = new JPAPersistence()
+  val em = persist.em
   val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) ORDER BY c.id"
   val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
   val patternSql = "SELECT p FROM Pattern p WHERE p.column = :col"
@@ -59,7 +60,7 @@ object SubattrEncodeSingleFile extends App {
         val total = parquetLineCount(col)
         val unmatchRate = unmatchedLine.toDouble / total
         col.replaceFeatures(Iterable(new Feature("SubattrStat", "unmatch_rate", unmatchRate)))
-
+        persist.save(Iterable(col))
         // Build a single table
         val validChildren = children.filter(_.colName != "unmatch").sortBy(_.colIndex)
         val pattern = getPattern(col).pattern
