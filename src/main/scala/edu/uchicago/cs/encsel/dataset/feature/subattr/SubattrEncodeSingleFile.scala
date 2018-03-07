@@ -47,11 +47,11 @@ object SubattrEncodeSingleFile extends App {
 
   val persist = new JPAPersistence()
   val em = persist.em
-  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) ORDER BY c.id"
+  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) AND c.id >= :start ORDER BY c.id"
   val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
   val patternSql = "SELECT p FROM Pattern p WHERE p.column = :col"
-
-  em.createQuery(sql, classOf[ColumnWrapper]).getResultList.asScala.foreach(col => {
+  val start = if (args.length == 0) 0 else args(0).toInt
+  em.createQuery(sql, classOf[ColumnWrapper]).setParameter("start", start).getResultList.asScala.foreach(col => {
     println("Processing column %d".format(col.id))
     val children = getChildren(col)
     children.find(_.colName == "unmatch") match {
@@ -88,8 +88,8 @@ object SubattrEncodeSingleFile extends App {
     em.createQuery(patternSql, classOf[PatternWrapper]).setParameter("col", col).getSingleResult
   }
 
-  def writeChildren(col: Column, pattern: PatternComposer, children: Seq[Column]): Unit = {
-    val file = FileUtils.addExtension(col.colFile, "subtable")
+  def writeChildren(parent: Column, pattern: PatternComposer, children: Seq[Column]): Unit = {
+    val file = FileUtils.addExtension(parent.colFile, "subtable")
     val path = Paths.get(file)
     if (Files.exists(path)) {
       Files.delete(path)
@@ -114,11 +114,11 @@ object SubattrEncodeSingleFile extends App {
 
     schema.getColumns().toArray.zip(children).foreach(pair => {
       val cd = pair._1
-      val col = pair._2
-      val bestEnc = col.findFeatures("EncFileSize").filter(_.value > 0).minBy(_.value)
+      val child = pair._2
+      val bestEnc = child.findFeatures("EncFileSize").filter(_.value > 0).minBy(_.value)
       val encName = bestEnc.name.replace("_file_size", "")
 
-      val encoding = col.dataType match {
+      val encoding = child.dataType match {
         case DataType.INTEGER => IntEncoding.valueOf(encName).parquetEncoding
         case DataType.STRING => StringEncoding.valueOf(encName).parquetEncoding
         case DataType.DOUBLE | DataType.FLOAT => FloatEncoding.valueOf(encName).parquetEncoding
@@ -126,7 +126,7 @@ object SubattrEncodeSingleFile extends App {
         case DataType.BOOLEAN => Encoding.RLE
       }
       // Fetch context from encoded file
-      val encodedFile = FileUtils.addExtension(col.colFile, encName)
+      val encodedFile = FileUtils.addExtension(child.colFile, encName)
 
 
       EncContext.encoding.get().put(cd.toString, encoding)
