@@ -35,7 +35,7 @@ import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
 
-object SubattrEncodeVerify {
+object SubattrEncodeVerify extends App {
   val em = new JPAPersistence().em
   val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) ORDER BY c.id"
   val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
