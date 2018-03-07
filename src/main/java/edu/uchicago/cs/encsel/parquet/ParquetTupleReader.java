@@ -39,6 +39,7 @@ import org.apache.parquet.schema.MessageType;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,6 +61,8 @@ public class ParquetTupleReader {
 
     private SingleRowTempTable rowTempTable;
 
+    private long numOfRecords = 0;
+
     private long rowGroupReadCounter = 0;
 
     private long readCounter = 0;
@@ -76,10 +79,8 @@ public class ParquetTupleReader {
         fileReader = ParquetFileReader.open(conf, inputPath, meta);
         readers = new ColumnReader[meta.getFileMetaData().getSchema().getColumns().size()];
         version = VersionParser.parse(meta.getFileMetaData().getCreatedBy());
-
+        numOfRecords = meta.getBlocks().stream().collect(Collectors.summingLong(b -> b.getRowCount()));
         readContext();
-
-        readyRead();
     }
 
     public MessageType getSchema() {
@@ -104,6 +105,10 @@ public class ParquetTupleReader {
         rowGroupReadCounter++;
         readCounter++;
         return result;
+    }
+
+    public long getNumOfRecords() {
+        return numOfRecords;
     }
 
     public void close() throws IOException {
