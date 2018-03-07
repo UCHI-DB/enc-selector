@@ -22,12 +22,15 @@
 
 package edu.uchicago.cs.encsel.dataset.feature.subattr
 
+import java.nio.file.{Files, Paths}
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
-import edu.uchicago.cs.encsel.dataset.feature.subattr.SubattrEncodeSingleFile._
+import edu.uchicago.cs.encsel.dataset.feature.subattr.SubattrEncodeSingleFile.{em, patternSql, _}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.parquet.ParquetTupleReader
 import edu.uchicago.cs.encsel.ptnmining.compose.PatternComposer
+import edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper
 import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
@@ -43,15 +46,22 @@ object SubattrEncodeVerify {
     val children = getChildren(col)
 
     // Build a single table
-    val validChildren = children.filter(_.colName != "unmatch").map(parquetLineCount).toSet
-    val subtable = FileUtils.addExtension(col.colFile, "subtable")
-    val parquetReader = new ParquetTupleReader(subtable)
+    val validChildren = children.filter(_.colName != "unmatch")
+    val pattern = new PatternComposer(getPattern(col).pattern)
 
-    if (validChildren.size != 1) {
-      println("%d has different children count".format(col.id))
-    }
-    if (parquetReader.getNumOfRecords != validChildren.head) {
-      println("%d subtable count is different from children count".format(col.id))
+    if (pattern.numGroup != validChildren.size)
+      println("%d parsed pattern is inconsistent with extracted columns")
+
+    val subtable = FileUtils.addExtension(col.colFile, "subtable")
+    if (Files.exists(Paths.get(subtable))) {
+      val parquetReader = new ParquetTupleReader(subtable)
+
+      if (validChildren.size != 1) {
+        println("%d has different children count".format(col.id))
+      }
+      if (parquetReader.getNumOfRecords != validChildren.head) {
+        println("%d subtable count is different from children count".format(col.id))
+      }
     }
   })
 
@@ -61,5 +71,9 @@ object SubattrEncodeVerify {
 
   def parquetLineCount(col: Column): Long = {
     FileUtils.numLine(col.colFile)
+  }
+
+  def getPattern(col: Column) = {
+    em.createQuery(patternSql, classOf[PatternWrapper]).setParameter("col", col).getSingleResult
   }
 }
