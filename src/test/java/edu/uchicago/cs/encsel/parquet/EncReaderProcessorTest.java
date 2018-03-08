@@ -36,7 +36,7 @@ public class EncReaderProcessorTest {
 
     @Test
     public void testExtractMeta() throws Exception {
-        Object[] result = EncReaderProcessor.getContext(new File("src/test/resource/parquet/part_20.parquet").toURI());
+        Object[] result = EncReaderProcessor.getContext(new File("src/test/resource/subtable/part_20.parquet").toURI());
         assertEquals(9, result.length);
         for (int i = 0; i < result.length; i++) {
             Object[] item = (Object[]) result[i];
