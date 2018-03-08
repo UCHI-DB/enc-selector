@@ -16,7 +16,7 @@ public class ParquetTupleReaderTest {
         ParquetTupleReader reader = new ParquetTupleReader(
                 new File("src/test/resource/subtable/part_20.parquet").toURI());
 
-        BufferedReader originReader = new BufferedReader(new FileReader(new File("src/test/resource/parquet/part_20")));
+        BufferedReader originReader = new BufferedReader(new FileReader(new File("src/test/resource/subtable/part_20")));
 
         for (int i = 0; i < 20; i++) {
             String[] origin = originReader.readLine().split("\\|");
@@ -40,17 +40,11 @@ public class ParquetTupleReaderTest {
     public void testSubtable() throws Exception {
         ParquetTupleReader reader = new ParquetTupleReader(
                 new File("src/test/resource/subtable/subtable").toURI());
-        System.out.println(reader.getSchema());
         Object[] result = null;
+        int counter = 0;
         while ((result = reader.read()) != null) {
-            for (int i = 0; i < result.length; i++) {
-                if (result[i] == null)
-                    System.out.print("<null>");
-                else
-                    System.out.print(result[i]);
-                System.out.print(",");
-            }
-            System.out.println();
+            counter++;
         }
+        assertEquals(reader.getNumOfRecords(), counter);
     }
 }
