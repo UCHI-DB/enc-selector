@@ -34,44 +34,5 @@ import edu.uchicago.cs.encsel.util.FileUtils
 import scala.collection.JavaConverters._
 
 object SubattrEncodeVerify extends App {
-  val em = new JPAPersistence().em
-  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) ORDER BY c.id"
-  val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
-  val patternSql = "SELECT p FROM Pattern p WHERE p.column = :col"
 
-  em.createQuery(sql, classOf[ColumnWrapper]).getResultList.asScala.foreach(col => {
-    println("Processing column %d".format(col.id))
-    val children = getChildren(col)
-
-    // Build a single table
-    val validChildren = children.filter(_.colName != "unmatch")
-    val pattern = new PatternComposer(getPattern(col).pattern)
-    val childrenSize = validChildren.map(c => FileUtils.numLine(c.colFile)).toSet
-    if (pattern.numGroup != validChildren.size)
-      println("%d parsed pattern is inconsistent with extracted columns")
-
-    val subtable = FileUtils.addExtension(col.colFile, "subtable")
-    if (Files.exists(Paths.get(subtable))) {
-      val parquetReader = new ParquetTupleReader(subtable)
-
-      if (childrenSize.size != 1) {
-        println("%d has different children count".format(col.id))
-      }
-      if (parquetReader.getNumOfRecords != childrenSize.head) {
-        println("%d subtable count is different from children count".format(col.id))
-      }
-    }
-  })
-
-  def getChildren(col: Column): Seq[Column] = {
-    em.createQuery(childSql, classOf[ColumnWrapper]).setParameter("parent", col).getResultList.asScala
-  }
-
-  def parquetLineCount(col: Column): Long = {
-    FileUtils.numLine(col.colFile)
-  }
-
-  def getPattern(col: Column) = {
-    em.createQuery(patternSql, classOf[PatternWrapper]).setParameter("col", col).getSingleResult
-  }
 }

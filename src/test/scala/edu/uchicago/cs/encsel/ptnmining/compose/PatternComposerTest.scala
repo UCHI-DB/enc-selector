@@ -22,8 +22,8 @@
 
 package edu.uchicago.cs.encsel.ptnmining.compose
 
-import org.junit.Test
 import org.junit.Assert._
+import org.junit.Test
 
 class PatternComposerTest {
 
@@ -34,7 +34,6 @@ class PatternComposerTest {
     try {
       composer.compose(Seq("AA", "KK"))
       fail("Should not reach here")
-
     } catch {
       case e: IllegalArgumentException => {}
     }
@@ -43,18 +42,35 @@ class PatternComposerTest {
   @Test
   def testComposeReal: Unit = {
     var composer = new PatternComposer("^(\\d+)-(\\d+)-(\\d+)\\s+(\\d+):(\\d+):(\\d+\\.?\\d*)$")
+    assertEquals(0, composer.optionalColumns.size)
     assertEquals(0, composer.booleanColumns.size)
     assertEquals(6, composer.numGroup)
+    assertEquals("\\d+", composer.group(0))
+    assertEquals("\\d+", composer.group(1))
+    assertEquals("\\d+", composer.group(2))
+    assertEquals("\\d+", composer.group(3))
+    assertEquals("\\d+", composer.group(4))
+    assertEquals("\\d+\\.?\\d*", composer.group(5))
     assertEquals("%s-%s-%s %s:%s:%s", composer.format)
 
     composer = new PatternComposer("^MIR-([0-9a-fA-F]+)-([0-9a-fA-F]+)-(\\d+)(-)?(\\d*)$")
+    assertEquals(2, composer.optionalColumns.size)
+    assertTrue(composer.optionalColumns.contains(3))
+    assertTrue(composer.optionalColumns.contains(4))
     assertEquals(1, composer.booleanColumns.size)
+    assertTrue(composer.booleanColumns.contains(3))
     assertEquals(5, composer.numGroup)
+    assertEquals("[0-9a-fA-F]+", composer.group(0))
+    assertEquals("[0-9a-fA-F]+", composer.group(1))
+    assertEquals("\\d+", composer.group(2))
+    assertEquals("-", composer.group(3))
+    assertEquals("\\d*", composer.group(4))
     assertEquals("MIR-%s-%s-%s%s%s", composer.format)
 
     composer = new PatternComposer("^\\((\\d+\\.?\\d*),\\s+-(\\d+\\.?\\d*)\\)$")
-    assertEquals(0, composer.booleanColumns.size)
+    assertEquals(0, composer.optionalColumns.size)
     assertEquals(2, composer.numGroup)
     assertEquals("\\(%s, -%s\\)", composer.format)
+
   }
 }

@@ -91,6 +91,7 @@ object MineColumn {
         union.content.size == 2 && union.content.contains(PEmpty) &&
           union.content.exists(p => p.isInstanceOf[PToken] && p.asInstanceOf[PToken].token.isInstanceOf[TSymbol])
       }
+      case _ => false
     }
   }
 
@@ -163,8 +164,8 @@ object MineColumn {
                       } else {
                         val value = matched.get.get(ptn.name)
                         val iany = ptn.asInstanceOf[PIntAny]
-                        val int = BigInt(value, if(iany.hasHex) 16 else 10)
-                        if(int.toInt != int.toLong && colTypes(i) == DataType.INTEGER) {
+                        val int = BigInt(value, if (iany.hasHex) 16 else 10)
+                        if (int.toInt != int.toLong && colTypes(i) == DataType.INTEGER) {
                           colTypes(i) = DataType.LONG
                         }
                         outputs(i).println(int.toString)

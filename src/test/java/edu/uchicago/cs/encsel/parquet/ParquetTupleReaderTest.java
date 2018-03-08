@@ -13,7 +13,8 @@ import static org.junit.Assert.assertEquals;
 public class ParquetTupleReaderTest {
     @Test
     public void testRead() throws Exception {
-        ParquetTupleReader reader = new ParquetTupleReader(new File("src/test/resource/parquet/part_20.parquet").toURI());
+        ParquetTupleReader reader = new ParquetTupleReader(
+                new File("src/test/resource/subtable/part_20.parquet").toURI());
 
         BufferedReader originReader = new BufferedReader(new FileReader(new File("src/test/resource/parquet/part_20")));
 
@@ -35,16 +36,21 @@ public class ParquetTupleReaderTest {
         originReader.close();
     }
 
-//    @Test
-//    public void testSubtable() throws Exception {
-//        ParquetTupleReader reader = new ParquetTupleReader(new File("/home/harper/subtable").toURI());
-//        Object[] result = null;
-//        while ((result = reader.read()) != null) {
-//            for (int i = 0; i < result.length; i++) {
-//                System.out.print(result[i].toString());
-//                System.out.print(",");
-//            }
-//            System.out.println();
-//        }
-//    }
+    @Test
+    public void testSubtable() throws Exception {
+        ParquetTupleReader reader = new ParquetTupleReader(
+                new File("src/test/resource/subtable/subtable").toURI());
+        System.out.println(reader.getSchema());
+        Object[] result = null;
+        while ((result = reader.read()) != null) {
+            for (int i = 0; i < result.length; i++) {
+                if (result[i] == null)
+                    System.out.print("<null>");
+                else
+                    System.out.print(result[i]);
+                System.out.print(",");
+            }
+            System.out.println();
+        }
+    }
 }
