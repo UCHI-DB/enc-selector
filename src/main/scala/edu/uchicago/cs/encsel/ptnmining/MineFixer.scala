@@ -112,7 +112,10 @@ object MineFixer extends App {
           // 1. Update type
           child.dataType = DataType.BOOLEAN
           // 2. Update column content
-          val str = pattern.group(i)
+          var str = pattern.group(i)
+          if("$.*/[\\]^".contains(str)) {
+            str = "\\%s".format(str)
+          }
           // Use sed to do in-place replacement
           val sedcmd = Seq("sed", "-i", "s/%s/1/g".format(str), new File(child.colFile).getAbsolutePath)
           val resp = sedcmd !!;
