@@ -72,5 +72,12 @@ class PatternComposerTest {
     assertEquals(2, composer.numGroup)
     assertEquals("\\(%s, -%s\\)", composer.format)
 
+    composer = new PatternComposer("^([a-zA-Z]+)(_)?([a-zA-Z]*)(_)?([a-zA-Z]*)(_)?([a-zA-Z]*)$")
+    assertEquals(6, composer.optionalColumns.size)
+    assertTrue(composer.optionalColumns == Set(1, 2, 3, 4, 5, 6))
+    assertEquals(3, composer.booleanColumns.size)
+    assertTrue(composer.booleanColumns == Set(1, 3, 5))
+    assertEquals(7, composer.numGroup)
+    assertEquals("%s%s%s%s%s%s%s", composer.format)
   }
 }

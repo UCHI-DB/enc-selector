@@ -30,7 +30,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage.featureType
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.parquet.ParquetTupleReader
-import edu.uchicago.cs.encsel.perf.Profiler
+import edu.uchicago.cs.encsel.util.perf.Profiler
 import edu.uchicago.cs.encsel.util.FileUtils
 import org.slf4j.LoggerFactory
 

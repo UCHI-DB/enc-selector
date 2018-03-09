@@ -34,21 +34,99 @@ object RegexParser {
       buffer
     else {
       var escape = false
+      var range = false
       var layer = 0
       var groupBuffer = new ArrayBuffer[GroupToken]
+      var rangeBuffer: SimpleToken = null
+      var rangeToken: RangeToken = null
+      var rangeOpen = false
       var current: Token = null
+
+      val pushRangeSpecialToken: (SimpleToken => Unit) = (token) => {
+        if (rangeBuffer != null) {
+          if (rangeOpen)
+            throw new IllegalArgumentException
+          rangeToken.children += ((rangeBuffer, null))
+          rangeBuffer = null
+        }
+        rangeToken.children += ((token, null))
+      }
+
       input.foreach(_ match {
         case esc if escape => {
           current = new SimpleToken(esc, 0, true)
-          if (layer == 0)
+          if (rangeToken != null) {
+            pushRangeSpecialToken(current.asInstanceOf[SimpleToken])
+          } else if (layer == 0) {
             buffer += current
-          else
+          } else {
             groupBuffer.last.children += current
+          }
           escape = false
+        }
+        case rg if range => {
+          rg match {
+            case '^' => {
+              if (rangeToken.children.isEmpty && rangeBuffer == null) {
+                rangeToken.inclusive = false
+              } else {
+                pushRangeSpecialToken(new SimpleToken('^'))
+              }
+            }
+            case '\\' => escape = true
+            case '-' => {
+              if (rangeBuffer == null) {
+                throw new IllegalArgumentException
+              }
+              rangeOpen = true
+            }
+            case ']' => {
+              // Process remain tokens
+              if (rangeBuffer != null) {
+                rangeToken.children += ((rangeBuffer, null))
+                rangeBuffer = null
+              }
+              if (rangeOpen) {
+                rangeToken.children += ((new SimpleToken('-'), null))
+                rangeOpen = false
+              }
+              range = false
+
+              if (layer == 0) {
+                buffer += rangeToken
+              } else {
+                groupBuffer.last.children += rangeToken
+              }
+              current = rangeToken
+              rangeToken = null
+            }
+            case other => {
+              val otherToken = new SimpleToken(other)
+              if (rangeBuffer == null) {
+                rangeBuffer = otherToken
+              } else {
+                if (rangeOpen) {
+                  rangeToken.children += ((rangeBuffer, otherToken))
+                  rangeOpen = false
+                  rangeBuffer = null
+                } else {
+                  rangeToken.children += ((rangeBuffer, null))
+                  rangeBuffer = otherToken
+                }
+              }
+            }
+          }
         }
         case '\\' => {
           escape = true
         }
+        case '[' => {
+          range = true
+          rangeBuffer = null
+          rangeOpen = false
+          rangeToken = new RangeToken
+        }
+
         case '(' => {
           groupBuffer += new GroupToken
           layer += 1
@@ -94,11 +172,34 @@ trait Token {
 }
 
 class GroupToken(r: Int = 0) extends Token {
+
   rep = r
+
   val children: mutable.Buffer[Token] = new ArrayBuffer[Token]
 
   override def toString: String = {
     Token.SYMBOL(rep).format("(%s)".format(children.map(_.toString).mkString("")))
+  }
+}
+
+class RangeToken(r: Int = 0) extends Token {
+
+  rep = r
+
+  var inclusive = true
+
+  val children = new ArrayBuffer[(SimpleToken, SimpleToken)]
+
+  override def toString: String = {
+    var result = "[%s]".format(children.map(child => {
+      if (child._2 == null) {
+        child._1.toString
+      } else {
+        "%s-%s".format(child._1, child._2)
+      }
+    }).mkString(""))
+    result = Token.SYMBOL(rep).format(result)
+    result
   }
 }
 

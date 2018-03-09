@@ -27,7 +27,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model._
 import edu.uchicago.cs.encsel.parquet.ParquetCompressedWriterHelper
-import edu.uchicago.cs.encsel.perf.Profiler
+import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 
 /**

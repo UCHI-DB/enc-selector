@@ -30,7 +30,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.classify._
 import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.perf.Profiler
+import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.commons.io.IOUtils
 
 /**
