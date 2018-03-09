@@ -23,10 +23,11 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import java.io.{BufferedReader, File, FileReader}
+import java.io.File
 import javax.persistence.NoResultException
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
@@ -36,8 +37,8 @@ import edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper
 import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
 import scala.io.Source
+import scala.sys.process._
 
 /**
   * This tool is used to mine from columns that were missing before
@@ -105,31 +106,24 @@ object MineFixer extends App {
       val children = getChildren(col).filter(_.colIndex != -1)
       val checkFailed = pattern.booleanColumns.filter(i => children(i).dataType != DataType.BOOLEAN)
       if (checkFailed.nonEmpty) {
-        //        println("Mismatch found and fixing : %d".format(col.id))
-        /*
         // Replace a STRING column with BOOLEAN column
         checkFailed.foreach(i => {
+          val child = children(i)
           // 1. Update type
-          children(i).dataType = DataType.BOOLEAN
-          persist.save(Iterable(children(i)))
+          child.dataType = DataType.BOOLEAN
           // 2. Update column content
-
-
-        })
-        */
-        checkFailed.foreach(i => {
-          val fileReader = new BufferedReader(new FileReader(new File(children(i).colFile)))
-          var line = fileReader.readLine()
-          val charset = new mutable.HashSet[Char]
-          var keep = (line != null && line.size <= 1)
-          while (keep) {
-            charset ++= line.toSet
-            line = fileReader.readLine()
-            keep = (line != null) && (line.size <= 1) && charset.size <= 1
-          }
-          fileReader.close()
-          if ((line != null && line.size > 1) || charset.size > 1) {
-            println("Data cannot be fixed : %d".format(col.id))
+          val str = pattern.group(i)
+          // Use sed to do in-place replacement
+          val sedcmd = Seq("sed", "-i", "s/%s/1/g".format(str), new File(child.colFile).getAbsolutePath)
+          val resp = sedcmd !!;
+          if (resp.length() != 0)
+            println("Error executing sed on %d".format(child.asInstanceOf[ColumnWrapper].id))
+          else {
+            // 3. Reset features
+            child.features.clear()
+            child.replaceFeatures(ParquetEncFileSize.extract(child))
+            child.replaceFeatures(ParquetCompressFileSize.extract(child))
+            persist.save(Iterable(child))
           }
         })
       }
