@@ -20,29 +20,36 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.ptnmining.analysis
+package edu.uchicago.cs.encsel.dataset.feature.subattr
+
+import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.util.FileUtils
 
-import scala.collection.JavaConverters._
+object SubattrUnmatchRate extends FeatureExtractor {
 
-object GetUnmatchRate extends App {
+  override def featureType: String = "SubattrStat"
+
+  override def supportFilter: Boolean = false
+
+  override def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
+    val originalSize = FileUtils.numLine(col.colFile)
+    val unmatchCol = getUnmatchChild(col)
+    if (null != unmatchCol && originalSize != 0) {
+      val unmatchSize = FileUtils.numLine(unmatchCol.colFile)
+      val ratio = unmatchSize.toDouble / originalSize
+      Iterable(new Feature(featureType, "unmatch_ratio", ratio))
+    }
+    else {
+      Iterable()
+    }
+  }
 
   val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
-
-  columns.foreach(col => {
-    val originalSize = FileUtils.numLine(col.colFile)
-    val unmatchSize = FileUtils.numLine(getUnmatchChild(col).colFile)
-    val ratio = unmatchSize.toDouble / originalSize
-    if (ratio != 0) {
-      col.putInfo("unmatch_ratio", ratio)
-      persist.save(Seq(col))
-    }
-  })
 
   def getUnmatchChild(col: Column): Column = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent AND c.colIndex = -1"

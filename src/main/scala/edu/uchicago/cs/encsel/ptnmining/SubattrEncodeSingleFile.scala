@@ -46,11 +46,10 @@ object SubattrEncodeSingleFile extends App {
 
   val persist = new JPAPersistence()
   val em = persist.em
-  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) AND c.id = :start ORDER BY c.id"
+  val sql = "SELECT c FROM Column c WHERE EXISTS (SELECT p FROM Column p WHERE p.parentWrapper = c) AND c.id >= :start ORDER BY c.id"
   val childSql = "SELECT c FROM Column c WHERE c.parentWrapper = :parent"
   val patternSql = "SELECT p FROM Pattern p WHERE p.column = :col"
-//  val start = if (args.length == 0) 0 else args(0).toInt
-  val start = 20
+  val start = if (args.length == 0) 0 else args(0).toInt
   em.createQuery(sql, classOf[ColumnWrapper]).setParameter("start", start).getResultList.asScala.foreach(col => {
     println("Processing column %d".format(col.id))
     val children = getChildren(col)
