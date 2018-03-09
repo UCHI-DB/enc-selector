@@ -98,7 +98,7 @@ object SubattrEncodeSingleFile extends App {
     // Setup encoding for each column
     val schema = new MessageType("table",
       children.map(c => {
-        val rep = if (optionalColumns.contains(c.colIndex)) Repetition.OPTIONAL else Repetition.REQUIRED
+        val rep = Repetition.OPTIONAL// Always optional as entire line may be empty, which is unknown from header
         val typeName = c.dataType match {
           case INTEGER => INT32
           case STRING => BINARY

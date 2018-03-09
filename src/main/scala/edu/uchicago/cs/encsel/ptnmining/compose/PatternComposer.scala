@@ -30,6 +30,8 @@ class PatternComposer(pattern: String) {
 
   private var groups: Seq[GroupToken] = _
 
+  private var probe = -1
+
   val (format, numGroup) = parse(pattern)
 
   protected def parse(pattern: String): (String, Int) = {
@@ -40,6 +42,10 @@ class PatternComposer(pattern: String) {
     optionalColIndex = groups.zipWithIndex.filter(p => isOptional(p._1)).map(_._2).toSet
 
     booleanColIndex = groups.zipWithIndex.filter(p => isBoolean(p._1)).map(_._2).toSet
+
+    if (numGroup > optionalColIndex.size) {
+      probe = ((0 until numGroup).toSet -- optionalColIndex).head
+    }
 
     val patternStr = parsed.map(_ match {
       case g: GroupToken => {
@@ -84,10 +90,15 @@ class PatternComposer(pattern: String) {
     if (data.length != numGroup)
       throw new IllegalArgumentException("Expecting %d columns, receiving %d columns".format(numGroup, data.length))
 
+    if (probe != -1 && null == data(probe)) {
+      return ""
+    }
+
     val dataArray = data.toArray
     booleanColumns.foreach(i => {
       dataArray(i) = if (data(i) == "true") group(i).head.toString else ""
     })
+
 
     format.format(dataArray: _*)
   }
