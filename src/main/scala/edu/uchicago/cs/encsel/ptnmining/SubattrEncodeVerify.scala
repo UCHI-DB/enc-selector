@@ -20,16 +20,19 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.ptnmining.analysis
+package edu.uchicago.cs.encsel.ptnmining
 
-import java.io.File
+import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
+import edu.uchicago.cs.encsel.parquet.ParquetTupleReader
+import edu.uchicago.cs.encsel.ptnmining.compose.PatternComposer
+import edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper
+import edu.uchicago.cs.encsel.util.FileUtils
 
-import sys.process._
+import scala.collection.JavaConverters._
 
-object StatUtils {
-
-
+object SubattrEncodeVerify extends App {
 
 }

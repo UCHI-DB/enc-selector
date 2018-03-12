@@ -29,7 +29,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model.DataType._
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, LongEncoding, StringEncoding}
-import edu.uchicago.cs.encsel.perf.Profiler
+import edu.uchicago.cs.encsel.util.perf.Profiler
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
 import edu.uchicago.cs.encsel.query.tpch.NostoreColumnTempTable

@@ -22,109 +22,83 @@
 
 package edu.uchicago.cs.encsel.ptnmining.compose
 
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
-
 class PatternComposer(pattern: String) {
 
-  private val booleanColIndex = new mutable.HashSet[Int]
+  private var booleanColIndex: Set[Int] = _
 
-  private val optionalColIndex = new mutable.HashSet[Int]
+  private var optionalColIndex: Set[Int] = _
 
-  private val groups = new ArrayBuffer[String]
+  private var groups: Seq[GroupToken] = _
+
+  private var probe = -1
 
   val (format, numGroup) = parse(pattern)
 
   protected def parse(pattern: String): (String, Int) = {
-    val buffer = new StringBuilder
-    val escapeBuffer = new StringBuilder
-    val groupBuffer = new StringBuilder
-    var layer = 0
-    var counter = 0
-    var escape = false
-    pattern.foreach(
-      _ match {
-        case esc if escape => {
-          val translated = esc match {
-            case 's' => ' '
-            case _ => "\\%s".format(esc)
-          }
-          if (layer > 0) {
-            groupBuffer.append(translated)
-          } else {
-            buffer.append(translated)
-          }
-          escape = false
-        }
-        case '\\' => {
-          escape = true
-        }
-        case '(' => {
-          if (layer > 0) {
-            groupBuffer.append('(')
-          }
-          layer += 1
-        }
-        case ')' => {
-          layer -= 1
-          if (layer == 0) {
-            buffer.append("%s")
-            counter += 1
-            groups += groupBuffer.toString
-            groupBuffer.clear()
-          } else {
-            groupBuffer.append(')')
-          }
-        }
-        case '+' => {
-          if (layer > 0) {
-            groupBuffer.append('+')
-          } else {
-            // Ignore
-          }
-        }
-        case '?' => {
-          if (layer > 0) {
-            groupBuffer.append('?')
-          } else if (groups.length > 0 && groupBuffer.length == 0 && isSymbol(groups.last)) {
-            // ? occurrs just after group
-            optionalColIndex += groups.length - 1
-            // Just done with a group
-            booleanColIndex += groups.length - 1
-          } else {
-            // Ignore
-          }
-        }
-        case '^' | '$' => {
-          // Ignore
-        }
-        case c => {
-          if (layer == 0)
-            buffer.append(c)
-          else
-            groupBuffer.append(c)
+    val parsed = RegexParser.parse(pattern)
+
+    groups = parsed.filter(_.isInstanceOf[GroupToken]).map(_.asInstanceOf[GroupToken])
+
+    optionalColIndex = groups.zipWithIndex.filter(p => isOptional(p._1)).map(_._2).toSet
+
+    booleanColIndex = groups.zipWithIndex.filter(p => isBoolean(p._1)).map(_._2).toSet
+
+    if (numGroup > optionalColIndex.size) {
+      probe = ((0 until numGroup).toSet -- optionalColIndex).head
+    }
+
+    val patternStr = parsed.map(_ match {
+      case g: GroupToken => {
+        "%s"
+      }
+      case s: SimpleToken => {
+        s.content match {
+          case '^' | '$' => ""
+          case 's' => if (s.escape) " " else "s"
+          case other => s.toString
         }
       }
-    )
-    (buffer.toString, counter)
+      case _ => throw new IllegalArgumentException
+    }).mkString("")
+
+    (patternStr, parsed.filter(_.isInstanceOf[GroupToken]).size)
   }
 
-  protected def isSymbol(str: String): Boolean = {
-    str.length == 1 && !Character.isLetterOrDigit(str.head)
+  private def isOptional(token: GroupToken): Boolean = {
+    token.rep == 1 || token.rep == 2 ||
+      token.children.forall(c => c.rep == 1 || c.rep == 2)
   }
 
-  def booleanColumns: Set[Int] = booleanColIndex.toSet
+  private def isBoolean(token: GroupToken): Boolean = {
+    token.rep == 1 && token.children.size == 1 && {
+      token.children.last match {
+        case s: SimpleToken => {
+          s.rep == 0 && s.escape == false && !Character.isLetterOrDigit(s.content)
+        }
+        case _ => false
+      }
+    }
+  }
 
-  def optionalColumns: Set[Int] = optionalColIndex.toSet
+  def booleanColumns: Set[Int] = booleanColIndex
+
+  def optionalColumns: Set[Int] = optionalColIndex
+
+  def group(index: Int): String = groups(index).children.mkString("")
 
   def compose(data: Seq[String]): String = {
     if (data.length != numGroup)
       throw new IllegalArgumentException("Expecting %d columns, receiving %d columns".format(numGroup, data.length))
 
+    if (probe != -1 && null == data(probe)) {
+      return ""
+    }
+
     val dataArray = data.toArray
     booleanColumns.foreach(i => {
-      dataArray(i) = if (data(i) == "true") groups(i) else ""
+      dataArray(i) = if (data(i) == "true") group(i).head.toString else ""
     })
+
 
     format.format(dataArray: _*)
   }

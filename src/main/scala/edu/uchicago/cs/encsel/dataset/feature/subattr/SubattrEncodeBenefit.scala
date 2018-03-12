@@ -20,9 +20,12 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package edu.uchicago.cs.encsel.ptnmining.analysis
+package edu.uchicago.cs.encsel.dataset.feature.subattr
+
+import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
@@ -30,40 +33,28 @@ import edu.uchicago.cs.encsel.model.DataType
 import scala.collection.JavaConverters._
 
 
-object GetEncodeBenefit extends App {
+object SubattrEncodeBenefit extends FeatureExtractor {
 
-  val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.dataType = :dt AND EXISTS (SELECT ch FROM Column ch WHERE ch.parentWrapper = c)", classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
+  override def featureType: String = "SubattrStat"
 
-  benefitVsRaw
+  override def supportFilter: Boolean = false
 
-  def benefitVsEncode: Unit = {
-    columns.foreach(col => {
-      val originalSize = columnSize(col)
-      val childrenSize = getChildren(col).map(columnSize).sum
-      if (originalSize > 0 && childrenSize > 0) {
-        val ratio = childrenSize / originalSize;
-        if (ratio != 0) {
-          col.putInfo("subattr_benefit", ratio)
-          persist.save(Seq(col))
-        }
-      }
-    })
+  override def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
+    val originalSize = columnSize(col)
+    val pSize = plainSize(col)
+    val children = getChildren(col)
+    if (originalSize > 0 && pSize > 0 && children.nonEmpty) {
+      val childrenSize = children.map(columnSize).sum
+      Iterable(
+        new Feature("SubattrStat", "subattr_benefit", childrenSize / originalSize),
+        new Feature("SubattrStat", "subattr_benefit_plain", childrenSize / pSize)
+      )
+    } else {
+      Iterable()
+    }
   }
 
-  def benefitVsRaw: Unit = {
-    columns.foreach(col => {
-      val pSize = plainSize(col)
-      val childrenSize = getChildren(col).map(columnSize).sum
-      if (pSize > 0 && childrenSize > 0) {
-        val ratio = childrenSize / pSize;
-        if (ratio != 0) {
-          col.putInfo("subattr_benefit_plain", ratio)
-          persist.save(Seq(col))
-        }
-      }
-    })
-  }
+  val persist = new JPAPersistence()
 
   def getChildren(col: Column): Seq[Column] = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"

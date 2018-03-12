@@ -14,20 +14,20 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package edu.uchicago.cs.encsel.dataset
+package edu.uchicago.cs.encsel.dataset.fix
 
 import java.io.{File, FileOutputStream, PrintWriter}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.model.DataType
-import org.apache.commons.lang3.StringUtils
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source

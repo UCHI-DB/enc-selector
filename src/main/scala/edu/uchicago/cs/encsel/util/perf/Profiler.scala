@@ -21,7 +21,7 @@
  *
  */
 
-package edu.uchicago.cs.encsel.perf
+package edu.uchicago.cs.encsel.util.perf
 
 import java.lang.management.ManagementFactory
 
