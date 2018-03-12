@@ -27,6 +27,7 @@ import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
+import edu.uchicago.cs.encsel.perf.Profiler;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.Encoding;
@@ -34,17 +35,17 @@ import org.apache.parquet.column.Encoding;
 import java.io.File;
 import java.io.IOException;
 
-
 public class ScanFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"4","RLE"};
+        //args = new String[]{"4","RLE", "UNCOMPRESSED"};
         if (args.length == 0) {
-            System.out.println("ScanFileProducer pos enc");
+            System.out.println("ScanFileProducer pos enc compression");
             return;
         }
         int col = Integer.parseInt(args[0]);
         String enc = args[1];
+        String compre = args[2];
         String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
@@ -55,9 +56,8 @@ public class ScanFileProducer {
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{bitLength,intbound});
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(4).toString(), new Integer[]{bitLength,intbound});
 
-        //System.out.println(Encoding.valueOf("PLAIN"));
         ParquetWriterHelper.write(new File(lineitem+".tbl").toURI(), TPCHSchema.lineitemSchema(),
-                new File(lineitem+".parquet").toURI(), "\\|", false);
+                new File(lineitem+".parquet").toURI(), "\\|", false, compre);
         long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), col);
         //System.out.println("col " + col + " size: "+colsize);
     }

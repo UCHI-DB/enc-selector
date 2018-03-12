@@ -2082,3 +2082,948 @@ round8,71326,71238093670,71310000000
 round9,71350,71313935455,71320000000
 ScanOnheap,71453,71372258263,71341000000
 query ended!
+UNCOMPRESSED
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:1
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:1
+compression:UNCOMPRESSED
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,23362,23136436043,21630000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:424529609
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 393009601}
+col 4 size:24005795
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2511,2508076338,2470000000
+round1,2029,2026962666,2000000000
+round2,1935,1935416442,1930000000
+round3,1874,1871778073,1870000000
+round4,1862,1861720797,1870000000
+round5,1879,1877805274,1860000000
+round6,1867,1865987649,1850000000
+round7,1885,1883378817,1890000000
+round8,1899,1896639243,1900000000
+round9,1869,1867974061,1850000000
+ScanOnheap,1961,1959573936,1949000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,25328,24991172390,23720000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:314835677
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 278601334}
+col 4 size:4514563
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2486,2480560538,2450000000
+round1,1946,1944909480,1930000000
+round2,1965,1964158301,1960000000
+round3,1979,1978109289,1960000000
+round4,1966,1963885836,1960000000
+round5,1988,1985472129,1980000000
+round6,1951,1949845276,1930000000
+round7,1950,1950033806,1940000000
+round8,1964,1962723218,1930000000
+round9,2089,2087334177,2050000000
+ScanOnheap,2028,2026703205,2009000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,23101,22738851292,21510000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:424528407
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 393008500}
+col 4 size:24005795
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2260,2254980069,2230000000
+round1,1827,1826618930,1800000000
+round2,1827,1827800455,1810000000
+round3,1810,1809727046,1800000000
+round4,1804,1803068384,1810000000
+round5,1801,1799731296,1810000000
+round6,1822,1821348982,1810000000
+round7,1969,1969286456,1970000000
+round8,1807,1805291125,1790000000
+round9,1849,1846792852,1860000000
+ScanOnheap,1877,1876464559,1869000000
+compression:SNAPPY
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,26044,25613345102,24520000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:231899038
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 154204617}
+col 4 size:11793887
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2806,2800656690,2730000000
+round1,2371,2369420109,2290000000
+round2,2323,2321453761,2240000000
+round3,2290,2288698337,2250000000
+round4,2312,2308879073,2240000000
+round5,2244,2243065141,2210000000
+round6,2303,2301545031,2220000000
+round7,2295,2291979805,2260000000
+round8,2289,2286979572,2220000000
+round9,2228,2228130243,2220000000
+ScanOnheap,2346,2344080776,2288000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,26557,26216613909,25110000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:198153200
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED, RLE_DICTIONARY], 152000411}
+col 4 size:4514704
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,4210,4203905053,3290000000
+round1,3773,3769180225,2820000000
+round2,3678,3676865926,2830000000
+round3,3656,3653020794,2720000000
+round4,3682,3678975091,2770000000
+round5,3649,3648047180,2750000000
+round6,3692,3689426443,2770000000
+round7,3681,3678149669,2750000000
+round8,3661,3658892304,2730000000
+round9,3153,3150221209,2940000000
+ScanOnheap,3683,3680668389,2837000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,25708,25321995727,24250000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:231897775
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 153130014}
+col 4 size:11793930
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2787,2779839222,2740000000
+round1,2390,2388843942,2330000000
+round2,2285,2281815514,2190000000
+round3,2262,2260487475,2190000000
+round4,2221,2218319674,2200000000
+round5,2252,2251188634,2190000000
+round6,2277,2275575906,2210000000
+round7,2287,2286017264,2220000000
+round8,2272,2270958464,2190000000
+round9,2296,2294002801,2260000000
+ScanOnheap,2332,2330704889,2272000000
+compression:GZIP
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,55249,54798901763,54150000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:160312412
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 134275171}
+col 4 size:6192072
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,3275,3270456526,3210000000
+round1,2863,2861119346,2780000000
+round2,2851,2848345269,2840000000
+round3,2864,2861910059,2850000000
+round4,2879,2878039423,2870000000
+round5,2881,2878620201,2870000000
+round6,2883,2882395252,2810000000
+round7,2870,2868066404,2860000000
+round8,2879,2876770155,2840000000
+round9,2949,2947253851,2920000000
+ScanOnheap,2919,2917297648,2885000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,46359,45985174805,44760000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:149818575
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, RLE_DICTIONARY, BIT_PACKED], 134456825}
+col 4 size:4482546
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,3305,3299083200,3220000000
+round1,2835,2834670646,2780000000
+round2,2802,2763939003,2720000000
+round3,2782,2779551711,2770000000
+round4,2776,2773658143,2770000000
+round5,2751,2749687981,2730000000
+round6,2758,2755670408,2740000000
+round7,2783,2781451835,2780000000
+round8,2768,2766209992,2730000000
+round9,2740,2738911679,2740000000
+ScanOnheap,2830,2824283459,2798000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,55212,54782986468,53940000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:160310820
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 134273906}
+col 4 size:6192072
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,3285,3279685668,3210000000
+round1,2899,2896676867,2840000000
+round2,2838,2836714029,2840000000
+round3,2854,2852942740,2840000000
+round4,2868,2865444666,2850000000
+round5,2868,2865024312,2850000000
+round6,2894,2891875832,2830000000
+round7,2864,2862312682,2850000000
+round8,2892,2890688225,2870000000
+round9,2939,2896795538,2860000000
+ScanOnheap,2920,2913816055,2884000000
+compression:LZO
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,23975,23570499458,22470000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:232611006
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 153841551}
+col 4 size:11812337
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2897,2893776854,2860000000
+round1,2495,2492311193,2420000000
+round2,2370,2368169241,2310000000
+round3,2325,2323325998,2340000000
+round4,2326,2323910685,2330000000
+round5,2323,2321764514,2320000000
+round6,2328,2326424456,2300000000
+round7,2347,2344781021,2270000000
+round8,2354,2351072173,2310000000
+round9,2642,2469660364,2440000000
+ScanOnheap,2440,2421519649,2390000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,25534,25132012139,23930000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:199617658
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 152569698}
+col 4 size:4532381
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2805,2800154217,2730000000
+round1,2398,2396660886,2330000000
+round2,2465,2247948629,2230000000
+round3,2281,2279548854,2270000000
+round4,2253,2249939721,2250000000
+round5,2238,2237024766,2240000000
+round6,2247,2244822520,2200000000
+round7,2280,2277978408,2240000000
+round8,2236,2234695891,2200000000
+round9,2240,2238306013,2220000000
+ScanOnheap,2344,2320707990,2291000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,23852,23457289925,22360000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:232606398
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 153491988}
+col 4 size:11812484
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,2857,2851290115,2760000000
+round1,2486,2483783889,2410000000
+round2,2331,2331247748,2320000000
+round3,2352,2350054208,2350000000
+round4,2354,2352419678,2360000000
+round5,2366,2364139290,2300000000
+round6,2346,2345762185,2340000000
+round7,2383,2379819881,2320000000
+round8,2624,2412188187,2420000000
+round9,2320,2319155706,2310000000
+ScanOnheap,2441,2418986088,2389000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:5
+compression:UNCOMPRESSED
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,112123,111462857630,106250000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2132510640
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 2087657103}
+col 4 size:120003861
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,9705,9696016105,9680000000
+round1,9301,9294431138,9300000000
+round2,9240,9235534466,9220000000
+round3,9269,9263234130,9250000000
+round4,9346,9341692053,9250000000
+round5,9254,9247355755,9230000000
+round6,9224,9218931426,9220000000
+round7,9273,9268538158,9300000000
+round8,9325,9320538896,9250000000
+round9,9241,9236763507,9200000000
+ScanOnheap,9317,9312303563,9290000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,121752,120739919226,115520000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1582561962
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 1520604088}
+col 4 size:22567275
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,10493,10484003842,10460000000
+round1,10223,9953330510,9940000000
+round2,9923,9918100796,9920000000
+round3,9923,9921389659,9910000000
+round4,9937,9935044747,9950000000
+round5,9933,9926162845,9940000000
+round6,9951,9945797680,9940000000
+round7,10017,10011075851,10040000000
+round8,10048,10041653907,10030000000
+round9,9984,9977493197,9980000000
+ScanOnheap,10043,10011405303,10011000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,113000,112201002499,106750000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2132504626
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 2087651231}
+col 4 size:120003861
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,9780,9770785443,9680000000
+round1,9301,9295721878,9220000000
+round2,9273,9270226392,9260000000
+round3,9296,9288512468,9280000000
+round4,9255,9253092125,9210000000
+round5,9250,9244708091,9210000000
+round6,9250,9244693662,9200000000
+round7,9318,9311943490,9240000000
+round8,9250,9245702277,9200000000
+round9,9227,9223652736,9240000000
+ScanOnheap,9320,9314903856,9274000000
+compression:SNAPPY
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,122177,121386594337,117750000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1168086964
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 1070587008}
+col 4 size:58957908
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,11989,11977678900,11890000000
+round1,11671,11662490294,11490000000
+round2,11505,11496823176,11490000000
+round3,11515,11509418016,11500000000
+round4,11820,11815078258,11780000000
+round5,11581,11573285660,11490000000
+round6,11607,11599266348,11480000000
+round7,11884,11521302031,11510000000
+round8,11519,11512620550,11510000000
+round9,11477,11468788367,11460000000
+ScanOnheap,11656,11613675160,11560000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,125310,124505064741,121820000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:993608777
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED, RLE_DICTIONARY], 968316524}
+col 4 size:22568162
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,14251,14236496999,12910000000
+round1,14040,13738668669,12500000000
+round2,13570,13562681118,12550000000
+round3,13714,13707152337,12620000000
+round4,13747,13737865303,12580000000
+round5,13616,13610167815,12560000000
+round6,13365,13357047665,12820000000
+round7,13503,13495491367,12730000000
+round8,13757,13748982774,12800000000
+round9,13892,13885724173,12890000000
+ScanOnheap,13745,13708027822,12696000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,120197,119336186006,115840000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1168080101
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 1070580897}
+col 4 size:58957908
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,12702,12691630837,12360000000
+round1,12106,12098934723,11990000000
+round2,12042,12035696660,12010000000
+round3,11988,11982770450,11980000000
+round4,12407,12030262233,11980000000
+round5,11989,11983759708,11970000000
+round6,12071,12065725976,12000000000
+round7,12090,12082784089,11890000000
+round8,11989,11980682292,11940000000
+round9,12049,12043114201,11950000000
+ScanOnheap,12143,12099536116,12007000000
+compression:GZIP
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,263608,261338378709,259250000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:819438252
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 780734941}
+col 4 size:30951151
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,15194,15179659677,15150000000
+round1,14973,14802310843,14670000000
+round2,14765,14757038024,14730000000
+round3,14670,14665548295,14650000000
+round4,15005,14840776808,14760000000
+round5,14801,14792851990,14660000000
+round6,14664,14655255178,14650000000
+round7,14806,14664235624,14640000000
+round8,14645,14637794732,14620000000
+round9,14693,14684771524,14690000000
+ScanOnheap,14821,14768024269,14722000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,212346,210906204635,208710000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:761965311
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, RLE_DICTIONARY, BIT_PACKED], 688405202}
+col 4 size:22408229
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,14766,14583488368,14590000000
+round1,13928,13921600417,13920000000
+round2,13937,13929925306,13920000000
+round3,13821,13814057008,13800000000
+round4,13813,13804851926,13750000000
+round5,14088,13892549873,13910000000
+round6,13843,13836601212,13860000000
+round7,13852,13846782820,13800000000
+round8,13849,13840474103,13830000000
+round9,13930,13920515525,13930000000
+ScanOnheap,13982,13939084655,13931000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,261028,258933619928,256840000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:819430183
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 780727379}
+col 4 size:30951151
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,15132,15119950740,15070000000
+round1,14908,14732964115,14660000000
+round2,14605,14596260107,14570000000
+round3,14640,14632092715,14620000000
+round4,14689,14680275811,14670000000
+round5,14833,14647165896,14650000000
+round6,14578,14571473895,14470000000
+round7,14577,14567675583,14530000000
+round8,14563,14555558866,14550000000
+round9,14618,14609890225,14620000000
+ScanOnheap,14714,14671330795,14641000000
+compression:LZO
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,114562,113786598353,109240000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1171838120
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 1074332589}
+col 4 size:59049530
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,12346,12337188071,12160000000
+round1,11859,11852750274,11740000000
+round2,11909,11900870814,11900000000
+round3,11957,11949625277,11960000000
+round4,11802,11794773158,11800000000
+round5,11902,11896577063,11850000000
+round6,11862,11854670614,11720000000
+round7,12457,11893596414,11890000000
+round8,11779,11770245708,11770000000
+round9,11842,11837379676,11820000000
+ScanOnheap,11971,11908767706,11861000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,121334,120480941664,116860000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1002144144
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 970210508}
+col 4 size:22656538
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,12591,12581806623,12550000000
+round1,11990,11981918667,11980000000
+round2,11913,11905420628,11900000000
+round3,12210,11984129315,11960000000
+round4,11923,11916594868,11890000000
+round5,12135,11871571862,11880000000
+round6,11949,11942233856,11960000000
+round7,12010,12004098096,12000000000
+round8,11997,11990341502,12000000000
+round9,12284,12047196480,12050000000
+ScanOnheap,12100,12022531189,12017000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,113203,112159731346,108920000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1171814682
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 1074025216}
+col 4 size:59048926
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,12688,12676047981,12400000000
+round1,12327,12085771487,12070000000
+round2,12040,12033149725,12050000000
+round3,12058,12050034759,12040000000
+round4,12228,11984158646,11990000000
+round5,12219,12213798467,11940000000
+round6,12032,12025103535,11960000000
+round7,12327,12059203303,12000000000
+round8,12044,12036496358,12010000000
+round9,11994,11988570412,11980000000
+ScanOnheap,12195,12115233467,12044000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:10
+compression:UNCOMPRESSED
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,218781,216746092267,210600000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:4278502349
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 4189716260}
+col 4 size:239953572
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,18854,18834335586,18850000000
+round1,18289,18278631447,18320000000
+round2,18213,18207648924,18210000000
+round3,18287,18276124003,18250000000
+round4,18283,18278101302,18340000000
+round5,18287,18280159093,18270000000
+round6,18268,18260301442,18240000000
+round7,18324,18313574557,18290000000
+round8,18481,18247282601,18220000000
+round9,18224,18215415633,18200000000
+ScanOnheap,18351,18319157458,18319000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,237674,235526408377,229830000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:3189852193
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 3181053550}
+col 4 size:45124318
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,20338,20319377665,20300000000
+round1,19825,19814195977,19760000000
+round2,19889,19878687627,19770000000
+round3,19868,19856652100,19710000000
+round4,20175,19775798767,19740000000
+round5,19834,19821908039,19750000000
+round6,19794,19785839180,19790000000
+round7,19803,19791163551,19750000000
+round8,19824,19812050820,19720000000
+round9,19698,19685797373,19680000000
+ScanOnheap,19904,19854147109,19797000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,216453,215236179162,208890000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:4278490329
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 4189704518}
+col 4 size:239953572
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,18902,18887158894,18900000000
+round1,18425,18412616125,18410000000
+round2,18471,18458948864,18380000000
+round3,18635,18628079110,18510000000
+round4,18443,18429879537,18410000000
+round5,18465,18450578159,18470000000
+round6,18457,18443471666,18390000000
+round7,18466,18456296283,18460000000
+round8,18489,18478232332,18450000000
+round9,18419,18408585905,18420000000
+ScanOnheap,18517,18505384687,18480000000
+compression:SNAPPY
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,243603,242127705060,236410000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2346968020
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 2251686038}
+col 4 size:117885403
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,24984,24966052733,24810000000
+round1,24609,24440616900,24400000000
+round2,24649,24387563764,24360000000
+round3,24653,24402216262,24400000000
+round4,24592,24397960036,24360000000
+round5,24375,24359635344,24350000000
+round6,24511,24499156649,24490000000
+round7,24363,24351979375,24310000000
+round8,24294,24278512498,24240000000
+round9,24308,24294765220,24300000000
+ScanOnheap,24533,24437845878,24402000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,248815,247252207624,242340000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2007797482
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED, RLE_DICTIONARY], 1954754589}
+col 4 size:45125984
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,26419,26371062717,25010000000
+round1,25695,25680271775,24340000000
+round2,24858,24846869481,24430000000
+round3,25642,25627575896,24380000000
+round4,24953,24937816690,24790000000
+round5,24731,24714528180,24460000000
+round6,25170,25157597433,24490000000
+round7,25682,25669888126,24480000000
+round8,25449,25436107434,24140000000
+round9,25531,25514135345,24070000000
+ScanOnheap,25413,25395585307,24459000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,240480,239078024168,234100000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2346638738
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 2250759099}
+col 4 size:117884914
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,23736,23719841798,23660000000
+round1,23914,23415006029,23360000000
+round2,23209,23196644735,23180000000
+round3,23408,23277065954,23120000000
+round4,23605,23394547665,23350000000
+round5,23423,23248613952,23190000000
+round6,23288,23277909327,23170000000
+round7,23444,23432622232,23130000000
+round8,23171,23159117548,23130000000
+round9,23277,23264231852,23220000000
+ScanOnheap,23447,23338560109,23251000000
+compression:GZIP
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,524791,520043724054,515870000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1651988949
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 1571667254}
+col 4 size:61886056
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,30068,30049629980,29900000000
+round1,29619,29603872043,29420000000
+round2,29645,29400025392,29340000000
+round3,29317,29305111947,29320000000
+round4,29667,29499166922,29440000000
+round5,29482,29466513716,29460000000
+round6,29421,29405086029,29410000000
+round7,29771,29443756334,29360000000
+round8,29572,29425443876,29300000000
+round9,29478,29461354452,29440000000
+ScanOnheap,29604,29505996069,29439000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,424040,420545860908,416880000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1548881097
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, RLE_DICTIONARY, BIT_PACKED], 1488452438}
+col 4 size:44806763
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,28090,28072433715,28070000000
+round1,27860,27513883729,27500000000
+round2,27705,27691966661,27700000000
+round3,27698,27452630672,27440000000
+round4,27531,27516545118,27550000000
+round5,27734,27455127998,27470000000
+round6,27582,27307185414,27270000000
+round7,27463,27447615526,27420000000
+round8,27650,27636570894,27640000000
+round9,27482,27468090495,27480000000
+ScanOnheap,27679,27556205022,27554000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,520878,517059570324,512950000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:1652113820
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 1566954724}
+col 4 size:61887034
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,30294,30270131463,30300000000
+round1,29449,29430883192,29440000000
+round2,29762,29595516393,29610000000
+round3,29777,29513458395,29520000000
+round4,29666,29651105288,29650000000
+round5,29756,29741635305,29720000000
+round6,29630,29616976428,29600000000
+round7,29789,29580069375,29580000000
+round8,29589,29573392603,29580000000
+round9,29566,29553827912,29560000000
+ScanOnheap,29727,29652699635,29656000000
+compression:LZO
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,226222,224381688048,219530000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2354322233
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 2258148446}
+col 4 size:118068743
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,24533,24212245604,24220000000
+round1,23947,23935833715,23920000000
+round2,24020,23779223333,23780000000
+round3,24020,23821144822,23830000000
+round4,24083,23945237389,23940000000
+round5,23911,23898081110,23800000000
+round6,23989,23770773727,23750000000
+round7,24125,23936584186,23840000000
+round8,24034,23838466991,23790000000
+round9,23971,23777631759,23770000000
+ScanOnheap,24063,23891522263,23864000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,238697,236902859849,232040000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2024098312
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 1959327010}
+col 4 size:45302632
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,25399,24961818878,24690000000
+round1,24486,24227750796,24060000000
+round2,24366,24177384827,24090000000
+round3,24270,24257452128,24270000000
+round4,24200,24184895125,24130000000
+round5,24354,24340671480,24320000000
+round6,24380,24074385389,24050000000
+round7,24407,24398060428,24400000000
+round8,24453,24224411355,24200000000
+round9,24371,24358996841,24360000000
+ScanOnheap,24468,24320582724,24257000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,223776,222259682335,217210000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2353527556
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 2256460577}
+col 4 size:118067104
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,24471,24452924102,24460000000
+round1,23885,23870759809,23870000000
+round2,23917,23905262568,23890000000
+round3,24143,23835168646,23780000000
+round4,24186,24173799910,23730000000
+round5,23889,23878678146,23830000000
+round6,23860,23849015835,23860000000
+round7,23888,23876280816,23860000000
+round8,24086,24073774350,23900000000
+round9,24125,23852668130,23810000000
+ScanOnheap,24045,23976833231,23899000000
+TPC-H Population Generator (Version 2.17.0)
+Copyright Transaction Processing Performance Council 1994 - 2010
+scale:15
+compression:UNCOMPRESSED
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,325476,321628354288,310960000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:6566763798
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 6536955070}
+col 4 size:359963822
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,29864,29841824305,29840000000
+round1,29490,29170133716,29150000000
+round2,29489,29255572867,29180000000
+round3,29286,29274064407,29230000000
+round4,29215,29197403407,29170000000
+round5,29168,29155360163,29180000000
+round6,29290,29271271128,29150000000
+round7,29236,29219119395,29210000000
+round8,29121,29105508826,29130000000
+round9,29131,29114711019,29080000000
+ScanOnheap,29329,29260496923,29232000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,354886,352416592985,342430000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:4968768684
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN, RLE_DICTIONARY], 4908104146}
+col 4 size:67693137
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,29940,29918029599,29900000000
+round1,29610,29278562308,29280000000
+round2,29185,29167373068,29160000000
+round3,29247,29230540697,29260000000
+round4,29103,29087135795,29100000000
+round5,29264,29248671356,29220000000
+round6,29494,29217279618,29190000000
+round7,29413,29399185463,29110000000
+round8,29333,29318534399,29360000000
+round9,29536,29262876964,29240000000
+ScanOnheap,29412,29312818926,29282000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, UNCOMPRESSED,314994,312290485010,303400000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:6566745440
+ColumnMetaData{UNCOMPRESSED [quantity] INT32  [BIT_PACKED, PLAIN], 6536936763}
+col 4 size:359963822
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,29988,29971240073,30030000000
+round1,29651,29637865761,29420000000
+round2,29666,29498354760,29390000000
+round3,29695,29514026963,29500000000
+round4,29449,29434721325,29430000000
+round5,29391,29377405242,29420000000
+round6,29407,29396182187,29450000000
+round7,29370,29351192555,29340000000
+round8,29390,29375491841,29390000000
+round9,29398,29381265750,29370000000
+ScanOnheap,29540,29493774645,29474000000
+compression:SNAPPY
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,353799,351043591535,343770000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:3678529114
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 3610274810}
+col 4 size:176842161
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,34648,34403246815,34390000000
+round1,33753,33737908488,33670000000
+round2,33853,33527737296,33540000000
+round3,33818,33552699202,33500000000
+round4,33896,33545345887,33560000000
+round5,33782,33523445872,33480000000
+round6,33953,33444490780,33490000000
+round7,33582,33564329742,33550000000
+round8,33617,33595838741,33570000000
+round9,33649,33631077017,33620000000
+ScanOnheap,33855,33652611984,33637000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,373968,370584766497,363190000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:3195744881
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED, RLE_DICTIONARY], 3175840036}
+col 4 size:67695426
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,38314,38014320253,36470000000
+round1,37900,37599424726,35880000000
+round2,36180,36157935251,35990000000
+round3,37379,37363864371,36080000000
+round4,37669,37394857573,35860000000
+round5,37323,37200331168,35740000000
+round6,37129,37020154971,36120000000
+round7,36785,36422002193,36080000000
+round8,37092,36822415256,35910000000
+round9,36386,36116673571,35950000000
+ScanOnheap,37215,37011197933,36008000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, SNAPPY,353175,350650126119,342890000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:3678508907
+ColumnMetaData{SNAPPY [quantity] INT32  [PLAIN, BIT_PACKED], 3610255101}
+col 4 size:176842161
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,34668,34382020385,34270000000
+round1,34149,33892070006,33570000000
+round2,33568,33546784632,33540000000
+round3,33683,33442656541,33450000000
+round4,33856,33655486648,33630000000
+round5,33473,33453340080,33440000000
+round6,33556,33536825554,33520000000
+round7,33810,33545390941,33500000000
+round8,33663,33464575138,33420000000
+round9,33826,33623171176,33610000000
+ScanOnheap,33825,33654232110,33595000000
+compression:GZIP
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,824279,817234842428,811290000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2538535290
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 2465844652}
+col 4 size:92842162
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,44716,44687015957,44670000000
+round1,44994,44362039720,44350000000
+round2,44730,44516424140,44500000000
+round3,44505,44196887884,44190000000
+round4,44634,44426701453,44420000000
+round5,44533,44285905948,44290000000
+round6,44529,44343448262,44350000000
+round7,44449,44272158920,44280000000
+round8,44649,44403858333,44410000000
+round9,44541,44516841560,44510000000
+ScanOnheap,44628,44401128217,44397000000
+Best (DDPD)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,679928,674231931862,668950000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2399094481
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, RLE_DICTIONARY, BIT_PACKED], 2388531071}
+col 4 size:67216131
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,41675,41648683267,41580000000
+round1,41439,41042814483,40960000000
+round2,40927,40905665397,40790000000
+round3,41014,40914272090,40910000000
+round4,40992,40891333722,40850000000
+round5,40838,40819333115,40780000000
+round6,41009,40915133865,40930000000
+round7,41064,40857785097,40850000000
+round8,40803,40780215509,40770000000
+round9,40914,40892713528,40590000000
+ScanOnheap,41067,40966795007,40901000000
+Worst (PPDP)
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, GZIP,825220,817759334089,812250000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:2539320386
+ColumnMetaData{GZIP [quantity] INT32  [PLAIN, BIT_PACKED], 2468245503}
+col 4 size:92842127
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,44015,43986623737,43920000000
+round1,43844,43558660594,43450000000
+round2,44097,43754057478,43660000000
+round3,44008,43833848506,43610000000
+round4,43777,43493022495,43420000000
+round5,43601,43575427349,43320000000
+round6,43895,43531864518,43520000000
+round7,43573,43443335369,43440000000
+round8,43596,43381064353,43400000000
+round9,43731,43468758491,43460000000
+ScanOnheap,43813,43602666289,43520000000
+compression:LZO
+Plain
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+prodeucing parquet file, LZO,329380,327035210745,319070000000
+file:/home/cc/tpch-generator/dbgen/lineitem.parquet
+Filesize:3690615173
+ColumnMetaData{LZO [quantity] INT32  [BIT_PACKED, PLAIN], 3620323208}
+col 4 size:177115565
+lineitem intBitLength: 6 lineitem intBound: 50
+WARN  NativeCodeLoader - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+round0,34706,34470707568,34450000000
+round1,34471,34119028008,33660000000

@@ -59,10 +59,17 @@ object LoadTPCH4Offheap extends App {
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Array[AnyRef]("6", "50"))
   ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
     new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+  ParquetReaderHelper.getColSize(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, 4)
 }
 
 object LoadTPCH4Plain extends App {
-
+  var compression = "UNCOMPRESSED"
+  if (args.length == 0) {
+    println("dude, i need at least one parameter for compression type (UNCOMPRESSED by default)")
+  }
+  else {
+    compression = args(0)
+  }
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.PLAIN)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Encoding.PLAIN)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Encoding.PLAIN)
@@ -72,11 +79,18 @@ object LoadTPCH4Plain extends App {
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Array[AnyRef]("0.4", "0.4"))
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Array[AnyRef]("string", "string"))
   ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
-    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false, compression)
+  ParquetReaderHelper.getColSize(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, 4)
 }
 
 object LoadTPCH4Best extends App {
-
+  var compression = "UNCOMPRESSED"
+  if (args.length == 0) {
+    println("dude, i need at least one parameter for compression type (UNCOMPRESSED by default)")
+  }
+  else {
+    compression = args(0)
+  }
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.PLAIN_DICTIONARY)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Encoding.PLAIN_DICTIONARY)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Encoding.PLAIN)
@@ -86,11 +100,18 @@ object LoadTPCH4Best extends App {
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Array[AnyRef]("0.4", "0.4"))
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Array[AnyRef]("string", "string"))
   ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
-    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false, compression)
+  ParquetReaderHelper.getColSize(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, 4)
 }
 
 object LoadTPCH4Worst extends App {
-
+  var compression = "UNCOMPRESSED"
+  if (args.length == 0) {
+    println("dude, i need at least one parameter for compression type (UNCOMPRESSED by default)")
+  }
+  else {
+    compression = args(0)
+  }
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(4).toString, Encoding.PLAIN)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(5).toString, Encoding.PLAIN)
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Encoding.PLAIN_DICTIONARY)
@@ -100,7 +121,8 @@ object LoadTPCH4Worst extends App {
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(6).toString, Array[AnyRef]("0.4", "0.4"))
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(10).toString, Array[AnyRef]("string", "string"))
   ParquetWriterHelper.write(new File("/home/cc/tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,
-    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false)
+    new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, "\\|", false, compression)
+  ParquetReaderHelper.getColSize(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI, 4)
 }
 
 
