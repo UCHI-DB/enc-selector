@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.dataset
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.report._
 import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage
-import edu.uchicago.cs.encsel.dataset.feature.subattr.SubattrScanTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.subattr.{SubattrEncodeBenefit2, SubattrScanTimeUsage}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
@@ -42,7 +42,7 @@ object RunFeatureOnMainColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(SubattrScanTimeUsage)
+  val missed = Seq(SubattrEncodeBenefit2)
 
   val prefix = args.length match {
     case gt if gt > 0 => args(0)
