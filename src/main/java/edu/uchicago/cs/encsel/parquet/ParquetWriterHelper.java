@@ -32,6 +32,7 @@ import org.apache.parquet.schema.MessageType;
 import org.apache.parquet.schema.PrimitiveType;
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
 import org.apache.parquet.schema.Type.Repetition;
+import edu.uchicago.cs.encsel.perf.Profiler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -145,6 +146,34 @@ public class ParquetWriterHelper {
 
         reader.close();
         writer.close();
+    }
+    
+    public static void write(URI input, MessageType schema, URI output, String split, boolean skipHeader, String compression) throws IOException {
+    		Profiler profiler = new Profiler();
+        profiler.mark();
+        
+    		File outfile = new File(output);
+        if (outfile.exists())
+            outfile.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildForTableWithCompression(new Path(output), schema, compression);
+
+        // Skip header line
+        String line = skipHeader ? reader.readLine() : null;
+
+        while ((line = reader.readLine()) != null) {
+            String[] dataArray = line.trim().split(split);
+            List<String> data = Arrays.asList(dataArray);
+            writer.write(data);
+        }
+
+        reader.close();
+        writer.close();
+        
+        profiler.pause();
+        System.out.println(String.format("prodeucing parquet file, %s,%d,%d,%d", compression, profiler.wcsum(), profiler.cpusum(),profiler.usersum()));
+        
     }
 
     public static URI singleColumnBoolean(URI input) throws IOException {
