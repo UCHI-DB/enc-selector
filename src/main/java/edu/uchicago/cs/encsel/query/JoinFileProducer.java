@@ -42,11 +42,12 @@ public class JoinFileProducer {
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
         //args = new String[]{"BP","RLE"};
         if (args.length == 0) {
-            System.out.println("JoinFileProducer PPencoding LPencoding");
+            System.out.println("JoinFileProducer PPencoding LPencoding Compression");
             return;
         }
         String PPencoding = args[0];
         String LPencoding = args[1];
+        String comp = args[2];
         String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
         String part = "/home/cc/tpch-generator/dbgen/part";
 
@@ -59,7 +60,7 @@ public class JoinFileProducer {
 
         //System.out.println(Encoding.valueOf("PLAIN"));
         ParquetWriterHelper.write(new File(lineitem+".tbl").toURI(), TPCHSchema.lineitemSchema(),
-                new File(lineitem+".parquet").toURI(), "\\|", false);
+                new File(lineitem+".parquet").toURI(), "\\|", false, comp);
 
 
 
@@ -71,11 +72,12 @@ public class JoinFileProducer {
         EncContext.context.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), new Integer[]{pbl,pib});
 
         ParquetWriterHelper.write(new File(part+".tbl").toURI(), TPCHSchema.partSchema(),
-                new File(part+".parquet").toURI(), "\\|", false);
-        long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), 1);
-        //System.out.println("lineitem col " + 1 + " size: "+colsize);
+                new File(part+".parquet").toURI(), "\\|", false, comp);
         long pcolsize = ParquetReaderHelper.getColSize(new File(part+".parquet").toURI(), 0);
         //System.out.println("part col " + 0 + " size:"+pcolsize);
+        long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), 1);
+        //System.out.println("lineitem col " + 1 + " size: "+colsize);
+
     }
 }
 
