@@ -37,7 +37,7 @@ import org.apache.parquet.schema.MessageType
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
-class BlockNestedLoopJoin(val hash: (Any) => Long, val numBlock: Int) extends Join {
+class BlockNestedLoopJoin(val numBlock: Int,val hash: (Any) => Long = (obj:Any)=>obj.hashCode()) extends Join {
 
   def join(left: URI, leftSchema: MessageType, right: URI, rightSchema: MessageType, joinKey: (Int, Int),
            leftProject: Array[Int], rightProject: Array[Int]):TempTable = {

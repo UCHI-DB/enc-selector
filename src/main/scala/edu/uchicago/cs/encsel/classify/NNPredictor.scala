@@ -54,6 +54,7 @@ class NNPredictor(model: String, val numFeature: Int) {
 
   def predict(feature: Array[Double]): Int = {
     val result = savedModel.session().runner().fetch("accuracy/prediction").feed("x", input).run()
+    buffer.clear()
     result(0).writeTo(buffer)
     buffer.get(0).toInt
   }

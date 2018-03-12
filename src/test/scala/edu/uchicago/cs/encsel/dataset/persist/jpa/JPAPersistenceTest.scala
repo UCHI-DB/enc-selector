@@ -17,6 +17,7 @@ class JPAPersistenceTest {
     val em = JPAPersistence.emf.createEntityManager()
 
     em.getTransaction.begin()
+    em.createNativeQuery("DELETE FROM col_info;").executeUpdate()
     em.createNativeQuery("DELETE FROM col_pattern;").executeUpdate()
     em.createNativeQuery("DELETE FROM feature;").executeUpdate()
     em.createNativeQuery("DELETE FROM col_data;").executeUpdate()
@@ -148,7 +149,7 @@ class JPAPersistenceTest {
   def testGetInfo: Unit = {
     val jpa = new JPAPersistence
     val col = jpa.find(20)
-    col.infos.put("abc", 12312.52)
+    col.putInfo("abc", 12312.52)
 
     jpa.save(Seq(col))
 

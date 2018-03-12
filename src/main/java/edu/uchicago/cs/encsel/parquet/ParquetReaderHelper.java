@@ -1,7 +1,7 @@
 package edu.uchicago.cs.encsel.parquet;
 
-import edu.uchicago.cs.encsel.perf.ProfileBean;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.ProfileBean;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;

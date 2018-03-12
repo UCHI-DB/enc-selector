@@ -22,9 +22,15 @@
  */
 package edu.uchicago.cs.encsel
 
+import java.io.{File, FileOutputStream}
+import java.net.URI
 import java.util.Properties
-import java.io.FileNotFoundException
+import java.util.zip.ZipFile
+
+import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConverters._
 
 object Config {
 
@@ -37,9 +43,16 @@ object Config {
 
   var distJmsHost = "vm://localhost"
 
-  load()
+  var predictIntModelPath = "./int_model"
+  var predictStringModelPath = "./string_model"
+  var predictNumFeature = 19
+
 
   val logger = LoggerFactory.getLogger(getClass)
+
+  load()
+  extract()
+
 
   def load(): Unit = {
     try {
@@ -52,10 +65,57 @@ object Config {
       columnFolder = p.getProperty("column.folder")
 
       distJmsHost = p.getProperty("dist.jms.host")
+
+      predictIntModelPath = p.getProperty("predict.model.int.path")
+      predictStringModelPath = p.getProperty("predict.model.string.path")
+      predictNumFeature = Integer.parseInt(p.getProperty("predict.numFeature"))
     } catch {
       case e: Exception => {
         logger.warn("Failed to load configuration", e)
       }
     }
+  }
+
+  // Extract Resources from jar to current folder
+  def extract(): Unit = {
+    try {
+      val jarURI = Config.getClass.getResource("/edu/uchicago/cs/encsel/Config.class").toURI
+      if (jarURI.getScheme == "jar") {
+        logger.info("Extracting Resources...")
+        val jarPath = new URI(jarURI.getSchemeSpecificPart.replaceFirst("!.*$", ""))
+
+        val zipFile = new ZipFile(new File(jarPath))
+
+        ZipUtils.extractFolder(zipFile, "int_model", new File("int_model"))
+        ZipUtils.extractFolder(zipFile, "string_model", new File("string_model"))
+        logger.info("Resource extracted")
+      } else {
+        logger.info("Resource not packed, no extracting needed")
+      }
+    } catch {
+      case e: Exception => {
+        logger.error("Failed to load resources", e)
+        System.exit(1)
+      }
+    }
+  }
+}
+
+object ZipUtils {
+  def extractFolder(zipFile: ZipFile, path: String, parent: File): Unit = {
+    zipFile.entries().asScala.foreach(entry => {
+      if (entry.getName.startsWith(path)) {
+        val realPath = entry.getName.replaceFirst("^" + path, parent.getAbsolutePath)
+        if (entry.isDirectory) {
+          new File(realPath).mkdir()
+        } else {
+          val inputstream = zipFile.getInputStream(entry)
+          val outputstream = new FileOutputStream(realPath)
+          IOUtils.copy(inputstream, outputstream)
+          inputstream.close()
+          outputstream.close()
+        }
+      }
+    })
   }
 }

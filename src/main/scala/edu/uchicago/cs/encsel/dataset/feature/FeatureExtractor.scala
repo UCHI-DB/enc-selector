@@ -22,6 +22,8 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature
 
+import java.io.{File, FileInputStream, InputStream}
+
 import edu.uchicago.cs.encsel.dataset.column.Column
 
 import scala.sys.process._
@@ -34,7 +36,16 @@ trait FeatureExtractor {
 
   def supportFilter: Boolean
 
-  def extract(input: Column, prefix: String = ""): Iterable[Feature]
+  def extract(input: Column, prefix: String = ""): Iterable[Feature] = {
+    val is = new FileInputStream(new File(input.colFile))
+    try {
+      extract(input, is, prefix)
+    } finally {
+      is.close()
+    }
+  }
+
+  def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature]
 }
 
 object FeatureExtractorUtils {

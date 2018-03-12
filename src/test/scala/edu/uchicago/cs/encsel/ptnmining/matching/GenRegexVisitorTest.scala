@@ -105,6 +105,21 @@ class GenRegexVisitorTest {
   }
 
   @Test
+  def testSymbolGroup: Unit = {
+    val ptn = PSeq.collect(
+      new PIntAny(5),
+      PUnion.collect(
+        new PToken(new TSymbol("+")),
+        PEmpty)
+    )
+    ptn.naming()
+    val regexv = new GenRegexVisitor
+    ptn.visit(regexv)
+    assertEquals("^(\\d{5})(\\+)?$",
+      regexv.get)
+  }
+
+  @Test
   def testSpecialChars: Unit = {
     val ptn = PSeq.collect(
       new PIntAny(5),

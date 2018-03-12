@@ -28,6 +28,9 @@ import java.net.URI
 import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.classify._
+import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ArrayBuffer
@@ -45,7 +48,7 @@ object Features {
   install(new Sortness(50))
   install(new Sortness(100))
   install(new Sortness(200))
-//  install(AdjInvertPair)
+  //  install(AdjInvertPair)
 
   def install(fe: FeatureExtractor) = {
     extractors += fe
@@ -76,9 +79,18 @@ object Features {
     val filteredColumn = new Column(input.origin, input.colIndex, input.colName, input.dataType)
     filteredColumn.colFile = filteredURI
 
+    val reader = new FileInputStream(new File(filteredURI))
+    val buffer = new ByteArrayOutputStream()
+
+    IOUtils.copy(reader, buffer)
+    reader.close()
+    buffer.close()
+
+    val bufferArray = buffer.toByteArray
+
     val extracted = extractors.filter(_.supportFilter).flatMap(ex => {
       try {
-        ex.extract(filteredColumn, prefix)
+        ex.extract(filteredColumn, new ByteArrayInputStream(bufferArray), prefix)
       } catch {
         case e: Exception => {
           logger.error("Exception while executing %s on %s:%s, skipping"

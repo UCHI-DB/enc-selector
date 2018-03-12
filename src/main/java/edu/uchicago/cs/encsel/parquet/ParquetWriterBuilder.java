@@ -93,12 +93,21 @@ public class ParquetWriterBuilder extends Builder<List<String>, ParquetWriterBui
                 .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
                 .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
     }
-    
+
     public static ParquetWriter<List<String>> buildForTableWithCompression(Path file, MessageType schema, String compression)
             throws IOException {
         ParquetWriterBuilder builder = new ParquetWriterBuilder(file, schema, new EncValuesWriterFactory());
 
         return builder.withValidation(false).withCompressionCodec(CompressionCodecName.valueOf(compression))
+                .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
+                .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
+                .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
+    }
+
+    public static ParquetWriter<List<String>> buildCompressed(Path file, MessageType schema, CompressionCodecName codec) throws IOException {
+        ParquetWriterBuilder builder = new ParquetWriterBuilder(file, schema, new EncValuesWriterFactory());
+
+        return builder.withValidation(false).withCompressionCodec(codec)
                 .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
                 .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
                 .withDictionaryPageSize(SCALE * ParquetWriter.DEFAULT_PAGE_SIZE).build();
