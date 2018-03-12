@@ -45,10 +45,22 @@ object SubattrScanTimeUsage2 extends FeatureExtractor {
   def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val subtable = FileUtils.addExtension(col.colFile, "subtable")
     if (Files.exists(Paths.get(subtable))) {
-      val tupleReader = new ParquetTupleReader(subtable)
       var counter = 0
+      val originReader = new ParquetTupleReader(FileUtils.addExtension(col.colFile, "DICT_GZIP"))
       profiler.reset
       profiler.mark
+      counter = 0
+      while (counter < originReader.getNumOfRecords) {
+        originReader.read()
+        counter += 1
+      }
+      profiler.pause
+      val otime = profiler.stop
+
+      val tupleReader = new ParquetTupleReader(subtable)
+      profiler.reset
+      profiler.mark
+      counter = 0
       while (counter < tupleReader.getNumOfRecords) {
         tupleReader.read()
         counter += 1
@@ -57,9 +69,10 @@ object SubattrScanTimeUsage2 extends FeatureExtractor {
       profiler.pause
       val time = profiler.stop
       Iterable(
-        new Feature(featureType, "wallclock2", time.wallclock),
-        new Feature(featureType, "cpu2", time.cpu),
-        new Feature(featureType, "user2", time.user)
+        new Feature(featureType, "st_wallclock", time.wallclock),
+        new Feature(featureType, "st_cpu", time.cpu),
+        new Feature(featureType, "dg_wallclock", otime.wallclock),
+        new Feature(featureType, "dg_cpu", otime.cpu)
       )
     } else {
       Iterable()
