@@ -54,6 +54,7 @@ object SubattrScanTimeUsage2 extends FeatureExtractor {
         originReader.read()
         counter += 1
       }
+      originReader.close()
       profiler.pause
       val otime = profiler.stop
 
