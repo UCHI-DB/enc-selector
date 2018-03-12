@@ -24,23 +24,22 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
-import edu.uchicago.cs.encsel.query.{ColumnTempTable, PipePrimitiveConverter, TempTable}
+import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.util.{DataUtils, SchemaUtils}
+import edu.uchicago.cs.encsel.query.{ColumnTempTable, PipePrimitiveConverter, TempTable}
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore
-import org.apache.parquet.hadoop.Footer
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 import org.apache.parquet.schema.MessageType
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
-class BlockNestedLoopJoin(val numBlock: Int,val hash: (Any) => Long = (obj:Any)=>obj.hashCode()) extends Join {
+class BlockNestedLoopJoin(val numBlock: Int) extends Join {
 
   def join(left: URI, leftSchema: MessageType, right: URI, rightSchema: MessageType, joinKey: (Int, Int),
-           leftProject: Array[Int], rightProject: Array[Int]):TempTable = {
+           leftProject: Array[Int], rightProject: Array[Int]): TempTable = {
 
     val leftKeySchema = SchemaUtils.project(leftSchema, Array(joinKey._1))
     val rightKeySchema = SchemaUtils.project(rightSchema, Array(joinKey._2))
@@ -77,7 +76,7 @@ class BlockNestedLoopJoin(val numBlock: Int,val hash: (Any) => Long = (obj:Any)=
         val placements = new ArrayBuffer[Int]()
         for (i <- 0L until rowGroup.getRowCount) {
           val keyValue = DataUtils.readValue(keyReader)
-          val keyIndex = (hash(keyValue) % numBlock).toInt
+          val keyIndex = (keyValue.hashCode() % numBlock).toInt
           placements += keyIndex
           keyConverter.setNext(leftKeys(keyIndex).getConverter(0).asPrimitiveConverter())
 
@@ -113,7 +112,7 @@ class BlockNestedLoopJoin(val numBlock: Int,val hash: (Any) => Long = (obj:Any)=
         val placements = new ArrayBuffer[Int]()
         for (i <- 0L until rowGroup.getRowCount) {
           val keyValue = DataUtils.readValue(keyReader)
-          val keyIndex = (hash(keyValue) % numBlock).toInt
+          val keyIndex = (keyValue.hashCode() % numBlock).toInt
           placements += keyIndex
           keyConverter.setNext(rightKeys(keyIndex).getConverter(0).asPrimitiveConverter())
           keyReader.writeCurrentValueToConverter()
