@@ -242,7 +242,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
+		Path path =  new Path("../tpch-generator/dbgen/orders.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -323,7 +323,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
+		Path path =  new Path("../tpch-generator/dbgen/orders.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -407,7 +407,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
+		Path path =  new Path("../tpch-generator/dbgen/orders1.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});
@@ -490,7 +490,7 @@ public class PageSkippingTest {
 		long startpos = 0;
 		Configuration conf = new Configuration();
 		//Path path =  new Path("src/test/resource/query_select/customer_100.parquet");
-		Path path =  new Path("/home/cc/tpch-generator/dbgen/orders1.parquet");
+		Path path =  new Path("../tpch-generator/dbgen/orders1.parquet");
 		ParquetMetadata readFooter = ParquetFileReader.readFooter(conf, path, ParquetMetadataConverter.NO_FILTER);
 		MessageType schema = readFooter.getFileMetaData().getSchema();
 		descriptor = schema.getColumnDescription(new String[] {"cust_key"});

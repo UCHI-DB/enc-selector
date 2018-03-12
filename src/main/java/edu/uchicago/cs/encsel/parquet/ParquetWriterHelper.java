@@ -33,6 +33,7 @@ import org.apache.parquet.schema.PrimitiveType;
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
 import org.apache.parquet.schema.Type.Repetition;
 import edu.uchicago.cs.encsel.perf.Profiler;
+import java.util.HashMap;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,9 +41,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ParquetWriterHelper {
 
@@ -101,6 +100,32 @@ public class ParquetWriterHelper {
             }
             br.close();
             return maxBitLength;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static HashMap<String, Integer> buildGlobalDict(URI input, int index) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(new File(input)));
+            int maxBitLength = 0;
+            String line;
+            String[] list;
+            HashMap<String, Integer> globalDict = new HashMap<String, Integer>();
+            Set<String> set = new TreeSet<>();
+            while ((line = br.readLine()) != null) {
+                list = line.split("\\|");
+                if (line.isEmpty())
+                    continue;
+                set.add(list[index]);
+            }
+            br.close();
+            int i = 0;
+            for (String item : set) {
+                globalDict.put(item, i);
+                i++;
+            }
+            return globalDict;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

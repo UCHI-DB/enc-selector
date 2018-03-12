@@ -87,7 +87,7 @@ public class TPCHQueryTest {
 		long cputime = 0L;
 		long usertime = 0L;
 		for (int i = 0; i < repeat; i++) {
-			ProfileBean prof = ParquetReaderHelper.profile(new File("/home/cc/tpch-generator/dbgen/orders.parquet").toURI(), new EncReaderProcessor() {
+			ProfileBean prof = ParquetReaderHelper.profile(new File("../tpch-generator/dbgen/orders.parquet").toURI(), new EncReaderProcessor() {
 
 				@Override
 				public void processRowGroup(VersionParser.ParsedVersion version,
@@ -142,7 +142,7 @@ public class TPCHQueryTest {
 		long usertime = 0L;
 
 		for (int i = 0; i < repeat; i++) {
-			ProfileBean prof = ParquetReaderHelper.filterProfile(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
+			ProfileBean prof = ParquetReaderHelper.filterProfile(new File("../tpch-generator/dbgen/lineitem.parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
 				@Override
 				public void processRowGroup(VersionParser.ParsedVersion version,
@@ -255,7 +255,7 @@ public class TPCHQueryTest {
 		long usertime = 0L;
 
 		for (int i = 0; i < repeat; i++) {
-			ProfileBean prof = ParquetReaderHelper.filterProfile(new File("/home/cc/tpch-generator/dbgen/lineitem.parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
+			ProfileBean prof = ParquetReaderHelper.filterProfile(new File("../tpch-generator/dbgen/lineitem.parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
 				@Override
 				public void processRowGroup(VersionParser.ParsedVersion version,

@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -131,5 +132,12 @@ public class ParquetWriterHelperTest {
         ParquetWriterHelper.singleColumnBoolean(new File(file).toURI());
         assertTrue(Files.exists(Paths.get("src/test/resource/coldata/test_col_boolean.data.PLAIN")));
 
+    }
+    @Test
+    public void testBuildGlobalDict(){
+        String lineitem = "../tpch-generator/dbgen/lineitem";
+        String part = "../tpch-generator/dbgen/part";
+        HashMap<String, Integer> dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 0);
+        System.out.println(dict.toString());
     }
 }
