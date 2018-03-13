@@ -1,8 +1,8 @@
 package edu.uchicago.cs.encsel.pageskipping;
 
 import edu.uchicago.cs.encsel.parquet.OffheapReadSopport;
-import edu.uchicago.cs.encsel.perf.ProfileBean;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.ProfileBean;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter;
 import edu.uchicago.cs.encsel.query.bitmap.Bitmap;
 import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap;

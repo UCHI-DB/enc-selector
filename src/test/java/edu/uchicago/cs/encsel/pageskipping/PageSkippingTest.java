@@ -3,7 +3,7 @@ package edu.uchicago.cs.encsel.pageskipping;
 import static org.junit.Assert.*;
 
 import edu.uchicago.cs.encsel.parquet.OffheapReadSopport;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import edu.uchicago.cs.encsel.query.offheap.EqualScalar;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;

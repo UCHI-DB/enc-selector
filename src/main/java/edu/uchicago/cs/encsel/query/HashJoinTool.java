@@ -26,7 +26,7 @@ package edu.uchicago.cs.encsel.query;
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import edu.uchicago.cs.encsel.query.operator.HashJoin;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import scala.Tuple2;

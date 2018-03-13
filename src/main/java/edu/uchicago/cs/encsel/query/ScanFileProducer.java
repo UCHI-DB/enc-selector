@@ -27,7 +27,7 @@ import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.Encoding;

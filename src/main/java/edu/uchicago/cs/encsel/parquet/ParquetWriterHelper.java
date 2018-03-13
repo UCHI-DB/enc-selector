@@ -32,7 +32,7 @@ import org.apache.parquet.schema.MessageType;
 import org.apache.parquet.schema.PrimitiveType;
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
 import org.apache.parquet.schema.Type.Repetition;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import java.util.HashMap;
 
 import java.io.BufferedReader;
@@ -174,7 +174,7 @@ public class ParquetWriterHelper {
     }
     
     public static void write(URI input, MessageType schema, URI output, String split, boolean skipHeader, String compression) throws IOException {
-    		Profiler profiler = new Profiler();
+        Profiler profiler = new Profiler();
         profiler.mark();
         
     		File outfile = new File(output);

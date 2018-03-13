@@ -8,43 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="abb4bcca-2e50-4b34-8bd8-51cdd640cbee" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_boolean.data.PLAIN.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_boolean.data.PLAIN.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_double.data.DICT.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_double.data.DICT.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_double.data.PLAIN.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_double.data.PLAIN.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.BP.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.BP.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.DELTABP.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.DELTABP.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.DICT.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.DICT.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.PLAIN.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.PLAIN.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.RLE.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.RLE.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_long.data.DELTABP.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_long.data.DELTABP.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_long.data.DICT.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_long.data.DICT.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_long.data.PLAIN.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_long.data.PLAIN.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DELTA.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DELTA.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DELTAL.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DELTAL.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DICT.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DICT.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.PLAIN.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.PLAIN.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_boolean.data.PLAIN" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_boolean.data.PLAIN" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_double.data.DICT" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_double.data.DICT" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_double.data.PLAIN" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_double.data.PLAIN" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_long.data.DELTABP" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_long.data.DELTABP" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_long.data.DICT" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_long.data.DICT" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_long.data.PLAIN" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_long.data.PLAIN" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/test_col_str.data.DELTA" afterPath="$PROJECT_DIR$/src/test/resource/coldata/test_col_str.data.DELTA" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/.data.BP.crc" afterPath="$PROJECT_DIR$/src/test/resource/scantime/.data.BP.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/.data.DELTABP.crc" afterPath="$PROJECT_DIR$/src/test/resource/scantime/.data.DELTABP.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/.data.DICT.crc" afterPath="$PROJECT_DIR$/src/test/resource/scantime/.data.DICT.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/.data.PLAIN.crc" afterPath="$PROJECT_DIR$/src/test/resource/scantime/.data.PLAIN.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/.data.RLE.crc" afterPath="$PROJECT_DIR$/src/test/resource/scantime/.data.RLE.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/data.BP" afterPath="$PROJECT_DIR$/src/test/resource/scantime/data.BP" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/data.DELTABP" afterPath="$PROJECT_DIR$/src/test/resource/scantime/data.DELTABP" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/data.DICT" afterPath="$PROJECT_DIR$/src/test/resource/scantime/data.DICT" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/data.PLAIN" afterPath="$PROJECT_DIR$/src/test/resource/scantime/data.PLAIN" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/scantime/data.RLE" afterPath="$PROJECT_DIR$/src/test/resource/scantime/data.RLE" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" afterPath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java" afterPath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" afterPath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -59,58 +30,8 @@
       <file leaf-file-name="HashJoinTool.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="46" column="54" lean-forward="false" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="86" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JoinFileProducer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/JoinFileProducer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="47" column="36" lean-forward="true" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParquetReaderHelper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="855">
-              <caret line="76" column="13" lean-forward="true" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="joinQ14.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/joinQ14.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="33" lean-forward="false" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="compressQ14.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/compressQ14.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="75" lean-forward="false" selection-start-line="15" selection-start-column="75" selection-end-line="15" selection-end-column="75" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="q6.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/q6.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="105">
+              <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -119,34 +40,99 @@
       <file leaf-file-name="ParquetWriterHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="82">
-              <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
+            <state relative-caret-position="132">
+              <caret line="34" column="48" lean-forward="false" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="48" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4133#4150#0" expanded="true" />
-                <marker date="1520822638467" expanded="true" signature="7321:7327" ph="{...}" />
+                <element signature="e#4138#4155#0" expanded="true" />
+                <marker date="1520889052654" expanded="true" signature="7328:7334" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ParquetWriterHelperTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java">
+      <file leaf-file-name="TPCHQueryTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="136" column="38" lean-forward="true" selection-start-line="136" selection-start-column="38" selection-end-line="136" selection-end-column="38" />
+            <state relative-caret-position="60">
+              <caret line="4" column="49" lean-forward="false" selection-start-line="4" selection-start-column="49" selection-end-line="4" selection-end-column="49" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MineColumnTest.scala" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/ptnmining/MineColumnTest.scala">
+      <file leaf-file-name="Q6ScanTool.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-655">
-              <caret line="127" column="70" lean-forward="true" selection-start-line="127" selection-start-column="70" selection-end-line="127" selection-end-column="70" />
+            <state relative-caret-position="165">
+              <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ScanFileProducer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="32" column="32" lean-forward="false" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Profiler.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/util/perf/Profiler.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-234">
+              <caret line="23" column="40" lean-forward="false" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="40" />
               <folding>
-                <element signature="e#915#934#0" expanded="true" />
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NLJoinTool.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="254">
+              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbadiDecisionTree.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/classify/AbadiDecisionTree.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="141">
+              <caret line="34" column="13" lean-forward="false" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+              <folding>
+                <element signature="e#917#970#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Function1.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.12.4/scala-library-2.12.4.jar!/scala/Function1.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="6" lean-forward="false" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BlockNestedLoopJoin.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/operator/BlockNestedLoopJoin.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="46" column="42" lean-forward="false" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
+              <folding>
+                <element signature="e#920#939#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -154,12 +140,15 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Package Object" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>equalin</find>
-      <find>entryWidth</find>
-      <find>predvalue</find>
-      <find>65486</find>
       <find>predVisitor</find>
       <find>set</find>
       <find>skipp</find>
@@ -184,8 +173,12 @@
       <find>true</find>
       <find>hash</find>
       <find>home</find>
-      <find>1.parquet</find>
       <find>order</find>
+      <find>Profiler</find>
+      <find>edu.uchicago.cs.encsel.perf</find>
+      <find>1.parquet</find>
+      <find>perf.Profiler</find>
+      <find>pe</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -214,15 +207,21 @@
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/BitmapPageFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/JoinFileProducer.java" />
         <option value="$PROJECT_DIR$/pwbq6.sh" />
         <option value="$PROJECT_DIR$/joinQ16.sh" />
         <option value="$PROJECT_DIR$/compressQ14.sh" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" />
+        <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/Profiler.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/perf/Profiler.scala" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" />
+        <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/operator/BlockNestedLoopJoin.scala" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java" />
       </list>
     </option>
   </component>
@@ -233,8 +232,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1514" />
-    <option name="y" value="155" />
+    <option name="x" value="1662" />
+    <option name="y" value="76" />
     <option name="width" value="1210" />
     <option name="height" value="823" />
   </component>
@@ -302,6 +301,15 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="query" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="parquet" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -356,6 +364,35 @@
               <item name="encsel" type="462c0819:PsiDirectoryNode" />
               <item name="query" type="462c0819:PsiDirectoryNode" />
               <item name="tpch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="query" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+              <item name="perf" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
@@ -418,6 +455,44 @@
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
               <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="dataset" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="dataset" type="462c0819:PsiDirectoryNode" />
+              <item name="feature" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="ptnmining" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="ptnmining" type="462c0819:PsiDirectoryNode" />
+              <item name="preprocess" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
               <item name="query" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -439,6 +514,37 @@
               <item name="encsel" type="462c0819:PsiDirectoryNode" />
               <item name="query" type="462c0819:PsiDirectoryNode" />
               <item name="operator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="encsel" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Maven: org.scala-lang:scala-library:2.12.4" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Maven: org.scala-lang:scala-library:2.12.4" type="70bed36:NamedLibraryElementNode" />
+              <item name="scala-library-2.12.4.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Maven: org.scala-lang:scala-library:2.12.4" type="70bed36:NamedLibraryElementNode" />
+              <item name="scala-library-2.12.4.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -475,7 +581,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.ParquetWriterHelperTest.testWriteStr">
+  <component name="RunManager" selected="Application.NLJoinTool">
     <configuration name="MyOnheap" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -484,6 +590,25 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.query.offheap.MyOnheap" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="enc-selector" />
+      <envs />
+    </configuration>
+    <configuration name="NLJoinTool" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="edu.uchicago.cs.encsel.query.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.query.NLJoinTool" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -595,31 +720,6 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="TPCHQueryTest.testQ6SkipOnheap" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="edu.uchicago.cs.encsel.pageskipping.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="enc-selector" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="edu.uchicago.cs.encsel.pageskipping" />
-      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.pageskipping.TPCHQueryTest" />
-      <option name="METHOD_NAME" value="testQ6SkipOnheap" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -703,19 +803,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Application.MyOnheap" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6SkipOnheap" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testEncodeBoolean" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testWriteStr" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testEncodeBoolean" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testWriteStr" />
+      <item index="5" class="java.lang.String" itemvalue="Application.NLJoinTool" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testWriteStr" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testEncodeBoolean" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6SkipOnheap" />
+        <item index="0" class="java.lang.String" itemvalue="Application.NLJoinTool" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testWriteStr" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testEncodeBoolean" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TPCHQueryTest.testQ6Onheap" />
       </list>
     </recent_temporary>
   </component>
@@ -737,7 +837,7 @@
       <workItem from="1517857365615" duration="33824000" />
       <workItem from="1518450900965" duration="3562000" />
       <workItem from="1518575360011" duration="56393000" />
-      <workItem from="1520819280898" duration="7465000" />
+      <workItem from="1520819280898" duration="20478000" />
     </task>
     <task id="LOCAL-00001" summary="TPCH q6">
       <created>1518708979584</created>
@@ -782,20 +882,20 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104666000" />
+    <option name="totallyTimeSpent" value="117679000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1514" y="155" width="1210" height="823" extended-state="0" />
+    <frame x="1662" y="76" width="1210" height="823" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37283623" sideWeight="0.49722221" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37283623" sideWeight="0.4859504" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44747612" sideWeight="0.50555557" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37283623" sideWeight="0.5140496" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33294117" sideWeight="0.49444443" order="7" side_tool="false" content_ui="tabs" />
@@ -805,6 +905,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29669422" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -816,7 +917,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -836,63 +936,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/io/File.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="274" column="11" lean-forward="false" selection-start-line="274" selection-start-column="11" selection-end-line="274" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NonePrimitiveConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="34" column="11" lean-forward="false" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/schema/MessageType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="105" column="32" lean-forward="false" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/offheap/OffheapCompare-v2.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="102" column="51" lean-forward="true" selection-start-line="102" selection-start-column="51" selection-end-line="102" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/PlainValuesReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="56" column="10" lean-forward="false" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/BinaryPlainValuesReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="37" column="14" lean-forward="false" selection-start-line="37" selection-start-column="14" selection-end-line="37" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/io/api/Binary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="588" column="22" lean-forward="false" selection-start-line="588" selection-start-column="16" selection-end-line="588" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/ValuesReader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -953,14 +996,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
           <caret line="80" column="0" lean-forward="true" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-108">
-          <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1028,14 +1063,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="92" column="66" lean-forward="false" selection-start-line="92" selection-start-column="66" selection-end-line="92" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/metadata/CompressionCodecName.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -1047,13 +1074,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="39" column="6" lean-forward="false" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/query/operator/BlockNestedLoopJoinTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1062,23 +1083,6 @@
         <state relative-caret-position="90">
           <caret line="33" column="20" lean-forward="false" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="20" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/operator/BlockNestedLoopJoin.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="39" column="34" lean-forward="false" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="58" column="74" lean-forward="false" selection-start-line="58" selection-start-column="74" selection-end-line="58" selection-end-column="74" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1114,16 +1118,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="124" column="30" lean-forward="false" selection-start-line="124" selection-start-column="30" selection-end-line="124" selection-end-column="30" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/q6.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1140,14 +1134,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/compressQ14.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="75" lean-forward="false" selection-start-line="15" selection-start-column="75" selection-end-line="15" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/EncReaderProcessorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="169">
@@ -1156,34 +1142,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="494" column="60" lean-forward="false" selection-start-line="494" selection-start-column="60" selection-end-line="494" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#testBitmapPageSkipping#0;class#PageSkippingTest#0" expanded="false" />
-            <element signature="method#testPredPageSkipping#0;class#PageSkippingTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="74" column="46" lean-forward="false" selection-start-line="74" selection-start-column="41" selection-end-line="74" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/ptnmining/MineColumnTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-655">
-          <caret line="127" column="70" lean-forward="true" selection-start-line="127" selection-start-column="70" selection-end-line="127" selection-end-column="70" />
+          <caret line="127" column="70" lean-forward="false" selection-start-line="127" selection-start-column="70" selection-end-line="127" selection-end-column="70" />
           <folding>
-            <element signature="e#915#934#0" expanded="true" />
+            <element signature="e#915#934#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1191,52 +1155,224 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="855">
-          <caret line="76" column="13" lean-forward="true" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/JoinFileProducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="47" column="36" lean-forward="true" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="50" column="43" lean-forward="false" selection-start-line="50" selection-start-column="43" selection-end-line="50" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="85" column="29" lean-forward="false" selection-start-line="85" selection-start-column="29" selection-end-line="85" selection-end-column="29" />
+          <caret line="76" column="13" lean-forward="false" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4133#4150#0" expanded="true" />
-            <marker date="1520822638467" expanded="true" signature="7321:7327" ph="{...}" />
+            <marker date="1520885385185" expanded="true" signature="985:2238" ph="{...}" />
+            <marker date="1520885385185" expanded="true" signature="2371:3832" ph="{...}" />
+            <marker date="1520885385185" expanded="true" signature="3943:4997" ph="{...}" />
+            <marker date="1520885385185" expanded="true" signature="5164:6670" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java">
+    <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/ptnmining/preprocess/FrequentWordTest.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="46" column="54" lean-forward="false" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="86" />
+        <state relative-caret-position="135">
+          <caret line="32" column="6" lean-forward="false" selection-start-line="32" selection-start-column="6" selection-end-line="32" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/dataset/feature/FilterTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="8" column="6" lean-forward="false" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="136" column="38" lean-forward="true" selection-start-line="136" selection-start-column="38" selection-end-line="136" selection-end-column="38" />
+        <state relative-caret-position="80">
+          <caret line="127" column="9" lean-forward="false" selection-start-line="127" selection-start-column="9" selection-end-line="127" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="160" column="53" lean-forward="false" selection-start-line="160" selection-start-column="53" selection-end-line="160" selection-end-column="53" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <marker date="1520885385170" expanded="true" signature="1515:2469" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="2507:3027" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="2750:2923" ph="(...)" />
+            <marker date="1520885385170" expanded="true" signature="3063:4438" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="3124:3227" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="3235:3266" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="4148:4334" ph="(...)" />
+            <marker date="1520885385170" expanded="true" signature="4473:5881" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="4534:4637" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="4645:4676" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="5591:5777" ph="(...)" />
+            <marker date="1520885385170" expanded="true" signature="5917:7303" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="5978:6081" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="7013:7199" ph="(...)" />
+            <marker date="1520885385170" expanded="true" signature="7343:11101" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="10824:10997" ph="(...)" />
+            <marker date="1520885385170" expanded="true" signature="11139:11446" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="11169:11342" ph="(...)" />
+            <marker date="1520885385170" expanded="true" signature="11480:11808" ph="{...}" />
+            <marker date="1520885385170" expanded="true" signature="11630:11806" ph="(...)" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="59" column="74" lean-forward="false" selection-start-line="59" selection-start-column="74" selection-end-line="59" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compressQ14.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="75" lean-forward="false" selection-start-line="15" selection-start-column="75" selection-end-line="15" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="96" column="46" lean-forward="false" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/package.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/JoinFileProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="69" column="0" lean-forward="false" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/Profiler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="930">
+          <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="34" column="48" lean-forward="false" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="48" />
+          <folding>
+            <element signature="e#4138#4155#0" expanded="true" />
+            <marker date="1520889052654" expanded="true" signature="7328:7334" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/TPCHQueryTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="49" lean-forward="false" selection-start-line="4" selection-start-column="49" selection-end-line="4" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/query/operator/BlockNestedLoopJoinTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="24" column="29" lean-forward="false" selection-start-line="24" selection-start-column="6" selection-end-line="24" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="32" column="32" lean-forward="false" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/util/perf/Profiler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-234">
+          <caret line="23" column="40" lean-forward="false" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="40" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="39" lean-forward="false" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.12.4/scala-library-2.12.4.jar!/scala/Function1.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="6" lean-forward="false" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/classify/AbadiDecisionTree.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="34" column="13" lean-forward="false" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+          <folding>
+            <element signature="e#917#970#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/operator/BlockNestedLoopJoin.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="46" column="42" lean-forward="false" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
+          <folding>
+            <element signature="e#920#939#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

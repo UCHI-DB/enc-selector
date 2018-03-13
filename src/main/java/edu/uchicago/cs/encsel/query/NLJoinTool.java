@@ -25,11 +25,12 @@ package edu.uchicago.cs.encsel.query;
 
 import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
-import edu.uchicago.cs.encsel.perf.Profiler;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
 import edu.uchicago.cs.encsel.query.operator.BlockNestedLoopJoin;
-import edu.uchicago.cs.encsel.query.operator.HashJoin;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
+import scala.Function1;
 import scala.Tuple2;
+import scala.runtime.AbstractFunction1;
 
 import java.io.File;
 
@@ -62,7 +63,8 @@ public class NLJoinTool {
             profiler.mark();
             System.out.println(EncContext.context.get().get(TPCHSchema.partSchema().getColumns().get(0).toString())[1]);
             //TODO NestedLoopJoin interface to be reshaped
-            TempTable result = new HashJoin().join(new File(part+".parquet").toURI(), TPCHSchema.partSchema(),
+            int numblock = 3;
+            TempTable result = new BlockNestedLoopJoin(numblock).join(new File(part+".parquet").toURI(), TPCHSchema.partSchema(),
                     new File(lineitem+".parquet").toURI(), TPCHSchema.lineitemSchema(),
                     joinindex, new int[]{0}, new int[]{5, 6});
             profiler.pause();
