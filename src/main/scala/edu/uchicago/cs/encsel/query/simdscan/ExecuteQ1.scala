@@ -32,7 +32,6 @@ import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.VersionParser
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore
-import org.apache.parquet.hadoop.ParquetReader
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 
 object ExecuteQ1 extends App {
@@ -73,7 +72,7 @@ object ExecuteQ1 extends App {
       profiler.pause
       val genbm = profiler.stop
 
-      println("Generate Bitmap: count %d, time %d".format(shipDateReader.getTotalValueCount,genbm.wallclock))
+      println("Generate Bitmap: count %d, time %d".format(shipDateReader.getTotalValueCount, genbm.wallclock))
 
 
       profiler.reset
@@ -93,16 +92,16 @@ object ExecuteQ1 extends App {
             col.consume()
           })
           counter += 1
-          selected.foreach(col=>{
-            col.writeCurrentValueToConverter()
-            col.consume()
-          })
         }
+        selected.foreach(col => {
+          col.writeCurrentValueToConverter()
+          col.consume()
+        })
       })
 
       profiler.pause
       val scan = profiler.stop
-      println("Decode: count %d, time %d".format(shipDateReader.getTotalValueCount,scan.wallclock))
+      println("Decode: count %d, time %d".format(shipDateReader.getTotalValueCount, scan.wallclock))
     }
   })
 

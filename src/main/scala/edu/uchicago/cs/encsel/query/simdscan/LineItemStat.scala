@@ -32,5 +32,5 @@ object LineItemStat extends App {
     val pieces = line.split("\\|")
     val shipdate = pieces(9)
     shipdate
-  }).toSet.size)
+  }).toSet.mkString(","))
 }
