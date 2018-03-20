@@ -27,7 +27,6 @@ import java.io.File
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
-import edu.uchicago.cs.encsel.query.simdscan.ExecuteQ1.{args, profiler}
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.VersionParser
@@ -130,11 +129,12 @@ object ExecuteQ6 extends App {
             col.consume()
           })
           counter += 1
-          selected.foreach(col => {
-            col.writeCurrentValueToConverter()
-            col.consume()
-          })
         }
+        selected.foreach(col => {
+          col.writeCurrentValueToConverter()
+          col.consume()
+        })
+        counter += 1
       })
 
       profiler.pause
