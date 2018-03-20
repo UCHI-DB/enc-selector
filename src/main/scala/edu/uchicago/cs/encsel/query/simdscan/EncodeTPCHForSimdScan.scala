@@ -29,10 +29,25 @@ import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import org.apache.parquet.column.Encoding
 
 object EncodeTPCHForSimdScan extends App {
-    EncContext.encoding.get().put(
-      TPCHSchema.lineitemSchema.getColumns().get(4).toString, Encoding.BIT_PACKED)
-    EncContext.context.get().put(
-      TPCHSchema.lineitemSchema.getColumns().get(4).toString, Array[AnyRef]("6", "50"))
-    ParquetWriterHelper.write(new File(args(0)).toURI, TPCHSchema.lineitemSchema,
-      new File(args(1)).toURI, "\\|", false)
+  EncContext.encoding.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(4).toString, Encoding.BIT_PACKED)
+  EncContext.context.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(4).toString, Array[AnyRef]("6", "50"))
+  EncContext.encoding.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(5).toString, Encoding.RLE_DICTIONARY
+  )
+  EncContext.encoding.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(6).toString, Encoding.RLE_DICTIONARY
+  )
+  EncContext.encoding.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(7).toString, Encoding.RLE_DICTIONARY
+  )
+  EncContext.encoding.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(9).toString, Encoding.RLE_DICTIONARY
+  )
+  EncContext.encoding.get().put(
+    TPCHSchema.lineitemSchema.getColumns().get(10).toString, Encoding.RLE_DICTIONARY
+  )
+  ParquetWriterHelper.write(new File(args(0)).toURI, TPCHSchema.lineitemSchema,
+    new File(args(1)).toURI, "\\|", false)
 }
