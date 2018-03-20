@@ -97,6 +97,7 @@ object ExecuteQ1 extends App {
           col.writeCurrentValueToConverter()
           col.consume()
         })
+        counter += 1
       })
 
       profiler.pause
