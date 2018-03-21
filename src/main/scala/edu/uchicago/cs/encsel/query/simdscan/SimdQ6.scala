@@ -24,7 +24,6 @@
 package edu.uchicago.cs.encsel.query.simdscan
 
 import java.io.File
-import java.nio.ByteBuffer
 
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
@@ -32,13 +31,12 @@ import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.VersionParser
-import org.apache.parquet.column.ColumnDescriptor
 import org.apache.parquet.column.impl.ColumnReaderImpl
-import org.apache.parquet.column.page.DataPage.Visitor
-import org.apache.parquet.column.page.{DataPageV1, DataPageV2, PageReadStore}
+import org.apache.parquet.column.page.PageReadStore
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 
-object SimdQ1 extends App {
+object SimdQ6 extends App {
+
 
   val profiler = new Profiler
 
@@ -52,53 +50,61 @@ object SimdQ1 extends App {
       // tax 7
       // line status 9
       // ship date 10
-      // ship date <= '1998-09-01'
       // Scan ship date to generate bitmap
 
       profiler.reset
       profiler.mark
 
-      val shipDateCol = TPCHSchema.lineitemSchema.getColumns().get(10)
       val quantityCol = TPCHSchema.lineitemSchema.getColumns().get(4)
-      val lineStatusCol = TPCHSchema.lineitemSchema.getColumns.get(9)
-      val shipDateReader = new ColumnReaderImpl(shipDateCol, rowGroup.getPageReader(shipDateCol),
-        new NonePrimitiveConverter, version)
       val quantityReader = new ColumnReaderImpl(quantityCol, rowGroup.getPageReader(quantityCol),
         new NonePrimitiveConverter, version)
-      val lineStatusReader = new ColumnReaderImpl(lineStatusCol, rowGroup.getPageReader(lineStatusCol),
-        new NonePrimitiveConverter, version)
-      // Generate bitmap
-      //      val bitmap = new RoaringBitmap
-      //      for (i <- 0L until shipDateReader.getTotalValueCount) {
-      //        val date = shipDateReader.getBinary.toStringUsingUTF8
-      //        if (date.compareTo("1998-09-01") <= 0) {
-      //          bitmap.set(i, true)
-      //        }
-      //        shipDateReader.consume()
-      //      }
-      val bitmap = new RoaringBitmap
-      val shipDatePageReader = rowGroup.getPageReader(shipDateCol)
-      SimdScanner.scanBitpackedColumn(shipDateCol,shipDatePageReader,meta.getRowCount ,13)
+
+      SimdScanner.scanBitpackedColumn(quantityCol,rowGroup.getPageReader(quantityCol),meta.getRowCount,15)
 
       profiler.pause
-      val genbm = profiler.stop
-
-      println("Generate Native Bitmap: count %d, time %d".format(shipDateReader.getTotalValueCount, genbm.wallclock))
-
-      val quantityPageReader = rowGroup.getPageReader(quantityCol)
-      SimdScanner.decodeBitpackedColumn(quantityCol,quantityPageReader,meta.getRowCount,15)
-
-      val lsPageReader = rowGroup.getPageReader(lineStatusCol)
-      SimdScanner.decodeBitpackedColumn(lineStatusCol,lsPageReader,meta.getRowCount,2)
-
-      profiler.pause
-      val scanbm = profiler.stop
-
-      println("Decode Native: count %d, time %d".format(shipDateReader.getTotalValueCount, scanbm.wallclock))
+      val qscan = profiler.stop
       profiler.reset
       profiler.mark
-      // Use bitmap to scan and decode other columns
-      val selected = Array(5, 6, 7).map(i => {
+
+      val shipDateCol = TPCHSchema.lineitemSchema.getColumns().get(10)
+      val shipDateReader = new ColumnReaderImpl(shipDateCol, rowGroup.getPageReader(shipDateCol),
+        new NonePrimitiveConverter, version)
+      SimdScanner.scanBitpackedColumn(shipDateCol,rowGroup.getPageReader(shipDateCol),meta.getRowCount,13)
+
+      profiler.pause
+      val sscan = profiler.stop
+      profiler.reset
+      profiler.mark
+
+      val discountCol = TPCHSchema.lineitemSchema.getColumns().get(6)
+      val discountReader = new ColumnReaderImpl(discountCol, rowGroup.getPageReader(discountCol),
+        new NonePrimitiveConverter, version)
+      val discountBitmap = new RoaringBitmap
+
+      for (i <- 0L until discountReader.getTotalValueCount) {
+        val price = discountReader.getDouble
+        if (price >= 0.05 && price <= 0.07) {
+          discountBitmap.set(i, true)
+        }
+        discountReader.consume()
+      }
+      profiler.pause
+      val dscan = profiler.stop
+      profiler.reset
+      profiler.mark
+
+      val bitmap = discountBitmap
+      profiler.pause
+      val genbm = profiler.stop
+      println("Scan: %d,%d,%d".format(qscan.wallclock, sscan.wallclock, dscan.wallclock))
+      println("Generate Bitmap: count %d, time %d".format(meta.getRowCount, genbm.wallclock))
+
+
+      profiler.reset
+      profiler.mark
+
+      // Use bitmap to scan other columns
+      val selected = Array(5, 6).map(i => {
         val cd = TPCHSchema.lineitemSchema.getColumns().get(i)
         new ColumnReaderImpl(cd, rowGroup.getPageReader(cd), new NonePrimitiveConverter, version)
       })
@@ -122,12 +128,9 @@ object SimdQ1 extends App {
 
       profiler.pause
       val scan = profiler.stop
-      println("Decode Others: count %d, time %d".format(shipDateReader.getTotalValueCount, scan.wallclock))
+      println("Decode: count %d, time %d".format(shipDateReader.getTotalValueCount, scan.wallclock))
     }
   })
 
   println("Total time: %d".format(time.wallclock))
-
-
-
 }

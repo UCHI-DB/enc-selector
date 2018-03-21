@@ -49,7 +49,6 @@ object ExecuteQ6 extends App {
       // tax 7
       // line status 9
       // ship date 10
-      // ship date <= '1998-09-01'
       // Scan ship date to generate bitmap
 
       profiler.reset
