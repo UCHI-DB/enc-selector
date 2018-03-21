@@ -37,7 +37,7 @@ import org.apache.parquet.column.page.DataPage.Visitor
 import org.apache.parquet.column.page.{DataPageV1, DataPageV2, PageReadStore}
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 
-object ExecuteQ1 extends App {
+object SimdQ1 extends App {
 
   val profiler = new Profiler
 
