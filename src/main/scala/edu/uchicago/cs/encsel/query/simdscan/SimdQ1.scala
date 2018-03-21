@@ -58,10 +58,14 @@ object SimdQ1 extends App {
       profiler.mark
 
       val shipDateCol = TPCHSchema.lineitemSchema.getColumns().get(10)
-
+      val quantityCol = TPCHSchema.lineitemSchema.getColumns().get(4)
+      val lineStatusCol = TPCHSchema.lineitemSchema.getColumns.get(9)
       val shipDateReader = new ColumnReaderImpl(shipDateCol, rowGroup.getPageReader(shipDateCol),
         new NonePrimitiveConverter, version)
-
+      val quantityReader = new ColumnReaderImpl(quantityCol, rowGroup.getPageReader(quantityCol),
+        new NonePrimitiveConverter, version)
+      val lineStatusReader = new ColumnReaderImpl(lineStatusCol, rowGroup.getPageReader(lineStatusCol),
+        new NonePrimitiveConverter, version)
       // Generate bitmap
       //      val bitmap = new RoaringBitmap
       //      for (i <- 0L until shipDateReader.getTotalValueCount) {
@@ -73,19 +77,19 @@ object SimdQ1 extends App {
       //      }
       val bitmap = new RoaringBitmap
       val scanner = new SimdScanner()
-      val pageReader = rowGroup.getPageReader(shipDateCol)
-      var page = pageReader.readPage()
-      while (page != null) {
-        page.accept(new Visitor[ByteBuffer]() {
+      val shipDatePageReader = rowGroup.getPageReader(shipDateCol)
+      var shipDatePage = shipDatePageReader.readPage()
+      while (shipDatePage != null) {
+       shipDatePage.accept(new Visitor[ByteBuffer]() {
           override def visit(dataPageV1: DataPageV1): ByteBuffer = {
-            scanner.scanBitpacked(dataPageV1.getBytes.toByteBuffer,0,100,5,10)
+            scanner.scanBitpacked(dataPageV1.getBytes.toByteBuffer,0,dataPageV1.getValueCount,5,10)
           }
 
           override def visit(dataPageV2: DataPageV2): ByteBuffer = {
-            scanner.scanBitpacked(dataPageV2.getData.toByteBuffer,0,100,5,10)
+            scanner.scanBitpacked(dataPageV2.getData.toByteBuffer,0,dataPageV2.getValueCount,5,10)
           }
         })
-        page = pageReader.readPage()
+        shipDatePage = shipDatePageReader.readPage()
       }
 
       profiler.pause
@@ -94,34 +98,68 @@ object SimdQ1 extends App {
       println("Generate Native Bitmap: count %d, time %d".format(shipDateReader.getTotalValueCount, genbm.wallclock))
 
 
-//      profiler.reset
-//      profiler.mark
-//      // Use bitmap to scan and decode other columns
-//      val selected = Array(4, 5, 6, 7, 9).map(i => {
-//        val cd = TPCHSchema.lineitemSchema.getColumns().get(i)
-//        new ColumnReaderImpl(cd, rowGroup.getPageReader(cd), new NonePrimitiveConverter, version)
-//      })
-//
-//      var counter = 0
-//      // Scan all columns
-//      bitmap.foreach((index) => {
-//        while (counter < index) {
-//          selected.foreach(col => {
-//            col.skip()
-//            col.consume()
-//          })
-//          counter += 1
-//        }
-//        selected.foreach(col => {
-//          col.writeCurrentValueToConverter()
-//          col.consume()
-//        })
-//        counter += 1
-//      })
-//
-//      profiler.pause
-//      val scan = profiler.stop
-//      println("Decode: count %d, time %d".format(shipDateReader.getTotalValueCount, scan.wallclock))
+      val quantityPageReader = rowGroup.getPageReader(quantityCol)
+      var quantityPage = quantityPageReader.readPage()
+      while (quantityPage != null) {
+        quantityPage.accept(new Visitor[ByteBuffer]() {
+          override def visit(dataPageV1: DataPageV1): ByteBuffer = {
+            scanner.decodeBitpacked(dataPageV1.getBytes.toByteBuffer,0,dataPageV1.getValueCount,13)
+          }
+
+          override def visit(dataPageV2: DataPageV2): ByteBuffer = {
+            scanner.decodeBitpacked(dataPageV2.getData.toByteBuffer,0,dataPageV2.getValueCount,13)
+          }
+        })
+        quantityPage = quantityPageReader.readPage()
+      }
+      val lsPageReader = rowGroup.getPageReader(lineStatusCol)
+      var lsPage = lsPageReader.readPage()
+      while (lsPage != null) {
+        val dataBuffer = lsPage.accept(new Visitor[ByteBuffer]() {
+          override def visit(dataPageV1: DataPageV1): ByteBuffer = {
+            scanner.decodeBitpacked(dataPageV1.getBytes.toByteBuffer,0,dataPageV1.getValueCount,2)
+          }
+
+          override def visit(dataPageV2: DataPageV2): ByteBuffer = {
+            scanner.decodeBitpacked(dataPageV2.getData.toByteBuffer,0,dataPageV2.getValueCount,2)
+          }
+        })
+
+        lsPage = lsPageReader.readPage()
+      }
+
+      profiler.pause
+      val scanbm = profiler.stop
+
+      println("Decode Native: count %d, time %d".format(shipDateReader.getTotalValueCount, scanbm.wallclock))
+      profiler.reset
+      profiler.mark
+      // Use bitmap to scan and decode other columns
+      val selected = Array(5, 6, 7).map(i => {
+        val cd = TPCHSchema.lineitemSchema.getColumns().get(i)
+        new ColumnReaderImpl(cd, rowGroup.getPageReader(cd), new NonePrimitiveConverter, version)
+      })
+
+      var counter = 0
+      // Scan all columns
+      bitmap.foreach((index) => {
+        while (counter < index) {
+          selected.foreach(col => {
+            col.skip()
+            col.consume()
+          })
+          counter += 1
+        }
+        selected.foreach(col => {
+          col.writeCurrentValueToConverter()
+          col.consume()
+        })
+        counter += 1
+      })
+
+      profiler.pause
+      val scan = profiler.stop
+      println("Decode Others: count %d, time %d".format(shipDateReader.getTotalValueCount, scan.wallclock))
     }
   })
 

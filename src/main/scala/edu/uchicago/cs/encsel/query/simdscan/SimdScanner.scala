@@ -29,4 +29,5 @@ class SimdScanner {
   System.loadLibrary("simdscan")
 
   @native def scanBitpacked(input: ByteBuffer, offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;
+  @native def decodeBitpacked(input: ByteBuffer, offset: Int, size: Int, entryWidth: Int): ByteBuffer;
 }
