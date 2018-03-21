@@ -26,7 +26,7 @@ package edu.uchicago.cs.encsel.query.simdscan
 import java.nio.ByteBuffer
 
 class SimdScanner {
-  System.loadLibrary("simdscanner")
+  System.loadLibrary("simdscan")
 
   @native def scanBitpacked(input: ByteBuffer, offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;
 }
