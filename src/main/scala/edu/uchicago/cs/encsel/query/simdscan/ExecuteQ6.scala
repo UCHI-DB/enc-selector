@@ -114,7 +114,7 @@ object ExecuteQ6 extends App {
       profiler.mark
 
       // Use bitmap to scan other columns
-      val selected = Array(5, 6).map(i => {
+      val selected = Array(5).map(i => {
         val cd = TPCHSchema.lineitemSchema.getColumns().get(i)
         new ColumnReaderImpl(cd, rowGroup.getPageReader(cd), new NonePrimitiveConverter, version)
       })
