@@ -30,48 +30,10 @@ import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.DataPage.Visitor
 import org.apache.parquet.column.page.{DataPageV1, DataPageV2, PageReader}
 
-object SimdScanner {
+class SimdScanner {
   System.loadLibrary("simdscan")
-
   @native def scanBitpacked(input: ByteBuffer, offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;
   @native def decodeBitpacked(input: ByteBuffer, offset: Int, size: Int, entryWidth: Int): ByteBuffer;
-
-  def scanBitpackedColumn(cd:ColumnDescriptor, reader:PageReader,total:Long,entryWidth:Int): ByteBuffer= {
-    var page = reader.readPage()
-    val buffer = ByteBuffer.allocateDirect(total.toInt*2)
-    while (page != null) {
-      val pageResult = page.accept(new Visitor[ByteBuffer]() {
-        override def visit(dataPageV1: DataPageV1): ByteBuffer = {
-          scanBitpacked(dataPageV1.getBytes.toByteBuffer, 0, dataPageV1.getValueCount, 5, entryWidth)
-        }
-
-        override def visit(dataPageV2: DataPageV2): ByteBuffer = {
-          scanBitpacked(dataPageV2.getData.toByteBuffer, 0, dataPageV2.getValueCount, 5, 10)
-        }
-      })
-      page = reader.readPage()
-      buffer.put(pageResult)
-    }
-    return buffer
-  }
-
-  def decodeBitpackedColumn(cd:ColumnDescriptor, reader:PageReader,total:Long, entryWidth:Int):ByteBuffer= {
-    var page = reader.readPage()
-    val buffer = ByteBuffer.allocateDirect(total.toInt*2)
-    while (page != null) {
-      val pageResult= page.accept(new Visitor[ByteBuffer]() {
-        override def visit(dataPageV1: DataPageV1): ByteBuffer = {
-          decodeBitpacked(dataPageV1.getBytes.toByteBuffer,0,dataPageV1.getValueCount,13)
-        }
-
-        override def visit(dataPageV2: DataPageV2): ByteBuffer = {
-          decodeBitpacked(dataPageV2.getData.toByteBuffer,0,dataPageV2.getValueCount,13)
-        }
-      })
-
-      buffer.put(pageResult)
-      page = reader.readPage()
-    }
-    buffer
-  }
 }
+
+

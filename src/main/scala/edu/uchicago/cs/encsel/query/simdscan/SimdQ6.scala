@@ -59,7 +59,7 @@ object SimdQ6 extends App {
       val quantityReader = new ColumnReaderImpl(quantityCol, rowGroup.getPageReader(quantityCol),
         new NonePrimitiveConverter, version)
 
-      SimdScanner.scanBitpackedColumn(quantityCol,rowGroup.getPageReader(quantityCol),meta.getRowCount,15)
+      SimdScan.scanBitpackedColumn(quantityCol,rowGroup.getPageReader(quantityCol),meta.getRowCount,15)
 
       profiler.pause
       val qscan = profiler.stop
@@ -69,7 +69,7 @@ object SimdQ6 extends App {
       val shipDateCol = TPCHSchema.lineitemSchema.getColumns().get(10)
       val shipDateReader = new ColumnReaderImpl(shipDateCol, rowGroup.getPageReader(shipDateCol),
         new NonePrimitiveConverter, version)
-      SimdScanner.scanBitpackedColumn(shipDateCol,rowGroup.getPageReader(shipDateCol),meta.getRowCount,13)
+      SimdScan.scanBitpackedColumn(shipDateCol,rowGroup.getPageReader(shipDateCol),meta.getRowCount,13)
 
       profiler.pause
       val sscan = profiler.stop

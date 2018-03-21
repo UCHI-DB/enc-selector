@@ -78,7 +78,7 @@ object SimdQ1 extends App {
       //      }
       val bitmap = new RoaringBitmap
       val shipDatePageReader = rowGroup.getPageReader(shipDateCol)
-      SimdScanner.scanBitpackedColumn(shipDateCol,shipDatePageReader,meta.getRowCount ,13)
+      SimdScan.scanBitpackedColumn(shipDateCol,shipDatePageReader,meta.getRowCount ,13)
 
       profiler.pause
       val genbm = profiler.stop
@@ -86,10 +86,10 @@ object SimdQ1 extends App {
       println("Generate Native Bitmap: count %d, time %d".format(shipDateReader.getTotalValueCount, genbm.wallclock))
 
       val quantityPageReader = rowGroup.getPageReader(quantityCol)
-      SimdScanner.decodeBitpackedColumn(quantityCol,quantityPageReader,meta.getRowCount,15)
+      SimdScan.decodeBitpackedColumn(quantityCol,quantityPageReader,meta.getRowCount,15)
 
       val lsPageReader = rowGroup.getPageReader(lineStatusCol)
-      SimdScanner.decodeBitpackedColumn(lineStatusCol,lsPageReader,meta.getRowCount,2)
+      SimdScan.decodeBitpackedColumn(lineStatusCol,lsPageReader,meta.getRowCount,2)
 
       profiler.pause
       val scanbm = profiler.stop
