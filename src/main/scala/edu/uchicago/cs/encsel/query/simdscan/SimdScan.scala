@@ -43,7 +43,7 @@ object SimdScan{
         }
 
         override def visit(dataPageV2: DataPageV2): ByteBuffer = {
-          simdScanner.scanBitpacked(dataPageV2.getData.toByteBuffer, 0, dataPageV2.getValueCount, 5, 10)
+          simdScanner.scanBitpacked(dataPageV2.getData.toByteBuffer, 0, dataPageV2.getValueCount, 5, entryWidth)
         }
       })
       page = reader.readPage()
@@ -58,11 +58,11 @@ object SimdScan{
     while (page != null) {
       val pageResult= page.accept(new Visitor[ByteBuffer]() {
         override def visit(dataPageV1: DataPageV1): ByteBuffer = {
-          simdScanner.decodeBitpacked(dataPageV1.getBytes.toByteBuffer,0,dataPageV1.getValueCount,13)
+          simdScanner.decodeBitpacked(dataPageV1.getBytes.toByteBuffer,0,dataPageV1.getValueCount,entryWidth)
         }
 
         override def visit(dataPageV2: DataPageV2): ByteBuffer = {
-          simdScanner.decodeBitpacked(dataPageV2.getData.toByteBuffer,0,dataPageV2.getValueCount,13)
+          simdScanner.decodeBitpacked(dataPageV2.getData.toByteBuffer,0,dataPageV2.getValueCount,entryWidth)
         }
       })
 
