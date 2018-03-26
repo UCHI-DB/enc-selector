@@ -14,39 +14,26 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package org.apache.parquet.bytes;
+package edu.uchicago.cs.encsel.query.simdscan
 
-import java.nio.ByteBuffer;
+import java.nio.ByteBuffer
 
+import org.apache.parquet.column.ColumnDescriptor
+import org.apache.parquet.column.impl.ColumnReaderImpl
+import org.apache.parquet.column.page.DataPage.Visitor
+import org.apache.parquet.column.page.{DataPageV1, DataPageV2, PageReader}
 
-public class HeapByteBufferAllocator implements ByteBufferAllocator {
-
-    public static final HeapByteBufferAllocator getInstance() {
-        return new HeapByteBufferAllocator();
-    }
-
-    public HeapByteBufferAllocator() {
-        super();
-    }
-
-    public ByteBuffer allocate(final int size) {
-        return ByteBuffer.allocateDirect(size);
-    }
-
-    @Override
-    public void release(ByteBuffer b) {
-        // The ByteBuffer.allocateDirect
-        return;
-    }
-
-    @Override
-    public boolean isDirect() {
-        return true;
-    }
+class SimdScanner {
+  System.loadLibrary("simdscan")
+  @native def scanBitpacked(input: ByteBuffer, offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;
+  @native def decodeBitpacked(input: ByteBuffer, offset: Int, size: Int, entryWidth: Int): ByteBuffer;
 }
+
+

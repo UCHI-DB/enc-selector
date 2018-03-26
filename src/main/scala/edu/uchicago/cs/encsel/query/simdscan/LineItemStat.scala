@@ -20,33 +20,17 @@
  *     Hao Jiang - initial API and implementation
  */
 
-package org.apache.parquet.bytes;
+package edu.uchicago.cs.encsel.query.simdscan
 
-import java.nio.ByteBuffer;
+import java.io.File
 
+import scala.io.Source
 
-public class HeapByteBufferAllocator implements ByteBufferAllocator {
+object LineItemStat extends App {
 
-    public static final HeapByteBufferAllocator getInstance() {
-        return new HeapByteBufferAllocator();
-    }
-
-    public HeapByteBufferAllocator() {
-        super();
-    }
-
-    public ByteBuffer allocate(final int size) {
-        return ByteBuffer.allocateDirect(size);
-    }
-
-    @Override
-    public void release(ByteBuffer b) {
-        // The ByteBuffer.allocateDirect
-        return;
-    }
-
-    @Override
-    public boolean isDirect() {
-        return true;
-    }
+  println(Source.fromFile(new File("/home/harper/TPCH/simdscan/lineitem.tbl")).getLines().map(line=>{
+    val pieces = line.split("\\|")
+    val shipdate = pieces(9)
+    shipdate
+  }).toSet.mkString(","))
 }
