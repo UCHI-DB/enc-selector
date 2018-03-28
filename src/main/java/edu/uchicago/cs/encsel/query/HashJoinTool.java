@@ -37,8 +37,8 @@ import java.io.File;
 public class HashJoinTool {
 
     public static void main(String[] args) {
-        String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
-        String part = "/home/cc/tpch-generator/dbgen/part";
+        String lineitem = "../tpch-generator/dbgen/lineitem";
+        String part = "../tpch-generator/dbgen/part";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 1);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);

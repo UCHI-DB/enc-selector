@@ -23,10 +23,15 @@ package edu.uchicago.cs.encsel.parquet;
 
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
+import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
+import org.apache.parquet.io.api.Binary;
+import org.apache.parquet.it.unimi.dsi.fastutil.ints.Int2IntMap;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -137,7 +142,8 @@ public class ParquetWriterHelperTest {
     public void testBuildGlobalDict(){
         String lineitem = "../tpch-generator/dbgen/lineitem";
         String part = "../tpch-generator/dbgen/part";
-        HashMap<String, Integer> dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 0);
-        System.out.println(dict.toString());
+        Object2IntMap<Binary> dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 4, TPCHSchema.partSchema());
+        System.out.println(dict.containsKey(Binary.fromString("SMAL BRUSHED COPPER")));
+
     }
 }

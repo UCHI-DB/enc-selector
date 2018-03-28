@@ -27,7 +27,12 @@ import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.LongEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
 import org.apache.hadoop.fs.Path;
+import org.apache.parquet.column.values.dictionary.PlainValuesDictionary;
 import org.apache.parquet.hadoop.ParquetWriter;
+import org.apache.parquet.io.ParquetDecodingException;
+import org.apache.parquet.io.api.Binary;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.apache.parquet.schema.MessageType;
 import org.apache.parquet.schema.PrimitiveType;
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
@@ -105,27 +110,131 @@ public class ParquetWriterHelper {
         }
     }
 
-    public static HashMap<String, Integer> buildGlobalDict(URI input, int index) {
+    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File(input)));
-            int maxBitLength = 0;
             String line;
             String[] list;
-            HashMap<String, Integer> globalDict = new HashMap<String, Integer>();
-            Set<String> set = new TreeSet<>();
-            while ((line = br.readLine()) != null) {
-                list = line.split("\\|");
-                if (line.isEmpty())
-                    continue;
-                set.add(list[index]);
-            }
-            br.close();
+            PrimitiveTypeName typeName = schema.getColumns().get(index).getType();
+            System.out.println(typeName);
+            Object2IntMap dictionaryContent = null;
             int i = 0;
-            for (String item : set) {
-                globalDict.put(item, i);
-                i++;
+            switch (typeName) {
+                case BINARY:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
+                    TreeSet<Binary> treeSet = new TreeSet<Binary>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        treeSet.add(Binary.fromString(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Binary item : treeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                case FIXED_LEN_BYTE_ARRAY:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
+                    TreeSet<Binary> FtreeSet = new TreeSet<Binary>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        FtreeSet.add(Binary.fromString(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Binary item : FtreeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                case INT96:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
+                    TreeSet<Binary> I96treeSet = new TreeSet<Binary>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        I96treeSet.add(Binary.fromString(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Binary item : I96treeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                case INT64:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Long>();
+                    TreeSet<Long> LongTreeSet = new TreeSet<Long>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        LongTreeSet.add(Long.parseLong(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Long item : LongTreeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                case DOUBLE:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Double>();
+                    TreeSet<Double> DoubleTreeSet = new TreeSet<Double>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        DoubleTreeSet.add(Double.parseDouble(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Double item : DoubleTreeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                case INT32:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Integer>();
+                    TreeSet<Integer> IntTreeSet = new TreeSet<Integer>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        IntTreeSet.add(Integer.parseInt(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Integer item : IntTreeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                case FLOAT:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Float>();
+                    TreeSet<Float> FloatTreeSet = new TreeSet<Float>();
+                    while ((line = br.readLine()) != null) {
+                        list = line.split("\\|");
+                        if (line.isEmpty())
+                            continue;
+                        FloatTreeSet.add(Float.parseFloat(list[index]));
+                    }
+                    br.close();
+                    i = 0;
+                    for (Float item : FloatTreeSet) {
+                        dictionaryContent.put(item, i);
+                        i++;
+                    }
+                    return dictionaryContent;
+                default:
+                    throw new ParquetDecodingException("Dictionary encoding not supported for type: " + typeName);
             }
-            return globalDict;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

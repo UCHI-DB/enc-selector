@@ -38,8 +38,8 @@ import java.io.File;
 public class NLJoinTool {
 
     public static void main(String[] args) {
-        String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
-        String part = "/home/cc/tpch-generator/dbgen/part";
+        String lineitem = "../tpch-generator/dbgen/lineitem";
+        String part = "../tpch-generator/dbgen/part";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 1);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);
@@ -63,7 +63,7 @@ public class NLJoinTool {
             profiler.mark();
             System.out.println(EncContext.context.get().get(TPCHSchema.partSchema().getColumns().get(0).toString())[1]);
             //TODO NestedLoopJoin interface to be reshaped
-            int numblock = 3;
+            int numblock = 10;
             TempTable result = new BlockNestedLoopJoin(numblock).join(new File(part+".parquet").toURI(), TPCHSchema.partSchema(),
                     new File(lineitem+".parquet").toURI(), TPCHSchema.lineitemSchema(),
                     joinindex, new int[]{0}, new int[]{5, 6});

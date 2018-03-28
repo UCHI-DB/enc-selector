@@ -68,10 +68,21 @@ class BlockNestedLoopJoin(val numBlock: Int) extends Join {
           .map(i => new PipePrimitiveConverter(leftProjectSchema.getType(i).asPrimitiveType()))
         val colReaders = leftProjectSchema.getColumns.zip(colConverters).map(col =>
           new ColumnReaderImpl(col._1, rowGroup.getPageReader(col._1), col._2, version))
+        println("before read key values")
+        val leftIndex = leftProject.indexOf(joinKey._1)
 
-        val keyCol = leftSchema.getColumns()(joinKey._1)
+        val keyReader = leftIndex match {
+          case -1 => {
+            val leftKeyCol = leftSchema.getColumns()(joinKey._1)
+            new ColumnReaderImpl(leftKeyCol, rowGroup.getPageReader(leftKeyCol),
+              new PipePrimitiveConverter(leftSchema.getType(joinKey._1).asPrimitiveType()), version)
+          }
+          case i => {
+            colReaders(i)
+          }
+        }
+
         val keyConverter = new PipePrimitiveConverter(leftSchema.getType(joinKey._1).asPrimitiveType())
-        val keyReader = new ColumnReaderImpl(keyCol, rowGroup.getPageReader(keyCol), keyConverter, version)
 
         val placements = new ArrayBuffer[Int]()
         for (i <- 0L until rowGroup.getRowCount) {
@@ -87,6 +98,7 @@ class BlockNestedLoopJoin(val numBlock: Int) extends Join {
         colReaders.zipWithIndex.foreach(rp => {
           val reader = rp._1
           val index = rp._2
+          println(rp._1+" read key values "+rp._2)
           for (i <- 0L until rowGroup.getRowCount) {
             val placement = placements(i.toInt)
             colConverters(index).setNext(leftBlocks(placement).getConverter(index).asPrimitiveConverter())
