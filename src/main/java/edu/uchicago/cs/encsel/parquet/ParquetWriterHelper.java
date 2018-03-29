@@ -110,6 +110,30 @@ public class ParquetWriterHelper {
         }
     }
 
+    public static <T> String globalDict2Str(Object2IntMap<T> globDict) {
+        StringBuilder ret = new StringBuilder();
+        Iterator<T> objIterator = globDict.keySet().iterator();
+        T firstKey = objIterator.next() ;
+        if (firstKey instanceof Binary) {
+            objIterator = globDict.keySet().iterator();
+            Binary cur = (Binary)firstKey;
+            while (objIterator.hasNext()) {
+                cur = (Binary)objIterator.next();
+                ret.append(cur.toStringUsingUTF8());
+                ret.append("|");
+            }
+            ret.deleteCharAt(ret.length()-1);
+            return ret.toString();
+        }
+        objIterator = globDict.keySet().iterator();
+        while (objIterator.hasNext()){
+            ret.append(objIterator.next().toString());
+            ret.append("|");
+        }
+        ret.deleteCharAt(ret.length()-1);
+        return ret.toString();
+    }
+
     public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File(input)));
@@ -306,7 +330,7 @@ public class ParquetWriterHelper {
         writer.close();
         
         profiler.pause();
-        System.out.println(String.format("prodeucing parquet file, %s,%d,%d,%d", compression, profiler.wcsum(), profiler.cpusum(),profiler.usersum()));
+        System.out.println(String.format("producing parquet file, %s,%d,%d,%d", compression, profiler.wcsum(), profiler.cpusum(),profiler.usersum()));
         
     }
 

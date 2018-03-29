@@ -87,7 +87,7 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
 
         /* type specific dictionary content */
         protected Object2IntMap<Binary> binaryDictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
-        protected Object2IntMap<Binary> globalDict = super.globalDict;
+        protected Object2IntMap<Binary> globalDict;
         /**
          * @param maxDictionaryByteSize
          */
@@ -97,14 +97,22 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         }
 
         @Override
+        public void setGlobalDict(Object2IntMap globalDict) {
+            this.globalDict = globalDict;
+        }
+
+        @Override
         public void writeBytes(Binary v) {
+            //System.out.println("global:"+ v.toString() + " " +globalDict.get(v));
             int id = binaryDictionaryContent.getInt(v);
+            //System.out.println("Local:"+ v.toStringUsingUTF8() + " " +id);
             if (id == -1) {
                 id = binaryDictionaryContent.size();
                 binaryDictionaryContent.put(v.copy(), id);
                 // length as int (4 bytes) + actual bytes
                 dictionaryByteSize += 4 + v.length();
             }
+
             encodedValues.add(globalDict.get(v));
         }
 
@@ -138,7 +146,7 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public void fallBackDictionaryEncodedData(ValuesWriter writer) {
             //build reverse dictionary
             Binary[] reverseDictionary = new Binary[getDictionarySize()];
-            for (Object2IntMap.Entry<Binary> entry : binaryDictionaryContent.object2IntEntrySet()) {
+            for (Object2IntMap.Entry<Binary> entry : globalDict.object2IntEntrySet()) {
                 reverseDictionary[entry.getIntValue()] = entry.getKey();
             }
 
@@ -212,6 +220,11 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         }
 
         @Override
+        public void setGlobalDict(Object2IntMap globalDict) {
+            this.globalDict = globalDict;
+        }
+
+        @Override
         public void writeLong(long v) {
             int id = longDictionaryContent.get(v);
             if (id == -1) {
@@ -251,10 +264,10 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public void fallBackDictionaryEncodedData(ValuesWriter writer) {
             //build reverse dictionary
             long[] reverseDictionary = new long[getDictionarySize()];
-            ObjectIterator<Long2IntMap.Entry> entryIterator = longDictionaryContent.long2IntEntrySet().iterator();
+            ObjectIterator<Object2IntMap.Entry<Long>> entryIterator = globalDict.object2IntEntrySet().iterator();
             while (entryIterator.hasNext()) {
-                Long2IntMap.Entry entry = entryIterator.next();
-                reverseDictionary[entry.getIntValue()] = entry.getLongKey();
+                Object2IntMap.Entry entry = entryIterator.next();
+                reverseDictionary[entry.getIntValue()] = (Long) entry.getKey();
             }
 
             //fall back to plain encoding
@@ -281,6 +294,11 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public PlainDoubleGlobalDictionaryValuesWriter(int maxDictionaryByteSize, Encoding encodingForDataPage, Encoding encodingForDictionaryPage, ByteBufferAllocator allocator) {
             super(maxDictionaryByteSize, encodingForDataPage, encodingForDictionaryPage, allocator);
             doubleDictionaryContent.defaultReturnValue(-1);
+        }
+
+        @Override
+        public void setGlobalDict(Object2IntMap globalDict) {
+            this.globalDict = globalDict;
         }
 
         @Override
@@ -323,10 +341,10 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public void fallBackDictionaryEncodedData(ValuesWriter writer) {
             //build reverse dictionary
             double[] reverseDictionary = new double[getDictionarySize()];
-            ObjectIterator<Double2IntMap.Entry> entryIterator = doubleDictionaryContent.double2IntEntrySet().iterator();
+            ObjectIterator<Object2IntMap.Entry<Double>> entryIterator = globalDict.object2IntEntrySet().iterator();
             while (entryIterator.hasNext()) {
-                Double2IntMap.Entry entry = entryIterator.next();
-                reverseDictionary[entry.getIntValue()] = entry.getDoubleKey();
+                Object2IntMap.Entry entry = entryIterator.next();
+                reverseDictionary[entry.getIntValue()] = (Double)entry.getKey();
             }
 
             //fall back to plain encoding
@@ -354,6 +372,11 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public PlainIntegerGlobalDictionaryValuesWriter(int maxDictionaryByteSize, Encoding encodingForDataPage, Encoding encodingForDictionaryPage, ByteBufferAllocator allocator) {
             super(maxDictionaryByteSize, encodingForDataPage, encodingForDictionaryPage, allocator);
             intDictionaryContent.defaultReturnValue(-1);
+        }
+
+        @Override
+        public void setGlobalDict(Object2IntMap globalDict) {
+            this.globalDict = globalDict;
         }
 
         @Override
@@ -396,10 +419,10 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public void fallBackDictionaryEncodedData(ValuesWriter writer) {
             //build reverse dictionary
             int[] reverseDictionary = new int[getDictionarySize()];
-            ObjectIterator<Int2IntMap.Entry> entryIterator = intDictionaryContent.int2IntEntrySet().iterator();
+            ObjectIterator<Object2IntMap.Entry<Integer>> entryIterator = globalDict.object2IntEntrySet().iterator();
             while (entryIterator.hasNext()) {
-                Int2IntMap.Entry entry = entryIterator.next();
-                reverseDictionary[entry.getIntValue()] = entry.getIntKey();
+                Object2IntMap.Entry entry = entryIterator.next();
+                reverseDictionary[entry.getIntValue()] = (Integer)entry.getKey();
             }
 
             //fall back to plain encoding
@@ -427,6 +450,11 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public PlainFloatGlobalDictionaryValuesWriter(int maxDictionaryByteSize, Encoding encodingForDataPage, Encoding encodingForDictionaryPage, ByteBufferAllocator allocator) {
             super(maxDictionaryByteSize, encodingForDataPage, encodingForDictionaryPage, allocator);
             floatDictionaryContent.defaultReturnValue(-1);
+        }
+
+        @Override
+        public void setGlobalDict(Object2IntMap globalDict) {
+            this.globalDict = globalDict;
         }
 
         @Override
@@ -469,10 +497,10 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public void fallBackDictionaryEncodedData(ValuesWriter writer) {
             //build reverse dictionary
             float[] reverseDictionary = new float[getDictionarySize()];
-            ObjectIterator<Float2IntMap.Entry> entryIterator = floatDictionaryContent.float2IntEntrySet().iterator();
+            ObjectIterator<Object2IntMap.Entry<Float>> entryIterator = globalDict.object2IntEntrySet().iterator();
             while (entryIterator.hasNext()) {
-                Float2IntMap.Entry entry = entryIterator.next();
-                reverseDictionary[entry.getIntValue()] = entry.getFloatKey();
+                Object2IntMap.Entry entry = entryIterator.next();
+                reverseDictionary[entry.getIntValue()] = (Float)entry.getKey();
             }
 
             //fall back to plain encoding

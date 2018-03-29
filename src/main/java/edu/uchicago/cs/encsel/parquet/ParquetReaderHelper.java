@@ -1,5 +1,6 @@
 package edu.uchicago.cs.encsel.parquet;
 
+import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import edu.uchicago.cs.encsel.util.perf.ProfileBean;
 import edu.uchicago.cs.encsel.util.perf.Profiler;
 import org.apache.hadoop.conf.Configuration;
@@ -8,18 +9,22 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
+import org.apache.parquet.column.page.DictionaryPage;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.filter2.compat.FilterCompat;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.hadoop.util.HiddenFileFilter;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.io.File;
+import java.util.Map;
 
 public class ParquetReaderHelper {
     public static void read(URI file, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {
@@ -78,6 +83,27 @@ public class ParquetReaderHelper {
         }
         return profiler.stop();
     }
+
+    public static void getGlobalDict (Footer footer){
+        Map<String, String> keyValueMeta = footer.getParquetMetadata().getFileMetaData().getKeyValueMetaData();
+        List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();
+        for (ColumnDescriptor col : cols) {
+            if (keyValueMeta.containsKey(col.toString()+".DICT")) {
+                EncContext.dictPage.get().put(col.toString(), buildGlobalDict(keyValueMeta.get(col.toString()+".DICT")));
+            }
+        }
+    }
+
+    public static DictionaryPage buildGlobalDict(String globDict){
+        DictionaryPage page = null;
+        String[] keys = globDict.split("\\|");
+        for(int i =0 ; i<keys.length; i++){
+
+        }
+        return page;
+    }
+
+
 
     public static long getColSize(URI file, int col) throws IOException, VersionParser.VersionParseException {
         Configuration conf = new Configuration();

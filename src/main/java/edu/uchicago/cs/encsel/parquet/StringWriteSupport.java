@@ -28,6 +28,7 @@ import org.apache.parquet.hadoop.api.WriteSupport;
 import org.apache.parquet.io.ParquetEncodingException;
 import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.io.api.RecordConsumer;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.apache.parquet.schema.MessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +119,9 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
             extrameta.put(entry.getKey() + ".1", entry.getValue()[1].toString());
         });
 
+        EncContext.globalDict.get().entrySet().forEach((Map.Entry<String, Object2IntMap> entry) -> {
+            extrameta.put(entry.getKey() + ".DICT", ParquetWriterHelper.globalDict2Str(entry.getValue()));
+        });
         return new FinalizedWriteContext(extrameta);
     }
 }

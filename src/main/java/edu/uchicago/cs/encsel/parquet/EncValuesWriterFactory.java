@@ -38,6 +38,7 @@ import org.apache.parquet.column.values.factory.DefaultValuesWriterFactory;
 import org.apache.parquet.column.values.factory.ValuesWriterFactory;
 import org.apache.parquet.column.values.plain.PlainValuesWriter;
 import org.apache.parquet.column.values.rle.RunLengthBitPackingHybridValuesWriter;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import static org.apache.parquet.column.Encoding.PLAIN;
 import static org.apache.parquet.column.Encoding.RLE_DICTIONARY;
@@ -76,6 +77,13 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
             return delegate.newValuesWriter(descriptor);
         }
         if (enc.usesDictionary()) {
+            Object2IntMap globalDict = EncContext.globalDict.get().get(descriptor.toString());
+            if (globalDict != null){
+                GlobalDictionaryValuesWriter globalDictValueWriter = globalDictionaryWriter(descriptor, parquetProperties,
+                        getEncodingForDictionaryPage(), getEncodingForDataPage());
+                globalDictValueWriter.setGlobalDict(globalDict);
+                return globalDictValueWriter;
+            }
             return dictionaryWriter(descriptor, parquetProperties, getEncodingForDictionaryPage(),
                     getEncodingForDataPage());
         }
@@ -210,6 +218,43 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
                         properties.getAllocator());
             case FIXED_LEN_BYTE_ARRAY:
                 return new DictionaryValuesWriter.PlainFixedLenArrayDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), path.getTypeLength(), dataPageEncoding,
+                        dictPageEncoding, properties.getAllocator());
+            default:
+                throw new IllegalArgumentException("Unknown type " + path.getType());
+        }
+    }
+    static GlobalDictionaryValuesWriter globalDictionaryWriter(ColumnDescriptor path, ParquetProperties properties,
+                                                   Encoding dictPageEncoding, Encoding dataPageEncoding) {
+        switch (path.getType()) {
+            case BOOLEAN:
+                throw new IllegalArgumentException("no dictionary encoding for BOOLEAN");
+            case BINARY:
+                return new GlobalDictionaryValuesWriter.PlainBinaryGlobalDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), dataPageEncoding, dictPageEncoding,
+                        properties.getAllocator());
+            case INT32:
+                return new GlobalDictionaryValuesWriter.PlainIntegerGlobalDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), dataPageEncoding, dictPageEncoding,
+                        properties.getAllocator());
+            case INT64:
+                return new GlobalDictionaryValuesWriter.PlainLongGlobalDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), dataPageEncoding, dictPageEncoding,
+                        properties.getAllocator());
+            case INT96:
+                return new GlobalDictionaryValuesWriter.PlainFixedLenArrayGlobalDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), 12, dataPageEncoding, dictPageEncoding,
+                        properties.getAllocator());
+            case DOUBLE:
+                return new GlobalDictionaryValuesWriter.PlainDoubleGlobalDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), dataPageEncoding, dictPageEncoding,
+                        properties.getAllocator());
+            case FLOAT:
+                return new GlobalDictionaryValuesWriter.PlainFloatGlobalDictionaryValuesWriter(
+                        properties.getDictionaryPageSizeThreshold(), dataPageEncoding, dictPageEncoding,
+                        properties.getAllocator());
+            case FIXED_LEN_BYTE_ARRAY:
+                return new GlobalDictionaryValuesWriter.PlainFixedLenArrayGlobalDictionaryValuesWriter(
                         properties.getDictionaryPageSizeThreshold(), path.getTypeLength(), dataPageEncoding,
                         dictPageEncoding, properties.getAllocator());
             default:

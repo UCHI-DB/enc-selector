@@ -29,9 +29,11 @@ import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.io.api.Binary;
+import org.apache.parquet.it.unimi.dsi.fastutil.doubles.Double2IntMap;
 import org.apache.parquet.it.unimi.dsi.fastutil.ints.Int2IntMap;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectIterator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -142,8 +143,14 @@ public class ParquetWriterHelperTest {
     public void testBuildGlobalDict(){
         String lineitem = "../tpch-generator/dbgen/lineitem";
         String part = "../tpch-generator/dbgen/part";
-        Object2IntMap<Binary> dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 4, TPCHSchema.partSchema());
+        Object2IntMap dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 2, TPCHSchema.partSchema());
         System.out.println(dict.containsKey(Binary.fromString("SMAL BRUSHED COPPER")));
+        System.out.println(dict);
+        ObjectIterator<Object2IntMap.Entry> entryIterator = dict.object2IntEntrySet().iterator();
+        while (entryIterator.hasNext()) {
+            Object2IntMap.Entry entry = entryIterator.next();
+            System.out.println(entry.getKey());
+        }
 
     }
 }
