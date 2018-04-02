@@ -9,24 +9,32 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
+import org.apache.parquet.column.Encoding;
+import org.apache.parquet.column.ParquetProperties;
 import org.apache.parquet.column.page.DictionaryPage;
 import org.apache.parquet.column.page.PageReadStore;
+import org.apache.parquet.column.values.ValuesWriter;
+import org.apache.parquet.column.values.plain.FixedLenByteArrayPlainValuesWriter;
+import org.apache.parquet.column.values.plain.PlainValuesWriter;
 import org.apache.parquet.filter2.compat.FilterCompat;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.hadoop.util.HiddenFileFilter;
+import org.apache.parquet.io.ParquetDecodingException;
+import org.apache.parquet.io.api.Binary;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.io.File;
-import java.util.Map;
+
+import static org.apache.parquet.column.Encoding.PLAIN;
 
 public class ParquetReaderHelper {
+    static private ParquetProperties parquetProperties = ParquetProperties.builder().build();
     public static void read(URI file, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {
         Configuration conf = new Configuration();
         Path path = new Path(file);
@@ -89,21 +97,112 @@ public class ParquetReaderHelper {
         List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();
         for (ColumnDescriptor col : cols) {
             if (keyValueMeta.containsKey(col.toString()+".DICT")) {
-                EncContext.dictPage.get().put(col.toString(), buildGlobalDict(keyValueMeta.get(col.toString()+".DICT")));
+                //System.out.println(keyValueMeta.get(col.toString()+".DICT"));
+                EncContext.dictPage.get().put(col.toString(), buildGlobalDict(keyValueMeta.get(col.toString()+".DICT"), col));
             }
         }
     }
 
-    public static DictionaryPage buildGlobalDict(String globDict){
+    public static DictionaryPage buildGlobalDict(String globDict, ColumnDescriptor col){
         DictionaryPage page = null;
-        String[] keys = globDict.split("\\|");
-        for(int i =0 ; i<keys.length; i++){
+        String[] dictValues = globDict.split("\\|");
+        if (dictValues.length > 0) {
+            // return a dictionary only if we actually used it
+            Object2IntMap dictionaryContent = null;
+            switch (col.getType()) {
+                case BINARY:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
+                    PlainValuesWriter dictionaryEncoder = new PlainValuesWriter(dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Binary entry = Binary.fromString(dictValues[i]);
+                        dictionaryEncoder.writeBytes(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(dictionaryEncoder, dictValues.length);
 
+                case FIXED_LEN_BYTE_ARRAY:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
+                    FixedLenByteArrayPlainValuesWriter fixedDictionaryEncoder = new FixedLenByteArrayPlainValuesWriter(col.getTypeLength(), dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Binary entry = Binary.fromString(dictValues[i]);
+                        fixedDictionaryEncoder.writeBytes(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(fixedDictionaryEncoder, dictValues.length);
+
+                case INT96:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
+                    FixedLenByteArrayPlainValuesWriter i96DictionaryEncoder = new FixedLenByteArrayPlainValuesWriter(col.getTypeLength(), dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Binary entry = Binary.fromString(dictValues[i]);
+                        i96DictionaryEncoder.writeBytes(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(i96DictionaryEncoder, dictValues.length);
+
+                case INT64:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Long>();
+                    PlainValuesWriter longDictionaryEncoder = new PlainValuesWriter(dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Long entry = Long.parseLong(dictValues[i]);
+                        longDictionaryEncoder.writeLong(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(longDictionaryEncoder, dictValues.length);
+
+                case DOUBLE:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Double>();
+                    PlainValuesWriter doubleDictionaryEncoder = new PlainValuesWriter(dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Double entry = Double.parseDouble(dictValues[i]);
+                        doubleDictionaryEncoder.writeDouble(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(doubleDictionaryEncoder, dictValues.length);
+
+                case INT32:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Integer>();
+                    PlainValuesWriter intDictionaryEncoder = new PlainValuesWriter(dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Integer entry = Integer.parseInt(dictValues[i]);
+                        intDictionaryEncoder.writeInteger(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(intDictionaryEncoder, dictValues.length);
+
+                case FLOAT:
+                    dictionaryContent = new Object2IntLinkedOpenHashMap<Float>();
+                    PlainValuesWriter floatDictionaryEncoder = new PlainValuesWriter(dictValues.length, parquetProperties.getDictionaryPageSizeThreshold(), parquetProperties.getAllocator());
+                    for (int i = 0; i < dictValues.length; i++) {
+                        Float entry = Float.parseFloat(dictValues[i]);
+                        floatDictionaryEncoder.writeFloat(entry);
+                        dictionaryContent.put(entry, i);
+                    }
+                    EncContext.globalDict.get().put(col.toString(), dictionaryContent);
+                    return dictPage(floatDictionaryEncoder, dictValues.length);
+
+                default:
+                    throw new ParquetDecodingException("Dictionary encoding not supported for type: " + col.getType());
+            }
         }
-        return page;
+        return null;
     }
 
+    static protected DictionaryPage dictPage(ValuesWriter dictPageWriter, int lastUsedDictionarySize) {
+        DictionaryPage ret = new DictionaryPage(dictPageWriter.getBytes(), lastUsedDictionarySize, getEncodingForDictionaryPage());
+        dictPageWriter.close();
+        return ret;
+    }
 
+    static private Encoding getEncodingForDictionaryPage() {
+        return PLAIN;
+    }
 
     public static long getColSize(URI file, int col) throws IOException, VersionParser.VersionParseException {
         Configuration conf = new Configuration();
@@ -146,6 +245,7 @@ public class ParquetReaderHelper {
             profiler.mark();
             processor.processFooter(footer);
             profiler.pause();
+            ParquetReaderHelper.getGlobalDict(footer);
             VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
 
             ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());

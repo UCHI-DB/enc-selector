@@ -38,7 +38,7 @@ import java.io.IOException;
 public class GlobalFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"1","PLAIN_DICTIONARY", "UNCOMPRESSED"};
+        args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("ScanFileProducer pos enc compression");
             return;
@@ -46,18 +46,18 @@ public class GlobalFileProducer {
         int col = Integer.parseInt(args[0]);
         String enc = args[1];
         String compre = args[2];
-        String nation = "../tpch-generator/dbgen/nation";
+        String lineitem = "../tpch-generator/dbgen/lineitem";
 
 
-        EncContext.encoding.get().put(TPCHSchema.nationSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
-        EncContext.context.get().put(TPCHSchema.nationSchema().getColumns().get(col).toString(), new Integer[]{6,12});
-        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File("../tpch-generator/dbgen/nation.tbl").toURI(),col,TPCHSchema.nationSchema());
+        EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
+        EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{6,12});
+        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File(lineitem+".tbl").toURI(),col,TPCHSchema.lineitemSchema());
         System.out.println(dictMap);
-        EncContext.globalDict.get().put(TPCHSchema.nationSchema().getColumns().get(col).toString(), dictMap);
+        EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), dictMap);
 
-        ParquetWriterHelper.write(new File(nation+".tbl").toURI(), TPCHSchema.nationSchema(),
-                new File(nation+".parquet").toURI(), "\\|", false, compre);
-        long colsize = ParquetReaderHelper.getColSize(new File(nation+".parquet").toURI(), col);
+        ParquetWriterHelper.write(new File(lineitem+".tbl").toURI(), TPCHSchema.lineitemSchema(),
+                new File(lineitem+".parquet").toURI(), "\\|", false, compre);
+        long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), col);
         //System.out.println("col " + col + " size: "+colsize);
     }
 }

@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="878e0a7c-8277-46d3-a323-285c70247ae6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.DELTABP.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_int.data.DELTABP.crc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DELTAL.crc" afterPath="$PROJECT_DIR$/src/test/resource/coldata/.test_col_str.data.DELTAL.crc" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncContext.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncContext.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncValuesWriterFactory.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncValuesWriterFactory.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/StringWriteSupport.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/StringWriteSupport.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" afterPath="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" afterPath="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,12 +19,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GlobalFileProducer.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
+      <file leaf-file-name="ParquetReaderHelper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="46" column="29" lean-forward="true" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
-              <folding />
+            <state relative-caret-position="68">
+              <caret line="110" column="51" lean-forward="false" selection-start-line="110" selection-start-column="12" selection-end-line="110" selection-end-column="51" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -37,8 +34,8 @@
       <file leaf-file-name="ParquetWriterHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
+            <state relative-caret-position="-4061">
+              <caret line="50" column="13" lean-forward="false" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#5705#5713#0" expanded="true" />
@@ -53,94 +50,46 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="GlobalFileProducer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="258">
+              <caret line="51" column="34" lean-forward="false" selection-start-line="51" selection-start-column="34" selection-end-line="51" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Q6ScanTool.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="132" column="28" lean-forward="true" selection-start-line="132" selection-start-column="28" selection-end-line="132" selection-end-column="28" />
+              <folding>
+                <element signature="e#5019#9481#0" expanded="true" />
+                <element signature="e#7276#7284#0" expanded="true" />
+                <element signature="e#9480#9481#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ColumnReaderImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5240">
-              <caret line="345" column="18" lean-forward="false" selection-start-line="345" selection-start-column="4" selection-end-line="345" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Dictionary.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/Dictionary.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="40" column="33" lean-forward="true" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GlobalDictionaryValuesWriter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-130">
-              <caret line="107" column="14" lean-forward="false" selection-start-line="107" selection-start-column="14" selection-end-line="107" selection-end-column="14" />
-              <folding>
-                <element signature="e#0#20910#0" expanded="true" />
-                <element signature="imports" expanded="true" />
-                <element signature="e#3383#3384#0" expanded="true" />
-                <element signature="e#3427#3428#0" expanded="true" />
-                <element signature="e#4619#4620#0" expanded="true" />
-                <element signature="e#4671#4672#0" expanded="true" />
-                <element signature="e#9606#9607#0" expanded="true" />
-                <element signature="e#9658#9659#0" expanded="true" />
-                <element signature="e#12626#12627#0" expanded="true" />
-                <element signature="e#12678#12679#0" expanded="true" />
-                <element signature="e#15689#15690#0" expanded="true" />
-                <element signature="e#15741#15742#0" expanded="true" />
-                <element signature="e#18703#18704#0" expanded="true" />
-                <element signature="e#18755#18756#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StringWriteSupport.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/StringWriteSupport.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="124" column="31" lean-forward="true" selection-start-line="124" selection-start-column="31" selection-end-line="124" selection-end-column="31" />
+            <state relative-caret-position="143">
+              <caret line="547" column="16" lean-forward="false" selection-start-line="547" selection-start-column="10" selection-end-line="547" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3269#3270#0" expanded="true" />
+                <element signature="e#3324#3325#0" expanded="true" />
+                <element signature="e#5135#5136#0" expanded="true" />
+                <element signature="e#5210#5211#0" expanded="true" />
+                <element signature="e#9558#9559#0" expanded="true" />
+                <element signature="e#9616#9617#0" expanded="true" />
+                <element signature="e#9958#9959#0" expanded="true" />
+                <element signature="e#10009#10010#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EncContext.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncContext.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="27" column="56" lean-forward="true" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
-              <folding>
-                <element signature="e#922#1122#0" expanded="true" />
-                <element signature="e#1121#1122#0" expanded="true" />
-                <element signature="e#1201#1404#0" expanded="true" />
-                <element signature="e#1403#1404#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParquetReaderHelper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="97" column="35" lean-forward="true" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PageReader.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/page/PageReader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8">
-              <caret line="26" column="17" lean-forward="false" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -156,15 +105,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hashRowReaders</find>
-      <find>bitmap</find>
-      <find>leftBlocks</find>
-      <find>convert</find>
-      <find>EncContext</find>
-      <find>Object2IntLinkedOpenHashMap</find>
       <find>usesDictionary</find>
       <find>Global</find>
-      <find>lastUsedDictionarySize</find>
       <find>lastUsedDictionarySize</find>
       <find>writeBytes</find>
       <find>int</find>
@@ -174,17 +116,31 @@
       <find>WriteContext</find>
       <find>write</find>
       <find>end</find>
-      <find>/home/cc</find>
       <find>String</find>
       <find>binary</find>
-      <find>dictionary</find>
       <find>dictionarypage</find>
       <find>lineitem</find>
+      <find>ParquetProperties</find>
+      <find>EncValuesWriterFactory</find>
+      <find>allocator</find>
+      <find>encoding</find>
+      <find>dictionary</find>
+      <find>nation</find>
+      <find>1993-01-0</find>
+      <find>map</find>
+      <find>1993-01-01</find>
+      <find>fallback</find>
+      <find>readValueDictionaryId()</find>
+      <find>fastutil</find>
+      <find>getDictionaryId</find>
+      <find>/home/cc</find>
+      <find>system</find>
     </findStrings>
     <replaceStrings>
       <replace />
-      <replace>..</replace>
       <replace>nation</replace>
+      <replace>lineitem</replace>
+      <replace>..</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -206,12 +162,15 @@
         <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelperTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncValuesWriterFactory.java" />
         <option value="$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncContext.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/StringWriteSupport.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java" />
       </list>
     </option>
   </component>
@@ -223,7 +182,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="92" />
-    <option name="y" value="50" />
+    <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="823" />
   </component>
@@ -243,7 +202,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -293,15 +251,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="encsel" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="encsel" type="462c0819:PsiDirectoryNode" />
               <item name="query" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -311,15 +260,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="parquet" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="parquet" type="462c0819:PsiDirectoryNode" />
-              <item name="bytes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
@@ -363,40 +303,6 @@
               <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
               <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="encsel" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="encsel" type="462c0819:PsiDirectoryNode" />
-              <item name="query" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="scala" type="462c0819:PsiDirectoryNode" />
-              <item name="encsel" type="462c0819:PsiDirectoryNode" />
-              <item name="query" type="462c0819:PsiDirectoryNode" />
-              <item name="tpch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -423,22 +329,14 @@
               <item name="encsel" type="462c0819:PsiDirectoryNode" />
               <item name="pageskipping" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="enc-selector" type="b2602c69:ProjectViewProjectNode" />
-              <item name="enc-selector" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="encsel" type="462c0819:PsiDirectoryNode" />
-              <item name="parquet" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -462,7 +360,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GlobalFileProducer">
+  <component name="RunManager" selected="Application.Q6ScanTool">
     <configuration name="GlobalFileProducer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -526,30 +424,24 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="ParquetWriterHelperTest.testWriteInt" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Q6ScanTool" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="edu.uchicago.cs.encsel.parquet.*" />
+          <option name="PATTERN" value="edu.uchicago.cs.encsel.query.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <module name="enc-selector" />
+      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.query.Q6ScanTool" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="edu.uchicago.cs.encsel.parquet" />
-      <option name="MAIN_CLASS_NAME" value="edu.uchicago.cs.encsel.parquet.ParquetWriterHelperTest" />
-      <option name="METHOD_NAME" value="testWriteInt" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
+      <module name="enc-selector" />
       <envs />
-      <patterns />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
@@ -652,19 +544,19 @@
       <envs />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testWriteInt" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testBuildGlobalDict" />
-      <item index="2" class="java.lang.String" itemvalue="Application.LoadTPCH4Offheap" />
-      <item index="3" class="java.lang.String" itemvalue="Application.GlobalFileProducer" />
-      <item index="4" class="java.lang.String" itemvalue="Application.tes" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testBuildGlobalDict" />
+      <item index="1" class="java.lang.String" itemvalue="Application.LoadTPCH4Offheap" />
+      <item index="2" class="java.lang.String" itemvalue="Application.GlobalFileProducer" />
+      <item index="3" class="java.lang.String" itemvalue="Application.tes" />
+      <item index="4" class="java.lang.String" itemvalue="Application.Q6ScanTool" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.GlobalFileProducer" />
-        <item index="1" class="java.lang.String" itemvalue="Application.tes" />
-        <item index="2" class="java.lang.String" itemvalue="Application.LoadTPCH4Offheap" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testBuildGlobalDict" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testWriteInt" />
+        <item index="0" class="java.lang.String" itemvalue="Application.Q6ScanTool" />
+        <item index="1" class="java.lang.String" itemvalue="Application.GlobalFileProducer" />
+        <item index="2" class="java.lang.String" itemvalue="Application.tes" />
+        <item index="3" class="java.lang.String" itemvalue="Application.LoadTPCH4Offheap" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.ParquetWriterHelperTest.testBuildGlobalDict" />
       </list>
     </recent_temporary>
   </component>
@@ -685,7 +577,9 @@
       <updated>1520954168814</updated>
       <workItem from="1520954170292" duration="1512000" />
       <workItem from="1521236098766" duration="24380000" />
-      <workItem from="1522100298702" duration="70349000" />
+      <workItem from="1522100298702" duration="86586000" />
+      <workItem from="1522550301172" duration="5406000" />
+      <workItem from="1522608353089" duration="18752000" />
     </task>
     <servers />
   </component>
@@ -722,36 +616,37 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96241000" />
+    <option name="totallyTimeSpent" value="136636000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="92" y="50" width="1280" height="823" extended-state="0" />
+    <frame x="92" y="23" width="1280" height="823" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33155793" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291714" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32756326" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32756326" sideWeight="0.503125" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2359375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39946738" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33155793" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32756326" sideWeight="0.496875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291714" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2359375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288948" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -770,245 +665,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/RowTempTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="54" column="16" lean-forward="false" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
-          <folding>
-            <element signature="e#1954#1955#0" expanded="false" />
-            <element signature="e#1990#1991#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/PreEncodingTool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="37" column="13" lean-forward="false" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="111" column="69" lean-forward="false" selection-start-line="111" selection-start-column="69" selection-end-line="111" selection-end-column="69" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NLJoinTool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="53" column="80" lean-forward="false" selection-start-line="53" selection-start-column="80" selection-end-line="53" selection-end-column="80" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/it/unimi/dsi/fastutil/objects/Object2IntMap.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/parquet/EncReaderProcessorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-172">
-          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/dictionary/PlainValuesDictionary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1867">
-          <caret line="41" column="22" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/filter2/predicate/ValidTypeMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-450">
-          <caret line="45" column="61" lean-forward="false" selection-start-line="45" selection-start-column="61" selection-end-line="45" selection-end-column="61" />
-          <folding>
-            <element signature="e#1923#1957#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/schema/PrimitiveType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="135" column="4" lean-forward="false" selection-start-line="135" selection-start-column="4" selection-end-line="135" selection-end-column="4" />
-          <folding>
-            <element signature="class#PrimitiveTypeNameConverter#0;class#PrimitiveType#0" expanded="false" />
-            <element signature="docComment;method#PrimitiveType#0;class#PrimitiveType#0" expanded="false" />
-            <element signature="method#PrimitiveType#0;class#PrimitiveType#0" expanded="false" />
-            <element signature="docComment;method#PrimitiveType#1;class#PrimitiveType#0" expanded="false" />
-            <element signature="method#PrimitiveType#1;class#PrimitiveType#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/lang/Long.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="1110" column="23" lean-forward="false" selection-start-line="1110" selection-start-column="23" selection-end-line="1110" selection-end-column="23" />
-          <folding>
-            <element signature="e#41211#41212#0" expanded="false" />
-            <element signature="e#41251#41252#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/ColumnDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="91" column="18" lean-forward="false" selection-start-line="91" selection-start-column="18" selection-end-line="91" selection-end-column="18" />
-          <folding>
-            <element signature="e#2680#2681#0" expanded="false" />
-            <element signature="e#2701#2702#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/factory/ValuesWriterFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="35" column="17" lean-forward="false" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/factory/DefaultValuesWriterFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="33" column="30" lean-forward="false" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/ParquetProperties.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-981">
-          <caret line="87" column="36" lean-forward="false" selection-start-line="87" selection-start-column="36" selection-end-line="87" selection-end-column="36" />
-          <folding>
-            <element signature="e#5677#5678#0" expanded="false" />
-            <element signature="e#5735#5736#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-common/1.9.0/parquet-common-1.9.0.jar!/org/apache/parquet/Log.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="13" column="32" lean-forward="false" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/impl/ColumnWriterV2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="167" column="15" lean-forward="false" selection-start-line="167" selection-start-column="15" selection-end-line="167" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/src.zip!/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/values/dictionary/DictionaryValuesWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2634">
-          <caret line="510" column="0" lean-forward="false" selection-start-line="510" selection-start-column="0" selection-end-line="510" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/impl/ColumnWriterV1.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="53" column="23" lean-forward="false" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/PlainValuesWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="53" column="20" lean-forward="false" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/dictionary/DictionaryValuesWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="330" column="54" lean-forward="false" selection-start-line="330" selection-start-column="54" selection-end-line="330" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/AdaptiveValuesWriterFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="211" column="25" lean-forward="false" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/it/unimi/dsi/fastutil/objects/Object2IntLinkedOpenHashMap.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/schema/MessageType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="105" column="32" lean-forward="false" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/io/api/RecordConsumer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
           <caret line="43" column="8" lean-forward="true" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/InternalParquetRecordWriter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="69" column="76" lean-forward="false" selection-start-line="69" selection-start-column="76" selection-end-line="69" selection-end-column="76" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/ParquetWriter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2851">
-          <caret line="201" column="32" lean-forward="false" selection-start-line="201" selection-start-column="32" selection-end-line="201" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1016,15 +676,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-4243">
           <caret line="77" column="38" lean-forward="false" selection-start-line="77" selection-start-column="38" selection-end-line="77" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="56" column="5" lean-forward="true" selection-start-line="56" selection-start-column="5" selection-end-line="56" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1033,17 +684,6 @@
         <state relative-caret-position="415">
           <caret line="73" column="31" lean-forward="false" selection-start-line="73" selection-start-column="31" selection-end-line="73" selection-end-column="31" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncValuesWriterFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="234" column="0" lean-forward="false" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#13683#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1065,38 +705,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="79" column="53" lean-forward="false" selection-start-line="79" selection-start-column="53" selection-end-line="79" selection-end-column="53" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#919#938#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ReaderProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="32" column="9" lean-forward="false" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetCompressedWriterHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1252">
-          <caret line="120" column="19" lean-forward="false" selection-start-line="120" selection-start-column="19" selection-end-line="120" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetTupleReader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="248">
           <caret line="80" column="77" lean-forward="false" selection-start-line="80" selection-start-column="77" selection-end-line="80" selection-end-column="77" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1104,10 +716,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
           <caret line="22" column="35" lean-forward="false" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
-          <folding>
-            <element signature="e#1184#1185#0" expanded="true" />
-            <element signature="e#1228#1229#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1123,14 +731,263 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2676">
           <caret line="270" column="22" lean-forward="false" selection-start-line="270" selection-start-column="16" selection-end-line="270" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/api/WriteSupport.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="36" column="15" lean-forward="false" selection-start-line="36" selection-start-column="15" selection-end-line="36" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/Encoding.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1146">
+          <caret line="59" column="12" lean-forward="false" selection-start-line="59" selection-start-column="12" selection-end-line="59" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-encoding/1.9.0/parquet-encoding-1.9.0.jar!/org/apache/parquet/bytes/CapacityByteArrayOutputStream.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="59" column="108" lean-forward="true" selection-start-line="59" selection-start-column="108" selection-end-line="59" selection-end-column="108" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/InternalParquetRecordWriter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="93" column="61" lean-forward="true" selection-start-line="93" selection-start-column="61" selection-end-line="93" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/ParquetWriter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="92" column="27" lean-forward="false" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/factory/DefaultValuesWriterFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="31" column="13" lean-forward="false" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-common/1.9.0/parquet-common-1.9.0.jar!/org/apache/parquet/bytes/ByteBufferAllocator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="9" column="17" lean-forward="false" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/factory/ValuesWriterFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="35" column="17" lean-forward="false" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncReaderProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/PlainValuesWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="72" column="20" lean-forward="false" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="70" column="52" lean-forward="false" selection-start-line="70" selection-start-column="52" selection-end-line="70" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/it/unimi/dsi/fastutil/longs/LongIterator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="9" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/metadata/BlockMetaData.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-43">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ReaderProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="32" column="72" lean-forward="false" selection-start-line="32" selection-start-column="72" selection-end-line="32" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/OffheapReadSopport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/uchicago/cs/encsel/pageskipping/PageSkippingTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="209" column="44" lean-forward="false" selection-start-line="209" selection-start-column="44" selection-end-line="209" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="24" column="64" lean-forward="false" selection-start-line="24" selection-start-column="64" selection-end-line="24" selection-end-column="64" />
+          <folding>
+            <element signature="e#922#1122#0" expanded="false" />
+            <element signature="e#1121#1122#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/ParquetProperties.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="304" column="15" lean-forward="false" selection-start-line="304" selection-start-column="15" selection-end-line="304" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/Dictionary.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/LoadTPCH.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="81" column="13" lean-forward="false" selection-start-line="81" selection-start-column="6" selection-end-line="81" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/page/DictionaryPage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-261">
+          <caret line="34" column="13" lean-forward="false" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/it/unimi/dsi/fastutil/objects/Object2IntMap.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/it/unimi/dsi/fastutil/objects/Object2IntFunction.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="8" lean-forward="false" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0.jar!/org/apache/parquet/it/unimi/dsi/fastutil/objects/Object2IntLinkedOpenHashMap.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-36">
+          <caret line="68" column="11" lean-forward="false" selection-start-line="68" selection-start-column="11" selection-end-line="68" selection-end-column="11" />
+          <folding>
+            <element signature="e#2890#2891#0" expanded="true" />
+            <element signature="e#2921#2922#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="110" column="51" lean-forward="false" selection-start-line="110" selection-start-column="12" selection-end-line="110" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/schema/PrimitiveType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3197">
+          <caret line="288" column="74" lean-forward="false" selection-start-line="288" selection-start-column="74" selection-end-line="288" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/NonePrimitiveConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="28" column="58" lean-forward="true" selection-start-line="28" selection-start-column="58" selection-end-line="28" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/io/api/PrimitiveConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="44" column="17" lean-forward="false" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
+          <folding>
+            <element signature="e#1361#1362#0" expanded="false" />
+            <element signature="e#1383#1384#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/plain/BinaryPlainValuesReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3">
+          <caret line="31" column="13" lean-forward="false" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/ValuesType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="27" column="38" lean-forward="false" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="135" column="0" lean-forward="false" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
+        <state relative-caret-position="-4061">
+          <caret line="50" column="13" lean-forward="false" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#5705#5713#0" expanded="true" />
@@ -1144,105 +1001,106 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
+        <state relative-caret-position="258">
+          <caret line="51" column="34" lean-forward="false" selection-start-line="51" selection-start-column="34" selection-end-line="51" selection-end-column="34" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/Encoding.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-82">
-          <caret line="243" column="22" lean-forward="false" selection-start-line="243" selection-start-column="22" selection-end-line="243" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5240">
-          <caret line="345" column="18" lean-forward="false" selection-start-line="345" selection-start-column="4" selection-end-line="345" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/Dictionary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="40" column="33" lean-forward="true" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="27" column="56" lean-forward="true" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
+        <state relative-caret-position="1661">
+          <caret line="234" column="19" lean-forward="false" selection-start-line="234" selection-start-column="19" selection-end-line="234" selection-end-column="19" />
           <folding>
-            <element signature="e#922#1122#0" expanded="true" />
-            <element signature="e#1121#1122#0" expanded="true" />
-            <element signature="e#1201#1404#0" expanded="true" />
-            <element signature="e#1403#1404#0" expanded="true" />
+            <element signature="e#9678#9679#0" expanded="false" />
+            <element signature="e#9706#9707#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-hadoop/1.9.0/parquet-hadoop-1.9.0.jar!/org/apache/parquet/hadoop/api/WriteSupport.class">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/dictionary/DictionaryValuesWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="36" column="15" lean-forward="false" selection-start-line="36" selection-start-column="15" selection-end-line="36" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/StringWriteSupport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="124" column="31" lean-forward="true" selection-start-line="124" selection-start-column="31" selection-end-line="124" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="97" column="35" lean-forward="true" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
+        <state relative-caret-position="152">
+          <caret line="94" column="20" lean-forward="false" selection-start-line="94" selection-start-column="20" selection-end-line="94" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-130">
-          <caret line="107" column="14" lean-forward="false" selection-start-line="107" selection-start-column="14" selection-end-line="107" selection-end-column="14" />
+        <state relative-caret-position="213">
+          <caret line="147" column="40" lean-forward="false" selection-start-line="147" selection-start-column="32" selection-end-line="147" selection-end-column="40" />
           <folding>
-            <element signature="e#0#20910#0" expanded="true" />
-            <element signature="imports" expanded="true" />
             <element signature="e#3383#3384#0" expanded="true" />
             <element signature="e#3427#3428#0" expanded="true" />
-            <element signature="e#4619#4620#0" expanded="true" />
-            <element signature="e#4671#4672#0" expanded="true" />
-            <element signature="e#9606#9607#0" expanded="true" />
-            <element signature="e#9658#9659#0" expanded="true" />
-            <element signature="e#12626#12627#0" expanded="true" />
-            <element signature="e#12678#12679#0" expanded="true" />
-            <element signature="e#15689#15690#0" expanded="true" />
-            <element signature="e#15741#15742#0" expanded="true" />
-            <element signature="e#18703#18704#0" expanded="true" />
-            <element signature="e#18755#18756#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/EncValuesWriterFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="46" column="29" lean-forward="true" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
+        <state relative-caret-position="341">
+          <caret line="83" column="49" lean-forward="false" selection-start-line="83" selection-start-column="49" selection-end-line="83" selection-end-column="49" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/StringWriteSupport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="120" column="0" lean-forward="false" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetCompressedWriterHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1215">
+          <caret line="120" column="19" lean-forward="false" selection-start-line="120" selection-start-column="19" selection-end-line="120" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/values/ValuesReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
+          <folding>
+            <element signature="e#3168#3169#0" expanded="false" />
+            <element signature="e#3219#3220#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="547" column="16" lean-forward="false" selection-start-line="547" selection-start-column="10" selection-end-line="547" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3269#3270#0" expanded="true" />
+            <element signature="e#3324#3325#0" expanded="true" />
+            <element signature="e#5135#5136#0" expanded="true" />
+            <element signature="e#5210#5211#0" expanded="true" />
+            <element signature="e#9558#9559#0" expanded="true" />
+            <element signature="e#9616#9617#0" expanded="true" />
+            <element signature="e#9958#9959#0" expanded="true" />
+            <element signature="e#10009#10010#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/Q6ScanTool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="132" column="28" lean-forward="true" selection-start-line="132" selection-start-column="28" selection-end-line="132" selection-end-column="28" />
+          <folding>
+            <element signature="e#5019#9481#0" expanded="true" />
+            <element signature="e#7276#7284#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -28,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import edu.uchicago.cs.encsel.parquet.EncContext;
 import org.apache.parquet.CorruptDeltaByteArrays;
 import org.apache.parquet.VersionParser.ParsedVersion;
 import org.apache.parquet.bytes.BytesInput;
@@ -333,6 +334,10 @@ public class ColumnReaderImpl implements ColumnReader {
     });
   }
 
+  public int getDictId(){
+    return dataColumn.readValueDictionaryId();
+  }
+
   /**
    * creates a reader for triplets
    * @param path the descriptor for the corresponding column
@@ -343,7 +348,12 @@ public class ColumnReaderImpl implements ColumnReader {
     this.pageReader = checkNotNull(pageReader, "pageReader");
     this.converter = checkNotNull(converter, "converter");
     this.writerVersion = writerVersion;
-    DictionaryPage dictionaryPage = pageReader.readDictionaryPage();
+    DictionaryPage dictionaryPage = null;
+    if ( EncContext.dictPage.get().containsKey(path.toString()))
+      dictionaryPage = EncContext.dictPage.get().get(path.toString());
+    else
+      dictionaryPage = pageReader.readDictionaryPage();
+
     if (dictionaryPage != null) {
       try {
         this.dictionary = dictionaryPage.getEncoding().initDictionary(path, dictionaryPage);
@@ -599,8 +609,10 @@ public class ColumnReaderImpl implements ColumnReader {
       this.dataColumn = dataEncoding.getValuesReader(path, VALUES);
     }
     if (dataEncoding.usesDictionary() && converter.hasDictionarySupport()) {
+      //.out.println("use dictionary value reader");
       bindToDictionary(dictionary);
     } else {
+      //System.out.println("do not use dictionary value reader");
       bind(path.getType());
     }
     try {

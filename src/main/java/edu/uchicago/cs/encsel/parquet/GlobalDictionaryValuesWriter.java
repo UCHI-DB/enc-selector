@@ -144,6 +144,8 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
 
         @Override
         public void fallBackDictionaryEncodedData(ValuesWriter writer) {
+
+            System.out.println("fallback");
             //build reverse dictionary
             Binary[] reverseDictionary = new Binary[getDictionarySize()];
             for (Object2IntMap.Entry<Binary> entry : globalDict.object2IntEntrySet()) {

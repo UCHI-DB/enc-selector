@@ -42,6 +42,7 @@ import org.apache.parquet.filter2.compat.FilterCompat;
 import org.apache.parquet.filter2.predicate.FilterPredicate;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.io.api.Binary;
+import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 import scala.Tuple2;
 
 import java.io.File;
@@ -64,7 +65,7 @@ public class Q6ScanTool {
     static Boolean quantity_pred(int value) {return value<25; }
     static Boolean discount_pred(double value) {return (value>=0.05)&&(value<=0.07); }
     static Boolean shipdate_pred(Binary value) {return (date1993.compareTo(value)==0)||(date1993.compareTo(value) + date1994.compareTo(value) == 0); }
-
+    static Boolean hardShipdate_pred(int value) {return  (value>=365)&&(value<730); }
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
 
@@ -80,7 +81,7 @@ public class Q6ScanTool {
         FilterPredicate shipdate_filter = and(gtEq(binaryColumn(shipdate_str), date1993), lt(binaryColumn(shipdate_str), date1994));
         FilterPredicate combine_filter = and(quantity_filter, and(shipdate_filter,discount_filter));
         FilterCompat.Filter rowGroup_filter = FilterCompat.get(combine_filter);
-        String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
+        String lineitem = "../tpch-generator/dbgen/lineitem";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);
@@ -118,11 +119,15 @@ public class Q6ScanTool {
                     }
 
                     int count = 0;
+                    Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_shipdate.toString());
+                    //System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
                     ColumnReaderImpl shipdateReader = new ColumnReaderImpl(l_shipdate, rowGroup.getPageReader(l_shipdate), new NonePrimitiveConverter(), version);
                     for (long j = 0;  j<rowGroup.getRowCount(); j++) {
                         if (bitmap.test(j)) {
                             count++;
+                            //System.out.println(shipdateReader.getBinary().toStringUsingUTF8());
                             bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
+                            //bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
                             //System.out.println("test  ----- row number:" + j );
                         }
                         else
