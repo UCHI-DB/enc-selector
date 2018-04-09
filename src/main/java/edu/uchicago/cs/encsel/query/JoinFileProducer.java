@@ -40,7 +40,7 @@ import java.io.IOException;
 public class JoinFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"BP","RLE"};
+        //args = new String[]{"BP","RLE", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("JoinFileProducer PPencoding LPencoding Compression");
             return;

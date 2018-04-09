@@ -27,15 +27,12 @@ import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
-import edu.uchicago.cs.encsel.util.perf.ProfileBean;
-import edu.uchicago.cs.encsel.util.perf.Profiler;
 import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap;
-import edu.uchicago.cs.encsel.query.operator.HashJoin;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
+import edu.uchicago.cs.encsel.util.perf.ProfileBean;
 import org.apache.parquet.Strings;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
-import org.apache.parquet.column.Encoding;
 import org.apache.parquet.column.impl.ColumnReaderImpl;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.filter2.compat.FilterCompat;
@@ -43,22 +40,18 @@ import org.apache.parquet.filter2.predicate.FilterPredicate;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
-import scala.Tuple2;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.apache.parquet.filter2.predicate.FilterApi.*;
-import static org.apache.parquet.filter2.predicate.FilterApi.and;
-import static org.apache.parquet.filter2.predicate.FilterApi.binaryColumn;
 
 
-
-public class Q6ScanTool {
+public class ShipdataFilter {
 
     static Binary date1993 = Binary.fromString("1993-01-01");
-    static Binary date1994 = Binary.fromString("1994-01-01");
+    static Binary date1994 = Binary.fromString("1996-09-27");
     static Boolean pred(int value){
         return value == 1;
     }
@@ -100,7 +93,6 @@ public class Q6ScanTool {
         long clocktime = 0L;
         long cputime = 0L;
         long usertime = 0L;
-
         for (int i = 0; i < repeat; i++) {
             ProfileBean prof = ParquetReaderHelper.filterProfile(new File(lineitem+".parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
@@ -110,75 +102,20 @@ public class Q6ScanTool {
                     //ParquetFileReader.setColFilter(pageReaders, cd, pred);
                     RoaringBitmap bitmap = new RoaringBitmap();
                     //System.out.println("rowgroup count: "+rowGroup.getRowCount());
-                    ColumnReaderImpl quantityReader = new ColumnReaderImpl(l_quantity, rowGroup.getPageReader(l_quantity), new NonePrimitiveConverter(), version);
-                    for (long j = 0;  j<rowGroup.getRowCount(); j++) {
-                        bitmap.set(j, quantity_pred(quantityReader.getInteger()));
-                        //if (quantity_pred(value))
-                        //System.out.println("row number:" + j + " value: " + colReader.getInteger());
-                        quantityReader.consume();
-                    }
-
-                    int count = 0;
-                    Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_shipdate.toString());
-                    //System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
                     ColumnReaderImpl shipdateReader = new ColumnReaderImpl(l_shipdate, rowGroup.getPageReader(l_shipdate), new NonePrimitiveConverter(), version);
                     for (long j = 0;  j<rowGroup.getRowCount(); j++) {
-                        if (bitmap.test(j)) {
-                            count++;
-                            //System.out.println(shipdateReader.getBinary().toStringUsingUTF8());
-                            //bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
-                            bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
-                            //System.out.println("test  ----- row number:" + j );
-                        }
-                        else
-                            shipdateReader.skip();
+                        //bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
+                        bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
+                        //if (quantity_pred(value))
+                        //System.out.println("row number:" + j + " value: " + colReader.getInteger());
                         shipdateReader.consume();
                     }
 
-                    //System.out.println("after quantity: "+count);
-                    ArrayList<Double> discountVals = new ArrayList<Double>();
+                    int count = 0;
+                    //Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_shipdate.toString());
+                    //System.out.println("Dictioanry key value:"+ shipdataDict.toString());
+                    //System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
 
-                    ColumnReaderImpl discountReader = new ColumnReaderImpl(l_discount, rowGroup.getPageReader(l_discount), new NonePrimitiveConverter(), version);
-                    count = 0;
-                    double cur = 0;
-                    for (long j = 0;  j<rowGroup.getRowCount(); j++) {
-                        if (bitmap.test(j)) {
-                            count++;
-                            cur = discountReader.getDouble();
-                            if (discount_pred(cur)) {
-                                discountVals.add(cur);
-                            }
-                            else
-                                bitmap.set(j, discount_pred(cur));
-                            //System.out.println("test  ----- row number:" + j + " value: " + colReader1.getBinary().toStringUsingUTF8());
-                        }
-                        else
-                            discountReader.skip();
-                        discountReader.consume();
-                    }
-
-                    //System.out.println("after shipdate: "+count+"list:"+ discountVals.size());
-
-                    count = 0;
-
-                    ColumnReaderImpl extendedpriceReader = new ColumnReaderImpl(l_extendedprice, rowGroup.getPageReader(l_extendedprice), new NonePrimitiveConverter(), version);
-                    count = 0;
-                    double revenue = 0;
-                    for (long j = 0;  j<rowGroup.getRowCount(); j++) {
-                        if (bitmap.test(j)) {
-                            count++;
-                            cur = extendedpriceReader.getDouble();
-                            revenue += cur*discountVals.remove(0);
-                            //System.out.println("test  ----- row number:" + j + " value: " + colReader1.getBinary().toStringUsingUTF8());
-                        }
-                        else
-                            extendedpriceReader.skip();
-                        extendedpriceReader.consume();
-                    }
-
-                    //System.out.println("after discount: "+count+"list:"+ discountVals.size());
-
-                    //System.out.println("$$revenue: "+revenue);
                 }
             });
 
