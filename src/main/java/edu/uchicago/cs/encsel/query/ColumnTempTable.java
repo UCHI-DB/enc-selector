@@ -68,6 +68,15 @@ public class ColumnTempTable extends GroupConverter implements TempTable {
     }
 
     @Override
+    public Object[] getRecord(int index) {
+        Object[] result = new Object[columns.length];
+        for(int i = 0 ; i < result.length;i++) {
+            result[i] = columns[i].getData().get(index);
+        }
+        return result;
+    }
+
+    @Override
     public void start() {
 
     }

@@ -14,24 +14,23 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
 package edu.uchicago.cs.encsel.dataset.feature.subattr
 
-import java.io.InputStream
+import java.io.{File, InputStream}
+import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
-import edu.uchicago.cs.encsel.model.DataType
-
-import scala.collection.JavaConverters._
-
+import edu.uchicago.cs.encsel.util.FileUtils
 
 object SubattrEncodeBenefit extends FeatureExtractor {
 
@@ -42,12 +41,12 @@ object SubattrEncodeBenefit extends FeatureExtractor {
   override def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val originalSize = columnSize(col)
     val pSize = plainSize(col)
-    val children = getChildren(col)
-    if (originalSize > 0 && pSize > 0 && children.nonEmpty) {
-      val childrenSize = children.map(columnSize).sum
+    val subtableFile = FileUtils.addExtension(col.colFile,"subtable")
+    if(Files.exists(Paths.get(subtableFile))) {
+      val childrenSize = new File(subtableFile).length()
       Iterable(
-        new Feature("SubattrStat", "subattr_benefit", childrenSize / originalSize),
-        new Feature("SubattrStat", "subattr_benefit_plain", childrenSize / pSize)
+        new Feature("SubattrStat", "size_ratio", childrenSize / originalSize),
+        new Feature("SubattrStat", "plain_size_ratio", childrenSize / pSize)
       )
     } else {
       Iterable()
@@ -55,11 +54,6 @@ object SubattrEncodeBenefit extends FeatureExtractor {
   }
 
   val persist = new JPAPersistence()
-
-  def getChildren(col: Column): Seq[Column] = {
-    val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent"
-    persist.em.createQuery(sql, classOf[ColumnWrapper]).setParameter("parent", col).getResultList.asScala
-  }
 
   def columnSize(col: Column): Double = {
     val features = col.findFeatures(ParquetEncFileSize.featureType).map(_.value).filter(_ > 0)

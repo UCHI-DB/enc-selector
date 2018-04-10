@@ -81,4 +81,8 @@ public class RowTempTable extends GroupConverter implements TempTable {
     public List<Row> getRecords() {
         return records;
     }
+
+    public Object[] getRecord(int index) {
+        return records.get(index).getData();
+    }
 }
