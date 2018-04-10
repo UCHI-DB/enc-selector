@@ -72,8 +72,6 @@ public class ParquetTupleVReader {
 
     private ColumnReader[] readers;
 
-    private ColumnPrimitiveConverter[] converters;
-
     public ParquetTupleVReader(URI inputFile) throws IOException, VersionParser.VersionParseException {
         Path inputPath = new Path(inputFile);
         meta = ParquetFileReader.readFooter(conf, inputPath, ParquetMetadataConverter.NO_FILTER);
@@ -133,6 +131,8 @@ public class ParquetTupleVReader {
                     for(int j = 0 ; j < currentRowGroup.getRowCount();j++) {
                         if (readers[i].getCurrentDefinitionLevel() == cd.getMaxDefinitionLevel()) {
                             readers[i].writeCurrentValueToConverter();
+                        } else {
+                            tempTable.getConverter(i).asPrimitiveConverter().addBinary(null);
                         }
                         readers[i].consume();
                     }
