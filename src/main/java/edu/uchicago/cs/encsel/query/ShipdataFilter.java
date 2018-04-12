@@ -105,7 +105,7 @@ public class ShipdataFilter {
                     ColumnReaderImpl shipdateReader = new ColumnReaderImpl(l_shipdate, rowGroup.getPageReader(l_shipdate), new NonePrimitiveConverter(), version);
                     for (long j = 0;  j<rowGroup.getRowCount(); j++) {
                         bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
-                        //bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
+                        bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
                         //if (quantity_pred(value))
                         //System.out.println("row number:" + j + " value: " + colReader.getInteger());
                         shipdateReader.consume();

@@ -134,26 +134,31 @@ public class ParquetWriterHelper {
         return ret.toString();
     }
 
-    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema) {
+    public static <T> Object2IntMap<T> buildGlobalDict(URI[] input, int[] index, MessageType[] schema, Boolean order) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(new File(input)));
             String line;
             String[] list;
-            PrimitiveTypeName typeName = schema.getColumns().get(index).getType();
+            PrimitiveTypeName typeName = schema[0].getColumns().get(index[0]).getType();
             System.out.println(typeName);
             Object2IntMap dictionaryContent = null;
             int i = 0;
+            int idx = 0;
             switch (typeName) {
                 case BINARY:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
-                    TreeSet<Binary> treeSet = new TreeSet<Binary>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        treeSet.add(Binary.fromString(list[index]));
+                    Set<Binary> treeSet = new TreeSet<Binary>();
+                    if (!order)
+                        treeSet = new LinkedHashSet<Binary>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            treeSet.add(Binary.fromString(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Binary item : treeSet) {
                         dictionaryContent.put(item, i);
@@ -162,14 +167,19 @@ public class ParquetWriterHelper {
                     return dictionaryContent;
                 case FIXED_LEN_BYTE_ARRAY:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
-                    TreeSet<Binary> FtreeSet = new TreeSet<Binary>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        FtreeSet.add(Binary.fromString(list[index]));
+                    Set<Binary> FtreeSet = new TreeSet<Binary>();
+                    if (!order)
+                        FtreeSet = new LinkedHashSet<Binary>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            FtreeSet.add(Binary.fromString(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Binary item : FtreeSet) {
                         dictionaryContent.put(item, i);
@@ -178,14 +188,19 @@ public class ParquetWriterHelper {
                     return dictionaryContent;
                 case INT96:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Binary>();
-                    TreeSet<Binary> I96treeSet = new TreeSet<Binary>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        I96treeSet.add(Binary.fromString(list[index]));
+                    Set<Binary> I96treeSet = new TreeSet<Binary>();
+                    if (!order)
+                        I96treeSet = new LinkedHashSet<Binary>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            I96treeSet.add(Binary.fromString(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Binary item : I96treeSet) {
                         dictionaryContent.put(item, i);
@@ -194,14 +209,19 @@ public class ParquetWriterHelper {
                     return dictionaryContent;
                 case INT64:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Long>();
-                    TreeSet<Long> LongTreeSet = new TreeSet<Long>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        LongTreeSet.add(Long.parseLong(list[index]));
+                    Set<Long> LongTreeSet = new TreeSet<Long>();
+                    if (!order)
+                        LongTreeSet = new LinkedHashSet<Long>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            LongTreeSet.add(Long.parseLong(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Long item : LongTreeSet) {
                         dictionaryContent.put(item, i);
@@ -210,14 +230,19 @@ public class ParquetWriterHelper {
                     return dictionaryContent;
                 case DOUBLE:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Double>();
-                    TreeSet<Double> DoubleTreeSet = new TreeSet<Double>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        DoubleTreeSet.add(Double.parseDouble(list[index]));
+                    Set<Double> DoubleTreeSet = new TreeSet<Double>();
+                    if (!order)
+                        DoubleTreeSet = new LinkedHashSet<Double>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            DoubleTreeSet.add(Double.parseDouble(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Double item : DoubleTreeSet) {
                         dictionaryContent.put(item, i);
@@ -226,14 +251,19 @@ public class ParquetWriterHelper {
                     return dictionaryContent;
                 case INT32:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Integer>();
-                    TreeSet<Integer> IntTreeSet = new TreeSet<Integer>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        IntTreeSet.add(Integer.parseInt(list[index]));
+                    Set<Integer> IntTreeSet = new TreeSet<Integer>();
+                    if (!order)
+                        IntTreeSet = new LinkedHashSet<Integer>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            IntTreeSet.add(Integer.parseInt(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Integer item : IntTreeSet) {
                         dictionaryContent.put(item, i);
@@ -242,14 +272,19 @@ public class ParquetWriterHelper {
                     return dictionaryContent;
                 case FLOAT:
                     dictionaryContent = new Object2IntLinkedOpenHashMap<Float>();
-                    TreeSet<Float> FloatTreeSet = new TreeSet<Float>();
-                    while ((line = br.readLine()) != null) {
-                        list = line.split("\\|");
-                        if (line.isEmpty())
-                            continue;
-                        FloatTreeSet.add(Float.parseFloat(list[index]));
+                    Set<Float> FloatTreeSet = new TreeSet<Float>();
+                    if (!order)
+                        FloatTreeSet = new LinkedHashSet<Float>();
+                    for (idx = 0; idx < input.length; idx++) {
+                        BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
+                        while ((line = br.readLine()) != null) {
+                            list = line.split("\\|");
+                            if (line.isEmpty())
+                                continue;
+                            FloatTreeSet.add(Float.parseFloat(list[index[idx]]));
+                        }
+                        br.close();
                     }
-                    br.close();
                     i = 0;
                     for (Float item : FloatTreeSet) {
                         dictionaryContent.put(item, i);
@@ -262,6 +297,14 @@ public class ParquetWriterHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema) {
+        URI[] inputArr = {input};
+        int[] indexArr = {index};
+        MessageType[] schemaArr = {schema};
+        Boolean order = true;
+        return buildGlobalDict(inputArr,indexArr,schemaArr,order);
     }
 
     public static int scanLongBitLength(URI input) {
