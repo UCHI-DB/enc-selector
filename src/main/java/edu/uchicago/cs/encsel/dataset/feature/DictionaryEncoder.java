@@ -272,7 +272,7 @@ public class DictionaryEncoder {
     }
 
     public static void singleColumnString(URI input, int batch) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(input.toString())));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
         // local dictionary encoding
         URI fUri = genOutputURI(input, "LDICTENCODING");

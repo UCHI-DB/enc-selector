@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="878e0a7c-8277-46d3-a323-285c70247ae6" name="Default" comment="filter with different selectivity">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,21 +14,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ParquetReaderHelper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java">
+      <file leaf-file-name="DictionaryEncoder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="254" column="43" lean-forward="false" selection-start-line="254" selection-start-column="43" selection-end-line="254" selection-end-column="43" />
+            <state relative-caret-position="2265">
+              <caret line="199" column="0" lean-forward="false" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DictionaryEncoder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
+      <file leaf-file-name="EncMemoryUsageProcess.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/EncMemoryUsageProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="290" column="34" lean-forward="false" selection-start-line="290" selection-start-column="34" selection-end-line="290" selection-end-column="34" />
+            <state relative-caret-position="90">
+              <caret line="32" column="13" lean-forward="false" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -66,16 +65,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PageWriter.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/parquet/parquet-column/1.9.0/parquet-column-1.9.0-sources.jar!/org/apache/parquet/column/page/PageWriter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-379">
-              <caret line="30" column="24" lean-forward="false" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="HashJoinTool.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/HashJoinTool.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -89,8 +78,18 @@
       <file leaf-file-name="DictEncodeAllCols.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-100">
-              <caret line="45" column="42" lean-forward="false" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
+            <state relative-caret-position="120">
+              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Column.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/dataset/column/Column.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="42" column="7" lean-forward="false" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -213,7 +212,6 @@
         <option value="$PROJECT_DIR$/src/test/resource/coldata/test_col_double.data" />
         <option value="$PROJECT_DIR$/src/test/resource/coldata/test_col_double.data.LOCALDICT" />
         <option value="$PROJECT_DIR$/src/test/resource/coldata/test_col_int.data" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetWriterHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/EncodeAllCols.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/values/dictionary/DictionaryValueWriter.java" />
@@ -228,6 +226,7 @@
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalJoinFileProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/ParquetReaderHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java" />
       </list>
     </option>
   </component>
@@ -847,7 +846,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="SearchEverywhereHistoryKey" value="internal&#9;FILE&#9;jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/jre/lib/rt.jar!/com/sun/xml/internal/bind/InternalAccessorFactory.class&#10;encoder&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java&#10;ty&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/model/DataType.java&#10;dataty&#9;PSI&#9;JAVA://edu.uchicago.cs.encsel.model.DataType" />
+    <property name="SearchEverywhereHistoryKey" value="DictionaryEncoder.java&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java&#10;internal&#9;FILE&#9;jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/jre/lib/rt.jar!/com/sun/xml/internal/bind/InternalAccessorFactory.class&#10;encoder&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java&#10;ty&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/model/DataType.java&#10;dataty&#9;PSI&#9;JAVA://edu.uchicago.cs.encsel.model.DataType" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -1085,7 +1084,7 @@
       <workItem from="1522550301172" duration="5406000" />
       <workItem from="1522608353089" duration="25884000" />
       <workItem from="1523234131668" duration="57608000" />
-      <workItem from="1523507575602" duration="17246000" />
+      <workItem from="1523507575602" duration="18636000" />
     </task>
     <servers />
   </component>
@@ -1122,7 +1121,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="218622000" />
+    <option name="totallyTimeSpent" value="220012000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="129" y="23" width="1280" height="823" extended-state="0" />
@@ -1175,14 +1174,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/dataset/fix/ReencodeLongColumn.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="30" column="7" lean-forward="false" selection-start-line="30" selection-start-column="7" selection-end-line="30" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/python/encsel/dataset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1279,14 +1270,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/EncMemoryUsageProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="32" column="13" lean-forward="false" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1595,14 +1578,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="290" column="34" lean-forward="false" selection-start-line="290" selection-start-column="34" selection-end-line="290" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/edu/uchicago/cs/encsel/dataset/feature/compress/ParquetCompressFileSizeTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1611,10 +1586,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/EncMemoryUsageProcess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="32" column="13" lean-forward="false" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/dataset/column/Column.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="42" column="7" lean-forward="false" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2265">
+          <caret line="199" column="0" lean-forward="false" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-100">
-          <caret line="45" column="42" lean-forward="false" selection-start-line="45" selection-start-column="42" selection-end-line="45" selection-end-column="42" />
+        <state relative-caret-position="120">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding />
         </state>
       </provider>
