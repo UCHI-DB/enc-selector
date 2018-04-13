@@ -35,10 +35,11 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 
-public class EncodeAllCols {
+public class DictEncodeAllCols {
 
     public static void main(String[] args) throws Exception {
         final int start = (args.length >= 1) ? Integer.parseInt(args[0]) : 0;
+        int batch = 200;
         System.out.println(String.format("Start is %d", start));
         EntityManager em = JPAPersistence.emf().createEntityManager();
         List<ColumnWrapper> columns = em.createQuery("select c from Column c", ColumnWrapper.class).getResultList();
@@ -48,54 +49,24 @@ public class EncodeAllCols {
             if (col.id() >= start) {
                 switch (col.dataType()) {
                     case STRING:
-                        for (StringEncoding e : StringEncoding.values()) {
-                            if (e.parquetEncoding() != null) {
-                                try {
-                                    ParquetWriterHelper.singleColumnString(col.colFile(), e);
-                                } catch (IllegalArgumentException ex) {
-                                }
-                            }
-                        }
+                        DictionaryEncoder.singleColumnString(col.colFile(), batch);
+                        DictionaryEncoder.singleColumnString(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case LONG:
-                        for (LongEncoding e : LongEncoding.values()) {
-                            if (e.parquetEncoding() != null) {
-                                try {
-                                    ParquetWriterHelper.singleColumnLong(col.colFile(), e);
-                                } catch (IllegalArgumentException ex) {
-                                }
-                            }
-                        }
+                        DictionaryEncoder.singleColumnLong(col.colFile(), batch);
+                        DictionaryEncoder.singleColumnLong(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case INTEGER:
-                        for (IntEncoding e : IntEncoding.values()) {
-                            if (e.parquetEncoding() != null) {
-                                try {
-                                    ParquetWriterHelper.singleColumnInt(col.colFile(), e);
-                                } catch (IllegalArgumentException ex) {
-                                }
-                            }
-                        }
+                        DictionaryEncoder.singleColumnInt(col.colFile(), batch);
+                        DictionaryEncoder.singleColumnInt(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case FLOAT:
-                        for (FloatEncoding e : FloatEncoding.values()) {
-                            if (e.parquetEncoding() != null) {
-                                try {
-                                    ParquetWriterHelper.singleColumnFloat(col.colFile(), e);
-                                } catch (IllegalArgumentException ex) {
-                                }
-                            }
-                        }
+                        DictionaryEncoder.singleColumnFloat(col.colFile(), batch);
+                        DictionaryEncoder.singleColumnFloat(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case DOUBLE:
-                        for (FloatEncoding e : FloatEncoding.values()) {
-                            if (e.parquetEncoding() != null) {
-                                try {
-                                    ParquetWriterHelper.singleColumnDouble(col.colFile(), e);
-                                } catch (IllegalArgumentException ex) {
-                                }
-                            }
-                        }
+                        DictionaryEncoder.singleColumnDouble(col.colFile(), batch);
+                        DictionaryEncoder.singleColumnDouble(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case BOOLEAN:
                         break;

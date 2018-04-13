@@ -40,7 +40,7 @@ import java.io.IOException;
 public class JoinFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"BP","RLE", "UNCOMPRESSED"};
+        args = new String[]{"DICT","DICT", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("JoinFileProducer PPencoding LPencoding Compression");
             return;
@@ -48,8 +48,8 @@ public class JoinFileProducer {
         String PPencoding = args[0];
         String LPencoding = args[1];
         String comp = args[2];
-        String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
-        String part = "/home/cc/tpch-generator/dbgen/part";
+        String lineitem = "../tpch-generator/dbgen/lineitem";
+        String part = "../tpch-generator/dbgen/part";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 1);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);

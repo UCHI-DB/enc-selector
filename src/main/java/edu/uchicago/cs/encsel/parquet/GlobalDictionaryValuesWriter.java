@@ -24,21 +24,14 @@
 
 package edu.uchicago.cs.encsel.parquet;
 
-import org.apache.parquet.Log;
 import org.apache.parquet.bytes.ByteBufferAllocator;
-import org.apache.parquet.bytes.BytesInput;
-import org.apache.parquet.bytes.BytesUtils;
-import org.apache.parquet.bytes.CapacityByteArrayOutputStream;
 import org.apache.parquet.column.Encoding;
 import org.apache.parquet.column.page.DictionaryPage;
-import org.apache.parquet.column.values.RequiresFallback;
 import org.apache.parquet.column.values.ValuesWriter;
 import org.apache.parquet.column.values.dictionary.DictionaryValuesWriter;
 import org.apache.parquet.column.values.dictionary.IntList;
 import org.apache.parquet.column.values.plain.FixedLenByteArrayPlainValuesWriter;
 import org.apache.parquet.column.values.plain.PlainValuesWriter;
-import org.apache.parquet.column.values.rle.RunLengthBitPackingHybridEncoder;
-import org.apache.parquet.io.ParquetEncodingException;
 import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.it.unimi.dsi.fastutil.doubles.Double2IntLinkedOpenHashMap;
 import org.apache.parquet.it.unimi.dsi.fastutil.doubles.Double2IntMap;
@@ -56,12 +49,8 @@ import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHash
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectIterator;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import static org.apache.parquet.Log.DEBUG;
 import static org.apache.parquet.bytes.BytesInput.concat;
 
 public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWriter {

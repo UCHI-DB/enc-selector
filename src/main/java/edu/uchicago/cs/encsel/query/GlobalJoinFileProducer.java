@@ -62,7 +62,7 @@ public class GlobalJoinFileProducer {
         EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), IntEncoding.valueOf(LPencoding).parquetEncoding());
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Integer[]{bitLength,intbound});
         Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(input,index,schema,order);
-        System.out.println(dictMap);
+        //System.out.println(dictMap);
         EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), dictMap);
 
         //System.out.println(Encoding.valueOf("PLAIN"));

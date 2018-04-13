@@ -148,6 +148,7 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
 	    	          @Override
 	    	          public DataPage visit(DataPageV1 dataPageV1) {
 	    	            try {
+	    	            	//System.out.println(dataPageV1.getStatistics().toString());
 	    	              return new DataPageV1(
 	    	                  decompressor.decompress(dataPageV1.getBytes(), dataPageV1.getUncompressedSize()),
 	    	                  dataPageV1.getValueCount(),

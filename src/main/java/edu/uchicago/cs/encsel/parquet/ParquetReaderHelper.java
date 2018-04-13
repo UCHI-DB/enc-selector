@@ -46,6 +46,8 @@ public class ParquetReaderHelper {
         }
         for (Footer footer : footers) {
             processor.processFooter(footer);
+            ParquetReaderHelper.getGlobalDict(footer);
+            //System.out.println(footer.getParquetMetadata().getBlocks().get(0).getColumns().get(10).getStatistics());
             VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
 
             ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());
@@ -75,8 +77,9 @@ public class ParquetReaderHelper {
             profiler.mark();
             processor.processFooter(footer);
             profiler.pause();
+            ParquetReaderHelper.getGlobalDict(footer);
+            //System.out.println(footer.getParquetMetadata().getBlocks().get(0).getColumns().get(10).getStatistics());
             VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
-
             ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());
             PageReadStore rowGroup = null;
             int blockCounter = 0;
@@ -246,6 +249,7 @@ public class ParquetReaderHelper {
             processor.processFooter(footer);
             profiler.pause();
             ParquetReaderHelper.getGlobalDict(footer);
+            //System.out.println(footer.getParquetMetadata().getBlocks().get(0).getColumns().get(10).getStatistics());
             VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
 
             ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());

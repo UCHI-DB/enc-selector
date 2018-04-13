@@ -166,5 +166,6 @@
     <orderEntry type="library" name="Maven: org.roaringbitmap:RoaringBitmap:0.6.66" level="project" />
     <orderEntry type="library" name="Maven: com.hadoop.gplcompression:hadoop-lzo:0.4.20" level="project" />
     <orderEntry type="library" name="Maven: org.xerial.snappy:snappy-java:1.1.7.1" level="project" />
+    <orderEntry type="library" name="Maven: com.twitter:parquet-hadoop-bundle:1.6.0" level="project" />
   </component>
 </module>
