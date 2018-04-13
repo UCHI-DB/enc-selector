@@ -64,7 +64,7 @@ public class DictionaryEncoder {
             // use global encoding
             fUri = genOutputURI(input, "GDICTENCODING");
         }
-        int code = 0;
+        int code = 1;
         File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
@@ -84,22 +84,29 @@ public class DictionaryEncoder {
         String line;
         int cur = 0;
         int count = 0;
+        String curStr;
         while ((line = reader.readLine()) != null) {
-            cur = Integer.parseInt(line.trim());
+            curStr = line.trim();
             count++;
-            if(dict.containsKey(cur))
-                os.writeInt(dict.get(cur));
-            else {
-                os.writeInt(code);
-                dict.put(cur,code);
-                code++;
+            if (curStr.equals("")){
+                os.writeInt(0);
+            }
+            else{
+                cur = Integer.parseInt(curStr);
+                if(dict.containsKey(cur))
+                    os.writeInt(dict.get(cur));
+                else {
+                    os.writeInt(code);
+                    dict.put(cur,code);
+                    code++;
+                }
             }
             if(count==batch){
                 dictos.writeInt(code);
                 dictos.writeInt(count);
                 dictos.writeInt(code*4);
                 BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-                code = 0;
+                code = 1;
                 for (Integer key : dict.keySet()){
                     dictos.writeInt(key);
                 }
@@ -112,7 +119,7 @@ public class DictionaryEncoder {
             dictos.writeInt(count);
             dictos.writeInt(code*4);
             BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-            code = 0;
+            code = 1;
             for (Integer key : dict.keySet()){
                 dictos.writeInt(key);
             }
@@ -162,7 +169,7 @@ public class DictionaryEncoder {
             // use global encoding
             fUri = genOutputURI(input, "GDICTENCODING");
         }
-        int code = 0;
+        int code = 1;
         File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
@@ -182,22 +189,29 @@ public class DictionaryEncoder {
         String line;
         long cur = 0;
         int count = 0;
+        String curStr;
         while ((line = reader.readLine()) != null) {
-            cur = Long.parseLong(line.trim());
+            curStr = line.trim();
             count++;
-            if(dict.containsKey(cur))
-                os.writeInt(dict.get(cur));
-            else {
-                os.writeInt(code);
-                dict.put(cur,code);
-                code++;
+            if (curStr.equals("")){
+                os.writeInt(0);
+            }
+            else{
+                cur = Long.parseLong(curStr);
+                if(dict.containsKey(cur))
+                    os.writeInt(dict.get(cur));
+                else {
+                    os.writeInt(code);
+                    dict.put(cur,code);
+                    code++;
+                }
             }
             if(count==batch){
                 dictos.writeInt(code);
                 dictos.writeInt(count);
                 dictos.writeInt(code*8);
                 BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-                code = 0;
+                code = 1;
                 for (Long key : dict.keySet()){
                     dictos.writeLong(key);
                 }
@@ -210,7 +224,7 @@ public class DictionaryEncoder {
             dictos.writeInt(count);
             dictos.writeInt(code*8);
             BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-            code = 0;
+            code = 1;
             for (Long key : dict.keySet()){
                 dictos.writeLong(key);
             }
@@ -260,7 +274,7 @@ public class DictionaryEncoder {
             // use global encoding
             fUri = genOutputURI(input, "GDICTENCODING");
         }
-        int code = 0;
+        int code = 1;
         File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
@@ -280,22 +294,29 @@ public class DictionaryEncoder {
         String line;
         String cur;
         int count = 0;
+        String curStr;
         while ((line = reader.readLine()) != null) {
-            cur = line.trim();
+            curStr = line.trim();
             count++;
-            if(dict.containsKey(cur))
-                os.writeInt(dict.get(cur));
-            else {
-                os.writeInt(code);
-                dict.put(cur,code);
-                code++;
+            if (curStr.equals("")){
+                os.writeInt(0);
+            }
+            else{
+                cur = (curStr);
+                if(dict.containsKey(cur))
+                    os.writeInt(dict.get(cur));
+                else {
+                    os.writeInt(code);
+                    dict.put(cur,code);
+                    code++;
+                }
             }
             if(count==batch){
                 dictos.writeInt(code);
                 dictos.writeInt(count);
                 dictos.writeInt(-1);
                 BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-                code = 0;
+                code = 1;
                 for (String key : dict.keySet()){
                     dictos.writeUTF(key);
                 }
@@ -308,7 +329,7 @@ public class DictionaryEncoder {
             dictos.writeInt(count);
             dictos.writeInt(-1);
             BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-            code = 0;
+            code = 1;
             for (String key : dict.keySet()){
                 dictos.writeUTF(key);
             }
@@ -358,7 +379,7 @@ public class DictionaryEncoder {
             // use global encoding
             fUri = genOutputURI(input, "GDICTENCODING");
         }
-        int code = 0;
+        int code = 1;
         File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
@@ -377,23 +398,30 @@ public class DictionaryEncoder {
         Map<Double, Integer> dict =  new LinkedHashMap();
         String line;
         Double cur = 0.0;
+        String curStr;
         int count = 0;
         while ((line = reader.readLine()) != null) {
-            cur = Double.parseDouble(line.trim());
+            curStr = line.trim();
             count++;
-            if(dict.containsKey(cur))
-                os.writeInt(dict.get(cur));
-            else {
-                os.writeInt(code);
-                dict.put(cur,code);
-                code++;
+            if (curStr.equals("")){
+                os.writeInt(0);
+            }
+            else{
+                cur = Double.parseDouble(curStr);
+                if(dict.containsKey(cur))
+                    os.writeInt(dict.get(cur));
+                else {
+                    os.writeInt(code);
+                    dict.put(cur,code);
+                    code++;
+                }
             }
             if(count==batch){
                 dictos.writeInt(code);
                 dictos.writeInt(count);
                 dictos.writeInt(code*8);
                 BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-                code = 0;
+                code = 1;
                 for (Double key : dict.keySet()){
                     dictos.writeDouble(key);
                 }
@@ -406,7 +434,7 @@ public class DictionaryEncoder {
             dictos.writeInt(count);
             dictos.writeInt(code*8);
             BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-            code = 0;
+            code = 1;
             for (Double key : dict.keySet()){
                 dictos.writeDouble(key);
             }
@@ -435,7 +463,7 @@ public class DictionaryEncoder {
         while (is.available()>0) {
             bitToWrite = BPList.get(listCount);
             encoded = is.readInt();
-            System.out.println(encoded +" " +bitToWrite );
+            //System.out.println(encoded +" " +bitToWrite );
             gos.write(bitToWrite, encoded);
             count++;
             if(count == batch){
@@ -456,7 +484,7 @@ public class DictionaryEncoder {
             // use global encoding
             fUri = genOutputURI(input, "GDICTENCODING");
         }
-        int code = 0;
+        int code = 1;
         File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
@@ -476,22 +504,29 @@ public class DictionaryEncoder {
         String line;
         float cur = 0;
         int count = 0;
+        String curStr;
         while ((line = reader.readLine()) != null) {
-            cur = Float.parseFloat(line.trim());
+            curStr = line.trim();
             count++;
-            if(dict.containsKey(cur))
-                os.writeInt(dict.get(cur));
-            else {
-                os.writeInt(code);
-                dict.put(cur,code);
-                code++;
+            if (curStr.equals("")){
+                os.writeInt(0);
+            }
+            else{
+                cur = Float.parseFloat(curStr);
+                if(dict.containsKey(cur))
+                    os.writeInt(dict.get(cur));
+                else {
+                    os.writeInt(code);
+                    dict.put(cur,code);
+                    code++;
+                }
             }
             if(count==batch){
                 dictos.writeInt(code);
                 dictos.writeInt(count);
                 dictos.writeInt(code*4);
                 BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-                code = 0;
+                code = 1;
                 for (Float key : dict.keySet()){
                     dictos.writeFloat(key);
                 }
@@ -504,7 +539,7 @@ public class DictionaryEncoder {
             dictos.writeInt(count);
             dictos.writeInt(code*4);
             BPList.add(32-Integer.numberOfLeadingZeros(code-1));
-            code = 0;
+            code = 1;
             for (Float key : dict.keySet()){
                 dictos.writeFloat(key);
             }
@@ -533,7 +568,7 @@ public class DictionaryEncoder {
         while (is.available()>0) {
             bitToWrite = BPList.get(listCount);
             encoded = is.readInt();
-            System.out.println(encoded +" " +bitToWrite );
+            //System.out.println(encoded +" " +bitToWrite );
             gos.write(bitToWrite, encoded);
             count++;
             if(count == batch){
@@ -547,10 +582,9 @@ public class DictionaryEncoder {
 
     public static void main(String[] args){
         try {
-            singleColumnString(new URI("src/test/resource/coldata/test_col_int.data"),114);
+            File test = new File("src/test/resource/coldata/test_col_int.data");
+            singleColumnString(test.toURI(),114);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 

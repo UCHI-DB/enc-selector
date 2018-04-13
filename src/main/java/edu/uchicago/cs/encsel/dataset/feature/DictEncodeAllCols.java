@@ -39,7 +39,7 @@ public class DictEncodeAllCols {
 
     public static void main(String[] args) throws Exception {
         final int start = (args.length >= 1) ? Integer.parseInt(args[0]) : 0;
-        int batch = 200;
+        int batch = 2000;
         System.out.println(String.format("Start is %d", start));
         EntityManager em = JPAPersistence.emf().createEntityManager();
         List<ColumnWrapper> columns = em.createQuery("select c from Column c where c.parentWrapper IS NULL", ColumnWrapper.class).getResultList();
