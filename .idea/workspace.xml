@@ -14,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DictionaryEncoder.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DictionaryEncoder.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2265">
-              <caret line="199" column="0" lean-forward="false" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+            <state relative-caret-position="142">
+              <caret line="58" column="32" lean-forward="true" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -75,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DictEncodeAllCols.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DictEncodeAllCols.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+            <state relative-caret-position="155">
+              <caret line="62" column="51" lean-forward="true" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -146,7 +146,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>write</find>
       <find>end</find>
       <find>String</find>
       <find>binary</find>
@@ -176,6 +175,7 @@
       <find>4</find>
       <find>if (order)</find>
       <find>start</find>
+      <find>input.toString()</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -1084,7 +1084,7 @@
       <workItem from="1522550301172" duration="5406000" />
       <workItem from="1522608353089" duration="25884000" />
       <workItem from="1523234131668" duration="57608000" />
-      <workItem from="1523507575602" duration="18636000" />
+      <workItem from="1523507575602" duration="18942000" />
     </task>
     <servers />
   </component>
@@ -1121,7 +1121,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="220012000" />
+    <option name="totallyTimeSpent" value="220318000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="129" y="23" width="1280" height="823" extended-state="0" />
@@ -1602,18 +1602,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2265">
-          <caret line="199" column="0" lean-forward="false" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+        <state relative-caret-position="155">
+          <caret line="62" column="51" lean-forward="true" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="142">
+          <caret line="58" column="32" lean-forward="true" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
           <folding />
         </state>
       </provider>

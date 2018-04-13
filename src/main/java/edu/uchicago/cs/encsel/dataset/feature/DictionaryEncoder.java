@@ -76,7 +76,7 @@ public class DictionaryEncoder {
      * @throws IOException
      */
     public static void singleColumnInt(URI input, int batch) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(input.toString())));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
         // local dictionary encoding
         URI fUri = genOutputURI(input, "LDICTENCODING");
@@ -174,7 +174,7 @@ public class DictionaryEncoder {
     }
 
     public static void singleColumnLong(URI input, int batch) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(input.toString())));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
         // local dictionary encoding
         URI fUri = genOutputURI(input, "LDICTENCODING");
@@ -370,7 +370,7 @@ public class DictionaryEncoder {
     }
 
     public static void singleColumnDouble(URI input, int batch) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(input.toString())));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
         // local dictionary encoding
         URI fUri = genOutputURI(input, "LDICTENCODING");
@@ -468,7 +468,7 @@ public class DictionaryEncoder {
     }
 
     public static void singleColumnFloat(URI input, int batch) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(input.toString())));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
         // local dictionary encoding
         URI fUri = genOutputURI(input, "LDICTENCODING");
