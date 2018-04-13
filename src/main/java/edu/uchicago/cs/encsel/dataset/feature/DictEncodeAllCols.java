@@ -42,9 +42,8 @@ public class DictEncodeAllCols {
         int batch = 200;
         System.out.println(String.format("Start is %d", start));
         EntityManager em = JPAPersistence.emf().createEntityManager();
-        List<ColumnWrapper> columns = em.createQuery("select c from Column c", ColumnWrapper.class).getResultList();
-
-        for (ColumnWrapper col : columns) {
+        List<ColumnWrapper> columns = em.createQuery("select c from Column c where c.parentWrapper IS NULL", ColumnWrapper.class).getResultList();
+        for (ColumnWrapper col : columns){
             System.out.println(col.id());
             if (col.id() >= start) {
                 switch (col.dataType()) {
