@@ -22,26 +22,6 @@
  */
 package edu.uchicago.cs.encsel.dataset.feature;
 
-import edu.uchicago.cs.encsel.dataset.feature.BitOutputStream;
-import edu.uchicago.cs.encsel.model.FloatEncoding;
-import edu.uchicago.cs.encsel.model.IntEncoding;
-import edu.uchicago.cs.encsel.model.LongEncoding;
-import edu.uchicago.cs.encsel.model.StringEncoding;
-import edu.uchicago.cs.encsel.parquet.EncContext;
-import edu.uchicago.cs.encsel.parquet.ParquetWriterBuilder;
-import org.apache.hadoop.fs.Path;
-import org.apache.parquet.column.values.dictionary.PlainValuesDictionary;
-import org.apache.parquet.hadoop.ParquetWriter;
-import org.apache.parquet.io.ParquetDecodingException;
-import org.apache.parquet.io.api.Binary;
-import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
-import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
-import org.apache.parquet.schema.MessageType;
-import org.apache.parquet.schema.PrimitiveType;
-import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
-import org.apache.parquet.schema.Type.Repetition;
-import edu.uchicago.cs.encsel.util.perf.Profiler;
-
 import java.io.*;
 import java.util.HashMap;
 
@@ -85,20 +65,20 @@ public class DictionaryEncoder {
             fUri = genOutputURI(input, "GDICTENCODING");
         }
         int code = 0;
-        File lOutput = new File(fUri.toString());
+        File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(fUri.toString()));
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(new File(fUri)));
         //local dictionary file
         URI dUri = genOutputURI(input, "LOCALDICT");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             dUri = genOutputURI(input, "GLOBALDICT");
         }
-        File dOutput = new File(dUri.toString());
+        File dOutput = new File(dUri);
         if (dOutput.exists())
             dOutput.delete();
-        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(dUri.toString()));
+        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(new File(dUri)));
 
         Map<Integer, Integer> dict =  new LinkedHashMap();
         String line;
@@ -144,17 +124,17 @@ public class DictionaryEncoder {
         os.close();
         dictos.close();
 
-        DataInputStream is = new DataInputStream(new FileInputStream(fUri.toString()));
+        DataInputStream is = new DataInputStream(new FileInputStream(new File(fUri)));
         // local dictionary encoding + BP
         URI gfUri = genOutputURI(input, "LBPDICTENCODING");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             gfUri = genOutputURI(input, "GBPDICTENCODING");
         }
-        File glOutput = new File(gfUri.toString());
+        File glOutput = new File(gfUri);
         if (glOutput.exists())
             glOutput.delete();
-        BitOutputStream gos = new BitOutputStream(gfUri.toString());
+        BitOutputStream gos = new BitOutputStream(new FileOutputStream(new File(gfUri)));
         int encoded ;
         int listCount = 0;
         int bitToWrite;
@@ -183,20 +163,20 @@ public class DictionaryEncoder {
             fUri = genOutputURI(input, "GDICTENCODING");
         }
         int code = 0;
-        File lOutput = new File(fUri.toString());
+        File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(fUri.toString()));
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(new File(fUri)));
         //local dictionary file
         URI dUri = genOutputURI(input, "LOCALDICT");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             dUri = genOutputURI(input, "GLOBALDICT");
         }
-        File dOutput = new File(dUri.toString());
+        File dOutput = new File(dUri);
         if (dOutput.exists())
             dOutput.delete();
-        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(dUri.toString()));
+        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(new File(dUri)));
 
         Map<Long, Integer> dict =  new LinkedHashMap();
         String line;
@@ -242,17 +222,17 @@ public class DictionaryEncoder {
         os.close();
         dictos.close();
 
-        DataInputStream is = new DataInputStream(new FileInputStream(fUri.toString()));
+        DataInputStream is = new DataInputStream(new FileInputStream(new File(fUri)));
         // local dictionary encoding + BP
         URI gfUri = genOutputURI(input, "LBPDICTENCODING");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             gfUri = genOutputURI(input, "GBPDICTENCODING");
         }
-        File glOutput = new File(gfUri.toString());
+        File glOutput = new File(gfUri);
         if (glOutput.exists())
             glOutput.delete();
-        BitOutputStream gos = new BitOutputStream(gfUri.toString());
+        BitOutputStream gos = new BitOutputStream(new FileOutputStream(new File(gfUri)));
         int encoded ;
         int listCount = 0;
         int bitToWrite;
@@ -281,20 +261,20 @@ public class DictionaryEncoder {
             fUri = genOutputURI(input, "GDICTENCODING");
         }
         int code = 0;
-        File lOutput = new File(fUri.toString());
+        File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(fUri.toString()));
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(new File(fUri)));
         //local dictionary file
         URI dUri = genOutputURI(input, "LOCALDICT");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             dUri = genOutputURI(input, "GLOBALDICT");
         }
-        File dOutput = new File(dUri.toString());
+        File dOutput = new File(dUri);
         if (dOutput.exists())
             dOutput.delete();
-        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(dUri.toString()));
+        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(new File(dUri)));
 
         Map<String, Integer> dict =  new LinkedHashMap();
         String line;
@@ -340,17 +320,17 @@ public class DictionaryEncoder {
         os.close();
         dictos.close();
 
-        DataInputStream is = new DataInputStream(new FileInputStream(fUri.toString()));
+        DataInputStream is = new DataInputStream(new FileInputStream(new File(fUri)));
         // local dictionary encoding + BP
         URI gfUri = genOutputURI(input, "LBPDICTENCODING");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             gfUri = genOutputURI(input, "GBPDICTENCODING");
         }
-        File glOutput = new File(gfUri.toString());
+        File glOutput = new File(gfUri);
         if (glOutput.exists())
             glOutput.delete();
-        BitOutputStream gos = new BitOutputStream(gfUri.toString());
+        BitOutputStream gos = new BitOutputStream(new FileOutputStream(new File(gfUri)));
         int encoded ;
         int listCount = 0;
         int bitToWrite;
@@ -379,20 +359,20 @@ public class DictionaryEncoder {
             fUri = genOutputURI(input, "GDICTENCODING");
         }
         int code = 0;
-        File lOutput = new File(fUri.toString());
+        File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(fUri.toString()));
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(new File(fUri)));
         //local dictionary file
         URI dUri = genOutputURI(input, "LOCALDICT");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             dUri = genOutputURI(input, "GLOBALDICT");
         }
-        File dOutput = new File(dUri.toString());
+        File dOutput = new File(dUri);
         if (dOutput.exists())
             dOutput.delete();
-        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(dUri.toString()));
+        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(new File(dUri)));
 
         Map<Double, Integer> dict =  new LinkedHashMap();
         String line;
@@ -438,17 +418,17 @@ public class DictionaryEncoder {
         os.close();
         dictos.close();
 
-        DataInputStream is = new DataInputStream(new FileInputStream(fUri.toString()));
+        DataInputStream is = new DataInputStream(new FileInputStream(new File(fUri)));
         // local dictionary encoding + BP
         URI gfUri = genOutputURI(input, "LBPDICTENCODING");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             gfUri = genOutputURI(input, "GBPDICTENCODING");
         }
-        File glOutput = new File(gfUri.toString());
+        File glOutput = new File(gfUri);
         if (glOutput.exists())
             glOutput.delete();
-        BitOutputStream gos = new BitOutputStream(gfUri.toString());
+        BitOutputStream gos = new BitOutputStream(new FileOutputStream(new File(gfUri)));
         int encoded ;
         int listCount = 0;
         int bitToWrite;
@@ -477,20 +457,20 @@ public class DictionaryEncoder {
             fUri = genOutputURI(input, "GDICTENCODING");
         }
         int code = 0;
-        File lOutput = new File(fUri.toString());
+        File lOutput = new File(fUri);
         if (lOutput.exists())
             lOutput.delete();
-        DataOutputStream os = new DataOutputStream(new FileOutputStream(fUri.toString()));
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(new File(fUri)));
         //local dictionary file
         URI dUri = genOutputURI(input, "LOCALDICT");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             dUri = genOutputURI(input, "GLOBALDICT");
         }
-        File dOutput = new File(dUri.toString());
+        File dOutput = new File(dUri);
         if (dOutput.exists())
             dOutput.delete();
-        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(dUri.toString()));
+        DataOutputStream dictos = new DataOutputStream(new FileOutputStream(new File(dUri)));
 
         Map<Float, Integer> dict =  new LinkedHashMap();
         String line;
@@ -536,17 +516,17 @@ public class DictionaryEncoder {
         os.close();
         dictos.close();
 
-        DataInputStream is = new DataInputStream(new FileInputStream(fUri.toString()));
+        DataInputStream is = new DataInputStream(new FileInputStream(new File(fUri)));
         // local dictionary encoding + BP
         URI gfUri = genOutputURI(input, "LBPDICTENCODING");
         if (batch == Integer.MAX_VALUE) {
             // use global encoding
             gfUri = genOutputURI(input, "GBPDICTENCODING");
         }
-        File glOutput = new File(gfUri.toString());
+        File glOutput = new File(gfUri);
         if (glOutput.exists())
             glOutput.delete();
-        BitOutputStream gos = new BitOutputStream(gfUri.toString());
+        BitOutputStream gos = new BitOutputStream(new FileOutputStream(new File(gfUri)));
         int encoded ;
         int listCount = 0;
         int bitToWrite;
