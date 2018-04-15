@@ -46,7 +46,7 @@ public class ScanFileProducer {
         int col = Integer.parseInt(args[0]);
         String enc = args[1];
         String compre = args[2];
-        String lineitem = "/home/cc/tpch-generator/dbgen/lineitem";
+        String lineitem = "../tpch-generator/dbgen/lineitem";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);

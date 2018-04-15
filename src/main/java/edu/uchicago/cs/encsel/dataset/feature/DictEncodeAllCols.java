@@ -46,6 +46,7 @@ public class DictEncodeAllCols {
         for (ColumnWrapper col : columns){
             System.out.println(col.id());
             if (col.id() >= start) {
+
                 switch (col.dataType()) {
                     case STRING:
                         DictionaryEncoder.singleColumnString(col.colFile(), batch);
