@@ -29,7 +29,8 @@ import java.nio.file.{Files, Paths}
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage.featureType
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
-import edu.uchicago.cs.encsel.parquet.ParquetTupleReader
+import edu.uchicago.cs.encsel.parquet.{ParquetTupleReader, ParquetTupleVReader}
+import edu.uchicago.cs.encsel.query.operator.VerticalSelect
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import edu.uchicago.cs.encsel.util.FileUtils
 import org.slf4j.LoggerFactory
@@ -46,7 +47,7 @@ object SubattrScanTimeUsage extends FeatureExtractor {
   def extract(col: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val subtable = FileUtils.addExtension(col.colFile, "subtable")
     if (Files.exists(Paths.get(subtable))) {
-      val tupleReader = new ParquetTupleReader(subtable)
+      val tupleReader = new ParquetTupleVReader(subtable)
       var counter = 0
       profiler.reset
       profiler.mark
@@ -58,9 +59,8 @@ object SubattrScanTimeUsage extends FeatureExtractor {
       profiler.pause
       val time = profiler.stop
       Iterable(
-        new Feature(featureType, "wallclock", time.wallclock),
-        new Feature(featureType, "cpu", time.cpu),
-        new Feature(featureType, "user", time.user)
+        new Feature(featureType, "vread_wallclock", time.wallclock),
+        new Feature(featureType, "vread_cpu", time.cpu)
       )
     } else {
       Iterable()
