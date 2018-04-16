@@ -43,10 +43,11 @@ public class DictEncodeAllCols {
         System.out.println(String.format("Start is %d", start));
         EntityManager em = JPAPersistence.emf().createEntityManager();
         List<ColumnWrapper> columns = em.createQuery("select c from Column c where c.parentWrapper IS NULL", ColumnWrapper.class).getResultList();
+        System.out.println("columns in total:" + columns.size());
         for (ColumnWrapper col : columns){
             System.out.println(col.id());
             if (col.id() >= start) {
-
+                System.out.println(col.colFile());
                 switch (col.dataType()) {
                     case STRING:
                         DictionaryEncoder.singleColumnString(col.colFile(), batch);
@@ -71,7 +72,9 @@ public class DictEncodeAllCols {
                     case BOOLEAN:
                         break;
                 }
+                System.out.println("Finished");
             }
         }
+        System.out.println("Ended successfully");
     }
 }
