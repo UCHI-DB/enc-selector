@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="878e0a7c-8277-46d3-a323-285c70247ae6" name="Default" comment="filter with different selectivity">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -41,8 +40,8 @@
       <file leaf-file-name="DictEncodeAllCols.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="48" column="36" lean-forward="true" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
+            <state relative-caret-position="274">
+              <caret line="63" column="31" lean-forward="true" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -637,7 +636,7 @@
       <workItem from="1522550301172" duration="5406000" />
       <workItem from="1522608353089" duration="25884000" />
       <workItem from="1523234131668" duration="57608000" />
-      <workItem from="1523507575602" duration="50054000" />
+      <workItem from="1523507575602" duration="50755000" />
     </task>
     <servers />
   </component>
@@ -674,7 +673,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="251430000" />
+    <option name="totallyTimeSpent" value="252131000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -1159,8 +1158,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictEncodeAllCols.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="48" column="36" lean-forward="true" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
+        <state relative-caret-position="274">
+          <caret line="63" column="31" lean-forward="true" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
           <folding />
         </state>
       </provider>
