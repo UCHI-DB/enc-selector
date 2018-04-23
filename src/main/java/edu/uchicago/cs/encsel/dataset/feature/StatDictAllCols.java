@@ -45,31 +45,28 @@ public class StatDictAllCols {
         if (lOutput.exists())
             lOutput.delete();
         FileWriter fileWriter = new FileWriter(ofd);
-        fileWriter.append("ORIGIN,L_DICT_ENC,L_BP_ENC,L_DCIT,G_DICT_ENC,G_BP_ENC,G_DCIT\n");
-        //EntityManager em = JPAPersistence.emf().createEntityManager();
-        //List<ColumnWrapper> columns = em.createQuery("select c from Column c where c.parentWrapper IS NULL", ColumnWrapper.class).getResultList();
-        //System.out.println(String.format("Total number of cols is %d", columns.size()));
+        fileWriter.append("COL_ID,TYPE,ORIGIN,L_DICT_ENC,L_BP_ENC,L_DCIT,G_DICT_ENC,G_BP_ENC,G_DCIT\n");
+        EntityManager em = JPAPersistence.emf().createEntityManager();
+        List<ColumnWrapper> columns = em.createQuery("select c from Column c where c.parentWrapper IS NULL", ColumnWrapper.class).getResultList();
+        System.out.println(String.format("Total number of cols is %d", columns.size()));
         URI curUri;
         String stat;
-        //for (ColumnWrapper col : columns){
-        for (int i=0; i<1; i++){
-            //System.out.println(col.id());
-            //if (col.id() >= start) {
-                File test = new File("src/test/resource/coldata/test_col_int.data");
-                //curUri = col.colFile()
-                curUri = test.toURI();
+        for (ColumnWrapper col : columns){
+            System.out.println(col.id());
+            if (col.id() >= start) {
+                curUri = col.colFile();
                 URI lUri = DictionaryEncoder.genOutputURI(curUri, "LDICTENCODING");
                 URI lBPUri = DictionaryEncoder.genOutputURI(curUri, "LBPDICTENCODING");
                 URI lDictUri = DictionaryEncoder.genOutputURI(curUri, "LOCALDICT");
                 URI gUri = DictionaryEncoder.genOutputURI(curUri, "GDICTENCODING");
                 URI gBPUri = DictionaryEncoder.genOutputURI(curUri, "GBPDICTENCODING");
                 URI gDictUri = DictionaryEncoder.genOutputURI(curUri, "GLOBALDICT");
-                stat = new File(curUri).length()+","+new File(lUri).length()+","+
+                stat = col.id()+","+col.dataType() + "," +new File(curUri).length()+","+new File(lUri).length()+","+
                         new File(lBPUri).length()+","+new File(lDictUri).length()+","+new File(gUri).length()+","+new File(gBPUri).length()+","+
                         new File(gDictUri).length();
                 fileWriter.append(stat+"\n");
-                System.out.println(stat);
-            //}
+                //System.out.println(stat);
+            }
         }
         fileWriter.flush();
         fileWriter.close();

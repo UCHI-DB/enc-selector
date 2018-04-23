@@ -609,7 +609,7 @@ public class ColumnReaderImpl implements ColumnReader {
       this.dataColumn = dataEncoding.getValuesReader(path, VALUES);
     }
     if (dataEncoding.usesDictionary() && converter.hasDictionarySupport()) {
-      //.out.println("use dictionary value reader");
+      //System.out.println("use dictionary value reader");
       bindToDictionary(dictionary);
     } else {
       //System.out.println("do not use dictionary value reader");

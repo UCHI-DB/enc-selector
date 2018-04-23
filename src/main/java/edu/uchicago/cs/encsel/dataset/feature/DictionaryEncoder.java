@@ -265,7 +265,7 @@ public class DictionaryEncoder {
         gos.close();
     }
 
-    public static void singleColumnString(URI input, int batch) throws IOException {
+    public static void  singleColumnString(URI input, int batch) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
         // local dictionary encoding
