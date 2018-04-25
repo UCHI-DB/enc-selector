@@ -37,6 +37,7 @@ import org.apache.parquet.column.impl.ColumnReaderImpl;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.filter2.compat.FilterCompat;
 import org.apache.parquet.filter2.predicate.FilterPredicate;
+import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -104,17 +105,17 @@ public class ShipdataFilter {
                     //System.out.println("rowgroup count: "+rowGroup.getRowCount());
                     ColumnReaderImpl shipdateReader = new ColumnReaderImpl(l_shipdate, rowGroup.getPageReader(l_shipdate), new NonePrimitiveConverter(), version);
                     for (long j = 0;  j<rowGroup.getRowCount(); j++) {
-                        bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
-                        //bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
+                        //bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
+                        bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
                         //if (quantity_pred(value))
                         //System.out.println("row number:" + j + " value: " + colReader.getInteger());
                         shipdateReader.consume();
                     }
 
                     int count = 0;
-                    //Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_shipdate.toString());
-                    //System.out.println("Dictioanry key value:"+ shipdataDict.toString());
-                    //System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
+                    Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_shipdate.toString());
+                    System.out.println("Dictioanry key value:"+ shipdataDict.toString());
+                    System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
 
                 }
             });
