@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="878e0a7c-8277-46d3-a323-285c70247ae6" name="Default" comment="filter with different selectivity">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rangeQuery.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ShipdataFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ShipdataFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,16 +15,56 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ShipdataFilter.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ShipdataFilter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ShipdataFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="68" column="66" lean-forward="false" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
+            <state relative-caret-position="147">
+              <caret line="63" column="79" lean-forward="false" selection-start-line="63" selection-start-column="79" selection-end-line="63" selection-end-column="79" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#5484#9403#0" expanded="true" />
                 <element signature="e#9402#9403#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="q6.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/q6.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pwbq6.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pwbq6.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="joinQ14.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/joinQ14.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rangeQuery.sh" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rangeQuery.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="82" lean-forward="false" selection-start-line="10" selection-start-column="82" selection-end-line="10" selection-end-column="82" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -72,18 +110,6 @@
                 <element signature="e#9616#9617#0" expanded="true" />
                 <element signature="e#9958#9959#0" expanded="true" />
                 <element signature="e#10009#10010#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ColumnChunkPageReadStore.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="134" column="51" lean-forward="false" selection-start-line="134" selection-start-column="51" selection-end-line="134" selection-end-column="51" />
-              <folding>
-                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -208,6 +234,7 @@
         <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/filter/StatisticsPageFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ShipdataFilter.java" />
+        <option value="$PROJECT_DIR$/rangeQuery.sh" />
       </list>
     </option>
   </component>
@@ -442,6 +469,9 @@
     <property name="SearchEverywhereHistoryKey" value="columnchunk&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/org/apache/parquet/hadoop/ColumnChunkPageReadStore.java&#10;DictionaryEncoder.java&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java&#10;internal&#9;FILE&#9;jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/Contents/Home/jre/lib/rt.jar!/com/sun/xml/internal/bind/InternalAccessorFactory.class&#10;encoder&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/dataset/feature/DictionaryEncoder.java&#10;ty&#9;FILE&#9;file:///Users/chunwei/research/enc-selector/src/main/java/edu/uchicago/cs/encsel/model/DataType.java&#10;dataty&#9;PSI&#9;JAVA://edu.uchicago.cs.encsel.model.DataType" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="edu.uchicago.cs.encsel.dataset.feature" />
       <recent name="edu.uchicago.cs.encsel.query" />
@@ -680,7 +710,7 @@
       <workItem from="1522550301172" duration="5406000" />
       <workItem from="1522608353089" duration="25884000" />
       <workItem from="1523234131668" duration="57608000" />
-      <workItem from="1523507575602" duration="90604000" />
+      <workItem from="1523507575602" duration="92514000" />
     </task>
     <servers />
   </component>
@@ -717,7 +747,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="291980000" />
+    <option name="totallyTimeSpent" value="293890000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1840" y="187" width="1358" height="823" extended-state="0" />
@@ -732,7 +762,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3701731" sideWeight="0.17673048" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3701731" sideWeight="0.8232695" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3701731" sideWeight="0.8232695" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291714" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -770,14 +800,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/format/converter/scriptFile.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/dataset/feature/compress/ParquetCompressFileSizeAndTime.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="263">
@@ -1206,13 +1228,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ShipdataFilter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="68" column="66" lean-forward="false" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
+        <state relative-caret-position="147">
+          <caret line="63" column="79" lean-forward="false" selection-start-line="63" selection-start-column="79" selection-end-line="63" selection-end-column="79" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#5484#9403#0" expanded="true" />
             <element signature="e#9402#9403#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rangeQuery.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="82" lean-forward="false" selection-start-line="10" selection-start-column="82" selection-end-line="10" selection-end-column="82" />
+          <folding />
         </state>
       </provider>
     </entry>
