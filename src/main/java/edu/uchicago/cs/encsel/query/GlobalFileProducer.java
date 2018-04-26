@@ -38,7 +38,7 @@ import java.io.IOException;
 public class GlobalFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED"};
+        //args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("ScanFileProducer pos enc compression");
             return;
