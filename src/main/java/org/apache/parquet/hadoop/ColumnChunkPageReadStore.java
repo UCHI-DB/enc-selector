@@ -128,9 +128,9 @@ class ColumnChunkPageReadStore implements PageReadStore, DictionaryPageReadStore
         return null;
       }
       while(!compressedPages.isEmpty()) {
-    	    //DataPage compressedPage = compressedPages.remove(0);
-    	    DataPageV1 compressedPage = (DataPageV1)compressedPages.remove(0);
-		  	System.out.println(compressedPage.getStatistics().toString());
+    	    DataPage compressedPage = compressedPages.remove(0);
+    	    //DataPageV1 compressedPage = (DataPageV1)compressedPages.remove(0);
+		  	//System.out.println(compressedPage.getStatistics().toString());
 
 		  if (filterPredicate != null && StatisticsPageFilter.canDrop(filterPredicate, compressedPage)) {
 				this.setSkipped(getSkipped()+compressedPage.getValueCount());

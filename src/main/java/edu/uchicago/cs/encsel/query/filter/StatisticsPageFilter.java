@@ -70,11 +70,28 @@ public class StatisticsPageFilter implements FilterPredicate.Visitor<Boolean> {
   private static final boolean BLOCK_MIGHT_MATCH = false;
   private static final boolean BLOCK_CANNOT_MATCH = true;
 
+  private static int PAGECOUNT = 0;
+  private static int PAGESKIPPED = 0;
+
+
   public static boolean canDrop(FilterPredicate pred, DataPage dataPage) {
     checkNotNull(pred, "pred");
     checkNotNull(dataPage, "dataPage");
+    PAGECOUNT++;
+    boolean drop = pred.accept(new StatisticsPageFilter(dataPage));
+    if (drop)
+      PAGESKIPPED++;
     //System.out.println(pred.accept(new StatisticsPageFilter(dataPage)) + " " + pred.toString() + " " + getStatisticsFromPageHeader(dataPage).toString());
-    return pred.accept(new StatisticsPageFilter(dataPage));
+    return drop;
+  }
+
+  public static int getPAGECOUNT() {
+    return PAGECOUNT;
+  }
+
+
+  public static int getPAGESKIPPED() {
+    return PAGESKIPPED;
   }
   
   private DataPage dataPage;
