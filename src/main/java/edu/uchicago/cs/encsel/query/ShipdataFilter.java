@@ -64,7 +64,7 @@ public class ShipdataFilter {
     static Boolean hardShipdate_pred(int value) {return  (value>=0)&&(value<code); }
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"1","1992-01-03", "false", "true"};
+        args = new String[]{"1","1992-01-03", "false", "false"};
         if (args.length == 0) {
             System.out.println("ShipdataFilter code value pageskipping hardmode");
             return;
