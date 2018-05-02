@@ -40,7 +40,7 @@ import java.net.URI;
 public class GlobalJoinFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"DICT","DICT", "UNCOMPRESSED"};
+        args = new String[]{"DICT","DICT", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("JoinFileProducer PPencoding LPencoding Compression");
             return;

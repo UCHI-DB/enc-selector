@@ -51,7 +51,6 @@ public class HashJoinTool {
 
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Object[]{bitLength,intbound});
         EncContext.context.get().put(TPCHSchema.partSchema().getColumns().get(0).toString(), new Object[]{pbl,pib});
-
         int repeat = 10;
         long clocktime = 0L;
         long cputime = 0L;

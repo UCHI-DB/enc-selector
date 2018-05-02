@@ -72,13 +72,17 @@ class HashJoin extends Join {
         }
         // Build hash table
         for (i <- 0L until rowGroup.getRowCount) {
-          val hashKey = DataUtils.readValue(hashKeyReader)
+          //val hashKey = DataUtils.readValue(hashKeyReader)
+          val hashKey = hashKeyReader.getCurrentValueDictionaryID
+          //println(hashKey)
           //println(hashKeyReader.getCurrentValueDictionaryID)
 
           hashtable.put(hashKey, hashRecorder.getCurrentRecord)
           hashRecorder.start()
           hashRowReaders.foreach(reader => {
-            reader.writeCurrentValueToConverter()
+            if(reader.getCurrentDefinitionLevel == reader.getDescriptor.getMaxDefinitionLevel){
+              reader.writeCurrentValueToConverter()
+            }
             reader.consume()
           })
           hashRecorder.end()
@@ -103,8 +107,9 @@ class HashJoin extends Join {
         val bitmap = new RoaringBitmap()
 
         for (i <- 0L until rowGroup.getRowCount) {
-          val hashKey = DataUtils.readValue(hashKeyReader)
-          hashtable.get(hashKey) match {
+          //val hashKey = DataUtils.readValue(hashKeyReader)
+          val hashKey = hashKeyReader.getCurrentValueDictionaryID
+            hashtable.get(hashKey) match {
             case Some(row) => {
               // Record match in bitmap
               bitmap.set(i, true)
