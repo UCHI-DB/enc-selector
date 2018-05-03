@@ -52,7 +52,7 @@ import static org.apache.parquet.filter2.predicate.FilterApi.*;
 
 public class ShipdataFilter {
 
-    static int code = 0;
+    static int code = -2;
     static Binary date1993 = Binary.fromString("1992-01-02");
     static Binary date1994 = Binary.fromString("1992-01-03");
     static Boolean pred(int value){
@@ -64,19 +64,21 @@ public class ShipdataFilter {
     static Boolean hardShipdate_pred(int value) {return  (value>=0)&&(value<code); }
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"1","1992-01-03", "false", "false"};
+        //args = new String[]{"false","1992-01-03", "false", "true"};
         if (args.length == 0) {
-            System.out.println("ShipdataFilter code value pageskipping hardmode");
+            System.out.println("ShipdataFilter order value pageskipping hardmode");
             return;
         }
-        code = Integer.parseInt(args[0]);
+        //code = Integer.parseInt(args[0]);
+        String order = args[0];
+        Boolean ordered = (order.equalsIgnoreCase("true") || order.equals("1"));
         date1994 = Binary.fromString(args[1]);
         String skip = args[2];
         String hard = args[3];
         Boolean pageSkipping = (skip.equalsIgnoreCase("true") || skip.equals("1"));
         Boolean hardmode = (hard.equalsIgnoreCase("true") || hard.equals("1"));
 
-        System.out.println(date1994.toStringUsingUTF8()+":"+code+", skipmode:"+skip+", hardmode:"+hard);
+        System.out.println(date1994.toStringUsingUTF8()+":"+order+", skipmode:"+skip+", hardmode:"+hard);
 
         ColumnDescriptor l_quantity = TPCHSchema.lineitemSchema().getColumns().get(4);
         String quantity_str = Strings.join(l_quantity.getPath(), ".");
@@ -110,6 +112,7 @@ public class ShipdataFilter {
         long cputime = 0L;
         long usertime = 0L;
         for (int i = 0; i < repeat; i++) {
+            code = -2;
             ProfileBean prof = ParquetReaderHelper.filterProfile(new File(lineitem+".parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
                 @Override
@@ -136,6 +139,11 @@ public class ShipdataFilter {
                     }
 
                     if(hardmode){
+                        if (!(EncContext.globalDict.get().containsKey(l_shipdate.toString()))||(code<0))
+                        {
+                            code = shipdateReader.retrieveDictID(date1994,ordered);
+                            System.out.println(code);
+                        }
                         while(shipdateReader.getReadValue()<rowGroup.getRowCount()) {
                             //System.out.println("getReadValue:"+shipdateReader.getReadValue());
                             //System.out.println("getPageValueCount:"+shipdateReader.getPageValueCount());

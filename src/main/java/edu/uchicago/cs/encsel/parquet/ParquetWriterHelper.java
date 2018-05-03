@@ -299,11 +299,10 @@ public class ParquetWriterHelper {
         }
     }
 
-    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema) {
+    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema,Boolean order) {
         URI[] inputArr = {input};
         int[] indexArr = {index};
         MessageType[] schemaArr = {schema};
-        Boolean order = true;
         return buildGlobalDict(inputArr,indexArr,schemaArr,order);
     }
 

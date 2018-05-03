@@ -74,7 +74,7 @@ class HashJoin extends Join {
         for (i <- 0L until rowGroup.getRowCount) {
           //val hashKey = DataUtils.readValue(hashKeyReader)
           val hashKey = hashKeyReader.getCurrentValueDictionaryID
-          //println(hashKey)
+          println(hashKey)
           //println(hashKeyReader.getCurrentValueDictionaryID)
 
           hashtable.put(hashKey, hashRecorder.getCurrentRecord)

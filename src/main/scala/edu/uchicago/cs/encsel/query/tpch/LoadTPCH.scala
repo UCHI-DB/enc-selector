@@ -79,7 +79,7 @@ object LoadTPCH4Offheap extends App {
 object  tes extends App {
   EncContext.encoding.get().put(TPCHSchema.lineitemSchema.getColumns()(8).toString, Encoding.PLAIN_DICTIONARY)
   EncContext.context.get().put(TPCHSchema.lineitemSchema.getColumns()(8).toString, Array[AnyRef]("6", "50"))
-  var dictMap = ParquetWriterHelper.buildGlobalDict(new File("../tpch-generator/dbgen/lineitem.tbl").toURI,8,TPCHSchema.lineitemSchema)
+  var dictMap = ParquetWriterHelper.buildGlobalDict(new File("../tpch-generator/dbgen/lineitem.tbl").toURI,8,TPCHSchema.lineitemSchema,true)
   println(dictMap)
   EncContext.globalDict.get().put(TPCHSchema.lineitemSchema.getColumns()(8).toString, dictMap)
   ParquetWriterHelper.write(new File("../tpch-generator/dbgen/lineitem.tbl").toURI, TPCHSchema.lineitemSchema,

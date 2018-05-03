@@ -143,7 +143,7 @@ public class ParquetWriterHelperTest {
     public void testBuildGlobalDict(){
         String lineitem = "../tpch-generator/dbgen/lineitem";
         String part = "../tpch-generator/dbgen/part";
-        Object2IntMap dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 2, TPCHSchema.partSchema());
+        Object2IntMap dict = ParquetWriterHelper.buildGlobalDict(new File(part+".tbl").toURI(), 2, TPCHSchema.partSchema(), true);
         System.out.println(dict.containsKey(Binary.fromString("SMAL BRUSHED COPPER")));
         System.out.println(dict);
         ObjectIterator<Object2IntMap.Entry> entryIterator = dict.object2IntEntrySet().iterator();
