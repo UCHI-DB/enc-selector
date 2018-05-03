@@ -17,7 +17,7 @@ for skip in true false; do
 done
 java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.GlobalFileProducer 10 PLAIN_DICTIONARY UNCOMPRESSED false
 for skip in true false; do
-    for hard in false; do
+    for hard in true false; do
         cd ~/enc-selector/
         java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.EqualFilter false 1992-01-03 $skip $hard
         java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.EqualFilter false 1992-01-04 $skip $hard
@@ -30,7 +30,7 @@ for skip in true false; do
 done
 java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.ScanFileProducer 4 RLE UNCOMPRESSED
 for skip in true false; do
-    for hard in false; do
+    for hard in true false; do
         cd ~/enc-selector/
         java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.EqualFilter false 1992-01-03 $skip $hard
         java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.EqualFilter false 1992-01-04 $skip $hard
