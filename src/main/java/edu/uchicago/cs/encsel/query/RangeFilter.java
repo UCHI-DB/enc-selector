@@ -41,16 +41,14 @@ import org.apache.parquet.filter2.predicate.FilterPredicate;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
 import org.apache.parquet.io.api.Binary;
-import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static org.apache.parquet.filter2.predicate.FilterApi.*;
 
 
-public class ShipdataFilter {
+public class RangeFilter {
 
     static int code = -2;
     static Binary date1993 = Binary.fromString("1992-01-02");
@@ -60,13 +58,13 @@ public class ShipdataFilter {
     }
     static Boolean quantity_pred(int value) {return value<25; }
     static Boolean discount_pred(double value) {return (value>=0.05)&&(value<=0.07); }
-    static Boolean shipdate_pred(Binary value) {return (date1993.compareTo(value)==0)||(date1993.compareTo(value) + date1994.compareTo(value) == 0); }
-    static Boolean hardShipdate_pred(int value) {return  (value>=0)&&(value<code); }
+    static Boolean shipdate_pred(Binary value) {return ( date1994.compareTo(value) > 0); }
+    static Boolean hardShipdate_pred(int value) {return (value<code); }
     static int totalcount = 0;
     static int selected = 0;
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","1992-01-03", "false", "false"};
+        //args = new String[]{"false","1992-01-04", "true", "false"};
         if (args.length == 0) {
             System.out.println("ShipdataFilter order value pageskipping hardmode");
             return;
@@ -91,9 +89,9 @@ public class ShipdataFilter {
         ColumnDescriptor l_extendedprice = TPCHSchema.lineitemSchema().getColumns().get(5);
         FilterPredicate quantity_filter = lt(intColumn(quantity_str), 25);
         FilterPredicate discount_filter = and(gtEq(doubleColumn(discount_str), 0.05),ltEq(doubleColumn(discount_str), 0.07));
-        FilterPredicate shipdate_filter = and(gtEq(binaryColumn(shipdate_str), date1993), lt(binaryColumn(shipdate_str), date1994));
+        FilterPredicate shipdate_filter = lt(binaryColumn(shipdate_str), date1994);
         FilterPredicate combine_filter = and(quantity_filter, and(shipdate_filter,discount_filter));
-        FilterCompat.Filter rowGroup_filter = FilterCompat.get(combine_filter);
+        FilterCompat.Filter rowGroup_filter = FilterCompat.get(shipdate_filter);
         String lineitem = "../tpch-generator/dbgen/lineitem";
 
         int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
