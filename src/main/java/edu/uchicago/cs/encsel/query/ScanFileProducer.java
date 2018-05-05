@@ -38,7 +38,7 @@ import java.io.IOException;
 public class ScanFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"10","PLAIN", "UNCOMPRESSED"};
+        args = new String[]{"6","PLAIN_DICTIONARY", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("ScanFileProducer pos enc compression");
             return;

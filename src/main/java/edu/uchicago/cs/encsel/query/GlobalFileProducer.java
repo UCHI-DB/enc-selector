@@ -38,7 +38,7 @@ import java.io.IOException;
 public class GlobalFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"4","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
+        args = new String[]{"5","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
         if (args.length == 0) {
             System.out.println("ScanFileProducer pos enc compression order");
             return;
@@ -50,7 +50,6 @@ public class GlobalFileProducer {
         Boolean ordered = (order.equalsIgnoreCase("true") || order.equals("1"));
 
         String lineitem = "../tpch-generator/dbgen/lineitem";
-
 
         EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{6,12});

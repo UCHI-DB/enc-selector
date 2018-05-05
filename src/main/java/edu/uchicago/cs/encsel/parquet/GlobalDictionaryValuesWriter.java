@@ -300,7 +300,7 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
                 doubleDictionaryContent.put(v, id);
                 dictionaryByteSize += 8;
             }
-            encodedValues.add(globalDict.get(globalDict.get(v)));
+            encodedValues.add(globalDict.get(v));
         }
 
         @Override
