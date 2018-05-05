@@ -142,7 +142,7 @@ public class EqualFilter {
                         if (!(EncContext.globalDict.get().containsKey(l_shipdate.toString()))||(code<0))
                         {
                             code = shipdateReader.retrieveDictID(date1994,ordered);
-                            System.out.println(code);
+                            //System.out.println(code);
                         }
                         while(shipdateReader.getReadValue()<rowGroup.getRowCount()) {
                             //System.out.println("getReadValue:"+shipdateReader.getReadValue());
@@ -224,7 +224,7 @@ public class EqualFilter {
                         if (!(EncContext.globalDict.get().containsKey(l_shipdate.toString()))||(code<0))
                         {
                             code = shipdateReader.retrieveDictID(date1994,ordered);
-                            System.out.println(code);
+                            //System.out.println(code);
                         }
                         while(shipdateReader.getReadValue()<rowGroup.getRowCount()) {
                             //System.out.println("getReadValue:"+shipdateReader.getReadValue());
