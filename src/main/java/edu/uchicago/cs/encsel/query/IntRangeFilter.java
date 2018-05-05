@@ -47,7 +47,7 @@ import java.io.IOException;
 import static org.apache.parquet.filter2.predicate.FilterApi.*;
 
 
-public class IntEqualFilter {
+public class IntRangeFilter {
 
     static int code = -2;
     static int quant = 0;
@@ -56,8 +56,8 @@ public class IntEqualFilter {
     static Boolean pred(int value){
         return value == 1;
     }
-    static Boolean quantity_pred(int value) {return value==quant; }
-    static Boolean hardQuantity_pred(int value) {return value==code; }
+    static Boolean quantity_pred(int value) {return value<quant; }
+    static Boolean hardQuantity_pred(int value) {return value<code; }
     static Boolean discount_pred(double value) {return (value>=0.05)&&(value<=0.07); }
     static Boolean shipdate_pred(Binary value) {return ( date1994.compareTo(value) == 0); }
     static Boolean hardShipdate_pred(int value) {return (value==code); }
@@ -65,7 +65,7 @@ public class IntEqualFilter {
     static int selected = 0;
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","50", "true", "true"};
+        //args = new String[]{"false","2", "true", "true"};
         if (args.length == 0) {
             System.out.println("IntEqualFilter order value pageskipping hardmode");
             return;
@@ -89,7 +89,7 @@ public class IntEqualFilter {
         ColumnDescriptor l_shipdate = TPCHSchema.lineitemSchema().getColumns().get(10);
         String shipdate_str = Strings.join(l_shipdate.getPath(), ".");
         ColumnDescriptor l_extendedprice = TPCHSchema.lineitemSchema().getColumns().get(5);
-        FilterPredicate quantity_filter = eq(intColumn(quantity_str), quant);
+        FilterPredicate quantity_filter = lt(intColumn(quantity_str), quant);
         FilterPredicate discount_filter = and(gtEq(doubleColumn(discount_str), 0.05),ltEq(doubleColumn(discount_str), 0.07));
         FilterPredicate shipdate_filter = eq(binaryColumn(shipdate_str), date1994);
         FilterPredicate combine_filter = and(quantity_filter, and(shipdate_filter,discount_filter));
@@ -137,7 +137,7 @@ public class IntEqualFilter {
                         if (!(EncContext.globalDict.get().containsKey(l_quantity.toString()))||(code<0))
                         {
                             code = quantityReader.retrieveDictID(quant,ordered);
-                            //System.out.println(code);
+                            System.out.println(code);
                         }
                         while(quantityReader.getReadValue()<rowGroup.getRowCount()) {
                             //System.out.println("getReadValue:"+quantityReader.getReadValue());
