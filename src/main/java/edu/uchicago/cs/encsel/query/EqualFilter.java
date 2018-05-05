@@ -64,7 +64,7 @@ public class EqualFilter {
     static int selected = 0;
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","1994-02-07", "false", "false"};
+        //args = new String[]{"false","1992-02-07", "true", "false"};
         if (args.length == 0) {
             System.out.println("ShipdataFilter order value pageskipping hardmode");
             return;
@@ -94,7 +94,7 @@ public class EqualFilter {
         FilterCompat.Filter rowGroup_filter = FilterCompat.get(shipdate_filter);
         String lineitem = "../tpch-generator/dbgen/lineitem";
 
-        int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
+        int intbound = 124;
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);
         System.out.println("lineitem intBitLength: "+ bitLength +" lineitem intBound: "+intbound);
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(4).toString(), new Integer[]{bitLength,intbound});

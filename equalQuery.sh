@@ -28,7 +28,7 @@ for skip in true false; do
         #cd $BASEDIR
     done
 done
-java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.ScanFileProducer 4 RLE UNCOMPRESSED
+java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.ScanFileProducer 10 PLAIN_DICTIONARY UNCOMPRESSEDUNCOMPRESSED
 for skip in true false; do
     for hard in true false; do
         cd ~/enc-selector/
@@ -41,7 +41,7 @@ for skip in true false; do
         #cd $BASEDIR
     done
 done
-java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.GlobalFileProducer 10 PLAIN UNCOMPRESSED false
+java -cp target/enc-selector-0.0.1-SNAPSHOT.jar:target/enc-selector-0.0.1-SNAPSHOT-jar-with-dependencies.jar edu.uchicago.cs.encsel.query.ScanFileProducer 10 PLAIN UNCOMPRESSED
 for skip in true false; do
     for hard in false; do
         cd ~/enc-selector/
