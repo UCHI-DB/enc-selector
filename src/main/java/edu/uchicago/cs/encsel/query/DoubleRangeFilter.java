@@ -51,30 +51,34 @@ public class DoubleRangeFilter {
 
     static int code = -2;
     static int quant = 0;
+    static double price = 0;
     static Binary date1993 = Binary.fromString("1992-01-02");
     static Binary date1994 = Binary.fromString("1992-01-03");
     static Boolean pred(int value){
         return value == 1;
     }
-    static Boolean quantity_pred(int value) {return value<quant; }
-    static Boolean hardQuantity_pred(int value) {return value<code; }
+    static Boolean quantity_pred(int value) {return value==quant; }
+    static Boolean hardQuantity_pred(int value) {return value==code; }
+    static Boolean price_pred(double value) {return (value<price); }
+    static Boolean hardPrice_pred(int value) {return (value<code); }
     static Boolean discount_pred(double value) {return (value>=0.05)&&(value<=0.07); }
     static Boolean shipdate_pred(Binary value) {return ( date1994.compareTo(value) == 0); }
     static Boolean hardShipdate_pred(int value) {return (value==code); }
     static int totalcount = 0;
     static int selected = 0;
 
+
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","2", "true", "true"};
+        args = new String[]{"false","104949.5", "false", "true"};
         if (args.length == 0) {
-            System.out.println("IntEqualFilter order value pageskipping hardmode");
+            System.out.println("DoubleEqualFilter order value pageskipping hardmode");
             return;
         }
         //code = Integer.parseInt(args[0]);
         String order = args[0];
         Boolean ordered = (order.equalsIgnoreCase("true") || order.equals("1"));
         //date1994 = Binary.fromString(args[1]);
-        quant = Integer.parseInt(args[1]);
+        price = Double.parseDouble(args[1]);
         String skip = args[2];
         String hard = args[3];
         Boolean pageSkipping = (skip.equalsIgnoreCase("true") || skip.equals("1"));
@@ -89,11 +93,13 @@ public class DoubleRangeFilter {
         ColumnDescriptor l_shipdate = TPCHSchema.lineitemSchema().getColumns().get(10);
         String shipdate_str = Strings.join(l_shipdate.getPath(), ".");
         ColumnDescriptor l_extendedprice = TPCHSchema.lineitemSchema().getColumns().get(5);
-        FilterPredicate quantity_filter = lt(intColumn(quantity_str), quant);
+        String extendedprice_str = Strings.join(l_extendedprice.getPath(), ".");
+        FilterPredicate quantity_filter = eq(intColumn(quantity_str), quant);
         FilterPredicate discount_filter = and(gtEq(doubleColumn(discount_str), 0.05),ltEq(doubleColumn(discount_str), 0.07));
         FilterPredicate shipdate_filter = eq(binaryColumn(shipdate_str), date1994);
+        FilterPredicate extendedprice_filter = lt(doubleColumn(extendedprice_str), price);
         FilterPredicate combine_filter = and(quantity_filter, and(shipdate_filter,discount_filter));
-        FilterCompat.Filter rowGroup_filter = FilterCompat.get(quantity_filter);
+        FilterCompat.Filter rowGroup_filter = FilterCompat.get(extendedprice_filter);
         String lineitem = "../tpch-generator/dbgen/lineitem";
 
         int intbound = 124;
@@ -121,60 +127,60 @@ public class DoubleRangeFilter {
                 public void processRowGroup(VersionParser.ParsedVersion version,
                                             BlockMetaData meta, PageReadStore rowGroup) {
                     if(pageSkipping){
-                        ParquetFileReader.setColFilter(rowGroup, l_quantity, quantity_filter);
+                        ParquetFileReader.setColFilter(rowGroup, l_extendedprice, extendedprice_filter);
                     }
                     RoaringBitmap bitmap = new RoaringBitmap();
                     //System.out.println("rowgroup count: "+rowGroup.getRowCount());
-                    ColumnReaderImpl quantityReader = new ColumnReaderImpl(l_quantity, rowGroup.getPageReader(l_quantity), new NonePrimitiveConverter(), version);
+                    ColumnReaderImpl extendedpriceReader = new ColumnReaderImpl(l_extendedprice, rowGroup.getPageReader(l_extendedprice), new NonePrimitiveConverter(), version);
 
 
-                    if(quantityReader.getReadValue()>=rowGroup.getRowCount()) {
+                    if(extendedpriceReader.getReadValue()>=rowGroup.getRowCount()) {
                         //System.out.println("End detected!");
                         return;
                     }
 
                     if(hardmode){
-                        if (!(EncContext.globalDict.get().containsKey(l_quantity.toString()))||(code<0))
+                        if (!(EncContext.globalDict.get().containsKey(l_extendedprice.toString()))||(code<0))
                         {
-                            code = quantityReader.retrieveDictID(quant,ordered);
-                            System.out.println(code);
+                            code = extendedpriceReader.retrieveDictID(price,ordered);
+                            //System.out.println(code);
                         }
-                        while(quantityReader.getReadValue()<rowGroup.getRowCount()) {
-                            //System.out.println("getReadValue:"+quantityReader.getReadValue());
-                            //System.out.println("getPageValueCount:"+quantityReader.getPageValueCount());
-                            long pageValueCount = quantityReader.getPageValueCount();
-                            long base = quantityReader.getReadValue();
+                        while(extendedpriceReader.getReadValue()<rowGroup.getRowCount()) {
+                            //System.out.println("getReadValue:"+extendedpriceReader.getReadValue());
+                            //System.out.println("getPageValueCount:"+extendedpriceReader.getPageValueCount());
+                            long pageValueCount = extendedpriceReader.getPageValueCount();
+                            long base = extendedpriceReader.getReadValue();
                             for (int j = 0; j<pageValueCount; j++){
-                                //System.out.println("row number:" + quantityReader.getReadValue());
-                                //bitmap.set(base++, quantity_pred(quantityReader.getBinary()));
-                                bitmap.set(base++, hardQuantity_pred(quantityReader.getDictId()));
-                                quantityReader.consume();
+                                //System.out.println("row number:" + extendedpriceReader.getReadValue());
+                                //bitmap.set(base++, quantity_pred(extendedpriceReader.getBinary()));
+                                bitmap.set(base++, hardPrice_pred(extendedpriceReader.getDictId()));
+                                extendedpriceReader.consume();
                             }
 
                         }
                     }
                     else{
-                        while(quantityReader.getReadValue()<rowGroup.getRowCount()) {
-                            //System.out.println("getReadValue:"+quantityReader.getReadValue());
-                            //System.out.println("getPageValueCount:"+quantityReader.getPageValueCount());
-                            long pageValueCount = quantityReader.getPageValueCount();
-                            long base = quantityReader.getReadValue();
+                        while(extendedpriceReader.getReadValue()<rowGroup.getRowCount()) {
+                            //System.out.println("getReadValue:"+extendedpriceReader.getReadValue());
+                            //System.out.println("getPageValueCount:"+extendedpriceReader.getPageValueCount());
+                            long pageValueCount = extendedpriceReader.getPageValueCount();
+                            long base = extendedpriceReader.getReadValue();
                             for (int j = 0; j<pageValueCount; j++){
-                                //System.out.println("row number:" + quantityReader.getReadValue());
-                                bitmap.set(base++, quantity_pred(quantityReader.getInteger()));
-                                //bitmap.set(base++, hardQuantity_pred(quantityReader.getDictId()));
-                                quantityReader.consume();
+                                //System.out.println("row number:" + extendedpriceReader.getReadValue());
+                                bitmap.set(base++, price_pred(extendedpriceReader.getDouble()));
+                                //bitmap.set(base++, hardQuantity_pred(extendedpriceReader.getDictId()));
+                                extendedpriceReader.consume();
                             }
 
                         }
                     }
-                    if(quantityReader.getReadValue()>=rowGroup.getRowCount()) {
+                    if(extendedpriceReader.getReadValue()>=rowGroup.getRowCount()) {
                         //System.out.println("End detected!");
                         return;
                     }
 
                     //int count = 0;
-                    //Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_quantity.toString());
+                    //Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_extendedprice.toString());
                     //System.out.println("Dictioanry key value:"+ shipdataDict.toString());
                     //System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
 
@@ -196,70 +202,62 @@ public class DoubleRangeFilter {
                 public void processRowGroup(VersionParser.ParsedVersion version,
                                             BlockMetaData meta, PageReadStore rowGroup) {
                     if(pageSkipping){
-                        ParquetFileReader.setColFilter(rowGroup, l_quantity, shipdate_filter);
+                        ParquetFileReader.setColFilter(rowGroup, l_extendedprice, extendedprice_filter);
                     }
                     RoaringBitmap bitmap = new RoaringBitmap();
                     //System.out.println("rowgroup count: "+rowGroup.getRowCount());
-                    ColumnReaderImpl quantityReader = new ColumnReaderImpl(l_quantity, rowGroup.getPageReader(l_quantity), new NonePrimitiveConverter(), version);
-                    /*for (long j = 0;  j<rowGroup.getRowCount(); j++) {
-                        bitmap.set(j, quantity_pred(quantityReader.getBinary()));
-                        //bitmap.set(j, hardQuantity_pred(quantityReader.getDictId()));
-                        //if (quantity_pred(value))
-                        //System.out.println("row number:" + j + " value: " + colReader.getInteger());
-                        quantityReader.consume();
-                    }*/
+                    ColumnReaderImpl extendedpriceReader = new ColumnReaderImpl(l_extendedprice, rowGroup.getPageReader(l_extendedprice), new NonePrimitiveConverter(), version);
 
-
-                    if(quantityReader.getReadValue()>=rowGroup.getRowCount()) {
+                    if(extendedpriceReader.getReadValue()>=rowGroup.getRowCount()) {
                         //System.out.println("End detected!");
                         return;
                     }
 
                     if(hardmode){
-                        if (!(EncContext.globalDict.get().containsKey(l_quantity.toString()))||(code<0))
+                        if (!(EncContext.globalDict.get().containsKey(l_extendedprice.toString()))||(code<0))
                         {
-                            code = quantityReader.retrieveDictID(quant,ordered);
-                            System.out.println(code);
+                            code = extendedpriceReader.retrieveDictID(price,ordered);
+                            //System.out.println(code);
                         }
-                        while(quantityReader.getReadValue()<rowGroup.getRowCount()) {
-                            //System.out.println("getReadValue:"+quantityReader.getReadValue());
-                            //System.out.println("getPageValueCount:"+quantityReader.getPageValueCount());
-                            long pageValueCount = quantityReader.getPageValueCount();
-                            long base = quantityReader.getReadValue();
+                        while(extendedpriceReader.getReadValue()<rowGroup.getRowCount()) {
+                            //System.out.println("getReadValue:"+extendedpriceReader.getReadValue());
+                            //System.out.println("getPageValueCount:"+extendedpriceReader.getPageValueCount());
+                            long pageValueCount = extendedpriceReader.getPageValueCount();
+                            long base = extendedpriceReader.getReadValue();
                             for (int j = 0; j<pageValueCount; j++){
-                                //System.out.println("row number:" + quantityReader.getReadValue());
-                                //bitmap.set(base++, quantity_pred(quantityReader.getBinary()));
-                                bitmap.set(base++, hardQuantity_pred(quantityReader.getDictId()));
-                                quantityReader.consume();
+                                //System.out.println("row number:" + extendedpriceReader.getReadValue());
+                                //bitmap.set(base++, quantity_pred(extendedpriceReader.getBinary()));
+                                bitmap.set(base++, hardPrice_pred(extendedpriceReader.getDictId()));
+                                extendedpriceReader.consume();
                             }
 
                         }
                     }
                     else{
-                        while(quantityReader.getReadValue()<rowGroup.getRowCount()) {
-                            //System.out.println("getReadValue:"+quantityReader.getReadValue());
-                            //System.out.println("getPageValueCount:"+quantityReader.getPageValueCount());
-                            long pageValueCount = quantityReader.getPageValueCount();
-                            long base = quantityReader.getReadValue();
+                        while(extendedpriceReader.getReadValue()<rowGroup.getRowCount()) {
+                            //System.out.println("getReadValue:"+extendedpriceReader.getReadValue());
+                            //System.out.println("getPageValueCount:"+extendedpriceReader.getPageValueCount());
+                            long pageValueCount = extendedpriceReader.getPageValueCount();
+                            long base = extendedpriceReader.getReadValue();
                             for (int j = 0; j<pageValueCount; j++){
-                                //System.out.println("row number:" + quantityReader.getReadValue());
+                                //System.out.println("row number:" + extendedpriceReader.getReadValue());
                                 totalcount++;
-                                if (quantity_pred(quantityReader.getInteger()))
+                                if (price_pred(extendedpriceReader.getDouble()))
                                     selected++;
-                                bitmap.set(base++, quantity_pred(quantityReader.getInteger()));
-                                //bitmap.set(base++, hardQuantity_pred(quantityReader.getDictId()));
-                                quantityReader.consume();
+                                bitmap.set(base++, price_pred(extendedpriceReader.getDouble()));
+                                //bitmap.set(base++, hardQuantity_pred(extendedpriceReader.getDictId()));
+                                extendedpriceReader.consume();
                             }
 
                         }
                     }
-                    if(quantityReader.getReadValue()>=rowGroup.getRowCount()) {
+                    if(extendedpriceReader.getReadValue()>=rowGroup.getRowCount()) {
                         //System.out.println("End detected!");
                         return;
                     }
 
                     //int count = 0;
-                    //Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_quantity.toString());
+                    //Object2IntMap shipdataDict = EncContext.globalDict.get().get(l_extendedprice.toString());
                     //System.out.println("Dictioanry key value:"+ shipdataDict.toString());
                     //System.out.println("1993-01-01:" + shipdataDict.get(date1993) + " 1994-01-01: " + shipdataDict.get(date1994));
 

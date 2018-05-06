@@ -481,8 +481,9 @@ public class ColumnReaderImpl implements ColumnReader {
     }
     else{
       while (start <= end) {
-        if (Double.compare(dictionary.decodeToDouble(start), ob)==0)
+        if (Double.compare(dictionary.decodeToDouble(start), ob)==0){
           return start;
+        }
         start++;
       }
     }

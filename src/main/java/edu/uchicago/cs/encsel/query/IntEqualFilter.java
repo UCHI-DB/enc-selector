@@ -196,7 +196,7 @@ public class IntEqualFilter {
                 public void processRowGroup(VersionParser.ParsedVersion version,
                                             BlockMetaData meta, PageReadStore rowGroup) {
                     if(pageSkipping){
-                        ParquetFileReader.setColFilter(rowGroup, l_quantity, shipdate_filter);
+                        ParquetFileReader.setColFilter(rowGroup, l_quantity, quantity_filter);
                     }
                     RoaringBitmap bitmap = new RoaringBitmap();
                     //System.out.println("rowgroup count: "+rowGroup.getRowCount());
