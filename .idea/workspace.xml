@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="878e0a7c-8277-46d3-a323-285c70247ae6" name="Default" comment="filter with different selectivity">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DoubleRangeQuery.sh" afterPath="$PROJECT_DIR$/DoubleRangeQuery.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntEqualFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntEqualFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntRangeFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntRangeFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" afterPath="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,8 +21,8 @@
       <file leaf-file-name="ScanFileProducer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="41" column="31" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
+            <state relative-caret-position="135">
+              <caret line="40" column="10" lean-forward="false" selection-start-line="40" selection-start-column="10" selection-end-line="40" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -32,8 +31,18 @@
       <file leaf-file-name="GlobalFileProducer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="51" column="51" lean-forward="true" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+            <state relative-caret-position="135">
+              <caret line="40" column="10" lean-forward="false" selection-start-line="40" selection-start-column="10" selection-end-line="40" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IntEqualFilter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntEqualFilter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1613">
+              <caret line="178" column="110" lean-forward="false" selection-start-line="178" selection-start-column="104" selection-end-line="178" selection-end-column="110" />
               <folding />
             </state>
           </provider>
@@ -42,18 +51,28 @@
       <file leaf-file-name="DoubleEqualFilter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="219" column="55" lean-forward="true" selection-start-line="219" selection-start-column="55" selection-end-line="219" selection-end-column="55" />
+            <state relative-caret-position="276">
+              <caret line="71" column="10" lean-forward="false" selection-start-line="71" selection-start-column="10" selection-end-line="71" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DoubleRangeFilter.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DoubleRangeFilter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="77" column="31" lean-forward="true" selection-start-line="77" selection-start-column="31" selection-end-line="77" selection-end-column="31" />
+            <state relative-caret-position="-4">
+              <caret line="79" column="48" lean-forward="true" selection-start-line="79" selection-start-column="48" selection-end-line="79" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TPCHSchema.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="151">
+              <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -62,18 +81,8 @@
       <file leaf-file-name="DoubleEqualQuery.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DoubleEqualQuery.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="177" lean-forward="true" selection-start-line="13" selection-start-column="169" selection-end-line="13" selection-end-column="177" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DoubleRangeQuery.sh" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/DoubleRangeQuery.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="142" lean-forward="true" selection-start-line="12" selection-start-column="142" selection-end-line="12" selection-end-column="142" />
+            <state relative-caret-position="-390">
+              <caret line="8" column="163" lean-forward="false" selection-start-line="8" selection-start-column="146" selection-end-line="8" selection-end-column="163" />
               <folding />
             </state>
           </provider>
@@ -82,22 +91,29 @@
       <file leaf-file-name="IntRangeFilter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntRangeFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-219">
+            <state relative-caret-position="100">
               <caret line="54" column="26" lean-forward="false" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ColumnReaderImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java">
+      <file leaf-file-name="RangeFilter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/RangeFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="480" column="5" lean-forward="true" selection-start-line="480" selection-start-column="5" selection-end-line="480" selection-end-column="5" />
-              <folding>
-                <element signature="e#5607#5608#0" expanded="true" />
-                <element signature="e#5676#5677#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="520">
+              <caret line="89" column="44" lean-forward="true" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EqualFilter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/EqualFilter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2428">
+              <caret line="226" column="53" lean-forward="false" selection-start-line="226" selection-start-column="49" selection-end-line="226" selection-end-column="53" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -114,8 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>switch</find>
-      <find>getdi</find>
       <find>dataColumn</find>
       <find>shipdate_pred</find>
       <find>hardquantity_pred</find>
@@ -136,14 +150,16 @@
       <find>getDictId</find>
       <find>shipda</find>
       <find>system</find>
-      <find>getin</find>
-      <find>date1994</find>
       <find>IntEqualFilter</find>
       <find>1</find>
       <find>2</find>
       <find>8</find>
       <find>16</find>
+      <find>date1994</find>
+      <find>IntRangeFilter</find>
       <find>4</find>
+      <find>getin</find>
+      <find>getdou</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -165,14 +181,16 @@
       <replace>l_quantity</replace>
       <replace>extendedpriceReader</replace>
       <replace>l_extendedprice</replace>
-      <replace>extendedprice_filter</replace>
       <replace>DoubleEqualFilter</replace>
       <replace>900.52</replace>
       <replace>1000.01</replace>
       <replace>901.99</replace>
       <replace>2000.02</replace>
       <replace>25000.01</replace>
+      <replace>53000.02</replace>
+      <replace>DoubleRangeFilter</replace>
       <replace />
+      <replace>extendedprice_filter</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -227,16 +245,16 @@
         <option value="$PROJECT_DIR$/equalQuery.sh" />
         <option value="$PROJECT_DIR$/IntEqualQuery.sh" />
         <option value="$PROJECT_DIR$/IntRangeQuery.sh" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/parquet/GlobalDictionaryValuesWriter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntRangeFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntEqualFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/parquet/column/impl/ColumnReaderImpl.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java" />
         <option value="$PROJECT_DIR$/DoubleEqualQuery.sh" />
         <option value="$PROJECT_DIR$/DoubleRangeQuery.sh" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java" />
       </list>
     </option>
   </component>
@@ -709,7 +727,7 @@
       <workItem from="1524768136909" duration="12147000" />
       <workItem from="1524971281079" duration="19055000" />
       <workItem from="1525227783539" duration="1287000" />
-      <workItem from="1525270686746" duration="64223000" />
+      <workItem from="1525270686746" duration="65682000" />
     </task>
     <servers />
   </component>
@@ -746,7 +764,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="392487000" />
+    <option name="totallyTimeSpent" value="393946000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1641" y="67" width="1358" height="823" extended-state="0" />
@@ -1050,14 +1068,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/EqualFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2517">
-          <caret line="226" column="53" lean-forward="false" selection-start-line="226" selection-start-column="49" selection-end-line="226" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/equalQuery.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1066,26 +1076,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/RangeFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="89" column="44" lean-forward="true" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rangeQuery.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="349">
           <caret line="48" column="8" lean-forward="false" selection-start-line="47" selection-start-column="8" selection-end-line="48" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="41" column="31" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -1146,26 +1140,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="68" column="84" lean-forward="false" selection-start-line="68" selection-start-column="70" selection-end-line="68" selection-end-column="84" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/IntRangeQuery.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="193" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="193" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntEqualFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="178" column="110" lean-forward="false" selection-start-line="178" selection-start-column="104" selection-end-line="178" selection-end-column="110" />
           <folding />
         </state>
       </provider>
@@ -1181,38 +1159,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="219" column="55" lean-forward="true" selection-start-line="219" selection-start-column="55" selection-end-line="219" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntRangeFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-219">
-          <caret line="54" column="26" lean-forward="false" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="51" column="51" lean-forward="true" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="77" column="31" lean-forward="true" selection-start-line="77" selection-start-column="31" selection-end-line="77" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/IntEqualQuery.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
@@ -1221,18 +1167,90 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DoubleEqualQuery.sh">
+    <entry file="file://$PROJECT_DIR$/DoubleRangeQuery.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="177" lean-forward="true" selection-start-line="13" selection-start-column="169" selection-end-line="13" selection-end-column="177" />
+        <state relative-caret-position="739">
+          <caret line="52" column="163" lean-forward="false" selection-start-line="52" selection-start-column="163" selection-end-line="52" selection-end-column="163" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DoubleRangeQuery.sh">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/edu/uchicago/cs/encsel/query/tpch/TPCHSchema.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="142" lean-forward="true" selection-start-line="12" selection-start-column="142" selection-end-line="12" selection-end-column="142" />
+        <state relative-caret-position="151">
+          <caret line="62" column="6" lean-forward="false" selection-start-line="62" selection-start-column="6" selection-end-line="62" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DoubleEqualQuery.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-390">
+          <caret line="8" column="163" lean-forward="false" selection-start-line="8" selection-start-column="146" selection-end-line="8" selection-end-column="163" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleEqualFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="71" column="10" lean-forward="false" selection-start-line="71" selection-start-column="10" selection-end-line="71" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntEqualFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1613">
+          <caret line="178" column="110" lean-forward="false" selection-start-line="178" selection-start-column="104" selection-end-line="178" selection-end-column="110" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/IntRangeFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="54" column="26" lean-forward="false" selection-start-line="54" selection-start-column="18" selection-end-line="54" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/RangeFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="89" column="44" lean-forward="true" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/EqualFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2428">
+          <caret line="226" column="53" lean-forward="false" selection-start-line="226" selection-start-column="49" selection-end-line="226" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/ScanFileProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="40" column="10" lean-forward="false" selection-start-line="40" selection-start-column="10" selection-end-line="40" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/GlobalFileProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="40" column="10" lean-forward="false" selection-start-line="40" selection-start-column="10" selection-end-line="40" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/uchicago/cs/encsel/query/DoubleRangeFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4">
+          <caret line="79" column="48" lean-forward="true" selection-start-line="79" selection-start-column="48" selection-end-line="79" selection-end-column="48" />
           <folding />
         </state>
       </provider>

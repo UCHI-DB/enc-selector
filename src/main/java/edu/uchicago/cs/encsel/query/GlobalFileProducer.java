@@ -38,7 +38,7 @@ import java.io.IOException;
 public class GlobalFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"5","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
+        //args = new String[]{"5","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
         if (args.length == 0) {
             System.out.println("ScanFileProducer pos enc compression order");
             return;

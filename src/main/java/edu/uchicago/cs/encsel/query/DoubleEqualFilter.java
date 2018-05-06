@@ -69,7 +69,7 @@ public class DoubleEqualFilter {
 
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"false","104949.5", "false", "false"};
+        //args = new String[]{"false","104949.5", "false", "false"};
         if (args.length == 0) {
             System.out.println("DoubleEqualFilter order value pageskipping hardmode");
             return;
