@@ -92,7 +92,7 @@ public class DoubleEqualFilter {
         String discount_str = Strings.join(l_discount.getPath(), ".");
         ColumnDescriptor l_shipdate = TPCHSchema.lineitemSchema().getColumns().get(10);
         String shipdate_str = Strings.join(l_shipdate.getPath(), ".");
-        ColumnDescriptor l_extendedprice = TPCHSchema.lineitemSchema().getColumns().get(5);
+        ColumnDescriptor l_extendedprice = TPCHSchema.lineitemSchema().getColumns().get(6);
         String extendedprice_str = Strings.join(l_extendedprice.getPath(), ".");
         FilterPredicate quantity_filter = eq(intColumn(quantity_str), quant);
         FilterPredicate discount_filter = and(gtEq(doubleColumn(discount_str), 0.05),ltEq(doubleColumn(discount_str), 0.07));
