@@ -134,7 +134,7 @@ public class ParquetWriterHelper {
         return ret.toString();
     }
 
-    public static <T> Object2IntMap<T> buildGlobalDict(URI[] input, int[] index, MessageType[] schema, Boolean order) {
+    public static <T> Object2IntMap<T> buildGlobalDict(URI[] input, int[] index, MessageType[] schema, Boolean order, double backuprate) {
         try {
             String line;
             String[] list;
@@ -160,9 +160,22 @@ public class ParquetWriterHelper {
                         br.close();
                     }
                     i = 0;
+                    int id = 0;
+                    int backup = (int) Math.floor(treeSet.size()*backuprate);
+                    Set<Binary> backupset = new HashSet<Binary>();
                     for (Binary item : treeSet) {
-                        dictionaryContent.put(item, i);
+                        if ((i>=200)&&(i<(200+backup))) {
+                            backupset.add(item);
+                        }
+                        else{
+                            dictionaryContent.put(item, id);
+                            id++;
+                        }
                         i++;
+                    }
+                    for (Binary bitem : backupset) {
+                        dictionaryContent.put(bitem, id);
+                        id++;
                     }
                     return dictionaryContent;
                 case FIXED_LEN_BYTE_ARRAY:
@@ -299,11 +312,11 @@ public class ParquetWriterHelper {
         }
     }
 
-    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema,Boolean order) {
+    public static <T> Object2IntMap<T> buildGlobalDict(URI input, int index, MessageType schema,Boolean order, double backuprate) {
         URI[] inputArr = {input};
         int[] indexArr = {index};
         MessageType[] schemaArr = {schema};
-        return buildGlobalDict(inputArr,indexArr,schemaArr,order);
+        return buildGlobalDict(inputArr,indexArr,schemaArr,order, backuprate);
     }
 
     public static int scanLongBitLength(URI input) {

@@ -338,10 +338,6 @@ public class ColumnReaderImpl implements ColumnReader {
     });
   }
 
-  public int getDictId(){
-    return binding.getDictionaryId();
-  }
-
   /**
    * creates a reader for triplets
    * @param path the descriptor for the corresponding column

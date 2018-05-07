@@ -64,7 +64,7 @@ public class RangeFilter {
     static int selected = 0;
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","1992-01-04", "true", "false"};
+        //args = new String[]{"false","1992-01-04", "true", "true"};
         if (args.length == 0) {
             System.out.println("ShipdataFilter order value pageskipping hardmode");
             return;
@@ -94,7 +94,7 @@ public class RangeFilter {
         FilterCompat.Filter rowGroup_filter = FilterCompat.get(shipdate_filter);
         String lineitem = "../tpch-generator/dbgen/lineitem";
 
-        int intbound = 123;
+        int intbound = ParquetWriterHelper.scanIntMaxInTab(new File(lineitem+".tbl").toURI(), 4);
         int bitLength = 32 - Integer.numberOfLeadingZeros(intbound);
         System.out.println("lineitem intBitLength: "+ bitLength +" lineitem intBound: "+intbound);
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(4).toString(), new Integer[]{bitLength,intbound});
@@ -152,7 +152,7 @@ public class RangeFilter {
                             for (int j = 0; j<pageValueCount; j++){
                                 //System.out.println("row number:" + shipdateReader.getReadValue());
                                 //bitmap.set(base++, shipdate_pred(shipdateReader.getBinary()));
-                                bitmap.set(base++, hardShipdate_pred(shipdateReader.getDictId()));
+                                bitmap.set(base++, hardShipdate_pred(shipdateReader.getCurrentValueDictionaryID()));
                                 shipdateReader.consume();
                             }
 
@@ -193,7 +193,7 @@ public class RangeFilter {
         }
         System.out.println(String.format("%s,%d,%d,%d,%d,%d", "ScanOnheap", clocktime / repeat, cputime / repeat, usertime / repeat, StatisticsPageFilter.getPAGECOUNT() / repeat,StatisticsPageFilter.getPAGESKIPPED() / repeat));
 
-        if (!pageSkipping && !hardmode && !ordered){
+        if (true){
             code = -2;
             ProfileBean selectProf = ParquetReaderHelper.filterProfile(new File(lineitem+".parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
@@ -224,7 +224,7 @@ public class RangeFilter {
                         if (!(EncContext.globalDict.get().containsKey(l_shipdate.toString()))||(code<0))
                         {
                             code = shipdateReader.retrieveDictID(date1994,ordered);
-                            //System.out.println(code);
+                            System.out.println(code);
                         }
                         while(shipdateReader.getReadValue()<rowGroup.getRowCount()) {
                             //System.out.println("getReadValue:"+shipdateReader.getReadValue());
@@ -234,7 +234,10 @@ public class RangeFilter {
                             for (int j = 0; j<pageValueCount; j++){
                                 //System.out.println("row number:" + shipdateReader.getReadValue());
                                 //bitmap.set(base++, shipdate_pred(shipdateReader.getBinary()));
-                                bitmap.set(base++, hardShipdate_pred(shipdateReader.getDictId()));
+                                totalcount++;
+                                if (hardShipdate_pred(shipdateReader.getCurrentValueDictionaryID()))
+                                    selected++;
+                                bitmap.set(base++, hardShipdate_pred(shipdateReader.getCurrentValueDictionaryID()));
                                 shipdateReader.consume();
                             }
 

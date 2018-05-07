@@ -40,7 +40,7 @@ import java.net.URI;
 public class MyJoinFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"PLAIN_DICTIONARY","PLAIN_DICTIONARY", "UNCOMPRESSED"};
+        //args = new String[]{"PLAIN_DICTIONARY","PLAIN_DICTIONARY", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("JoinFileProducer PPencoding LPencoding Compression");
             return;
@@ -57,7 +57,7 @@ public class MyJoinFileProducer {
 
         EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(index[0]).toString(), Encoding.valueOf(PPencoding));
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(index[0]).toString(), new Integer[]{1,2});
-        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(input,index,schema,order);
+        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(input,index,schema,order,0);
         System.out.println(dictMap);
         EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(index[0]).toString(), dictMap);
 

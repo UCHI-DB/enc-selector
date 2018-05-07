@@ -127,7 +127,7 @@ public class Q6ScanTool {
                             count++;
                             //System.out.println(shipdateReader.getBinary().toStringUsingUTF8());
                             //bitmap.set(j, shipdate_pred(shipdateReader.getBinary()));
-                            bitmap.set(j, hardShipdate_pred(shipdateReader.getDictId()));
+                            bitmap.set(j, hardShipdate_pred(shipdateReader.getCurrentValueDictionaryID()));
                             //System.out.println("test  ----- row number:" + j );
                         }
                         else

@@ -38,7 +38,7 @@ import java.io.IOException;
 public class GlobalFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"6","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
+        //args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
         if (args.length == 0) {
             System.out.println("ScanFileProducer pos enc compression order");
             return;
@@ -53,7 +53,7 @@ public class GlobalFileProducer {
 
         EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{6,12});
-        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File(lineitem+".tbl").toURI(),col,TPCHSchema.lineitemSchema(),ordered);
+        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File(lineitem+".tbl").toURI(),col,TPCHSchema.lineitemSchema(),ordered, 0);
         System.out.println(dictMap);
         EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), dictMap);
 

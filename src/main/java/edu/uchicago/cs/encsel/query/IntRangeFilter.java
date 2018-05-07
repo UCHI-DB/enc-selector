@@ -65,7 +65,7 @@ public class IntRangeFilter {
     static int selected = 0;
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","2", "true", "true"};
+        //args = new String[]{"true","2", "false", "false"};
         if (args.length == 0) {
             System.out.println("IntEqualFilter order value pageskipping hardmode");
             return;
@@ -137,7 +137,7 @@ public class IntRangeFilter {
                         if (!(EncContext.globalDict.get().containsKey(l_quantity.toString()))||(code<0))
                         {
                             code = quantityReader.retrieveDictID(quant,ordered);
-                            System.out.println(code);
+                            //System.out.println(code);
                         }
                         while(quantityReader.getReadValue()<rowGroup.getRowCount()) {
                             //System.out.println("getReadValue:"+quantityReader.getReadValue());
@@ -147,7 +147,7 @@ public class IntRangeFilter {
                             for (int j = 0; j<pageValueCount; j++){
                                 //System.out.println("row number:" + quantityReader.getReadValue());
                                 //bitmap.set(base++, quantity_pred(quantityReader.getBinary()));
-                                bitmap.set(base++, hardQuantity_pred(quantityReader.getDictId()));
+                                bitmap.set(base++, hardQuantity_pred(quantityReader.getCurrentValueDictionaryID()));
                                 quantityReader.consume();
                             }
 
@@ -188,7 +188,7 @@ public class IntRangeFilter {
         }
         System.out.println(String.format("%s,%d,%d,%d,%d,%d", "ScanOnheap", clocktime / repeat, cputime / repeat, usertime / repeat, StatisticsPageFilter.getPAGECOUNT() / repeat,StatisticsPageFilter.getPAGESKIPPED() / repeat));
 
-        if (!pageSkipping && !hardmode && !ordered){
+        if (true){
             code = -2;
             ProfileBean selectProf = ParquetReaderHelper.filterProfile(new File(lineitem+".parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
@@ -229,7 +229,10 @@ public class IntRangeFilter {
                             for (int j = 0; j<pageValueCount; j++){
                                 //System.out.println("row number:" + quantityReader.getReadValue());
                                 //bitmap.set(base++, quantity_pred(quantityReader.getBinary()));
-                                bitmap.set(base++, hardQuantity_pred(quantityReader.getDictId()));
+                                totalcount++;
+                                if (hardQuantity_pred(quantityReader.getCurrentValueDictionaryID()))
+                                    selected++;
+                                bitmap.set(base++, hardQuantity_pred(quantityReader.getCurrentValueDictionaryID()));
                                 quantityReader.consume();
                             }
 

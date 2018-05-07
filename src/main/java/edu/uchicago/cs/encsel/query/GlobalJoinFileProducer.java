@@ -40,7 +40,7 @@ import java.net.URI;
 public class GlobalJoinFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"DICT","DICT", "UNCOMPRESSED"};
+        //args = new String[]{"DICT","DICT", "UNCOMPRESSED"};
         if (args.length == 0) {
             System.out.println("JoinFileProducer PPencoding LPencoding Compression");
             return;
@@ -61,7 +61,7 @@ public class GlobalJoinFileProducer {
 
         EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), IntEncoding.valueOf(LPencoding).parquetEncoding());
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), new Integer[]{bitLength,intbound});
-        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(input,index,schema,order);
+        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(input,index,schema,order,0);
         //System.out.println(dictMap);
         EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(1).toString(), dictMap);
 

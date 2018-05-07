@@ -69,7 +69,7 @@ public class DoubleRangeFilter {
 
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        //args = new String[]{"false","0.0", "true", "true"};
+        //args = new String[]{"false","0.03", "false", "true"};
         if (args.length == 0) {
             System.out.println("DoubleEqualFilter order value pageskipping hardmode");
             return;
@@ -153,7 +153,7 @@ public class DoubleRangeFilter {
                             for (int j = 0; j<pageValueCount; j++){
                                 //System.out.println("row number:" + extendedpriceReader.getReadValue());
                                 //bitmap.set(base++, quantity_pred(extendedpriceReader.getBinary()));
-                                bitmap.set(base++, hardPrice_pred(extendedpriceReader.getDictId()));
+                                bitmap.set(base++, hardPrice_pred(extendedpriceReader.getCurrentValueDictionaryID()));
                                 extendedpriceReader.consume();
                             }
 
@@ -194,7 +194,7 @@ public class DoubleRangeFilter {
         }
         System.out.println(String.format("%s,%d,%d,%d,%d,%d", "ScanOnheap", clocktime / repeat, cputime / repeat, usertime / repeat, StatisticsPageFilter.getPAGECOUNT() / repeat,StatisticsPageFilter.getPAGESKIPPED() / repeat));
 
-        if (!pageSkipping && !hardmode && !ordered){
+        if (true){
             code = -2;
             ProfileBean selectProf = ParquetReaderHelper.filterProfile(new File(lineitem+".parquet").toURI(), rowGroup_filter, new EncReaderProcessor() {
 
@@ -227,7 +227,10 @@ public class DoubleRangeFilter {
                             for (int j = 0; j<pageValueCount; j++){
                                 //System.out.println("row number:" + extendedpriceReader.getReadValue());
                                 //bitmap.set(base++, quantity_pred(extendedpriceReader.getBinary()));
-                                bitmap.set(base++, hardPrice_pred(extendedpriceReader.getDictId()));
+                                totalcount++;
+                                if (hardPrice_pred(extendedpriceReader.getCurrentValueDictionaryID()))
+                                    selected++;
+                                bitmap.set(base++, hardPrice_pred(extendedpriceReader.getCurrentValueDictionaryID()));
                                 extendedpriceReader.consume();
                             }
 
