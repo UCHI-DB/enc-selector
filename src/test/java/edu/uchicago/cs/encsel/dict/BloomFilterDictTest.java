@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import java.util.Random;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class BloomFilterDictTest {
@@ -56,6 +57,6 @@ public class BloomFilterDictTest {
 
         BloomFilterDict dict = new BloomFilterDict(data, 0.03);
 
-        assertTrue(dict.contain(test));
+        assertFalse(dict.contain(test));
     }
 }
