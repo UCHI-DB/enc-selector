@@ -22,29 +22,26 @@
 
 package edu.uchicago.cs.encsel.dict;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.Funnels;
 
-public class HashDict implements Dict {
+public class GoogleBloomFilterDict implements Dict {
 
-    Set<Integer> dict;
-    double probability = 1;
+    private BloomFilter inner;
 
-    public HashDict(int[] data, double p) {
-        dict = new HashSet<>();
-
-        for (int i : data) {
-            dict.add(i);
-        }
-        this.probability = 1 - p;
+    public GoogleBloomFilterDict(int[] data, double p) {
+        inner = BloomFilter.create(Funnels.integerFunnel(), data.length, p);
+        for (int d : data)
+            inner.put(d);
     }
 
+    @Override
     public boolean contain(int[] data) {
-        // Check p data in random, if all success then pass
-        int check = Math.min((int) Math.ceil(data.length * probability), data.length);
-        for (int i = 0; i < check; i++) {
-            if (!dict.contains(data[i]))
+        for(int d: data) {
+            if(!inner.mightContain(d)) {
                 return false;
+            }
         }
         return true;
     }
