@@ -32,6 +32,9 @@ import java.io.FileWriter;
 import java.net.URI;
 import java.util.List;
 
+import static edu.uchicago.cs.encsel.model.DataType.DOUBLE;
+import static edu.uchicago.cs.encsel.model.DataType.STRING;
+
 
 public class StatDictAllCols {
 
@@ -61,8 +64,29 @@ public class StatDictAllCols {
                 URI gUri = DictionaryEncoder.genOutputURI(curUri, "GDICTENCODING");
                 URI gBPUri = DictionaryEncoder.genOutputURI(curUri, "GBPDICTENCODING");
                 URI gDictUri = DictionaryEncoder.genOutputURI(curUri, "GLOBALDICT");
-                stat = col.id()+","+col.dataType() + "," +new File(curUri).length()+","+new File(lUri).length()+","+
-                        new File(lBPUri).length()+","+new File(lDictUri).length()+","+new File(gUri).length()+","+new File(gBPUri).length()+","+
+                URI binUri = DictionaryEncoder.genOutputURI(curUri, "BINARY");
+                long binSize = new File(binUri).length();
+                long gSize = new File(gUri).length();
+                switch (col.dataType()) {
+                    case STRING:
+                        break;
+                    case LONG:
+                        binSize = gSize*2;
+                        break;
+                    case INTEGER:
+                        binSize = gSize;
+                        break;
+                    case FLOAT:
+                        binSize = gSize;
+                        break;
+                    case DOUBLE:
+                        binSize = gSize*2;
+                        break;
+                    case BOOLEAN:
+                        break;
+                }
+                stat = col.id()+","+col.dataType() + "," +new File(curUri).length()+","+binSize+","+new File(lUri).length()+
+                        ","+ new File(lBPUri).length()+","+new File(lDictUri).length()+","+gSize+","+new File(gBPUri).length()+","+
                         new File(gDictUri).length();
                 fileWriter.append(stat+"\n");
                 //System.out.println(stat);

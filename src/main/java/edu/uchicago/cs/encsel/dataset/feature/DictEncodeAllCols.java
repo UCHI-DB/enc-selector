@@ -50,24 +50,25 @@ public class DictEncodeAllCols {
                 System.out.println(col.colFile().toString());
                 switch (col.dataType()) {
                     case STRING:
-                        DictionaryEncoder.singleColumnString(col.colFile(), batch);
-                        DictionaryEncoder.singleColumnString(col.colFile(), Integer.MAX_VALUE);
+                        DictionaryEncoder.singleColumnString(col.colFile());
+                        //DictionaryEncoder.singleColumnString(col.colFile(), batch);
+                        //DictionaryEncoder.singleColumnString(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case LONG:
-                        DictionaryEncoder.singleColumnLong(col.colFile(), batch);
-                        DictionaryEncoder.singleColumnLong(col.colFile(), Integer.MAX_VALUE);
+                        //DictionaryEncoder.singleColumnLong(col.colFile(), batch);
+                        //DictionaryEncoder.singleColumnLong(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case INTEGER:
-                        DictionaryEncoder.singleColumnInt(col.colFile(), batch);
-                        DictionaryEncoder.singleColumnInt(col.colFile(), Integer.MAX_VALUE);
+                        //DictionaryEncoder.singleColumnInt(col.colFile(), batch);
+                        //DictionaryEncoder.singleColumnInt(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case FLOAT:
-                        DictionaryEncoder.singleColumnFloat(col.colFile(), batch);
-                        DictionaryEncoder.singleColumnFloat(col.colFile(), Integer.MAX_VALUE);
+                        //DictionaryEncoder.singleColumnFloat(col.colFile(), batch);
+                        //DictionaryEncoder.singleColumnFloat(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case DOUBLE:
-                        DictionaryEncoder.singleColumnDouble(col.colFile(), batch);
-                        DictionaryEncoder.singleColumnDouble(col.colFile(), Integer.MAX_VALUE);
+                        //DictionaryEncoder.singleColumnDouble(col.colFile(), batch);
+                        //DictionaryEncoder.singleColumnDouble(col.colFile(), Integer.MAX_VALUE);
                         break;
                     case BOOLEAN:
                         break;

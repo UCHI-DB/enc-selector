@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import static edu.uchicago.cs.encsel.model.DataType.STRING;
 
 import static edu.uchicago.cs.encsel.parquet.ParquetWriterHelper.genOutput;
 
@@ -370,6 +371,24 @@ public class DictionaryEncoder {
         gos.close();
     }
 
+    public static void  singleColumnString(URI input) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+        // local dictionary encoding
+        URI fUri = genOutputURI(input, "BINARY");
+        File lOutput = new File(fUri);
+        if (lOutput.exists())
+            lOutput.delete();
+        DataOutputStream os = new DataOutputStream(new FileOutputStream(new File(fUri)));
+        String line;
+        String curStr;
+        while ((line = reader.readLine()) != null) {
+            curStr = line.trim();
+            os.writeUTF(curStr);
+        }
+        reader.close();
+        os.close();
+    }
+
     public static void singleColumnDouble(URI input, int batch) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
         List<Integer> BPList = new ArrayList();
@@ -582,8 +601,10 @@ public class DictionaryEncoder {
 
     public static void main(String[] args){
         try {
-            File test = new File("src/test/resource/coldata/test_col_int.data");
-            singleColumnString(test.toURI(),114);
+            File test = new File("src/test/resource/coldata/test_col_str.data");
+            singleColumnString(test.toURI());
+            if (STRING.equals(STRING))
+                System.out.println(true);
         } catch (IOException e) {
             e.printStackTrace();
         }

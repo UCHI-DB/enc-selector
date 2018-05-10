@@ -180,7 +180,7 @@ public class MOPRangeFilter {
                                 long base = shipdateReader.getReadValue();
                                 for (int j = 0; j<pageValueCount; j++){
                                     dictID = shipdateReader.getCurrentValueDictionaryID();
-                                    bitmap.set(base++, backup_pred(dictID)&&hardShipdate_pred(dictID));
+                                    bitmap.set(base++, backup_pred(dictID)||hardShipdate_pred(dictID));
                                     shipdateReader.consume();
                                 }
 
