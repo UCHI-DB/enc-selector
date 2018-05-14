@@ -35,7 +35,7 @@ object SimdScan{
 
   def scanBitpackedColumn(cd:ColumnDescriptor, reader:PageReader,total:Long,entryWidth:Int): ByteBuffer= {
     var page = reader.readPage()
-    val buffer = ByteBuffer.allocateDirect(total.toInt*entryWidth*2)
+//    val buffer = ByteBuffer.allocateDirect(total.toInt*entryWidth*2)
     while (page != null) {
       val pageResult = page.accept(new Visitor[ByteBuffer]() {
         override def visit(dataPageV1: DataPageV1): ByteBuffer = {
@@ -47,14 +47,14 @@ object SimdScan{
         }
       })
       page = reader.readPage()
-      buffer.put(pageResult)
+//      buffer.put(pageResult)
     }
-    return buffer
+    return null;
   }
 
   def decodeBitpackedColumn(cd:ColumnDescriptor, reader:PageReader,total:Long, entryWidth:Int):ByteBuffer= {
     var page = reader.readPage()
-    val buffer = ByteBuffer.allocateDirect(total.toInt*entryWidth*2)
+//    val buffer = ByteBuffer.allocateDirect(total.toInt*entryWidth*2)
     while (page != null) {
       val pageResult= page.accept(new Visitor[ByteBuffer]() {
         override def visit(dataPageV1: DataPageV1): ByteBuffer = {
@@ -66,9 +66,10 @@ object SimdScan{
         }
       })
 
-      buffer.put(pageResult)
+//      buffer.put(pageResult)
       page = reader.readPage()
     }
-    buffer
+//    buffer
+    null
   }
 }
