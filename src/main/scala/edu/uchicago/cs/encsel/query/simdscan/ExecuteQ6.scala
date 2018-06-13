@@ -27,7 +27,6 @@ import java.io.File
 import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
-import edu.uchicago.cs.encsel.query.simdscan.ExecuteQ1.{args, profiler}
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.VersionParser
@@ -50,7 +49,6 @@ object ExecuteQ6 extends App {
       // tax 7
       // line status 9
       // ship date 10
-      // ship date <= '1998-09-01'
       // Scan ship date to generate bitmap
 
       profiler.reset
@@ -116,7 +114,7 @@ object ExecuteQ6 extends App {
       profiler.mark
 
       // Use bitmap to scan other columns
-      val selected = Array(5, 6).map(i => {
+      val selected = Array(5).map(i => {
         val cd = TPCHSchema.lineitemSchema.getColumns().get(i)
         new ColumnReaderImpl(cd, rowGroup.getPageReader(cd), new NonePrimitiveConverter, version)
       })
@@ -130,11 +128,12 @@ object ExecuteQ6 extends App {
             col.consume()
           })
           counter += 1
-          selected.foreach(col => {
-            col.writeCurrentValueToConverter()
-            col.consume()
-          })
         }
+        selected.foreach(col => {
+          col.writeCurrentValueToConverter()
+          col.consume()
+        })
+        counter += 1
       })
 
       profiler.pause

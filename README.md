@@ -16,6 +16,30 @@ Using this framework, we have collected over 7000 columns from approximately 120
 
 [Insert some charts we generated for the dataset]
 
+Here's a list of data sources we used in the experiments.
+* Government Data Portals
+  * [Open Government Data](https://www.data.gov/open-gov/)
+  * [NYC](https://opendata.cityofnewyork.us/)
+  * [Chicago](https://data.cityofchicago.org/)
+  * [Baltimore](https://data.baltimorecity.gov/)
+  * [Dallas](https://mydata.dallasisd.org/)
+  * [Washington D.C.](https://dc.gov/page/open-data)
+  * [LA](https://data.lacity.org/)
+  * [Maryland](https://data.maryland.gov/)
+  * [Lousiville](https://data.louisvilleky.gov/)
+  * [Oakland](https://data.oaklandnet.com/)
+* Server Logs
+  * Argonne Server Logs [Requesting permission to publish]
+* GIS data
+  * [ArcGIS Open Data](http://hub.arcgis.com/pages/open-data)
+  * [Esri Open Data](http://www.esri.com/software/open/open-data)
+* Social Networks
+  * [Bikeshare](https://www.bikeshare.com/)
+  * [Yelp](https://www.yelp.com/dataset/challenge)
+* Machine Learning Datasets
+  * [UCI Repo](https://archive.ics.uci.edu/ml/)
+
+
 ## Pattern Mining
 Data type is crucial to encoding selection. A proper data type determination can greatly reduce space requirement for encoded data. For example, storing a date field in string format requires at least 8 bytes, while storing it in integer format takes no more than 4 bytes. If we further observe the effective data range, this can be further reduced to 23 bits. However, most real-world datasets are semi-structured, in which only part of the data contains valid common structures. Pattern Mining targets at automatically identify and extract these structures, allowing more efficient encoding to be applied on them. In this project, we have developed two methods for Pattern Mining, **Common Sequence** and **Frequent Similar Words**.
 

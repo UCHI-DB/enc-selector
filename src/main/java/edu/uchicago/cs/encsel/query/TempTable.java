@@ -23,4 +23,5 @@
 package edu.uchicago.cs.encsel.query;
 
 public interface TempTable {
+    Object[] getRecord(int index);
 }
