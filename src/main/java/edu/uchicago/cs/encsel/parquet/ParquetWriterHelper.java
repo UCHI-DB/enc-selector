@@ -95,7 +95,7 @@ public class ParquetWriterHelper {
             String line;
             String[] list;
             while ((line = br.readLine()) != null) {
-                list = line.split("\\|");
+                list = line.split("\\|", -1);
                 if (line.isEmpty())
                     continue;
                 int number = Integer.parseInt(list[index]);
@@ -152,7 +152,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             treeSet.add(Binary.fromString(list[index[idx]]));
@@ -186,7 +186,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             FtreeSet.add(Binary.fromString(list[index[idx]]));
@@ -207,7 +207,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             I96treeSet.add(Binary.fromString(list[index[idx]]));
@@ -228,7 +228,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             LongTreeSet.add(Long.parseLong(list[index[idx]]));
@@ -249,7 +249,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             DoubleTreeSet.add(Double.parseDouble(list[index[idx]]));
@@ -270,7 +270,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             IntTreeSet.add(Integer.parseInt(list[index[idx]]));
@@ -291,7 +291,7 @@ public class ParquetWriterHelper {
                     for (idx = 0; idx < input.length; idx++) {
                         BufferedReader br = new BufferedReader(new FileReader(new File(input[idx])));
                         while ((line = br.readLine()) != null) {
-                            list = line.split("\\|");
+                            list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
                             FloatTreeSet.add(Float.parseFloat(list[index[idx]]));
@@ -352,11 +352,10 @@ public class ParquetWriterHelper {
         String line = skipHeader ? reader.readLine() : null;
 
         while ((line = reader.readLine()) != null) {
-            String[] dataArray = line.trim().split(split);
+            String[] dataArray = line.trim().split(split,-1);
             List<String> data = Arrays.asList(dataArray);
             writer.write(data);
         }
-
         reader.close();
         writer.close();
     }
@@ -376,7 +375,8 @@ public class ParquetWriterHelper {
         String line = skipHeader ? reader.readLine() : null;
 
         while ((line = reader.readLine()) != null) {
-            String[] dataArray = line.trim().split(split);
+            // Handle the empty entry for each line
+            String[] dataArray = line.trim().split(split,-1);
             List<String> data = Arrays.asList(dataArray);
             writer.write(data);
         }

@@ -82,6 +82,7 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
                             recordConsumer.addFloat(Float.parseFloat(val));
                             break;
                         case DOUBLE:
+                            val = val.replaceAll("[^-+.\\d]", "");
                             recordConsumer.addDouble(Double.parseDouble(val));
                             break;
                         case INT32:

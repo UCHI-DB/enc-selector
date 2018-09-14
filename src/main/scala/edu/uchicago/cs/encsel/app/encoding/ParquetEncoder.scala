@@ -78,7 +78,7 @@ object ParquetEncoder extends App {
       case PrimitiveTypeName.INT32 => {
         encodingMap.put(coldesc.toString, parquetIntEncoding(encoding))
         // TODO Determine bit size for integer, here hard code as a sample
-        contextMap.put(coldesc.toString, Array[AnyRef]("16", "1024"))
+        contextMap.put(coldesc.toString, Array[AnyRef]("32", "1024"))
       }
       case PrimitiveTypeName.BINARY => {
         encodingMap.put(coldesc.toString, parquetStringEncoding(encoding))
@@ -89,7 +89,7 @@ object ParquetEncoder extends App {
 
   // Invoke Parquet Writer
   // TODO use CSV parser to parse file
-  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",", false)
+  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",", true)
 
   def parquetStringEncoding(enc: Int): Encoding = {
     IntEncoding.values()(enc) match {
