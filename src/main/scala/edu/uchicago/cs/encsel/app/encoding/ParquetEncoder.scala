@@ -91,7 +91,7 @@ object ParquetEncoder extends App {
   // TODO use CSV parser to parse file
   ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",", true)
 
-  def parquetStringEncoding(enc: Int): Encoding = {
+  def parquetIntEncoding(enc: Int): Encoding = {
     IntEncoding.values()(enc) match {
       case IntEncoding.PLAIN => {
         Encoding.PLAIN
@@ -114,7 +114,7 @@ object ParquetEncoder extends App {
     }
   }
 
-  def parquetIntEncoding(enc: Int): Encoding = {
+  def parquetStringEncoding(enc: Int): Encoding = {
     StringEncoding.values()(enc) match {
       case StringEncoding.PLAIN => Encoding.PLAIN
       case StringEncoding.DELTA => Encoding.DELTA_BYTE_ARRAY

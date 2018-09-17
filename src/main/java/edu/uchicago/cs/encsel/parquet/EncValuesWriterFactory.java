@@ -154,9 +154,10 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
             case DELTA_BINARY_PACKED:
                 return new DeltaBinaryPackingValuesWriterForInteger(parquetProperties.getInitialSlabSize(),
                         parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
-            case DELTA_BYTE_ARRAY:
+            /*case DELTA_BYTE_ARRAY:
                 return new DeltaBinaryPackingValuesWriterForInteger(parquetProperties.getInitialSlabSize(),
                         parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+            */
             case PLAIN:
                 return new PlainValuesWriter(parquetProperties.getInitialSlabSize(),
                         parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());

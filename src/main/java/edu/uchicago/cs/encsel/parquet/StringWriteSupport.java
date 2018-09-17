@@ -79,10 +79,11 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
                             recordConsumer.addBoolean("true".equals(lower) || "yes".equals(lower) || "1".equals(lower));
                             break;
                         case FLOAT:
+                            val = val.replaceAll("[^-+Ee.\\d]", "");
                             recordConsumer.addFloat(Float.parseFloat(val));
                             break;
                         case DOUBLE:
-                            val = val.replaceAll("[^-+.\\d]", "");
+                            val = val.replaceAll("[^-+Ee.\\d]", "");
                             recordConsumer.addDouble(Double.parseDouble(val));
                             break;
                         case INT32:
