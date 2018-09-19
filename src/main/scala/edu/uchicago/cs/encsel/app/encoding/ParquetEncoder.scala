@@ -22,9 +22,9 @@ object ParquetEncoder extends App {
 
   val intModel = args(3)
   val stringModel = args(4)
-
+  val split = args(5)
   val sizeLimit = args.length match {
-    case ge6 if ge6 >= 6 => args(5).toInt
+    case ge7 if ge7 >= 7 => args(6).toInt
     case _ => 1000000 // Default 1M
   }
 
@@ -51,13 +51,17 @@ object ParquetEncoder extends App {
         val allFeatures = Features.extract(col, Filter.sizeFilter(sizeLimit), "temp_")
           .map(_.value).toArray
         val features = validFeatureIndex.map(allFeatures(_))
-        intPredictor.predict(features)
+        val ret = intPredictor.predict(features)
+        System.out.println("column name: "+ col.toString +" encoding: " + parquetIntEncoding(ret).toString)
+        ret
       }
       case DataType.STRING => {
         val allFeatures = Features.extract(col, Filter.sizeFilter(sizeLimit), "temp_")
           .map(_.value).toArray
         val features = validFeatureIndex.map(allFeatures(_))
-        stringPredictor.predict(features)
+        val ret = stringPredictor.predict(features)
+        System.out.println("column name: "+ col.toString +" encoding: " + parquetStringEncoding(ret).toString)
+        ret
       }
       case _ => {
         -1
@@ -69,27 +73,46 @@ object ParquetEncoder extends App {
   EncContext.encoding.set(encodingMap)
   val contextMap = new util.HashMap[String, Array[AnyRef]]()
   EncContext.context.set(contextMap)
+  var colNum = 0
 
   colEncodings.zip(parquetSchema.getColumns).foreach(pair => {
-    val encoding = pair._1
     val coldesc = pair._2
 
     coldesc.getType match {
       case PrimitiveTypeName.INT32 => {
+        val encoding = args.length match {
+          case ge8 if ge8 >= 8 => args(7).toInt // if user defined encoding
+          case _ => pair._1
+        }
         encodingMap.put(coldesc.toString, parquetIntEncoding(encoding))
+        var intBitLength = 12
+        var intBound = 2050
+        System.out.println("column name: "+ coldesc.toString +" encoding: " + parquetIntEncoding(encoding).toString)
+        if (encoding == 2){
+          intBound = ParquetWriterHelper.scanIntMaxInTab(new File(inputFile).toURI, colNum, split,true)
+          intBitLength = 32 - Integer.numberOfLeadingZeros(intBound)
+          System.out.println("intBitLength: " + intBitLength + " intBound: " + intBound)
+        }
         // TODO Determine bit size for integer, here hard code as a sample
-        contextMap.put(coldesc.toString, Array[AnyRef]("32", "1024"))
+        //System.out.println("intBitLength: " + intBitLength + " intBound: " + intBound)
+        contextMap.put(coldesc.toString, Array[AnyRef](intBitLength.asInstanceOf[AnyRef], intBound.asInstanceOf[AnyRef]))
       }
       case PrimitiveTypeName.BINARY => {
+        val encoding = args.length match {
+          case ge9 if ge9 >= 9 => args(8).toInt // if user defined encoding
+          case _ => pair._1
+        }
         encodingMap.put(coldesc.toString, parquetStringEncoding(encoding))
+        System.out.println("column name: "+ coldesc.toString +" encoding: " + parquetStringEncoding(encoding).toString)
       }
       case _ => {}
     }
+    colNum = colNum+1
   })
 
   // Invoke Parquet Writer
   // TODO use CSV parser to parse file
-  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, ",", true)
+  ParquetWriterHelper.write(inputFile, parquetSchema, outputFile, split, true)
 
   def parquetIntEncoding(enc: Int): Encoding = {
     IntEncoding.values()(enc) match {

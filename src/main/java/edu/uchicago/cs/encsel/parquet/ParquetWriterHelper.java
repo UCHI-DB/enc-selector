@@ -110,6 +110,35 @@ public class ParquetWriterHelper {
         }
     }
 
+    public static int scanIntMaxInTab(URI input,int index, String split, boolean skipHeader) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(new File(input)));
+            int maxBitLength = 0;
+            String line = skipHeader ? br.readLine() : null;
+            String[] list;
+            int number;
+            while ((line = br.readLine()) != null) {
+                list = line.split(split, -1);
+                if (line.isEmpty()||list[index]=="")
+                    continue;
+                try{
+                    number = Integer.parseInt(list[index]);
+                }
+                catch(NumberFormatException e){
+                    continue;
+                }
+                if (number > maxBitLength)
+                    //System.out.println(list.length);
+                    maxBitLength = number;
+            }
+            br.close();
+            return maxBitLength;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public static <T> String globalDict2Str(Object2IntMap<T> globDict) {
         StringBuilder ret = new StringBuilder();
         Iterator<T> objIterator = globDict.keySet().iterator();
