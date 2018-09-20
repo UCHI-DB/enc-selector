@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSizeAndTime
+import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ParquetCompressFileSizeAndTime}
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.feature.subattr.{SubattrScanTimeUsage, SubattrScanTimeUsage2}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
@@ -42,7 +42,7 @@ object RunFeatureOnMainColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(ParquetEncFileSize)
+  val missed = Seq(ParquetEncFileSize, ParquetCompressFileSize)
 
   val prefix = args.length match {
     case gt if gt > 0 => args(0)
