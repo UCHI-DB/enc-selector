@@ -42,7 +42,7 @@ trait Persistence {
 }
 
 object Persistence {
-  private val impl = new FilePersistence
+  private val impl = new JPAPersistence
 
   def get: Persistence = impl
 }
