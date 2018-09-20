@@ -40,12 +40,15 @@ public class DictPerformance {
 
     static int repeat = 5;
 
+    static double sampling = 0.1;
+    static double threshold = 0.7;
+
     static {
         // Fill data
         for (int i = 0; i < data.length; i++) {
             data[i] = rand.nextInt(Integer.MAX_VALUE);
         }
-        dict = new GoogleBloomFilterDict(data, p);
+        dict = new HashDict(data, p);
     }
 
     public static void main(String[] args) {
@@ -76,7 +79,7 @@ public class DictPerformance {
             }
 
             profiler.mark();
-            dict.contain(test);
+            dict.contain(test, sampling, threshold);
             profiler.pause();
         }
         ProfileBean result = profiler.stop();

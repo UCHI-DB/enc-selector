@@ -1,9 +1,10 @@
 import sys
 import numpy as np
+import shutil
 import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.datasets.base import load_csv_without_header
 
-from encsel.dataset import DataSet
+from encsel.dataset import DataSet, DataSplit
 
 num_feature = 19;
 hidden_dim = 1000;
@@ -41,7 +42,9 @@ def build_graph(num_class):
 
 def train(data_file, model_path, num_class):
     ds = load_csv_without_header(data_file, np.int32, np.float32, 19);
-    dataset = DataSet(ds.data, ds.target)
+    dsplit = DataSplit(ds.data,ds.target,0.75)
+    dtrain = dsplit.getTrain()
+    dtest = dsplit.getTest()
 
     x, label, train_step, accuracy, prediction = build_graph(num_class)
     builder = tf.saved_model.builder.SavedModelBuilder(model_path)
@@ -50,12 +53,14 @@ def train(data_file, model_path, num_class):
         sess.run(tf.global_variables_initializer())
 
         for i in range(5000):
-            batch = dataset.next_batch(50)
+            batch = dtrain.next_batch(50)
             if batch is None:
                 break
             if i % 100 == 0:
                 train_accuracy = accuracy.eval(feed_dict={x: batch[0], label: batch[1]})
                 print('step %d, training accuracy %g' % (i, train_accuracy))
+                test_accuracy = accuracy.eval(feed_dict={x: dtest.data, label:dtest.label})
+                print('step %d, test accuracy %g' % (i, test_accuracy))
             train_step.run(feed_dict={x: batch[0], label: batch[1]})
 
         # Build Signature to save to model
@@ -91,7 +96,8 @@ def main():
 
 
 def main2():
-    train("/home/harper/enc_workspace/string_train.csv", '/home/harper/enc_workspace/string_model/', 4)
+    shutil.rmtree("/home/harper/enc_workspace/int_model/",ignore_errors=True)
+    train("/home/harper/enc_workspace/int_train.csv", '/home/harper/enc_workspace/int_model/', 5)
 
 
 if __name__ == "__main__":

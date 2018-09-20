@@ -41,6 +41,6 @@ public class HashDictTest {
 
             HashDict dict = new HashDict(data, 0.03);
 
-            assertTrue(dict.contain(data));
+            assertTrue(dict.contain(data,1,1));
         }
 }

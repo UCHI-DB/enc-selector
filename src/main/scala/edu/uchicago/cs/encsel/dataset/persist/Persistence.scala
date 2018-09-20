@@ -23,6 +23,7 @@
 package edu.uchicago.cs.encsel.dataset.persist
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.persist.file.FilePersistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
 import edu.uchicago.cs.encsel.model.DataType
 
@@ -41,7 +42,7 @@ trait Persistence {
 }
 
 object Persistence {
-  private val impl = new JPAPersistence
+  private val impl = new FilePersistence
 
   def get: Persistence = impl
 }

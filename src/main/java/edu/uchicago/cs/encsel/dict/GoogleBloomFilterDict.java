@@ -23,7 +23,6 @@
 package edu.uchicago.cs.encsel.dict;
 
 import com.google.common.hash.BloomFilter;
-import com.google.common.hash.Funnel;
 import com.google.common.hash.Funnels;
 
 public class GoogleBloomFilterDict implements Dict {
@@ -37,12 +36,16 @@ public class GoogleBloomFilterDict implements Dict {
     }
 
     @Override
-    public boolean contain(int[] data) {
-        for(int d: data) {
-            if(!inner.mightContain(d)) {
-                return false;
+    public boolean contain(int[] data, double sampling, double threshold) {
+        int thresholdNum = (int) (data.length * sampling * threshold);
+        int count = 0;
+        for (int d : data) {
+            if (inner.mightContain(d)) {
+                count++;
+                if (count > thresholdNum)
+                    return true;
             }
         }
-        return true;
+        return false;
     }
 }

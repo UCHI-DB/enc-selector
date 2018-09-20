@@ -24,5 +24,5 @@ package edu.uchicago.cs.encsel.dict;
 
 public interface Dict {
 
-    public boolean contain(int[] data);
+    public boolean contain(int[] test, double sampling, double threshold);
 }
