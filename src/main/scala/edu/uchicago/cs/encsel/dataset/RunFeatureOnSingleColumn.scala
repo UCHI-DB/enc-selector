@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
@@ -40,7 +41,7 @@ object RunFeatureOnSingleColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(ScanCompressedTimeUsage)
+  val missed = Seq(ParquetEncFileSize)
 
   val from = args(0).toInt
   val to = args(1).toInt
