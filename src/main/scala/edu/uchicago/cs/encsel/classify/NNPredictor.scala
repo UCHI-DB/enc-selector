@@ -59,3 +59,19 @@ class NNPredictor(model: String, val numFeature: Int) {
     buffer.get(0).toInt
   }
 }
+
+object NNLoader extends App {
+  val savedModel = SavedModelBundle.load("/home/harper/IdeaProjects/enc-selector/src/main/nnmodel/int_model", "serve")
+
+  var result = savedModel.session().runner().fetch("layer1/w1").fetch("layer2/w2").run()
+
+  var w1 = result(0)
+  var w2 = result(1)
+  var array1 = Array.ofDim[Float](19,1000)
+  var array2 = Array.ofDim[Float](1000,5)
+  w1.copyTo(array1)
+  w2.copyTo(array2)
+
+  println(array1(0)(0))
+  println(array2(0)(0))
+}

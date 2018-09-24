@@ -58,12 +58,23 @@ public class BloomFilterDict implements Dict {
     }
 
     @Override
-    public boolean contain(int[] data) {
+    public boolean contain(int[] data, double sampling, double threshold) {
+        int thresholdNum = (int) (data.length * sampling * threshold);
+        int count = 0;
         for (int d : data) {
-            for (int idx = 0; idx < numHash; idx++) {
-                if (!get(hash(d, idx))) {
-                    return false;
-                }
+            if (contain(d)) {
+                count++;
+                if (count > thresholdNum)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean contain(int data) {
+        for (int idx = 0; idx < numHash; idx++) {
+            if (!get(hash(data, idx))) {
+                return false;
             }
         }
         return true;
