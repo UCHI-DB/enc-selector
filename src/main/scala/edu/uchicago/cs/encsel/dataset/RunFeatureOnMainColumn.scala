@@ -62,8 +62,8 @@ object RunFeatureOnMainColumn extends App {
     case _ => null
   }
 
-  Features.extractors.clear()
-  Features.extractors ++= missed
+//  Features.extractors.clear()
+//  Features.extractors ++= missed
 
   val persistence = Persistence.get
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL ORDER BY c.id",
