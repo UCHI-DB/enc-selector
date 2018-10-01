@@ -36,7 +36,7 @@
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://division.cs.uchicago.edu/encsel"/>
             <property name="javax.persistence.jdbc.user" value="encsel"/>
-            <property name="javax.persistence.jdbc.password" value="encsel"/>
+            <property name="javax.persistence.jdbc.password" value="harper"/>
             <!-- property name="eclipselink.logging.level" value="FINE" /-->
         </properties>
     </persistence-unit>

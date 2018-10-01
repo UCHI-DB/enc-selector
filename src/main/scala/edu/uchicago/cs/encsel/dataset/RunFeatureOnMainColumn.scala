@@ -23,9 +23,7 @@
 package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ParquetCompressFileSizeAndTime}
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
-import edu.uchicago.cs.encsel.dataset.feature.subattr.{SubattrScanTimeUsage, SubattrScanTimeUsage2}
+import edu.uchicago.cs.encsel.dataset.feature.classify._
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
@@ -42,7 +40,8 @@ object RunFeatureOnMainColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(ParquetEncFileSize, ParquetCompressFileSize)
+  val missed = Seq(Sparsity, Entropy, Length, Distinct, new Sortness(50),
+    new Sortness(100), new Sortness(200))
 
   val prefix = args.length match {
     case gt if gt > 0 => args(0)

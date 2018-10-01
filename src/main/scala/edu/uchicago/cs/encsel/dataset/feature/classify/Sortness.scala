@@ -29,6 +29,7 @@ import java.util.Comparator
 import edu.uchicago.cs.encsel.common.Conversions._
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
+import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.io.Source
 import scala.util.Random
@@ -48,7 +49,9 @@ class Sortness(val windowSize: Int) extends FeatureExtractor {
     val source = Source.fromInputStream(input)
 
     val stream = source.getLines().toStream
-    val lineCount = stream.size
+//    val lineCount = stream.size
+    // For performance consideration
+    val lineCount = FileUtils.numLine(col.colFile)
 
     val selection = lineCount > windowSize * windowSize match {
       case true => 2.0 / windowSize
