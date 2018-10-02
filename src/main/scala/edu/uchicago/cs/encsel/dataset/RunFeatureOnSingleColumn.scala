@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.classify._
+import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
@@ -41,8 +42,7 @@ object RunFeatureOnSingleColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(Sparsity, Entropy, Length, Distinct, new Sortness(50),
-    new Sortness(100), new Sortness(200))
+  val missed = Seq(ParquetCompressFileSize)
 
   val from = args(0).toInt
   val to = args(1).toInt
