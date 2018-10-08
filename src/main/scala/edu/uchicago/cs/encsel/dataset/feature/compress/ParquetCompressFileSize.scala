@@ -53,7 +53,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
               new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
             } catch {
               case ile: IllegalArgumentException => {
-                // Unsupported Encoding, ignore
+                ile.printStackTrace()
                 null
               }
             }
@@ -68,6 +68,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
               new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
             } catch {
               case ile: IllegalArgumentException => {
+                ile.printStackTrace()
                 null
               }
             }
@@ -82,6 +83,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
               new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
             } catch {
               case ile: IllegalArgumentException => {
+                ile.printStackTrace()
                 null
               }
             }
@@ -96,6 +98,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
               new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
             } catch {
               case ile: IllegalArgumentException => {
+                ile.printStackTrace()
                 null
               }
             }
@@ -110,6 +113,7 @@ object ParquetCompressFileSize extends FeatureExtractor {
               new Feature(fType, "%s_%s_file_size".format(e.name(), codec.name()), new File(f).length)
             } catch {
               case ile: IllegalArgumentException => {
+                ile.printStackTrace()
                 null
               }
             }
