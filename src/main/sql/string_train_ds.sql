@@ -1,5 +1,5 @@
 SELECT 
-	cd.id,
+    cd.id,
     f1.value AS 'Sparsity_valid_ratio',
     f2.value AS 'Entropy_line_max',
     f3.value AS 'Entropy_line_min',
@@ -110,11 +110,12 @@ FROM
     FROM
         feature
     WHERE
-        type = 'EncFileSize' AND value >= 0
+        type IN ('EncFileSize' , 'CompressEncFileSize')
+            AND value >= 0
     GROUP BY col_id) minval ON minenc.col_id = minval.col_id
         AND minenc.value = minval.value
     WHERE
-        minenc.type = 'EncFileSize') mine ON mine.col_id = cd.id
+        minenc.type IN ('EncFileSize' , 'CompressEncFileSize')) mine ON mine.col_id = cd.id
 WHERE
     cd.data_type = 'STRING'
-limit 50000
+LIMIT 50000
