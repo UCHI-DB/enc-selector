@@ -105,11 +105,66 @@ object SimilarWords extends FeatureExtractor {
     }
     while (size == buffer.length)
 
-    val kmSum = lengthCounter.zipWithIndex.map(pair=> pair._1*pair._2).sum.toDouble
+    val kmSum = lengthCounter.zipWithIndex.map(pair => pair._1 * pair._2).sum.toDouble
 
     return Iterable(
-      new Feature(fType, "ratio", kmSum/pointer),
+      new Feature(fType, "ratio", kmSum / pointer),
       new Feature(fType, "value", kmSum)
     )
+  }
+}
+
+object AccurateSimilarWords extends FeatureExtractor {
+  override def featureType: String = "AccurateSimilarWords"
+
+  override def supportFilter: Boolean = true
+
+  val windowSize = (1 << 15) - 1
+
+  val msgSize = (1 << 8) - 1
+
+  val p = 3593406659l
+
+  override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
+    val fType = "%s%s".format(prefix, featureType)
+
+    var r = Math.abs(Random.nextLong()) % p
+    var rp = new Array[Long](msgSize);
+    rp(0) = 1
+    for (i <- 1 until msgSize) {
+      rp(i) = (rp(i - 1) * r) % p
+    }
+
+    val substrs = new mutable.HashSet[Long];
+    var suffixs = new mutable.HashMap[Long, Int];
+
+    val lengthCounter = Array.fill[Long](msgSize + 1)(0)
+    val buffer = new Array[Byte](windowSize)
+
+    var pointer = 0
+    var size = 0
+    do {
+      size = input.read(buffer)
+      for (i <- 0 until size) {
+        // Maintain the dictionary
+        val char = buffer(i).asInstanceOf[Long];
+        val newsuffix = new mutable.HashMap[Long, Int];
+        newsuffix += ((char, 1));
+        suffixs.foreach(suffix => {
+          if (suffix._2 < msgSize) {
+            newsuffix += ((suffix._1 + char * rp(suffix._1), suffix._2 + 1))
+          }
+        })
+        suffixs = newsuffix
+        substrs ++= suffixs.keySet
+
+        // Look for the longest prefix starting at (i)
+        for(msg<- 1 to msgSize) {
+
+        }
+
+      }
+    }
+    while (size == buffer.length)
   }
 }
