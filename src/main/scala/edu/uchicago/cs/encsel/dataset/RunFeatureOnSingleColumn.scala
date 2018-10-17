@@ -42,7 +42,7 @@ object RunFeatureOnSingleColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(ParquetCompressFileSize)
+  val missed = Seq(SimilarWords)
 
   val from = args(0).toInt
   val to = args(1).toInt
