@@ -152,7 +152,7 @@ object AccurateSimilarWords extends FeatureExtractor {
         newsuffix += ((char, 1));
         suffixs.foreach(suffix => {
           if (suffix._2 < msgSize) {
-            newsuffix += ((suffix._1 + char * rp(suffix._1), suffix._2 + 1))
+            newsuffix += ((suffix._1 + char * rp(suffix._1.toInt), suffix._2 + 1))
           }
         })
         suffixs = newsuffix
@@ -166,5 +166,7 @@ object AccurateSimilarWords extends FeatureExtractor {
       }
     }
     while (size == buffer.length)
+
+    return Iterable()
   }
 }
