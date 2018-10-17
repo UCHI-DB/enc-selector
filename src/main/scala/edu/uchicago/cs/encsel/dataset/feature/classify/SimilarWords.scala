@@ -114,8 +114,8 @@ object SimilarWords extends FeatureExtractor {
   }
 }
 
-object AccurateSimilarWords extends FeatureExtractor {
-  override def featureType: String = "AccurateSimilarWords"
+object BlockSimilarWords extends FeatureExtractor {
+  override def featureType: String = "BlockSimilarWords"
 
   override def supportFilter: Boolean = true
 
@@ -135,38 +135,44 @@ object AccurateSimilarWords extends FeatureExtractor {
       rp(i) = (rp(i - 1) * r) % p
     }
 
-    val substrs = new mutable.HashSet[Long];
-    var suffixs = new mutable.HashMap[Long, Int];
-
-    val lengthCounter = Array.fill[Long](msgSize + 1)(0)
     val buffer = new Array[Byte](windowSize)
-
-    var pointer = 0
     var size = 0
+    // TODO Skip buffer
+    var skip = false
     do {
-      size = input.read(buffer)
-      for (i <- 0 until size) {
-        // Maintain the dictionary
-        val char = buffer(i).asInstanceOf[Long];
-        val newsuffix = new mutable.HashMap[Long, Int];
-        newsuffix += ((char, 1));
-        suffixs.foreach(suffix => {
-          if (suffix._2 < msgSize) {
-            newsuffix += ((suffix._1 + char * rp(suffix._1.toInt), suffix._2 + 1))
-          }
-        })
-        suffixs = newsuffix
-        substrs ++= suffixs.keySet
-
-        // Look for the longest prefix starting at (i)
-        for(msg<- 1 to msgSize) {
-
-        }
-
+      if (skip) {
+        input.skip(windowSize)
+        size = windowSize
+      } else {
+        size = input.read(buffer)
+        scanBlock(buffer, size, rp)
       }
     }
     while (size == buffer.length)
 
     return Iterable()
+  }
+
+  def scanBlock(buffer: Array[Byte], size: Int, rp: Array[Long]): Unit = {
+    var exists = new mutable.HashSet[Long]
+    var suffixs = new mutable.HashMap[Long, Int];
+    val lengthCounter = Array.fill[Long](msgSize + 1)(0l)
+    for (i <- 0 until size) {
+      val char = buffer(i).asInstanceOf[Long];
+      val newsuffix = new mutable.HashMap[Long, Int];
+      newsuffix += ((char, 1));
+      suffixs.foreach(suffix => {
+        if (suffix._2 < msgSize) {
+          newsuffix += ((suffix._1 + char * rp(suffix._1.toInt), suffix._2 + 1))
+        }
+      })
+      suffixs = newsuffix
+      newsuffix.foreach(n => {
+        if (!exists.contains(n._1)) {
+          exists += n._1
+          lengthCounter(n._2) += 1
+        }
+      })
+    }
   }
 }
