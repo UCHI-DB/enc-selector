@@ -26,10 +26,12 @@ package edu.uchicago.cs.encsel.dataset.feature.classify
 import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.classify.BlockSimilarWords.msgSize
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 
 import scala.collection.mutable
 import scala.util.Random
+
 
 object SimilarWords extends FeatureExtractor {
 
@@ -50,7 +52,7 @@ object SimilarWords extends FeatureExtractor {
     var queueStart = 0
     var queue = new mutable.Queue[(Long, Long)]()
 
-    var r = Math.abs(Random.nextLong()) % p
+    var r: Long = Math.abs(Random.nextLong()) % p
     var rp = new Array[Long](msgSize);
     rp(0) = 1
     for (i <- 1 until msgSize) {
@@ -115,7 +117,7 @@ object SimilarWords extends FeatureExtractor {
 }
 
 object BlockSimilarWords extends FeatureExtractor {
-  override def featureType: String = "BlockSimilarWords"
+  override def featureType: String = "SimilarWords"
 
   override def supportFilter: Boolean = true
 
@@ -128,32 +130,29 @@ object BlockSimilarWords extends FeatureExtractor {
   override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
 
-    var r = Math.abs(Random.nextLong()) % p
-    var rp = new Array[Long](msgSize);
-    rp(0) = 1
-    for (i <- 1 until msgSize) {
-      rp(i) = (rp(i - 1) * r) % p
-    }
+    val fpr = new Fingerprint(p)
+
+    val ratios = new mutable.ArrayBuffer[Double]()
 
     val buffer = new Array[Byte](windowSize)
     var size = 0
-    // TODO Skip buffer
-    var skip = false
+    var skipProb = 1.0 / msgSize
     do {
-      if (skip) {
+      if (Random.nextDouble() < skipProb) {
         input.skip(windowSize)
         size = windowSize
       } else {
         size = input.read(buffer)
-        scanBlock(buffer, size, rp)
+        val blockRatio = scanBlock(buffer, size, fpr)
+        ratios += blockRatio
       }
     }
     while (size == buffer.length)
 
-    return Iterable()
+    return Iterable(new Feature(fType, "block_ratio", ratios.sum / ratios.size))
   }
 
-  def scanBlock(buffer: Array[Byte], size: Int, rp: Array[Long]): Unit = {
+  def scanBlock(buffer: Array[Byte], size: Int, fpr: Fingerprint): Double = {
     var exists = new mutable.HashSet[Long]
     var suffixs = new mutable.HashMap[Long, Int];
     val lengthCounter = Array.fill[Long](msgSize + 1)(0l)
@@ -163,7 +162,7 @@ object BlockSimilarWords extends FeatureExtractor {
       newsuffix += ((char, 1));
       suffixs.foreach(suffix => {
         if (suffix._2 < msgSize) {
-          newsuffix += ((suffix._1 + char * rp(suffix._1.toInt), suffix._2 + 1))
+          newsuffix += (((suffix._1 + char * fpr.rp(suffix._2.toInt)) % p, suffix._2 + 1))
         }
       })
       suffixs = newsuffix
@@ -174,5 +173,48 @@ object BlockSimilarWords extends FeatureExtractor {
         }
       })
     }
+    return lengthCounter.zipWithIndex.map(p => p._1 * p._2).sum.toDouble / size
+  }
+
+  def scanBlock2(buffer: Array[Byte], size: Int, rp: Array[Long]): Array[Long] = {
+    var exists = new mutable.HashSet[Long]
+    var suffixs = new mutable.HashMap[Long, Int];
+    val lengthCounter = Array.fill[Long](msgSize + 1)(0l)
+    for (i <- 0 until size) {
+      val char = buffer(i).asInstanceOf[Long];
+      val newsuffix = new mutable.HashMap[Long, Int];
+      newsuffix += ((char, 1));
+      suffixs.foreach(suffix => {
+        if (suffix._2 < msgSize) {
+          newsuffix += (((suffix._1 + char * rp(suffix._2.toInt)) % p, suffix._2 + 1))
+        }
+      })
+      suffixs = newsuffix
+      newsuffix.foreach(n => {
+        if (!exists.contains(n._1)) {
+          exists += n._1
+          lengthCounter(n._2) += 1
+        }
+      })
+      if (i > 30 && lengthCounter(29) != lengthCounter(28) - 1) {
+        println("here")
+      }
+    }
+    return lengthCounter
+  }
+}
+
+
+class Fingerprint(p: Long) {
+
+  var r: Long = Math.abs(Random.nextLong()) % p
+  var rp = new Array[Long](msgSize);
+  rp(0) = 1
+  for (i <- 1 until msgSize) {
+    rp(i) = (rp(i - 1) * r) % p
+  }
+
+  def get(s: String): Long = {
+    s.zipWithIndex.map(pair => pair._1 * rp(pair._2) % p).reduce((x1, x2) => (x1 + x2) % p)
   }
 }
