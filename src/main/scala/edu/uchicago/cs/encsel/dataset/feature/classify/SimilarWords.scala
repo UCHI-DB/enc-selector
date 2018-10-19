@@ -154,53 +154,42 @@ object BlockSimilarWords extends FeatureExtractor {
 
   def scanBlock(buffer: Array[Byte], size: Int, fpr: Fingerprint): Double = {
     var exists = new mutable.HashSet[Long]
-    var suffixs = new mutable.HashMap[Long, Int];
+    var suffixFp = Array.fill[Long](msgSize)(0l);
+    var suffixLength = 0
     val lengthCounter = Array.fill[Long](msgSize + 1)(0l)
-    for (i <- 0 until size) {
-      val char = buffer(i).asInstanceOf[Long];
-      val newsuffix = new mutable.HashMap[Long, Int];
-      newsuffix += ((char, 1));
-      suffixs.foreach(suffix => {
-        if (suffix._2 < msgSize) {
-          newsuffix += (((suffix._1 + char * fpr.rp(suffix._2.toInt)) % p, suffix._2 + 1))
-        }
-      })
-      suffixs = newsuffix
-      newsuffix.foreach(n => {
-        if (!exists.contains(n._1)) {
-          exists += n._1
-          lengthCounter(n._2) += 1
-        }
-      })
-    }
-    return lengthCounter.zipWithIndex.map(p => p._1 * p._2).sum.toDouble / size
-  }
+    var pointer = 0
+    while (pointer < size) {
+      // Look forward for the longest prefix
+      var fpointer = pointer
+      var fp: Long = buffer(fpointer)
+      val fpsteps: Array[Long] = Array.fill[Long](msgSize)(0l)
+      fpsteps(0) = fp
+      while (exists.contains(fp)) {
+        fpointer += 1
+        fp = fpr.append(fp, fpointer - pointer, buffer(fpointer))
+        fpsteps(fpointer - pointer) = fp
+      }
+      // Found the longest prefix and the next message is fp
+      val msglen = fpointer - pointer + 1
+      lengthCounter(msglen) += 1
+      exists += fp
+      pointer = fpointer + 1
 
-  def scanBlock2(buffer: Array[Byte], size: Int, rp: Array[Long]): Array[Long] = {
-    var exists = new mutable.HashSet[Long]
-    var suffixs = new mutable.HashMap[Long, Int];
-    val lengthCounter = Array.fill[Long](msgSize + 1)(0l)
-    for (i <- 0 until size) {
-      val char = buffer(i).asInstanceOf[Long];
-      val newsuffix = new mutable.HashMap[Long, Int];
-      newsuffix += ((char, 1));
-      suffixs.foreach(suffix => {
-        if (suffix._2 < msgSize) {
-          newsuffix += (((suffix._1 + char * rp(suffix._2.toInt)) % p, suffix._2 + 1))
+      // Now construct all substrings introduced by the new message
+      for (i <- 1 to suffixLength) {
+        // Left side
+        for (j <- 1 to Math.min(msgSize - 1, msglen)) { // Right side
+          exists += fpr.combine(suffixFp(i), i, fpsteps(j))
         }
-      })
-      suffixs = newsuffix
-      newsuffix.foreach(n => {
-        if (!exists.contains(n._1)) {
-          exists += n._1
-          lengthCounter(n._2) += 1
-        }
-      })
-      if (i > 30 && lengthCounter(29) != lengthCounter(28) - 1) {
-        println("here")
+      }
+      // Now construct new suffix
+
+      suffixLength = Math.min(pointer, msgSize - 1)
+      for (i <- 1 until Math.max(0, suffixLength - msglen)) {
+        suffixFp(i) = fpr.divide(fp - fpsteps(msglen - i), msglen - i)
       }
     }
-    return lengthCounter
+    return lengthCounter.zipWithIndex.map(p => p._1 * p._2).sum.toDouble / size
   }
 }
 
@@ -216,5 +205,18 @@ class Fingerprint(p: Long) {
 
   def get(s: String): Long = {
     s.zipWithIndex.map(pair => pair._1 * rp(pair._2) % p).reduce((x1, x2) => (x1 + x2) % p)
+  }
+
+  def append(fp: Long, length: Int, char: Byte) = {
+    (fp + rp(length) * char) % p
+  }
+
+  def combine(lfp: Long, llen: Int, rfp: Long): Long = {
+    (lfp + (rp(llen) * rfp) % p) % p
+  }
+
+  def divide(fp: Long, pow: Int): Long = {
+    // TODO
+    throw new UnsupportedOperationException()
   }
 }
