@@ -26,197 +26,270 @@ package edu.uchicago.cs.encsel.dataset.feature.classify
 import java.io.InputStream
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.classify.BlockSimilarWords.msgSize
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 
 import scala.collection.mutable
 import scala.util.Random
 
 
-object SimilarWords extends FeatureExtractor {
-
-  def featureType = "SimilarWords"
-
-  def supportFilter: Boolean = true
-
-  val windowSize = (1 << 15) - 1
-  val msgSize = (1 << 8) - 1
-
-  val p = 3593406659l
-
-  def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
-    val fType = "%s%s".format(prefix, featureType)
-
-    // Map a Karp-Rabin fingerprint to a position in the queue
-    var lookup = new mutable.HashSet[Long]()
-    var queueStart = 0
-    var queue = new mutable.Queue[(Long, Long)]()
-
-    var r: Long = Math.abs(Random.nextLong()) % p
-    var rp = new Array[Long](msgSize);
-    rp(0) = 1
-    for (i <- 1 until msgSize) {
-      rp(i) = (rp(i - 1) * r) % p
-    }
-
-    var lengthCounter = Array.fill[Long](msgSize + 1)(0)
-
-    var pointer = 0l
-    var fingerprint = 0l
-    var msglen = 0
-
-    val buffer = new Array[Byte](10000)
-
-    var size = 0
-    do {
-      size = input.read(buffer)
-      for (i <- 0 until size) {
-        pointer += 1
-        // Remove the substring that is already out of window
-        if (!queue.isEmpty && queue.front._2 <= pointer - windowSize) {
-          val outOfWindow = queue.dequeue()
-          lookup.remove(outOfWindow._1)
-        }
-
-        // Compute the fingerprint for the string
-        fingerprint = (fingerprint + buffer(i) * rp(msglen)) % p
-        msglen += 1
-
-        if (msglen == msgSize) {
-          if (!lookup.contains(fingerprint)) {
-            lookup.add(fingerprint)
-            queue.enqueue((pointer - msgSize, fingerprint))
-
-            lengthCounter(msglen) += 1
-          }
-          msglen = 0
-          fingerprint = 0l
-        } else {
-          if (!lookup.contains(fingerprint)) {
-            // If does not contain the string
-            lookup.add(fingerprint)
-            queue.enqueue((pointer - msglen, fingerprint))
-
-            lengthCounter(msglen) += 1
-
-            msglen = 0
-            fingerprint = 0l
-          }
-        }
-      }
-    }
-    while (size == buffer.length)
-
-    val kmSum = lengthCounter.zipWithIndex.map(pair => pair._1 * pair._2).sum.toDouble
-
-    return Iterable(
-      new Feature(fType, "ratio", kmSum / pointer),
-      new Feature(fType, "value", kmSum)
-    )
-  }
-}
-
-object BlockSimilarWords extends FeatureExtractor {
+class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
   override def featureType: String = "SimilarWords"
 
   override def supportFilter: Boolean = true
 
   val windowSize = (1 << 15) - 1
 
-  val msgSize = (1 << 8) - 1
-
-  val p = 3593406659l
+  val threshold = 100
 
   override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
 
-    val fpr = new Fingerprint(p)
-
-    val ratios = new mutable.ArrayBuffer[Double]()
+    val fpr = new Fingerprint(msgSize)
 
     val buffer = new Array[Byte](windowSize)
     var size = 0
     var skipProb = 1.0 / msgSize
+
+    var blockCount = 0
+    val info = new BlockInfo
+    info.counter = 0
+
     do {
-      if (Random.nextDouble() < skipProb) {
+      if (blockCount >= threshold && Random.nextDouble() < skipProb) {
         input.skip(windowSize)
         size = windowSize
       } else {
         size = input.read(buffer)
-        val blockRatio = scanBlock(buffer, size, fpr)
-        ratios += blockRatio
+        val blockInfo = scanBlock(buffer, size, fpr)
+
+        info.merge(blockInfo)
       }
     }
     while (size == buffer.length)
 
-    return Iterable(new Feature(fType, "block_ratio", ratios.sum / ratios.size))
+    return Iterable(
+      new Feature(fType, "ratio", info.compressionRatio),
+      new Feature(fType, "msglen_entropy", info.msglenEntropy),
+      new Feature(fType, "dist_entropy", info.msgDistEntropy),
+      new Feature(fType, "char_entropy", info.charEntropy)
+    )
   }
 
-  def scanBlock(buffer: Array[Byte], size: Int, fpr: Fingerprint): Double = {
-    var exists = new mutable.HashSet[Long]
-    var suffixFp = Array.fill[Long](msgSize)(0l);
-    var suffixLength = 0
-    val lengthCounter = Array.fill[Long](msgSize + 1)(0l)
+  def scanBlock(buffer: Array[Byte], size: Int, fpr: Fingerprint): BlockInfo = {
+    val exists = new mutable.HashMap[Long, Int]
+    exists += ((0, 0))
+    var suffixs = new SuffixBuffer(msgSize + 1, fpr)
+
+    val msgcounter = Array.fill[Int](msgSize + 1)(0)
+    val distcounter = new mutable.HashMap[Int, Int]
+    val charcounter = Array.fill[Int](257)(0)
+
     var pointer = 0
     while (pointer < size) {
       // Look forward for the longest prefix
       var fpointer = pointer
-      var fp: Long = buffer(fpointer)
-      val fpsteps: Array[Long] = Array.fill[Long](msgSize)(0l)
-      fpsteps(0) = fp
-      while (exists.contains(fp)) {
-        fpointer += 1
-        fp = fpr.append(fp, fpointer - pointer, buffer(fpointer))
-        fpsteps(fpointer - pointer) = fp
-      }
-      // Found the longest prefix and the next message is fp
-      val msglen = fpointer - pointer + 1
-      lengthCounter(msglen) += 1
-      exists += fp
-      pointer = fpointer + 1
 
-      // Now construct all substrings introduced by the new message
-      for (i <- 1 to suffixLength) {
-        // Left side
-        for (j <- 1 to Math.min(msgSize - 1, msglen)) { // Right side
-          exists += fpr.combine(suffixFp(i), i, fpsteps(j))
+      var msgfp: Long = 0
+      var msgdist: Int = 0
+
+      // Find the longest prefix
+      while (fpointer < size && fpointer - pointer < msgSize && exists.contains(msgfp)) {
+        msgdist = exists.getOrElse(msgfp, 0)
+        msgfp = fpr.combine(msgfp, fpointer - pointer, buffer(fpointer))
+        if (exists.contains(msgfp)) {
+          msgdist = exists.getOrElse(msgfp, 0)
+          // Update suffix and update substrings
+          suffixs.shiftIn(buffer(fpointer))
+          fpointer += 1
+          val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
+          exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
         }
       }
-      // Now construct new suffix
 
-      suffixLength = Math.min(pointer, msgSize - 1)
-      for (i <- 1 until Math.max(0, suffixLength - msglen)) {
-        suffixFp(i) = fpr.divide(fp - fpsteps(msglen - i), msglen - i)
+      if (fpointer < size && fpointer - pointer < msgSize) {
+        // Add the new char to suffix
+        val newchar = buffer(fpointer)
+        suffixs.shiftIn(newchar)
+        charcounter(newchar) += 1
+        fpointer += 1
+        val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
+        exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
+      } else {
+        // Reach message size limit
+        charcounter(0) += 1
+      }
+
+      var msglen = fpointer - pointer
+      pointer = fpointer
+
+      msgcounter(msglen) += 1
+      val distc = distcounter.getOrElse(msgdist, 0)
+      distcounter.put(msgdist, distc + 1)
+    }
+
+    val blockInfo = new BlockInfo
+    blockInfo.counter = 1
+
+    val msgcounterSum = msgcounter.sum.toDouble
+    val distcounterSum = distcounter.values.sum.toDouble
+
+    blockInfo.compressionRatio = msgcounterSum / size
+    blockInfo.msglenEntropy = msgcounter.map(probMap(msgcounterSum)).sum
+    blockInfo.msgDistEntropy = distcounter.values.map(probMap(distcounterSum)).sum
+    blockInfo.charEntropy = charcounter.map(probMap(msgcounterSum)).sum
+
+    return blockInfo
+  }
+
+  def probMap(sum: Double): (Int) => Double = {
+    (value: Int) => {
+      value match {
+        case 0 => 0
+        case _ => {
+          val prob = value / sum
+          -prob * Math.log(prob)
+        }
       }
     }
-    return lengthCounter.zipWithIndex.map(p => p._1 * p._2).sum.toDouble / size
   }
 }
 
+class BlockInfo {
 
-class Fingerprint(p: Long) {
+  var compressionRatio: Double = 0
 
-  var r: Long = Math.abs(Random.nextLong()) % p
+  var msglenEntropy: Double = 0
+
+  var msgDistEntropy: Double = 0
+
+  var charEntropy: Double = 0
+
+  var counter = 0
+
+  def merge(other: BlockInfo) = {
+    this.compressionRatio =
+      (this.compressionRatio * this.counter + other.compressionRatio * other.counter) / (this.counter + other.counter)
+    this.msglenEntropy =
+      (this.msglenEntropy * this.counter + other.msglenEntropy * other.counter) / (this.counter + other.counter)
+    this.msgDistEntropy =
+      (this.msgDistEntropy * this.counter + other.msgDistEntropy * other.counter) / (this.counter + other.counter)
+    this.charEntropy =
+      (this.charEntropy * this.counter + other.charEntropy * other.counter) / (this.counter + other.counter)
+  }
+
+}
+
+/**
+  * SuffixBuffer(i) is the fingerprint of suffix with size i.
+  * size range is 1 to msgSize - 1
+  *
+  * @param size
+  * @param fpr
+  */
+class SuffixBuffer(val size: Int, val fpr: Fingerprint) {
+
+  var pointer = 0
+
+  val storage = Array.fill[Long](size)(0l)
+
+  def shift(offset: Int) = {
+    pointer += offset
+  }
+
+  def apply(index: Int): Long = {
+    storage((pointer + index) % size)
+  }
+
+  def update(index: Int, value: Long) = {
+    storage((pointer + index) % size) = value
+  }
+
+  def shiftIn(value: Long) = {
+    for (i <- 1 until size - 1) {
+      update(i, fpr.combine(apply(i), i, value))
+    }
+    // Shift pointer back
+    pointer -= 1
+    while (pointer < 0)
+      pointer += size
+    pointer %= size
+
+    update(1, value)
+    update(0, 0l)
+  }
+
+  def values(length: Int) = (1 to length).map(apply(_))
+}
+
+object ModularMath {
+  val p = 2806624493l
+
+  def add(a: Long, b: Long): Long = {
+    return (a + b) % p
+  }
+
+  def sub(a: Long, b: Long): Long = {
+    return (a + p - b) % p
+  }
+
+  def mul(a: Long, b: Long): Long = {
+    return a * b % p
+  }
+}
+
+class Fingerprint(val msgSize: Int = (1 << 8) - 1) {
+  val p = 2806624493l
+  var r: Long = (Math.abs(Random.nextLong()) % p)
+  var rinv = inverse()
   var rp = new Array[Long](msgSize);
+  var rinvp = new Array[Long](msgSize);
   rp(0) = 1
+  rinvp(0) = 1
+
+
   for (i <- 1 until msgSize) {
-    rp(i) = (rp(i - 1) * r) % p
+    rp(i) = ModularMath.mul(rp(i - 1), r)
+    rinvp(i) = ModularMath.mul(rinvp(i - 1), rinv)
   }
 
   def get(s: String): Long = {
-    s.zipWithIndex.map(pair => pair._1 * rp(pair._2) % p).reduce((x1, x2) => (x1 + x2) % p)
-  }
-
-  def append(fp: Long, length: Int, char: Byte) = {
-    (fp + rp(length) * char) % p
+    s.zipWithIndex.map(pair => ModularMath.mul(pair._1, rp(pair._2))).reduce(ModularMath.add)
   }
 
   def combine(lfp: Long, llen: Int, rfp: Long): Long = {
-    (lfp + (rp(llen) * rfp) % p) % p
+    ModularMath.add(ModularMath.mul(rfp, rp(llen)), lfp)
   }
 
   def divide(fp: Long, pow: Int): Long = {
-    // TODO
-    throw new UnsupportedOperationException()
+    ModularMath.mul(fp, rinvp(pow))
+  }
+
+  def shifth(fp: Long, shift: Int): Long = {
+    ModularMath.mul(fp, rp(shift))
+  }
+
+  def shiftl(fp: Long, lfp: Long, lfpl: Int): Long = {
+    ModularMath.mul(ModularMath.sub(fp, lfp), rinvp(lfpl))
+  }
+
+  /**
+    * Compute the inverse of r using extended Euclidean algorithm
+    *
+    * @return
+    */
+  def inverse(): Long = {
+    var data0 = Array(p, 1, 0)
+    var data1 = Array(r, 0, 1)
+    do {
+      val div = data0(0) / data1(0)
+      var newdata = data0.zip(data1).map(pair => pair._1 - pair._2 * div)
+      data0 = data1
+      data1 = newdata
+    } while (data1(0) != 1)
+    var cand = data1(2)
+    while (cand < 0) {
+      cand += p
+    }
+    return cand
   }
 }
