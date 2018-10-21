@@ -55,7 +55,7 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
     info.counter = 0
 
     do {
-      if (blockCount >= threshold && Random.nextDouble() < skipProb) {
+      if (blockCount >= threshold && Random.nextDouble() >= skipProb) {
         input.skip(windowSize)
         size = windowSize
       } else {
@@ -175,6 +175,7 @@ class BlockInfo {
       (this.msgDistEntropy * this.counter + other.msgDistEntropy * other.counter) / (this.counter + other.counter)
     this.charEntropy =
       (this.charEntropy * this.counter + other.charEntropy * other.counter) / (this.counter + other.counter)
+    this.counter += other.counter
   }
 
 }

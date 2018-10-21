@@ -12,23 +12,23 @@ import org.junit.Test
 import scala.util.Random
 
 class SimilarWordsTest {
-    @Test
-    def testRun: Unit = {
-      val col = new Column(null, -1, "", DataType.INTEGER)
-      col.colFile = new File("src/test/resource/coldata/test_col_similarword.data").toURI
+  @Test
+  def testRun: Unit = {
+    val col = new Column(null, -1, "", DataType.INTEGER)
+    col.colFile = new File("src/test/resource/coldata/test_col_similarword.data").toURI
 
-      val features = new SimilarWords().extract(col).toArray
+    val features = new SimilarWords().extract(col).toArray
 
-      assertEquals(4, features.length)
-      assertEquals("ratio", features(0).name)
-      assertEquals(0.174, features(0).value, 0.001)
-      assertEquals("msglen_entropy", features(1).name)
-      assertEquals(1.907, features(1).value, 0.001)
-      assertEquals("dist_entropy", features(2).name)
-      assertEquals(2.485, features(2).value, 0.001)
-      assertEquals("char_entropy", features(3).name)
-      assertEquals(0.888, features(3).value, 0.001)
-    }
+    assertEquals(4, features.length)
+    assertEquals("ratio", features(0).name)
+    assertEquals(0.174, features(0).value, 0.001)
+    assertEquals("msglen_entropy", features(1).name)
+    assertEquals(1.907, features(1).value, 0.001)
+    assertEquals("dist_entropy", features(2).name)
+    assertEquals(2.485, features(2).value, 0.001)
+    assertEquals("char_entropy", features(3).name)
+    assertEquals(0.888, features(3).value, 0.001)
+  }
 
 
   @Test
@@ -134,5 +134,42 @@ class FingerprintTest {
     val suffixfp = fp.get(suffix)
 
     assertEquals(suffixfp, fp.divide(fullfp + fp.p - prefixfp, prefix.length))
+  }
+}
+
+class BlockInfoTest {
+
+  @Test
+  def testMerge = {
+
+    val a = new BlockInfo()
+    a.counter = 0
+    var b = new BlockInfo()
+    b.counter = 1
+    b.compressionRatio = 0.5
+    b.msgDistEntropy = 0.2
+    b.msglenEntropy = 0.1
+    b.charEntropy = 3
+
+    a.merge(b)
+
+    assertEquals(0.5, a.compressionRatio, 0.001)
+    assertEquals(0.2, a.msgDistEntropy, 0.001)
+    assertEquals(0.1, a.msglenEntropy, 0.001)
+    assertEquals(3, a.charEntropy, 0.001)
+
+    b = new BlockInfo()
+    b.counter = 2
+    b.compressionRatio = 0.1
+    b.msgDistEntropy = 0.8
+    b.msglenEntropy = 0.5
+    b.charEntropy = 2.1
+
+    a.merge(b)
+
+    assertEquals(0.233, a.compressionRatio, 0.001)
+    assertEquals(0.6, a.msgDistEntropy, 0.001)
+    assertEquals(0.367, a.msglenEntropy, 0.001)
+    assertEquals(2.4, a.charEntropy, 0.001)
   }
 }
