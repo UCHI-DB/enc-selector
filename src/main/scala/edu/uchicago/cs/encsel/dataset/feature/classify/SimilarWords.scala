@@ -50,19 +50,18 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
     var size = 0
     var skipProb = 1.0 / msgSize
 
-    var blockCount = 0
     val info = new BlockInfo
     info.counter = 0
 
     do {
-      if (blockCount >= threshold && Random.nextDouble() >= skipProb) {
+      if (info.counter >= threshold && Random.nextDouble() >= skipProb) {
         input.skip(windowSize)
         size = windowSize
       } else {
         size = input.read(buffer)
         val blockInfo = scanBlock(buffer, size, fpr)
-
         info.merge(blockInfo)
+
       }
     }
     while (size == buffer.length)

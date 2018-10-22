@@ -153,6 +153,7 @@ class BlockInfoTest {
 
     a.merge(b)
 
+    assertEquals(1,a.counter)
     assertEquals(0.5, a.compressionRatio, 0.001)
     assertEquals(0.2, a.msgDistEntropy, 0.001)
     assertEquals(0.1, a.msglenEntropy, 0.001)
@@ -167,6 +168,7 @@ class BlockInfoTest {
 
     a.merge(b)
 
+    assertEquals(3,a.counter)
     assertEquals(0.233, a.compressionRatio, 0.001)
     assertEquals(0.6, a.msgDistEntropy, 0.001)
     assertEquals(0.367, a.msglenEntropy, 0.001)
