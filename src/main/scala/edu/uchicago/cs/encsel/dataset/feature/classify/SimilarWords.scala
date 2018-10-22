@@ -70,7 +70,8 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
       new Feature(fType, "ratio", info.compressionRatio),
       new Feature(fType, "msglen_entropy", info.msglenEntropy),
       new Feature(fType, "dist_entropy", info.msgDistEntropy),
-      new Feature(fType, "char_entropy", info.charEntropy)
+      new Feature(fType, "char_entropy", info.charEntropy),
+      new Feature(fType, "block_count", info.counter)
     )
   }
 
