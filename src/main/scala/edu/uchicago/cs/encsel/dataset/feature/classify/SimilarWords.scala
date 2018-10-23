@@ -39,7 +39,7 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
   val windowSize = (1 << 15) - 1
 
-  val threshold = 100
+  val threshold = 10
 
   override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
