@@ -19,7 +19,7 @@ class SimilarWordsTest {
 
     val features = new SimilarWords().extract(col).toArray
 
-    assertEquals(4, features.length)
+    assertEquals(5, features.length)
     assertEquals("ratio", features(0).name)
     assertEquals(0.174, features(0).value, 0.001)
     assertEquals("msglen_entropy", features(1).name)
