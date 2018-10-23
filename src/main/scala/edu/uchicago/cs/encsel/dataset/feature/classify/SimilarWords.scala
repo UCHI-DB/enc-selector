@@ -48,7 +48,7 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
     val buffer = new Array[Byte](windowSize)
     var size = 0
-    var skipProb = 1.0 / msgSize
+    var skipProb = 1.0 / 5 * msgSize
 
     val info = new BlockInfo
     info.counter = 0
