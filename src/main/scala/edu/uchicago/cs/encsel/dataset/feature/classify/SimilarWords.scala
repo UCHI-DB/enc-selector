@@ -103,7 +103,7 @@ class SimilarWords(val msgSize: Int = (1 << 7) - 1) extends FeatureExtractor {
       // Find the longest prefix
       while (fpointer < size && fpointer - pointer < msgSize && exists.contains(msgfp)) {
         msgdist = exists.getOrElse(msgfp, 0)
-        msgdist = 0
+//        msgdist = 0
         msgfp = fpr.combine(msgfp, fpointer - pointer, buffer(fpointer))
         if (exists.contains(msgfp)) {
           msgdist = exists.getOrElse(msgfp, 0)

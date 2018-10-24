@@ -17,7 +17,7 @@ class SimilarWordsTest {
     val col = new Column(null, -1, "", DataType.INTEGER)
     col.colFile = new File("src/test/resource/coldata/test_col_similarword.data").toURI
 
-    val features = new SimilarWords().extract(col).toArray
+    val features = new SimilarWords((1 << 8) - 1).extract(col).toArray
 
     assertEquals(5, features.length)
     assertEquals("ratio", features(0).name)
@@ -34,7 +34,7 @@ class SimilarWordsTest {
   @Test
   def testBlockSimilarWordsScanBlock: Unit = {
 
-    val bsw = new SimilarWords()
+    val bsw = new SimilarWords((1<<8)-1)
     val fpr = new Fingerprint(bsw.msgSize)
 
     var string: Array[Byte] = null
