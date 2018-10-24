@@ -34,7 +34,7 @@ class SimilarWordsTest {
   @Test
   def testBlockSimilarWordsScanBlock: Unit = {
 
-    val bsw = new SimilarWords((1<<8)-1)
+    val bsw = new SimilarWords((1 << 8) - 1)
     val fpr = new Fingerprint(bsw.msgSize)
 
     var string: Array[Byte] = null
@@ -101,13 +101,13 @@ class SimilarWordsTest {
 
     val features = new SimilarWords().extract(col).toArray
 
-    System.out.println(System.currentTimeMillis() - start)
-    System.out.println(features(4).value)
+    println("Time Consumption:" + (System.currentTimeMillis() - start))
+    println(features(4).value)
 
-    System.out.println(features(0).value)
-    System.out.println(features(1).value)
-    System.out.println(features(2).value)
-    System.out.println(features(3).value)
+    println(features(0).value)
+    println(features(1).value)
+    println(features(2).value)
+    println(features(3).value)
   }
 }
 
