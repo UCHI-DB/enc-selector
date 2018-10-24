@@ -24,15 +24,17 @@
 package edu.uchicago.cs.encsel.dataset.feature.classify
 
 import java.io.InputStream
+import java.util.concurrent.{Callable, Executors, Future}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
 
-class SimilarWords(val msgSize: Int = (1 << 7) - 1) extends FeatureExtractor {
+class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
   override def featureType: String = "SimilarWords"
 
   override def supportFilter: Boolean = true
@@ -41,35 +43,51 @@ class SimilarWords(val msgSize: Int = (1 << 7) - 1) extends FeatureExtractor {
 
   val threshold = 10
 
+  val threadPool = Executors.newFixedThreadPool(48)
+
   override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
 
     val fpr = new Fingerprint(msgSize)
 
-    val buffer = new Array[Byte](windowSize)
+    //    val buffer = new Array[Byte](windowSize)
     var size = 0
     var skipProb = 1.0 / msgSize
 
     val info = new BlockInfo
     info.counter = 0
 
+    val futures = new ArrayBuffer[Future[BlockInfo]]()
+
     do {
-      if (info.counter >= threshold && Random.nextDouble() >= skipProb) {
+      if (futures.size >= threshold && Random.nextDouble() >= skipProb) {
         val start = System.currentTimeMillis()
         input.skip(windowSize)
-        println("Skip Block:" + (System.currentTimeMillis() - start))
         size = windowSize
       } else {
+        val buffer = new Array[Byte](windowSize)
         size = input.read(buffer)
-        val start = System.currentTimeMillis()
-        val blockInfo = scanBlock(buffer, size, fpr)
-        println("Scan Block:" + (System.currentTimeMillis() - start))
-        info.merge(blockInfo)
-
+        val bsize = size
+        val callable: Callable[BlockInfo] = new Callable[BlockInfo] {
+          def call: BlockInfo = {
+            val start = System.currentTimeMillis()
+            val res = scanBlock(buffer, bsize, fpr)
+            println(System.currentTimeMillis() - start)
+            return res
+          }
+        }
+        futures += threadPool.submit(callable)
       }
     }
-    while (size == buffer.length)
+    while (size == windowSize)
 
+    println("Number of tasks:" + futures.size)
+
+    try {
+      futures.foreach(f => info.merge(f.get))
+    } catch {
+      case e: Exception => throw new RuntimeException(e)
+    }
     return Iterable(
       new Feature(fType, "ratio", info.compressionRatio),
       new Feature(fType, "msglen_entropy", info.msglenEntropy),
@@ -103,7 +121,7 @@ class SimilarWords(val msgSize: Int = (1 << 7) - 1) extends FeatureExtractor {
       // Find the longest prefix
       while (fpointer < size && fpointer - pointer < msgSize && exists.contains(msgfp)) {
         msgdist = exists.getOrElse(msgfp, 0)
-//        msgdist = 0
+        //        msgdist = 0
         msgfp = fpr.combine(msgfp, fpointer - pointer, buffer(fpointer))
         if (exists.contains(msgfp)) {
           msgdist = exists.getOrElse(msgfp, 0)
