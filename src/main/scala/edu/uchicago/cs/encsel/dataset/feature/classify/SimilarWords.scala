@@ -43,7 +43,7 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
   val threshold = 10
 
-  val threadPool = Executors.newFixedThreadPool(48)
+  val threadPool = Executors.newFixedThreadPool(30)
 
   override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
