@@ -32,7 +32,7 @@ import scala.collection.mutable
 import scala.util.Random
 
 
-class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
+class SimilarWords(val msgSize: Int = (1 << 7) - 1) extends FeatureExtractor {
   override def featureType: String = "SimilarWords"
 
   override def supportFilter: Boolean = true
@@ -48,18 +48,22 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
     val buffer = new Array[Byte](windowSize)
     var size = 0
-    var skipProb = 1.0 / 5 * msgSize
+    var skipProb = 1.0 / msgSize
 
     val info = new BlockInfo
     info.counter = 0
 
     do {
       if (info.counter >= threshold && Random.nextDouble() >= skipProb) {
+        val start = System.currentTimeMillis()
         input.skip(windowSize)
+        println("Skip Block:" + (System.currentTimeMillis() - start))
         size = windowSize
       } else {
         size = input.read(buffer)
+        val start = System.currentTimeMillis()
         val blockInfo = scanBlock(buffer, size, fpr)
+        println("Scan Block:" + (System.currentTimeMillis() - start))
         info.merge(blockInfo)
 
       }
@@ -77,7 +81,11 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
   def scanBlock(buffer: Array[Byte], size: Int, fpr: Fingerprint): BlockInfo = {
     val exists = new mutable.HashMap[Long, Int]
+    //    val exists = BloomFilterWrapper.create(1000000)
+    //    val exists = new Roaring64NavigableMap()
     exists += ((0, 0))
+    //    exists.add(0)
+    //    exists.put(0l)
     var suffixs = new SuffixBuffer(msgSize + 1, fpr)
 
     val msgcounter = Array.fill[Int](msgSize + 1)(0)
@@ -95,14 +103,19 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
       // Find the longest prefix
       while (fpointer < size && fpointer - pointer < msgSize && exists.contains(msgfp)) {
         msgdist = exists.getOrElse(msgfp, 0)
+        msgdist = 0
         msgfp = fpr.combine(msgfp, fpointer - pointer, buffer(fpointer))
         if (exists.contains(msgfp)) {
           msgdist = exists.getOrElse(msgfp, 0)
+          //          msgdist = 0
           // Update suffix and update substrings
           suffixs.shiftIn(buffer(fpointer))
           fpointer += 1
           val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
           exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
+          //          exists.add(newsubstr: _*)
+          //          newsubstr.foreach(exists.put(_))
+          //          exists.putAll(suffixs.valuesAsBloomFilter(Math.min(fpointer, msgSize)))
         }
       }
 
@@ -114,6 +127,9 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
         fpointer += 1
         val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
         exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
+        //        newsubstr.foreach(exists.put(_))
+        //        exists.add(newsubstr: _*)
+        //        exists.putAll(suffixs.valuesAsBloomFilter(Math.min(fpointer, msgSize)))
       } else {
         // Reach message size limit
         charcounter(0) += 1
@@ -220,6 +236,7 @@ class SuffixBuffer(val size: Int, val fpr: Fingerprint) {
   }
 
   def values(length: Int) = (1 to length).map(apply(_))
+
 }
 
 object ModularMath {

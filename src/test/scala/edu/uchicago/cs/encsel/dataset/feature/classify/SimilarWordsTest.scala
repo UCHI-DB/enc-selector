@@ -90,6 +90,25 @@ class SimilarWordsTest {
     assertEquals(1.475, info.msgDistEntropy, 0.001)
     assertEquals(1.352, info.charEntropy, 0.001)
   }
+
+
+  @Test
+  def testScanPerformance: Unit = {
+
+    val start = System.currentTimeMillis()
+    val col = new Column(null, -1, "", DataType.STRING)
+    col.colFile = new File("src/test/resource/coldata/test_col_similarword_large.dat").toURI
+
+    val features = new SimilarWords().extract(col).toArray
+
+    System.out.println(System.currentTimeMillis() - start)
+    System.out.println(features(4).value)
+
+    System.out.println(features(0).value)
+    System.out.println(features(1).value)
+    System.out.println(features(2).value)
+    System.out.println(features(3).value)
+  }
 }
 
 class FingerprintTest {
@@ -153,7 +172,7 @@ class BlockInfoTest {
 
     a.merge(b)
 
-    assertEquals(1,a.counter)
+    assertEquals(1, a.counter)
     assertEquals(0.5, a.compressionRatio, 0.001)
     assertEquals(0.2, a.msgDistEntropy, 0.001)
     assertEquals(0.1, a.msglenEntropy, 0.001)
@@ -168,7 +187,7 @@ class BlockInfoTest {
 
     a.merge(b)
 
-    assertEquals(3,a.counter)
+    assertEquals(3, a.counter)
     assertEquals(0.233, a.compressionRatio, 0.001)
     assertEquals(0.6, a.msgDistEntropy, 0.001)
     assertEquals(0.367, a.msglenEntropy, 0.001)
