@@ -70,18 +70,13 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
         val bsize = size
         val callable: Callable[BlockInfo] = new Callable[BlockInfo] {
           def call: BlockInfo = {
-            val start = System.currentTimeMillis()
-            val res = scanBlock(buffer, bsize, fpr)
-            println(System.currentTimeMillis() - start)
-            return res
+            scanBlock(buffer, bsize, fpr)
           }
         }
         futures += threadPool.submit(callable)
       }
     }
     while (size == windowSize)
-
-    println("Number of tasks:" + futures.size)
 
     try {
       futures.foreach(f => info.merge(f.get))
