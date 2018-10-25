@@ -115,14 +115,18 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
       // Find the longest prefix
       while (fpointer < size && fpointer - pointer < msgSize && exists.contains(msgfp)) {
+
+        var newchar = buffer(fpointer).toInt
+        if (newchar < 0)
+          newchar += 255
         msgdist = exists.getOrElse(msgfp, 0)
         //        msgdist = 0
-        msgfp = fpr.combine(msgfp, fpointer - pointer, buffer(fpointer))
+        msgfp = fpr.combine(msgfp, fpointer - pointer, newchar)
         if (exists.contains(msgfp)) {
           msgdist = exists.getOrElse(msgfp, 0)
           //          msgdist = 0
           // Update suffix and update substrings
-          suffixs.shiftIn(buffer(fpointer))
+          suffixs.shiftIn(newchar)
           fpointer += 1
           val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
           exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
@@ -134,7 +138,9 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
       if (fpointer < size && fpointer - pointer < msgSize) {
         // Add the new char to suffix
-        val newchar = buffer(fpointer)
+        var newchar = buffer(fpointer).toInt
+        if (newchar < 0)
+          newchar += 255
         suffixs.shiftIn(newchar)
         charcounter(newchar) += 1
         fpointer += 1
