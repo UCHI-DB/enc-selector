@@ -17,9 +17,9 @@ class SimilarWordsTest {
     val col = new Column(null, -1, "", DataType.INTEGER)
     col.colFile = new File("src/test/resource/coldata/test_col_similarword.data").toURI
 
-    val features = new SimilarWords().extract(col).toArray
+    val features = new SimilarWords((1 << 8) - 1).extract(col).toArray
 
-    assertEquals(4, features.length)
+    assertEquals(5, features.length)
     assertEquals("ratio", features(0).name)
     assertEquals(0.174, features(0).value, 0.001)
     assertEquals("msglen_entropy", features(1).name)
@@ -34,7 +34,7 @@ class SimilarWordsTest {
   @Test
   def testBlockSimilarWordsScanBlock: Unit = {
 
-    val bsw = new SimilarWords()
+    val bsw = new SimilarWords((1 << 8) - 1)
     val fpr = new Fingerprint(bsw.msgSize)
 
     var string: Array[Byte] = null
@@ -89,6 +89,25 @@ class SimilarWordsTest {
     assertEquals(0.956, info.msglenEntropy, 0.001)
     assertEquals(1.475, info.msgDistEntropy, 0.001)
     assertEquals(1.352, info.charEntropy, 0.001)
+  }
+
+
+  @Test
+  def testScanPerformance: Unit = {
+
+    val start = System.currentTimeMillis()
+    val col = new Column(null, -1, "", DataType.STRING)
+    col.colFile = new File("src/test/resource/coldata/test_col_similarword_large.dat").toURI
+
+    val features = new SimilarWords().extract(col).toArray
+
+    println("Time Consumption:" + (System.currentTimeMillis() - start))
+    println(features(4).value)
+
+    println(features(0).value)
+    println(features(1).value)
+    println(features(2).value)
+    println(features(3).value)
   }
 }
 
@@ -153,7 +172,7 @@ class BlockInfoTest {
 
     a.merge(b)
 
-    assertEquals(1,a.counter)
+    assertEquals(1, a.counter)
     assertEquals(0.5, a.compressionRatio, 0.001)
     assertEquals(0.2, a.msgDistEntropy, 0.001)
     assertEquals(0.1, a.msglenEntropy, 0.001)
@@ -168,7 +187,7 @@ class BlockInfoTest {
 
     a.merge(b)
 
-    assertEquals(3,a.counter)
+    assertEquals(3, a.counter)
     assertEquals(0.233, a.compressionRatio, 0.001)
     assertEquals(0.6, a.msgDistEntropy, 0.001)
     assertEquals(0.367, a.msglenEntropy, 0.001)

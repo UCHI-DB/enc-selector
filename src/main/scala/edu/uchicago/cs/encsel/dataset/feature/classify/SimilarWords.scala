@@ -24,11 +24,13 @@
 package edu.uchicago.cs.encsel.dataset.feature.classify
 
 import java.io.InputStream
+import java.util.concurrent.{Callable, Executors, Future}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
 
@@ -39,33 +41,48 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
   val windowSize = (1 << 15) - 1
 
-  val threshold = 100
+  val threshold = 10
+
+  val threadPool = Executors.newFixedThreadPool(30)
 
   override def extract(column: Column, input: InputStream, prefix: String): Iterable[Feature] = {
     val fType = "%s%s".format(prefix, featureType)
 
     val fpr = new Fingerprint(msgSize)
 
-    val buffer = new Array[Byte](windowSize)
+    //    val buffer = new Array[Byte](windowSize)
     var size = 0
     var skipProb = 1.0 / msgSize
 
     val info = new BlockInfo
     info.counter = 0
 
+    val futures = new ArrayBuffer[Future[BlockInfo]]()
+
     do {
-      if (info.counter >= threshold && Random.nextDouble() >= skipProb) {
+      if (futures.size >= threshold && Random.nextDouble() >= skipProb) {
+        val start = System.currentTimeMillis()
         input.skip(windowSize)
         size = windowSize
       } else {
+        val buffer = new Array[Byte](windowSize)
         size = input.read(buffer)
-        val blockInfo = scanBlock(buffer, size, fpr)
-        info.merge(blockInfo)
-
+        val bsize = size
+        val callable: Callable[BlockInfo] = new Callable[BlockInfo] {
+          def call: BlockInfo = {
+            scanBlock(buffer, bsize, fpr)
+          }
+        }
+        futures += threadPool.submit(callable)
       }
     }
-    while (size == buffer.length)
+    while (size == windowSize)
 
+    try {
+      futures.foreach(f => info.merge(f.get))
+    } catch {
+      case e: Exception => throw new RuntimeException(e)
+    }
     return Iterable(
       new Feature(fType, "ratio", info.compressionRatio),
       new Feature(fType, "msglen_entropy", info.msglenEntropy),
@@ -77,7 +94,11 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
   def scanBlock(buffer: Array[Byte], size: Int, fpr: Fingerprint): BlockInfo = {
     val exists = new mutable.HashMap[Long, Int]
+    //    val exists = BloomFilterWrapper.create(1000000)
+    //    val exists = new Roaring64NavigableMap()
     exists += ((0, 0))
+    //    exists.add(0)
+    //    exists.put(0l)
     var suffixs = new SuffixBuffer(msgSize + 1, fpr)
 
     val msgcounter = Array.fill[Int](msgSize + 1)(0)
@@ -94,26 +115,40 @@ class SimilarWords(val msgSize: Int = (1 << 8) - 1) extends FeatureExtractor {
 
       // Find the longest prefix
       while (fpointer < size && fpointer - pointer < msgSize && exists.contains(msgfp)) {
+
+        var newchar = buffer(fpointer).toInt
+        if (newchar < 0)
+          newchar += 255
         msgdist = exists.getOrElse(msgfp, 0)
-        msgfp = fpr.combine(msgfp, fpointer - pointer, buffer(fpointer))
+        //        msgdist = 0
+        msgfp = fpr.combine(msgfp, fpointer - pointer, newchar)
         if (exists.contains(msgfp)) {
           msgdist = exists.getOrElse(msgfp, 0)
+          //          msgdist = 0
           // Update suffix and update substrings
-          suffixs.shiftIn(buffer(fpointer))
+          suffixs.shiftIn(newchar)
           fpointer += 1
           val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
           exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
+          //          exists.add(newsubstr: _*)
+          //          newsubstr.foreach(exists.put(_))
+          //          exists.putAll(suffixs.valuesAsBloomFilter(Math.min(fpointer, msgSize)))
         }
       }
 
       if (fpointer < size && fpointer - pointer < msgSize) {
         // Add the new char to suffix
-        val newchar = buffer(fpointer)
+        var newchar = buffer(fpointer).toInt
+        if (newchar < 0)
+          newchar += 255
         suffixs.shiftIn(newchar)
         charcounter(newchar) += 1
         fpointer += 1
         val newsubstr = suffixs.values(Math.min(fpointer, msgSize))
         exists ++= newsubstr.zipWithIndex.map(pair => (pair._1, fpointer - pair._2))
+        //        newsubstr.foreach(exists.put(_))
+        //        exists.add(newsubstr: _*)
+        //        exists.putAll(suffixs.valuesAsBloomFilter(Math.min(fpointer, msgSize)))
       } else {
         // Reach message size limit
         charcounter(0) += 1
@@ -220,6 +255,7 @@ class SuffixBuffer(val size: Int, val fpr: Fingerprint) {
   }
 
   def values(length: Int) = (1 to length).map(apply(_))
+
 }
 
 object ModularMath {
