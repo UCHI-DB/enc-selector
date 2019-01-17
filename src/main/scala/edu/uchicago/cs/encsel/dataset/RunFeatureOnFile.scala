@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
 
-class RunFeatureOnFile extends App {
+object RunFeatureOnFile extends App {
 
   val logger = LoggerFactory.getLogger(getClass)
 
