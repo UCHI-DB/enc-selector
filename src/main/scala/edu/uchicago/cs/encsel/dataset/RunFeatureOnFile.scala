@@ -23,6 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset
 
+import java.io.File
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
@@ -44,7 +45,7 @@ object RunFeatureOnFile extends App {
   var column = new Column
   column.dataType = DataType.STRING
 
-  column.colFile = new URI(args(0))
+  column.colFile = new File(args(0)).toURI
 
   System.out.println("Processing %s".format(column.colFile))
   try {
