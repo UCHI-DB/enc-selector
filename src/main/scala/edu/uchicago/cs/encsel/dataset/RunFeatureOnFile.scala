@@ -48,14 +48,13 @@ object RunFeatureOnFile extends App {
 
   System.out.println("Processing %s".format(column.colFile))
   try {
-    column.replaceFeatures(Features.extract(column))
+    torun.extract(column).foreach(f=>{
+      System.out.println("%s:%f".format(f.name, f.value));
+    })
   } catch {
     case e: Exception => {
       logger.warn("Failed during processing", e)
     }
   }
 
-  column.features.asScala.foreach(f => {
-    System.out.println("%s:%f".format(f.name, f.value));
-  })
 }
