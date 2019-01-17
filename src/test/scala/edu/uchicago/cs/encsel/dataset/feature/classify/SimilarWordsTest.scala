@@ -17,7 +17,7 @@ class SimilarWordsTest {
     val col = new Column(null, -1, "", DataType.INTEGER)
     col.colFile = new File("src/test/resource/coldata/test_col_similarword.data").toURI
 
-    val features = new SimilarWords((1 << 8) - 1).extract(col).toArray
+    val features = new SimilarWords().extract(col).toArray
 
     assertEquals(5, features.length)
     assertEquals("ratio", features(0).name)
@@ -34,7 +34,7 @@ class SimilarWordsTest {
   @Test
   def testBlockSimilarWordsScanBlock: Unit = {
 
-    val bsw = new SimilarWords((1 << 8) - 1)
+    val bsw = new SimilarWords()
     val fpr = new Fingerprint(bsw.msgSize)
 
     var string: Array[Byte] = null
@@ -91,23 +91,9 @@ class SimilarWordsTest {
     assertEquals(1.352, info.charEntropy, 0.001)
   }
 
-
   @Test
-  def testScanPerformance: Unit = {
+  def testBlockPerformance:Unit = {
 
-    val start = System.currentTimeMillis()
-    val col = new Column(null, -1, "", DataType.STRING)
-    col.colFile = new File("src/test/resource/coldata/test_col_similarword_large.dat").toURI
-
-    val features = new SimilarWords().extract(col).toArray
-
-    println("Time Consumption:" + (System.currentTimeMillis() - start))
-    println(features(4).value)
-
-    println(features(0).value)
-    println(features(1).value)
-    println(features(2).value)
-    println(features(3).value)
   }
 }
 
