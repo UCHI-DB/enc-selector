@@ -49,7 +49,8 @@ object RunFeatureOnFile extends App {
       profiler.reset
       profiler.mark
       ParquetCompressedWriterHelper.singleColumnString(file, encodings(0), codec)
-      profiler.stop System.out.println("")
+      profiler.stop
+      System.out.println("%s:%f", codec.name(), profiler.wcsum)
     })
   catch {
     case e: Exception => {
