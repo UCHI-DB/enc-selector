@@ -24,15 +24,13 @@
 package edu.uchicago.cs.encsel.dataset
 
 import java.io.File
-import java.net.URI
 
-import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.Features
 import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressTimeUsage
-import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.model.StringEncoding
+import edu.uchicago.cs.encsel.parquet.ParquetCompressedWriterHelper
+import edu.uchicago.cs.encsel.util.perf.Profiler
+import org.apache.parquet.hadoop.metadata.CompressionCodecName
 import org.slf4j.LoggerFactory
-
-import scala.collection.JavaConverters._
 
 object RunFeatureOnFile extends App {
 
@@ -40,19 +38,20 @@ object RunFeatureOnFile extends App {
 
   val torun = ParquetCompressTimeUsage
 
-  val file = args(0)
+  val file = new File(args(0)).toURI
 
-  var column = new Column
-  column.dataType = DataType.STRING
+  val encodings = Array(StringEncoding.PLAIN);
+  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
 
-  column.colFile = new File(args(0)).toURI
-
-  System.out.println("Processing %s".format(column.colFile))
-  try {
-    torun.extract(column).foreach(f=>{
-      System.out.println("%s:%f".format(f.name, f.value));
+  val profiler = new Profiler
+  try
+    codecs.foreach(f = codec => {
+      profiler.reset
+      profiler.mark
+      ParquetCompressedWriterHelper.singleColumnString(file, encodings(0), codec)
+      profiler.stop System.out.println("")
     })
-  } catch {
+  catch {
     case e: Exception => {
       logger.warn("Failed during processing", e)
     }
