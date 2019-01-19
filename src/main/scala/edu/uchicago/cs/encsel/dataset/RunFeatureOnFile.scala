@@ -43,7 +43,7 @@ object RunFeatureOnFile extends App {
   //  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
 
   val column = new Column
-  column.dataType = DataType.STRING
+  column.dataType = DataType.valueOf(args(1))
   column.colFile = file
 
   val profiler = new Profiler
