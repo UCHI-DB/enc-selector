@@ -29,6 +29,8 @@ class Profiler {
 
   val threadBean = ManagementFactory.getThreadMXBean
 
+  var running = false
+
   var wcsum = 0L
   var cpusum = 0L
   var usersum = 0L
@@ -41,15 +43,19 @@ class Profiler {
     wcstart = System.currentTimeMillis()
     cpustart = threadBean.getCurrentThreadCpuTime
     userstart = threadBean.getCurrentThreadUserTime
+    running = true
   }
 
   def pause: Unit = {
     wcsum += System.currentTimeMillis() - wcstart
     cpusum += threadBean.getCurrentThreadCpuTime - cpustart
     usersum += threadBean.getCurrentThreadUserTime - userstart
+    running = false
   }
 
   def stop: ProfileBean = {
+    if (running)
+      pause
     return new ProfileBean(wcsum, cpusum, usersum)
   }
 
