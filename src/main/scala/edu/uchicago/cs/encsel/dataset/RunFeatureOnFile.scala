@@ -55,7 +55,7 @@ object RunFeatureOnFile extends App {
       profiler.mark
       ParquetCompressedWriterHelper.singleColumnString(file, encodings(0), codec)
       profiler.stop
-      System.out.println("%s:%f".format(codec.name(), profiler.wcsum))
+      System.out.println("%s:%f".format(codec.name(), profiler.wcsum.asInstanceOf[Double]))
     })
   //    ParquetCompressTimeUsage.extract(column).foreach(f => {
   //      System.out.println("%s:%f".format(f.name, f.value))
