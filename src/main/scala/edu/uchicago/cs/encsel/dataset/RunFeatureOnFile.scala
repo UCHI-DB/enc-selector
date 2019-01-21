@@ -27,8 +27,10 @@ import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressTimeUsage
-import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.model.{DataType, StringEncoding}
+import edu.uchicago.cs.encsel.parquet.ParquetCompressedWriterHelper
 import edu.uchicago.cs.encsel.util.perf.Profiler
+import org.apache.parquet.hadoop.metadata.CompressionCodecName
 import org.slf4j.LoggerFactory
 
 object RunFeatureOnFile extends App {
@@ -39,8 +41,8 @@ object RunFeatureOnFile extends App {
 
   val file = new File(args(0)).toURI
 
-  //  val encodings = Array(StringEncoding.PLAIN);
-  //  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
+  val encodings = Array(StringEncoding.PLAIN);
+  val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
 
   val column = new Column
   column.dataType = DataType.valueOf(args(1))
@@ -48,16 +50,16 @@ object RunFeatureOnFile extends App {
 
   val profiler = new Profiler
   try
-    //    codecs.foreach(f = codec => {
-    //      profiler.reset
-    //      profiler.mark
-    //      ParquetCompressedWriterHelper.singleColumnString(file, encodings(0), codec)
-    //      profiler.stop
-    //      System.out.println("%s:%f".format(codec.name(), profiler.wcsum))
-    //    })
-    ParquetCompressTimeUsage.extract(column).foreach(f => {
-      System.out.println("%s:%f".format(f.name, f.value))
+    codecs.foreach(f = codec => {
+      profiler.reset
+      profiler.mark
+      ParquetCompressedWriterHelper.singleColumnString(file, encodings(0), codec)
+      profiler.stop
+      System.out.println("%s:%f".format(codec.name(), profiler.wcsum))
     })
+  //    ParquetCompressTimeUsage.extract(column).foreach(f => {
+  //      System.out.println("%s:%f".format(f.name, f.value))
+  //    })
   catch {
     case e: Exception => {
       logger.warn("Failed during processing", e)
