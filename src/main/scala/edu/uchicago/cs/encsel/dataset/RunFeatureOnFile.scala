@@ -41,7 +41,7 @@ object RunFeatureOnFile extends App {
 
   val file = new File(args(0)).toURI
 
-  val encodings = Array(StringEncoding.PLAIN);
+  val encodings = Array(StringEncoding.PLAIN)
   val codecs = Array(CompressionCodecName.SNAPPY, CompressionCodecName.GZIP, CompressionCodecName.LZO)
 
   val column = new Column

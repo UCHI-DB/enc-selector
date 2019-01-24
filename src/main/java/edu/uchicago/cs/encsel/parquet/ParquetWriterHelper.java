@@ -28,6 +28,7 @@ import edu.uchicago.cs.encsel.model.LongEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.hadoop.ParquetWriter;
+import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.apache.parquet.schema.MessageType;
 import org.apache.parquet.schema.PrimitiveType;
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
@@ -104,13 +105,20 @@ public class ParquetWriterHelper {
         }
     }
 
-    public static void write(URI input, MessageType schema, URI output, String split, boolean skipHeader) throws IOException {
+    public static void write(URI input, MessageType schema, URI output,
+                             String split, boolean skipHeader) throws IOException {
+        write(input, schema, output, split, skipHeader, CompressionCodecName.UNCOMPRESSED);
+    }
+
+    public static void write(URI input, MessageType schema,
+                             URI output, String split, boolean skipHeader,
+                             CompressionCodecName codec) throws IOException {
         File outfile = new File(output);
         if (outfile.exists())
             outfile.delete();
         BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
 
-        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildForTable(new Path(output), schema);
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildCompressed(new Path(output), schema, codec);
 
         // Skip header line
         String line = skipHeader ? reader.readLine() : null;
