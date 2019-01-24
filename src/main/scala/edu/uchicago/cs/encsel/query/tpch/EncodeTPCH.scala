@@ -37,6 +37,7 @@ object EncodeTPCH extends App {
     TPCHSchema.schemas.foreach(schema => {
       schema.getColumns.forEach(cd=>{
         EncContext.encoding.get().put(cd.toString, Encoding.PLAIN)
+        EncContext.context.get().put(cd.toString, Array[Object]("0","0"))
       })
       ParquetWriterHelper.write(
         new File("%s%s%s".format(folder, schema.getName, inputsuffix)).toURI,
@@ -80,6 +81,7 @@ object EncodeTPCH extends App {
     TPCHSchema.schemas.foreach(schema => {
       schema.getColumns.forEach(cd=>{
         EncContext.encoding.get().put(cd.toString, Encoding.PLAIN)
+        EncContext.context.get().put(cd.toString, Array[Object]("0","0"))
       })
       ParquetWriterHelper.write(
         new File("%s%s%s".format(folder, schema.getName, inputsuffix)).toURI,
