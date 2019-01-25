@@ -120,8 +120,7 @@ object EncodeTPCH extends App {
   val folder = args(0)
   val inputsuffix = ".tbl"
 
-  plain(folder, ".tbl", "p.parquet")
-  plainGzip(folder, ".tbl", "pg.parquet")
-  dictGzip(folder, ".tbl", "dg.parquet")
+  parquet(folder, ".tbl", "pq.parquet")
+  parquetGzip(folder, ".tbl", "pqg.parquet")
 
 }

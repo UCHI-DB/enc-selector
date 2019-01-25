@@ -1,9 +1,9 @@
 clear
 load('enc');
 
-enc_gen_slope = str_enc.plain\str_enc.gen_cpu;
-gzip_gen_slope = str_enc.plain\str_enc.gzip_gen_cpu;
-lzo_gen_slope = str_enc.plain\str_enc.lzo_gen_cpu;
+enc_gen_slope = str_enc.plain\str_enc.gen_wc;
+gzip_gen_slope = str_enc.plain\str_enc.gzip_gen_wc;
+lzo_gen_slope = str_enc.plain\str_enc.lzo_gen_wc;
 
 enc_scan_slope = str_enc.plain\str_enc.scan_cpu;
 gzip_scan_slope = str_enc.plain\str_enc.gzip_scan_cpu;
