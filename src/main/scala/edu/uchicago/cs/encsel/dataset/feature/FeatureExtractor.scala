@@ -44,7 +44,7 @@ trait FeatureExtractor {
       case _ => null
     }
     try {
-      extract(input, null, prefix)
+      extract(input, is, prefix)
     } finally {
       is.close()
     }
