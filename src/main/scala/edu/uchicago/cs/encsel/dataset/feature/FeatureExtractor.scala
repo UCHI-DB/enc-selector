@@ -32,14 +32,19 @@ trait FeatureExtractor {
 
   def featureType: String
 
+  def bufferData: Boolean = true
+
   protected def featureType(prefix: String): String = "%s%s".format(prefix, featureType)
 
   def supportFilter: Boolean
 
   def extract(input: Column, prefix: String = ""): Iterable[Feature] = {
-    val is = new FileInputStream(new File(input.colFile))
+    val is = bufferData match {
+      case true => new FileInputStream(new File(input.colFile))
+      case _ => null
+    }
     try {
-      extract(input, is, prefix)
+      extract(input, null, prefix)
     } finally {
       is.close()
     }

@@ -1,0 +1,105 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ * Contributors:
+ *     Hao Jiang - initial API and implementation
+ */
+
+package edu.uchicago.cs.encsel.query.tpch
+
+import java.io.File
+import java.net.URI
+import java.util._
+
+import edu.uchicago.cs.encsel.dataset.column.Column
+import edu.uchicago.cs.encsel.dataset.feature.Feature
+import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsage.{featureType, predicate}
+import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsageNoSnappy.profiler
+
+import scala.collection.JavaConverters._
+import edu.uchicago.cs.encsel.model.{IntEncoding, StringEncoding}
+import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetCompressedWriterHelper}
+import edu.uchicago.cs.encsel.query.VColumnPredicate
+import edu.uchicago.cs.encsel.query.operator.VerticalSelect
+import edu.uchicago.cs.encsel.query.tpch.EncodeTPCHColumn.args
+import edu.uchicago.cs.encsel.util.perf.Profiler
+import org.apache.parquet.column.ColumnDescriptor
+import org.apache.parquet.hadoop.metadata.CompressionCodecName
+import org.apache.parquet.schema.{MessageType, PrimitiveType}
+import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
+import org.apache.parquet.schema.Type.Repetition
+
+object ReadPerfTPCHColumn extends App {
+  val inputFile = new File(args(0))
+  val fileName = inputFile.getName
+  val schema = TPCHSchema.schemas.find(_.getName.equals(args(0).substring(0, fileName.indexOf(".")))).get;
+  val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP)
+
+  val profiler = new Profiler
+  val predicate = new VColumnPredicate((data) => true, 0)
+  val select = new VerticalSelect() {
+    override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
+  }
+
+  def scan(t: ColumnDescriptor, index: Int, encoding: String, codec: CompressionCodecName): Unit = {
+    try {
+      val fileName = "%s.col%d.%s_%s".format(inputFile.getAbsolutePath, index, encoding, codec.name());
+      val encfile = new URI(fileName)
+
+      val colschema = new MessageType("default",
+        new PrimitiveType(Repetition.OPTIONAL, t.getType, "value")
+      )
+      profiler.reset
+      profiler.mark
+      select.select(encfile, predicate, colschema, Array(0))
+      profiler.pause
+      val time = profiler.stop
+
+      print("%d, %s, %s, %lu".format(index, encoding, codec.name(), time.wallclock))
+    } catch {
+      case e: Exception => {
+        e.printStackTrace()
+        Iterable[Feature]()
+      }
+    }
+  }
+
+
+  schema.getColumns.asScala.zipWithIndex.foreach(c => {
+    c._1.getType match {
+      case PrimitiveTypeName.INT32 => {
+        IntEncoding.values().toList.foreach(encoding => {
+          compressions.foreach(codec => {
+            scan(c._1, c._2, encoding.name(), codec)
+          })
+        })
+      }
+      case PrimitiveTypeName.BINARY => {
+        StringEncoding.values().toList.foreach(encoding => {
+          compressions.foreach(codec => {
+            scan(c._1, c._2, encoding.name, codec)
+          })
+        })
+      }
+      case _ => {
+
+      }
+    }
+  })
+}
