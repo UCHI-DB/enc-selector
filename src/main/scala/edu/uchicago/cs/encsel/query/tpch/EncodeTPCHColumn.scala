@@ -39,7 +39,7 @@ object EncodeTPCHColumn extends App {
 
   val fileName = inputFile.getName
 
-  val schema = TPCHSchema.schemas.find(_.getName.equals(args(0).substring(0, fileName.indexOf(".")))).get;
+  val schema = TPCHSchema.lineitemSchema
 
   val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP)
 
