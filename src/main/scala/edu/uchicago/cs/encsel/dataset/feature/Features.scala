@@ -29,7 +29,8 @@ import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.classify._
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.resource.{ParquetEncFileSize, ScanTimeUsage}
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 
@@ -40,15 +41,18 @@ object Features {
   val logger = LoggerFactory.getLogger(getClass)
   val extractors = new ArrayBuffer[FeatureExtractor]()
 
-  install(ParquetEncFileSize)
-  install(Sparsity)
-  install(Entropy)
-  install(Length)
-  install(Distinct)
-  install(new Sortness(50))
-  install(new Sortness(100))
-  install(new Sortness(200))
+  //  install(ParquetEncFileSize)
+  //  install(Sparsity)
+  //  install(Entropy)
+  //  install(Length)
+  //  install(Distinct)
+  //  install(new Sortness(50))
+  //  install(new Sortness(100))
+  //  install(new Sortness(200))
   //  install(AdjInvertPair)
+
+  install(ScanTimeUsage)
+  install(ScanCompressedTimeUsage)
 
   def install(fe: FeatureExtractor) = {
     extractors += fe

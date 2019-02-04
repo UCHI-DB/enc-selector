@@ -24,7 +24,8 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.classify._
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
+import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ScanCompressedTimeUsage}
+import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
@@ -41,7 +42,7 @@ object RunFeatureOnMainColumn extends App {
   val persist = new JPAPersistence
 
   // val missed = Seq(new MiscEncFileSize(new BitVectorEncoding))
-  val missed = Seq(new SimilarWords)
+//  val missed = Seq(new SimilarWords)
 
   val prefix = args.length match {
     case gt if gt > 0 => args(0)
@@ -62,7 +63,7 @@ object RunFeatureOnMainColumn extends App {
   }
 
   Features.extractors.clear()
-  Features.extractors ++= missed
+  Features.extractors ++= Seq(ScanCompressedTimeUsage, ScanTimeUsage)
 
   val persistence = Persistence.get
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL ORDER BY c.id",
