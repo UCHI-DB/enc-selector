@@ -48,7 +48,7 @@ object ScanCompressedTimeUsage extends FeatureExtractor {
 
 
   val predicate = new VColumnPredicate((data) => true, 0)
-  val codecs = Array("GZIP", "LZO")
+  val codecs = Array("SNAPPY", "GZIP", "LZO")
   val select = new VerticalSelect() {
     override def createRecorder(schema: MessageType) = new NostoreColumnTempTable(schema)
   };
