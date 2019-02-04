@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 import java.net.URI
+import java.nio.file.Paths
 import java.util._
 
 import edu.uchicago.cs.encsel.dataset.column.Column
@@ -48,7 +49,7 @@ import org.apache.parquet.schema.Type.Repetition
 object ReadPerfTPCHColumn extends App {
   val inputFile = new File(args(0))
   val fileName = inputFile.getName
-  val schema = TPCHSchema.schemas.find(_.getName.equals(args(0).substring(0, fileName.indexOf(".")))).get;
+  val schema = TPCHSchema.lineitemSchema
   val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP)
 
   val profiler = new Profiler
@@ -60,6 +61,8 @@ object ReadPerfTPCHColumn extends App {
   def scan(t: ColumnDescriptor, index: Int, encoding: String, codec: CompressionCodecName): Unit = {
     try {
       val fileName = "%s.col%d.%s_%s".format(inputFile.getAbsolutePath, index, encoding, codec.name());
+      if(!new File(fileName).exists())
+        return
       val encfile = new URI(fileName)
 
       val colschema = new MessageType("default",
