@@ -25,8 +25,8 @@ package edu.uchicago.cs.encsel.query.tpch
 import java.io.File
 import java.util
 
-import edu.uchicago.cs.encsel.model.{IntEncoding, StringEncoding}
-import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetCompressedWriterHelper}
+import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, StringEncoding}
+import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetCompressedWriterHelper, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.tpch.ScanGenData.schema
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
@@ -41,7 +41,7 @@ object EncodeTPCHColumn extends App {
 
   val schema = TPCHSchema.lineitemSchema
 
-  val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP)
+  val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP)
 
   val context = new util.HashMap[String, Array[AnyRef]]()
   EncContext.context.set(context)
@@ -57,11 +57,15 @@ object EncodeTPCHColumn extends App {
       case PrimitiveTypeName.INT32 => {
         IntEncoding.values().toList.foreach(encoding => {
           compressions.foreach(codec => {
-            try {
-              ParquetCompressedWriterHelper.singleColumnInt(colFile, encoding, codec);
-            } catch {
-              case e: Exception => {
-                e.printStackTrace()
+            val outputFile = ParquetWriterHelper.genOutput(colFile,
+              String.format("%s_%s", encoding.name, codec.name))
+            if (!outputFile.exists()) {
+              try {
+                ParquetCompressedWriterHelper.singleColumnInt(colFile, encoding, codec);
+              } catch {
+                case e: Exception => {
+                  e.printStackTrace()
+                }
               }
             }
           })
@@ -70,11 +74,33 @@ object EncodeTPCHColumn extends App {
       case PrimitiveTypeName.BINARY => {
         StringEncoding.values().toList.foreach(encoding => {
           compressions.foreach(codec => {
-            try {
-              ParquetCompressedWriterHelper.singleColumnString(colFile, encoding, codec);
-            } catch {
-              case e: Exception => {
-                e.printStackTrace()
+            val outputFile = ParquetWriterHelper.genOutput(colFile,
+              String.format("%s_%s", encoding.name, codec.name))
+            if (!outputFile.exists()) {
+              try {
+                ParquetCompressedWriterHelper.singleColumnString(colFile, encoding, codec);
+              } catch {
+                case e: Exception => {
+                  e.printStackTrace()
+                }
+              }
+            }
+          })
+        })
+      }
+      case PrimitiveTypeName.DOUBLE => {
+        FloatEncoding.values().toList.foreach(encoding => {
+          compressions.foreach(codec => {
+            val outputFile = ParquetWriterHelper.genOutput(colFile,
+              String.format("%s_%s", encoding.name, codec.name))
+            if (!outputFile.exists()) {
+              try {
+                ParquetCompressedWriterHelper
+                  .singleColumnDouble(colFile, encoding, codec);
+              } catch {
+                case e: Exception => {
+                  e.printStackTrace()
+                }
               }
             }
           })
