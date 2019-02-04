@@ -74,7 +74,7 @@ object ReadPerfTPCHColumn extends App {
       profiler.pause
       val time = profiler.stop
 
-      print("%d, %s, %s, %d".format(index, encoding, codec.name(), time.wallclock))
+      print("%d, %s, %s, %d\n".format(index, encoding, codec.name(), time.wallclock))
     } catch {
       case e: Exception => {
         e.printStackTrace()
