@@ -108,6 +108,9 @@ object EncodeTPCH extends App {
 
   def parquet(folder: String, inputsuffix: String, outputsuffix: String): Unit = {
     TPCHSchema.schemas.foreach(schema => {
+      schema.getColumns.forEach(cd=>{
+        EncContext.encoding.get().remove(cd.toString)
+      })
       ParquetWriterHelper.write(
         new File("%s%s%s".format(folder, schema.getName, inputsuffix)).toURI,
         schema,
