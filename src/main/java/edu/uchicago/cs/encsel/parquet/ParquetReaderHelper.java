@@ -9,6 +9,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.page.PageReadStore;
+import org.apache.parquet.format.RowGroup;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
@@ -18,6 +19,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ParquetReaderHelper {
     public static void read(URI file, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {
@@ -29,6 +33,9 @@ public class ParquetReaderHelper {
         if (footers.isEmpty()) {
             return;
         }
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(30);
+
         for (Footer footer : footers) {
             processor.processFooter(footer);
             VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
@@ -38,10 +45,17 @@ public class ParquetReaderHelper {
             int blockCounter = 0;
             List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();
             while ((rowGroup = fileReader.readNextRowGroup()) != null) {
+                final PageReadStore thisrowgroup = rowGroup;
                 BlockMetaData blockMeta = footer.getParquetMetadata().getBlocks().get(blockCounter);
-                processor.processRowGroup(version, blockMeta, rowGroup);
+                threadPool.submit(() -> processor.processRowGroup(version, blockMeta, thisrowgroup));
                 blockCounter++;
             }
+        }
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(1, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
