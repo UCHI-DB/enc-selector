@@ -24,7 +24,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ParquetReaderHelper {
-    public static void read(URI file, ReaderProcessor processor) throws IOException, VersionParser.VersionParseException {
+    public static void read(URI file, ReaderProcessor processor) throws IOException,
+            VersionParser.VersionParseException {
         Configuration conf = new Configuration();
         Path path = new Path(file);
         FileSystem fs = path.getFileSystem(conf);
@@ -57,6 +58,14 @@ public class ParquetReaderHelper {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static ProfileBean profile(URI file, ReaderProcessor processor) throws IOException,
+            VersionParser.VersionParseException {
+        Profiler p = new Profiler();
+        p.mark();
+        read(file,processor);
+        return p.stop();
     }
 
 }

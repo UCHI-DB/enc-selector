@@ -24,27 +24,19 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 import java.net.URI
-import java.nio.file.Paths
-import java.util._
 
-import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.Feature
-import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsage
-import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsage.{featureType, predicate}
-import edu.uchicago.cs.encsel.dataset.feature.compress.ScanCompressedTimeUsageNoSnappy.profiler
-
-import scala.collection.JavaConverters._
-import edu.uchicago.cs.encsel.model.{IntEncoding, StringEncoding}
-import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetCompressedWriterHelper}
+import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, StringEncoding}
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
-import edu.uchicago.cs.encsel.query.tpch.EncodeTPCHColumn.args
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.column.ColumnDescriptor
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
-import org.apache.parquet.schema.{MessageType, PrimitiveType}
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 import org.apache.parquet.schema.Type.Repetition
+import org.apache.parquet.schema.{MessageType, PrimitiveType}
+
+import scala.collection.JavaConverters._
 
 object ReadPerfTPCHColumn extends App {
   val inputFile = new File(args(0))
@@ -61,7 +53,7 @@ object ReadPerfTPCHColumn extends App {
   def scan(t: ColumnDescriptor, index: Int, encoding: String, codec: CompressionCodecName): Unit = {
     try {
       val fileName = "%s.col%d.%s_%s".format(inputFile.getAbsolutePath, index, encoding, codec.name());
-      if(!new File(fileName).exists())
+      if (!new File(fileName).exists())
         return
       val encfile = new URI(fileName)
 
@@ -87,14 +79,21 @@ object ReadPerfTPCHColumn extends App {
   schema.getColumns.asScala.zipWithIndex.foreach(c => {
     c._1.getType match {
       case PrimitiveTypeName.INT32 => {
-        IntEncoding.values().toList.foreach(encoding => {
+        IntEncoding.values().toList.filter(_.parquetEncoding() != null).foreach(encoding => {
           compressions.foreach(codec => {
             scan(c._1, c._2, encoding.name(), codec)
           })
         })
       }
       case PrimitiveTypeName.BINARY => {
-        StringEncoding.values().toList.foreach(encoding => {
+        StringEncoding.values().toList.filter(_.parquetEncoding() != null).foreach(encoding => {
+          compressions.foreach(codec => {
+            scan(c._1, c._2, encoding.name, codec)
+          })
+        })
+      }
+      case PrimitiveTypeName.DOUBLE => {
+        FloatEncoding.values().toList.filter(_.parquetEncoding() != null).foreach(encoding => {
           compressions.foreach(codec => {
             scan(c._1, c._2, encoding.name, codec)
           })
