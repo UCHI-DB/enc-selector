@@ -27,7 +27,7 @@ import org.apache.parquet.column.Encoding;
 public enum IntEncoding {
     PLAIN(Encoding.PLAIN), DICT(Encoding.PLAIN_DICTIONARY),
     BP(Encoding.BIT_PACKED), RLE(Encoding.RLE),
-    DELTABP(Encoding.DELTA_BINARY_PACKED), BITVECTOR(null);
+    DELTABP(Encoding.DELTA_BINARY_PACKED)/*, BITVECTOR(null)*/;
 
     private Encoding parquetEncoding;
 
