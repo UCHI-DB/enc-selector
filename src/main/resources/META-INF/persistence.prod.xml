@@ -34,7 +34,7 @@
         <properties>
             <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://hajiang.cs.uchicago.edu/encsel"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://hajiang.cs.uchicago.edu:3306/encsel"/>
             <property name="javax.persistence.jdbc.user" value="encsel"/>
             <property name="javax.persistence.jdbc.password" value="encsel"/>
             <!-- property name="eclipselink.logging.level" value="FINE" /-->
@@ -46,7 +46,7 @@
         <properties>
             <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/wordvec?characterEncoding=UTF-8"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://hajiang.cs.uchicago.edu:3306/wordvec?characterEncoding=UTF-8"/>
             <property name="javax.persistence.jdbc.user" value="wordvec"/>
             <property name="javax.persistence.jdbc.password" value="wordvec"/>
             <!-- property name="eclipselink.logging.level" value="FINE" /-->

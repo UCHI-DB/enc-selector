@@ -42,7 +42,7 @@ class ScanTimeUsageTest {
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.STRING)
     col.colFile = new File("src/test/resource/scantime/str.data").toURI
 
-    ParquetEncFileSize.extract(col)
+//    ParquetEncFileSize.extract(col)
 
     val feature = ScanTimeUsage.extract(col)
     assertEquals(encs.size * 3, feature.size)
