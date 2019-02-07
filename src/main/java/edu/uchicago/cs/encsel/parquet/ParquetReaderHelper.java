@@ -48,7 +48,7 @@ public class ParquetReaderHelper {
             while ((rowGroup = fileReader.readNextRowGroup()) != null) {
                 final PageReadStore thisrowgroup = rowGroup;
                 BlockMetaData blockMeta = footer.getParquetMetadata().getBlocks().get(blockCounter);
-                threadPool.submit(() -> processor.processRowGroup(version, blockMeta, thisrowgroup));
+//                threadPool.submit(() -> processor.processRowGroup(version, blockMeta, thisrowgroup));
                 blockCounter++;
             }
         }
