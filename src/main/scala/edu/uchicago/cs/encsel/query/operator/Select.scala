@@ -148,61 +148,61 @@ class VerticalSelect extends Select {
       override def processRowGroup(version: ParsedVersion,
                                    meta: BlockMetaData,
                                    rowGroup: PageReadStore): Unit = {
-        val columns = schema.getColumns.zipWithIndex.filter(col => {
-          columnMap.containsKey(col._2)
-        }).map(col => {
-          val converter = projectMap.getOrElse(col._2, -1) match {
-            case -1 => new NonePrimitiveConverter
-            case index => recorder.getConverter(index).asPrimitiveConverter()
-          }
-          new ColumnReaderImpl(col._1, rowGroup.getPageReader(col._1), converter, version)
-        })
-
-        if (vp != null) {
-          vp.leaves.foreach(leaf => {
-            leaf.setColumn(columns(columnMap.getOrElse(leaf.colIndex, -1)))
-            // Install a pipe to push data that belongs to output columns
-            if (projectMap.containsKey(leaf.colIndex)) {
-              leaf.setPipe(new ColumnTempTablePipe(recorder, leaf.colIndex))
-            }
-          })
-
-          val bitmap = vp.bitmap
-
-          nonPredictIndices.map(columns(_)).foreach(col => {
-            var counter = 0
-            // Skip columns if necessary
-
-            bitmap.foreach(stop => {
-              while (counter < stop) {
-                readColumn(col, false)
-                col.consume()
-                counter += 1
-              }
-              readColumn(col, true)
-              col.consume()
-              counter += 1
-            })
-            /*
-            for (count <- 0L until rowGroup.getRowCount) {
-
-              readColumn(col, bitmap.test(count))
-              col.consume()
-            }*/
-          }
-          )
-        }
-
-        else {
-          nonPredictIndices.map(columns(_)).foreach(col => {
-            var count = 0
-            while (count < rowGroup.getRowCount) {
-              readColumn(col, true)
-              col.consume()
-              count += 1
-            }
-          })
-        }
+//        val columns = schema.getColumns.zipWithIndex.filter(col => {
+//          columnMap.containsKey(col._2)
+//        }).map(col => {
+//          val converter = projectMap.getOrElse(col._2, -1) match {
+//            case -1 => new NonePrimitiveConverter
+//            case index => recorder.getConverter(index).asPrimitiveConverter()
+//          }
+//          new ColumnReaderImpl(col._1, rowGroup.getPageReader(col._1), converter, version)
+//        })
+//
+//        if (vp != null) {
+//          vp.leaves.foreach(leaf => {
+//            leaf.setColumn(columns(columnMap.getOrElse(leaf.colIndex, -1)))
+//            // Install a pipe to push data that belongs to output columns
+//            if (projectMap.containsKey(leaf.colIndex)) {
+//              leaf.setPipe(new ColumnTempTablePipe(recorder, leaf.colIndex))
+//            }
+//          })
+//
+//          val bitmap = vp.bitmap
+//
+//          nonPredictIndices.map(columns(_)).foreach(col => {
+//            var counter = 0
+//            // Skip columns if necessary
+//
+//            bitmap.foreach(stop => {
+//              while (counter < stop) {
+//                readColumn(col, false)
+//                col.consume()
+//                counter += 1
+//              }
+//              readColumn(col, true)
+//              col.consume()
+//              counter += 1
+//            })
+//            /*
+//            for (count <- 0L until rowGroup.getRowCount) {
+//
+//              readColumn(col, bitmap.test(count))
+//              col.consume()
+//            }*/
+//          }
+//          )
+//        }
+//
+//        else {
+//          nonPredictIndices.map(columns(_)).foreach(col => {
+//            var count = 0
+//            while (count < rowGroup.getRowCount) {
+//              readColumn(col, true)
+//              col.consume()
+//              count += 1
+//            }
+//          })
+//        }
       }
     }
 
