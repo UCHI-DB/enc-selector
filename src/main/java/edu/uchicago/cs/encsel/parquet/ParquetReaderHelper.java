@@ -35,7 +35,7 @@ public class ParquetReaderHelper {
             return;
         }
 
-        ExecutorService threadPool = Executors.newFixedThreadPool(20);
+        ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
         for (Footer footer : footers) {
             processor.processFooter(footer);
