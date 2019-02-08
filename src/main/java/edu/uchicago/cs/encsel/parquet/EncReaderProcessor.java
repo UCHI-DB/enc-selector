@@ -73,4 +73,12 @@ public abstract class EncReaderProcessor implements ReaderProcessor {
         }
         return result;
     }
+
+    private int expectNumThread = 1;
+    public int expectNumThread() {
+        return expectNumThread;
+    }
+    public void setExpectNumThread(int e) {
+        this.expectNumThread = e;
+    }
 }

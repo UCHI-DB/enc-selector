@@ -31,4 +31,6 @@ public interface ReaderProcessor {
     void processFooter(Footer footer);
 
     void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup);
+
+    int expectNumThread();
 }
