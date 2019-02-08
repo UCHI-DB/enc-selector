@@ -232,7 +232,7 @@ class HorizontalSelect extends Select {
 
     val (columnMap, projectMap, nonPredictIndices) = columnMapping(p, schema, projectIndices)
 
-    ParquetReaderHelper.read(input, new ReaderProcessor {
+    ParquetReaderHelper.read(input, new EncReaderProcessor {
       override def processFooter(footer: Footer): Unit = {}
 
       override def processRowGroup(version: ParsedVersion,

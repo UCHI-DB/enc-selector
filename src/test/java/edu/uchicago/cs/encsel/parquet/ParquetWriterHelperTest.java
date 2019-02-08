@@ -100,6 +100,11 @@ public class ParquetWriterHelperTest {
                     public void processRowGroup(VersionParser.ParsedVersion version,
                                                 BlockMetaData meta, PageReadStore rowGroup) {
                     }
+
+                    @Override
+                    public int expectNumThread() {
+                        return 1;
+                    }
                 });
 
         ParquetReaderHelper.read(new File(
@@ -115,6 +120,11 @@ public class ParquetWriterHelperTest {
                     @Override
                     public void processRowGroup(VersionParser.ParsedVersion version,
                                                 BlockMetaData meta, PageReadStore rowGroup) {
+                    }
+
+                    @Override
+                    public int expectNumThread() {
+                        return 1;
                     }
                 });
     }
