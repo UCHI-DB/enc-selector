@@ -98,7 +98,8 @@ public class TPCHLoadParquetInMem {
             for(CompressionCodecName codec : codecs) {
                 String fileName = MessageFormat.format("{0}.col{1}.{2}_{3}",main.getAbsolutePath(), index,e,codec.name());
                 ProfileBean loadTime = readEncoding(new File(fileName).toURI());
-                System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}", index, e, codec.name(), loadTime.wallclock()));
+                System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}", index, e, codec.name(),
+                        String.valueOf(loadTime.wallclock())));
             }
         }
     }
