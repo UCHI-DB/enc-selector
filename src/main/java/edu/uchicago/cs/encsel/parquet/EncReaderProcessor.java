@@ -36,6 +36,9 @@ import java.net.URI;
 import java.util.Map;
 
 public abstract class EncReaderProcessor implements ReaderProcessor {
+
+    protected MessageType schema;
+
     /**
      * Load data from file footer and put that in ThreadLocal for decoding purpose
      *
@@ -44,7 +47,7 @@ public abstract class EncReaderProcessor implements ReaderProcessor {
     @Override
     public void processFooter(Footer footer) {
         Map<String, String> meta = footer.getParquetMetadata().getFileMetaData().getKeyValueMetaData();
-        MessageType schema = footer.getParquetMetadata().getFileMetaData().getSchema();
+        schema = footer.getParquetMetadata().getFileMetaData().getSchema();
 
         schema.getColumns().forEach(col -> {
             if (meta.containsKey(String.format("%s.0", col.toString()))) {

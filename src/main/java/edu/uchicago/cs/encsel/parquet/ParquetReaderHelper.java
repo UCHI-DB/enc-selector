@@ -30,25 +30,35 @@ public class ParquetReaderHelper {
         Path path = new Path(file);
         FileSystem fs = path.getFileSystem(conf);
         List<FileStatus> statuses = Arrays.asList(fs.listStatus(path, HiddenFileFilter.INSTANCE));
-        List<Footer> footers = ParquetFileReader.readAllFootersInParallelUsingSummaryFiles(conf, statuses, false);
+        List<Footer> footers = ParquetFileReader
+                .readAllFootersInParallelUsingSummaryFiles(conf, statuses, false);
         if (footers.isEmpty()) {
             return;
         }
 
-        ExecutorService threadPool = Executors.newFixedThreadPool(processor.expectNumThread());
+        ExecutorService threadPool = processor.expectNumThread() > 0 ?
+                Executors.newFixedThreadPool(processor.expectNumThread()) :
+                null;
 
         for (Footer footer : footers) {
             processor.processFooter(footer);
-            VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
+            VersionParser.ParsedVersion version = VersionParser.parse(
+                    footer.getParquetMetadata().getFileMetaData().getCreatedBy());
 
-            ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());
+            ParquetFileReader fileReader = ParquetFileReader
+                    .open(conf, footer.getFile(), footer.getParquetMetadata());
             PageReadStore rowGroup = null;
             int blockCounter = 0;
-            List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();
+            List<ColumnDescriptor> cols = footer.getParquetMetadata()
+                    .getFileMetaData().getSchema().getColumns();
             while ((rowGroup = fileReader.readNextRowGroup()) != null) {
                 final PageReadStore thisrowgroup = rowGroup;
                 BlockMetaData blockMeta = footer.getParquetMetadata().getBlocks().get(blockCounter);
-                threadPool.submit(() -> processor.processRowGroup(version, blockMeta, thisrowgroup));
+                if (processor.expectNumThread() == 0) {
+                    processor.processRowGroup(version, blockMeta, thisrowgroup);
+                } else {
+                    threadPool.submit(() -> processor.processRowGroup(version, blockMeta, thisrowgroup));
+                }
                 blockCounter++;
             }
         }
@@ -64,7 +74,7 @@ public class ParquetReaderHelper {
             VersionParser.VersionParseException {
         Profiler p = new Profiler();
         p.mark();
-        read(file,processor);
+        read(file, processor);
         return p.stop();
     }
 

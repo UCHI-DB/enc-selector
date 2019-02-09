@@ -22,37 +22,64 @@
 
 package edu.uchicago.cs.encsel.query.tpch;
 
+import edu.uchicago.cs.encsel.model.FloatEncoding;
+import edu.uchicago.cs.encsel.model.IntEncoding;
+import edu.uchicago.cs.encsel.model.StringEncoding;
 import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
+import edu.uchicago.cs.encsel.query.ColumnPrimitiveConverter;
+import edu.uchicago.cs.encsel.query.NonePrimitiveConverter;
+import edu.uchicago.cs.encsel.util.perf.ProfileBean;
+import edu.uchicago.cs.encsel.util.perf.Profiler;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
+import org.apache.parquet.column.ColumnReader;
+import org.apache.parquet.column.impl.ColumnReaderImpl;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.column.page.PageReader;
+import org.apache.parquet.hadoop.Footer;
+import org.apache.parquet.hadoop.ParquetFileReader;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
+import org.apache.parquet.hadoop.metadata.CompressionCodecName;
+import org.apache.parquet.hadoop.util.HiddenFileFilter;
 import org.apache.parquet.schema.MessageType;
 
 import java.io.File;
 import java.net.URI;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TPCHColumnMaterialize {
 
     public static void main(String[] args) throws Exception {
-
-        URI file = new File(args[0]).toURI();
-        int index = Integer.valueOf(args[1]);
-
-        MessageType lineitemSchema = TPCHSchema.lineitemSchema();
-
-        ColumnDescriptor cd = lineitemSchema.getColumns().get(index);
-
-        ParquetReaderHelper.read(file, new EncReaderProcessor() {
+        File file = new File(args[0]);
+        final int numThread = Integer.valueOf(args[1]);
+        new TPCHWorker(new EncReaderProcessor() {
             @Override
-            public void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta,
-                                        PageReadStore rowGroup) {
-                PageReader pageReader = rowGroup.getPageReader(cd);
-
+            public int expectNumThread() {
+                return numThread;
             }
-        });
 
+            @Override
+            public void processRowGroup(VersionParser.ParsedVersion version,
+                                        BlockMetaData meta, PageReadStore rowGroup) {
+                for (ColumnDescriptor cd : schema.getColumns()) {
+                    ColumnReader cr = new ColumnReaderImpl(cd, rowGroup.getPageReader(cd),
+                            new NonePrimitiveConverter(), version);
+
+                    if (cr.getCurrentDefinitionLevel() == cr.getDescriptor().getMaxDefinitionLevel()) {
+                        cr.writeCurrentValueToConverter();
+                    }
+                }
+            }
+        }, TPCHSchema.lineitemSchema());
     }
+
 }

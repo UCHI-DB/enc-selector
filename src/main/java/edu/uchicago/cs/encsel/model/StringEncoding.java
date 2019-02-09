@@ -26,7 +26,7 @@ import org.apache.parquet.column.Encoding;
 
 public enum StringEncoding {
     PLAIN(Encoding.PLAIN), DICT(Encoding.PLAIN_DICTIONARY), DELTA(Encoding.DELTA_BYTE_ARRAY),
-    DELTAL(Encoding.DELTA_LENGTH_BYTE_ARRAY), BITVECTOR(null);
+    DELTAL(Encoding.DELTA_LENGTH_BYTE_ARRAY)/*, BITVECTOR(null)*/;
 
     private Encoding parquetEncoding;
 

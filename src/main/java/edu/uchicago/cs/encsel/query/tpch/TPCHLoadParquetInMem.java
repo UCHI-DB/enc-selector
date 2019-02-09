@@ -60,88 +60,22 @@ import java.util.stream.Stream;
 
 public class TPCHLoadParquetInMem {
 
-    static final CompressionCodecName[] codecs =
-            {CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP};
-
     public static void main(String[] args) throws Exception {
         File file = new File(args[0]);
 
-        MessageType lineitemSchema = TPCHSchema.lineitemSchema();
+        TPCHWorker worker = new TPCHWorker(new EncReaderProcessor() {
 
-        for(int i = 0 ; i < lineitemSchema.getColumns().size();i++) {
-            ColumnDescriptor cd = lineitemSchema.getColumns().get(i);
-            readColumn(file, i+1, cd);
-        }
-    }
-
-    protected static void readColumn(File main, int index, ColumnDescriptor cd) throws Exception {
-        List<String> encodings = null;
-        switch(cd.getType()) {
-            case BINARY:
-                encodings = Arrays.stream(StringEncoding.values())
-                        .filter(p->p.parquetEncoding()!=null).map(e->e.name()).collect(Collectors.toList());
-                break;
-            case INT32:
-                encodings = Arrays.stream(IntEncoding.values())
-                        .filter(p->p.parquetEncoding()!=null).map(e->e.name()).collect(Collectors.toList());
-                break;
-            case DOUBLE:
-                encodings = Arrays.stream(FloatEncoding.values())
-                        .filter(p->p.parquetEncoding()!=null).map(e->e.name()).collect(Collectors.toList());
-                break;
-            default:
-               encodings = Collections.<String>emptyList();
-               break;
-        }
-
-        for(String e: encodings) {
-            for(CompressionCodecName codec : codecs) {
-                String fileName = MessageFormat.format("{0}.col{1}.{2}_{3}",main.getAbsolutePath(), index,e,codec.name());
-                try {
-                    ProfileBean loadTime = readEncoding(new File(fileName).toURI());
-                    System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}", index, e, codec.name(),
-                            String.valueOf(loadTime.wallclock())));
-                }catch(Exception ex) {
-                    // Silently ignore
-                }
+            @Override
+            public int expectNumThread() {
+                return 0;
             }
-        }
-    }
 
-    protected static ProfileBean readEncoding(URI file) throws Exception {
-        Profiler p = new Profiler();
-        p.mark();
-
-        Configuration conf = new Configuration();
-        Path path = new Path(file);
-        FileSystem fs = path.getFileSystem(conf);
-        List<FileStatus> statuses = Arrays.asList(fs.listStatus(path, HiddenFileFilter.INSTANCE));
-        List<Footer> footers = ParquetFileReader.readAllFootersInParallelUsingSummaryFiles(conf, statuses, false);
-        if (footers.isEmpty()) {
-            return p.stop();
-        }
-
-        EncReaderProcessor processor = new EncReaderProcessor() {
             @Override
             public void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup) {
 
             }
-        };
-
-        for (Footer footer : footers) {
-            processor.processFooter(footer);
-
-            VersionParser.ParsedVersion version = VersionParser.parse(footer.getParquetMetadata().getFileMetaData().getCreatedBy());
-
-            ParquetFileReader fileReader = ParquetFileReader.open(conf, footer.getFile(), footer.getParquetMetadata());
-            PageReadStore rowGroup = null;
-            int blockCounter = 0;
-            List<ColumnDescriptor> cols = footer.getParquetMetadata().getFileMetaData().getSchema().getColumns();
-            while ((rowGroup = fileReader.readNextRowGroup()) != null) {
-                blockCounter++;
-            }
-        }
-
-        return p.stop();
+        }, TPCHSchema.lineitemSchema());
     }
+
+
 }
