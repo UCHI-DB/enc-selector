@@ -256,7 +256,7 @@
 
     <properties>
         <parquet.version>1.9.0</parquet.version>
-        <hadoop.version>2.9.0</hadoop.version>
+        <hadoop.version>3.2.0</hadoop.version>
         <nd4j.version>0.9.1</nd4j.version>
         <scala.version>2.12.4</scala.version>
     </properties>
