@@ -92,7 +92,7 @@ class SimilarWordsTest {
   }
 
   @Test
-  def testBlockPerformance:Unit = {
+  def testBlockPerformance: Unit = {
 
   }
 }
@@ -138,7 +138,7 @@ class FingerprintTest {
     val prefixfp = fp.get(prefix)
     val suffixfp = fp.get(suffix)
 
-    assertEquals(suffixfp, fp.divide(fullfp + fp.p - prefixfp, prefix.length))
+    assertEquals("" + teststr + "," + fp.r, suffixfp, fp.divide(fullfp + fp.p - prefixfp, prefix.length))
   }
 }
 
