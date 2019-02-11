@@ -145,6 +145,8 @@ class VerticalSelect extends Select {
 
     ParquetReaderHelper.read(input, new EncReaderProcessor {
 
+      override def expectNumThread(): Int = 30
+
       override def processRowGroup(version: ParsedVersion,
                                    meta: BlockMetaData,
                                    rowGroup: PageReadStore): Unit = {

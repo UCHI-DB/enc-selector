@@ -42,7 +42,7 @@ object ReadPerfTPCHColumn extends App {
   val inputFile = new File(args(0))
   val fileName = inputFile.getName
   val schema = TPCHSchema.lineitemSchema
-  val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP)
+  val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP)
 
   val profiler = new Profiler
   val predicate = new VColumnPredicate((data) => true, 0)

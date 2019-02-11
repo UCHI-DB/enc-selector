@@ -60,6 +60,9 @@ import java.util.stream.Stream;
 
 public class TPCHLoadParquetInMem {
 
+    static final CompressionCodecName[] codecs =
+            {CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP};
+
     public static void main(String[] args) throws Exception {
         File file = new File(args[0]);
 
