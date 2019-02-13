@@ -87,7 +87,8 @@ public class TPCHWorker {
                             index, e, codec.name(),
                             String.valueOf(loadTime.wallclock())));
                 } catch (Exception ex) {
-                    // Silently ignore
+                    // ignore
+                    ex.printStackTrace();
                 }
             }
         }
