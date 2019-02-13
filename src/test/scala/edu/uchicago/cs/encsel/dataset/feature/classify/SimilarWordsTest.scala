@@ -129,6 +129,7 @@ class FingerprintTest {
     val fp = new Fingerprint
 
     val teststr = UUID.randomUUID().toString
+    //    val teststr = "1c86609a-81aa-4e56-a11f-c5c561468bb1"
     val fullfp = fp.get(teststr)
 
     val suffixlen = Random.nextInt(teststr.length - 4) + 4
@@ -138,7 +139,8 @@ class FingerprintTest {
     val prefixfp = fp.get(prefix)
     val suffixfp = fp.get(suffix)
 
-    assertEquals("" + teststr + "," + fp.r, suffixfp, fp.divide(fullfp + fp.p - prefixfp, prefix.length))
+    assertEquals("" + teststr + "," + fp.r + "," + suffixlen,
+      suffixfp, fp.divide(fullfp + fp.p - prefixfp, prefix.length))
   }
 }
 
