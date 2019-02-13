@@ -66,7 +66,7 @@ public class TPCHLoadParquetInMem {
     public static void main(String[] args) throws Exception {
         File file = new File(args[0]);
 
-        TPCHWorker worker = new TPCHWorker(new EncReaderProcessor() {
+        new TPCHWorker(new EncReaderProcessor() {
 
             @Override
             public int expectNumThread() {
@@ -77,7 +77,7 @@ public class TPCHLoadParquetInMem {
             public void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup) {
 
             }
-        }, TPCHSchema.lineitemSchema());
+        }, TPCHSchema.lineitemSchema()).work(file.getAbsolutePath());
     }
 
 

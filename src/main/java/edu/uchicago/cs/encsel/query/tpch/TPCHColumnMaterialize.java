@@ -24,6 +24,7 @@ package edu.uchicago.cs.encsel.query.tpch;
 
 import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.query.MemBufferPrimitiveConverter;
+import edu.uchicago.cs.encsel.query.NonePrimitiveConverter;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.ColumnReader;
@@ -49,7 +50,7 @@ public class TPCHColumnMaterialize {
                                         BlockMetaData meta, PageReadStore rowGroup) {
                 for (ColumnDescriptor cd : schema.getColumns()) {
                     ColumnReader cr = new ColumnReaderImpl(cd, rowGroup.getPageReader(cd),
-                            new MemBufferPrimitiveConverter(), version);
+                            new NonePrimitiveConverter(), version);
                     for (int i = 0; i < rowGroup.getRowCount(); i++) {
                         if (cr.getCurrentDefinitionLevel() == cr.getDescriptor().getMaxDefinitionLevel()) {
                             cr.writeCurrentValueToConverter();
@@ -60,6 +61,6 @@ public class TPCHColumnMaterialize {
                     }
                 }
             }
-        }, TPCHSchema.lineitemSchema());
+        }, TPCHSchema.lineitemSchema()).work(file.getAbsolutePath());
     }
 }
