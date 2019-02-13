@@ -83,9 +83,11 @@ public class TPCHWorker {
                 try {
                     ProfileBean loadTime = ParquetReaderHelper.profile(
                             configuration, uri, processor);
-                    System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}",
+                    long fileSize = new File(fileName).length();
+                    System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}, {4,number,#.###}",
                             index, e, codec.name(),
-                            String.valueOf(loadTime.wallclock())));
+                            String.valueOf(loadTime.wallclock()),
+                            ((double) fileSize) / (1000*loadTime.wallclock())));
                 } catch (Exception ex) {
                     // ignore
                     ex.printStackTrace();
