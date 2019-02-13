@@ -73,11 +73,13 @@ public class ParquetReaderHelper {
                 blockCounter++;
             }
         }
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(1, TimeUnit.DAYS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (null != threadPool) {
+            threadPool.shutdown();
+            try {
+                threadPool.awaitTermination(1, TimeUnit.DAYS);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
