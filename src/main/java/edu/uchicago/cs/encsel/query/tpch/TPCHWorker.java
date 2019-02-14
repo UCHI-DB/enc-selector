@@ -7,6 +7,9 @@ import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
 import edu.uchicago.cs.encsel.util.perf.ProfileBean;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.apache.parquet.schema.MessageType;
@@ -74,20 +77,21 @@ public class TPCHWorker {
             for (CompressionCodecName codec : codecs) {
                 String fileName = MessageFormat.format("{0}.col{1}.{2}_{3}",
                         main, index, e, codec.name());
-                URI uri = null;
-                if (fileName.startsWith("hdfs")) {
-                    uri = new URI(fileName);
-                } else {
-                    uri = new File(fileName).toURI();
+                URI fileURI = new URI(fileName);
+                FileSystem fs = FileSystem.get(fileURI, configuration);
+                Path filePath = new Path(fileURI);
+                // Skip non-existing and empty file
+                if (!fs.exists(filePath) || fs.getFileStatus(filePath).getLen() == 0) {
+                    continue;
                 }
                 try {
                     ProfileBean loadTime = ParquetReaderHelper.profile(
-                            configuration, uri, processor);
+                            configuration, fileURI, processor);
                     long fileSize = new File(fileName).length();
                     System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}, {4,number,#.###}",
                             index, e, codec.name(),
                             String.valueOf(loadTime.wallclock()),
-                            ((double) fileSize) / (1000*loadTime.wallclock())));
+                            ((double) fileSize) / (1000 * loadTime.wallclock())));
                 } catch (Exception ex) {
                     // ignore
                     ex.printStackTrace();

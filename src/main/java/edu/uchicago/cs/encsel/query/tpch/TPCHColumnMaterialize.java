@@ -37,7 +37,6 @@ import java.io.File;
 public class TPCHColumnMaterialize {
 
     public static void main(String[] args) throws Exception {
-        File file = new File(args[0]);
         final int numThread = Integer.valueOf(args[1]);
         new TPCHWorker(new EncReaderProcessor() {
             @Override
@@ -61,6 +60,6 @@ public class TPCHColumnMaterialize {
                     }
                 }
             }
-        }, TPCHSchema.lineitemSchema()).work(file.getAbsolutePath());
+        }, TPCHSchema.lineitemSchema()).work(args[0]);
     }
 }

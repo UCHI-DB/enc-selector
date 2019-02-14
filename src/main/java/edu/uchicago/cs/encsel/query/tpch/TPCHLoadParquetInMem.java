@@ -64,10 +64,12 @@ public class TPCHLoadParquetInMem {
             {CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP};
 
     public static void main(String[] args) throws Exception {
-        File file = new File(args[0]);
+
+        Configuration configuration = new Configuration();
+        configuration.set("fs.default.name", "hdfs://192.5.87.20:9000");
+        configuration.set("dfs.client.use.datanode.hostname", "true");
 
         new TPCHWorker(new EncReaderProcessor() {
-
             @Override
             public int expectNumThread() {
                 return 0;
@@ -77,7 +79,7 @@ public class TPCHLoadParquetInMem {
             public void processRowGroup(VersionParser.ParsedVersion version, BlockMetaData meta, PageReadStore rowGroup) {
 
             }
-        }, TPCHSchema.lineitemSchema()).work(file.getAbsolutePath());
+        }, TPCHSchema.lineitemSchema()).work(args[0]);
     }
 
 
