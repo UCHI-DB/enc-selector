@@ -25,6 +25,7 @@ package edu.uchicago.cs.encsel.query.tpch;
 import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.query.MemBufferPrimitiveConverter;
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.ColumnReader;
@@ -37,8 +38,12 @@ import java.io.File;
 public class TPCHColumnMaterialize {
 
     public static void main(String[] args) throws Exception {
+        Configuration configuration = new Configuration();
+        configuration.set("fs.default.name", "hdfs://192.5.87.20:9000");
+        configuration.set("dfs.client.use.datanode.hostname", "true");
+
         final int numThread = Integer.valueOf(args[1]);
-        new TPCHWorker(new EncReaderProcessor() {
+        new TPCHWorker(configuration, new EncReaderProcessor() {
             @Override
             public int expectNumThread() {
                 return numThread;
