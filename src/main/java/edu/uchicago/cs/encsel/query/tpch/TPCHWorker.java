@@ -80,18 +80,18 @@ public class TPCHWorker {
                 URI fileURI = new URI(fileName);
                 FileSystem fs = FileSystem.get(fileURI, configuration);
                 Path filePath = new Path(fileURI);
+                long fileLength = fs.getFileStatus(filePath).getLen();
                 // Skip non-existing and empty file
-                if (!fs.exists(filePath) || fs.getFileStatus(filePath).getLen() == 0) {
+                if (!fs.exists(filePath) || fileLength == 0) {
                     continue;
                 }
                 try {
                     ProfileBean loadTime = ParquetReaderHelper.profile(
                             configuration, fileURI, processor);
-                    long fileSize = new File(fileName).length();
                     System.out.println(MessageFormat.format("{0}, {1}, {2}, {3}, {4,number,#.###}",
                             index, e, codec.name(),
                             String.valueOf(loadTime.wallclock()),
-                            ((double) fileSize) / (1000 * loadTime.wallclock())));
+                            ((double) fileLength) / (1000 * loadTime.wallclock())));
                 } catch (Exception ex) {
                     // ignore
                     ex.printStackTrace();
