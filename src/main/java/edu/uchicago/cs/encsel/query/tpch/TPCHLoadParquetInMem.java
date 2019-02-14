@@ -66,6 +66,8 @@ public class TPCHLoadParquetInMem {
     public static void main(String[] args) throws Exception {
 
         Configuration configuration = new Configuration();
+        configuration.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+        configuration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
         configuration.set("fs.default.name", "hdfs://192.5.87.20:9000");
         configuration.set("dfs.client.use.datanode.hostname", "true");
 
