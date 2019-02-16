@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class TPCHWorker {
 
     private CompressionCodecName[] codecs =
-            {CompressionCodecName.UNCOMPRESSED, /*CompressionCodecName.LZO,*/ CompressionCodecName.GZIP};
+            {CompressionCodecName.UNCOMPRESSED, CompressionCodecName.SNAPPY, CompressionCodecName.GZIP};
 
     private EncReaderProcessor processor;
 

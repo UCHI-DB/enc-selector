@@ -41,7 +41,8 @@ object EncodeTPCHColumn extends App {
 
   val schema = TPCHSchema.lineitemSchema
 
-  val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP)
+  // val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP)
+  val compressions = Array(CompressionCodecName.SNAPPY)
 
   val context = new util.HashMap[String, Array[AnyRef]]()
   EncContext.context.set(context)
