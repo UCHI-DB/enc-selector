@@ -63,11 +63,13 @@ object RunFeatureOnMainColumn extends App {
   }
 
   Features.extractors.clear()
-  Features.extractors ++= Seq(ScanCompressedTimeUsageNoSnappy)
+  Features.extractors ++= Seq(ScanTimeUsage, ScanCompressedTimeUsage)
 
   val persistence = Persistence.get
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL ORDER BY c.id",
-    classOf[ColumnWrapper]).getResultList.asScala.toList
+  val columns = persist.em.createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\n        JOIN\n    " +
+    "feature size ON size.col_id = cd.id\n        AND size.type = 'EncFileSize'\n        " +
+    "AND size.name = 'PLAIN_file_size'\n        AND size.value > 1000000\nWHERE\n    cd.parent_id IS NULL",
+    classOf[ColumnWrapper]).getResultList.asScala.toList.map(_.asInstanceOf[ColumnWrapper])
   val size = columns.size
   var counter = 0
   columns.foreach(column => {
