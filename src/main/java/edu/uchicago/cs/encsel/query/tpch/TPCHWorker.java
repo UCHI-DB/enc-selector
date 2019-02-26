@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class TPCHWorker {
 
     private CompressionCodecName[] codecs =
-            {CompressionCodecName.UNCOMPRESSED, CompressionCodecName.LZO, CompressionCodecName.GZIP};
+            {CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP};
 
     private EncReaderProcessor processor;
 
@@ -80,9 +80,9 @@ public class TPCHWorker {
                 URI fileURI = new URI(fileName);
                 FileSystem fs = FileSystem.get(fileURI, configuration);
                 Path filePath = new Path(fileURI);
-                long fileLength = fs.getFileStatus(filePath).getLen();
+                long fileLength;
                 // Skip non-existing and empty file
-                if (!fs.exists(filePath) || fileLength == 0) {
+                if (!fs.exists(filePath) || (fileLength = fs.getFileStatus(filePath).getLen()) == 0) {
                     continue;
                 }
                 try {

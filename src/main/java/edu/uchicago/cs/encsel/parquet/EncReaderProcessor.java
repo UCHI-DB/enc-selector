@@ -77,7 +77,7 @@ public abstract class EncReaderProcessor implements ReaderProcessor {
         return result;
     }
 
-    private int expectNumThread = 1;
+    private int expectNumThread = 0;
     public int expectNumThread() {
         return expectNumThread;
     }
