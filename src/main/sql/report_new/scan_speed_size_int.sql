@@ -1,28 +1,28 @@
-SELECT size.value,
-       bp.value,
-       bpsz.value,
-       rle.value,
-       rlesz.value,
-       dict.value,
-       dictsz.value,
-       deltabp.value,
-       deltabpsz.value,
-       bpg.value,
-       bpgsz.value,
-       rleg.value,
-       rlegsz.value,
-       dictg.value,
-       dictgsz.value,
-       deltabpg.value,
-       deltabpgsz.value,
-       bps.value,
-       bpssz.value,
-       rles.value,
-       rlessz.value,
-       dicts.value,
-       dictssz.value,
-       deltabps.value,
-       deltabpssz.value
+SELECT size.value size,
+       bp.value bp,
+       bpsz.value bpsz,
+       rle.value rle,
+       rlesz.value rlesz,
+       dict.value dict,
+       dictsz.value dictsz,
+       deltabp.value deltabp,
+       deltabpsz.value deltabpsz,
+       bpg.value bpg,
+       bpgsz.value bpgsz,
+       rleg.value rleg,
+       rlegsz.value rlegsz,
+       dictg.value dictg,
+       dictgsz.value dictgsz,
+       deltabpg.value deltabpg,
+       deltabpgsz.value deltabpgsz,
+       bps.value bps,
+       bpssz.value bpssz,
+       rles.value rles,
+       rlessz.value rlessz,
+       dicts.value dicts,
+       dictssz.value dictssz,
+       deltabps.value deltabps,
+       deltabpssz.value deltabpssz
 FROM col_data cd
        JOIN
      feature size ON size.col_id = cd.id
@@ -125,4 +125,6 @@ FROM col_data cd
        AND deltabpssz.type = 'CompressEncFileSize'
        AND deltabpssz.name = 'DELTABP_LZO_file_size'
 WHERE cd.data_type = 'INTEGER'
-  AND size.value > 1000000
+  AND size.value > 5000000
+  AND cd.parent_id is NULL
+  AND cd.id < 15016

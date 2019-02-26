@@ -1,10 +1,10 @@
-SELECT size.value,
-       dict.value,
-       dictsz.value,
-       dictg.value,
-       dictgsz.value,
-       dicts.value,
-       dictssz.value
+SELECT size.value    size,
+       dict.value    dict,
+       dictsz.value  dictsz,
+       dictg.value   dictg,
+       dictgsz.value dictgsz,
+       dicts.value   dicts,
+       dictssz.value dictssz
 FROM col_data cd
        JOIN
      feature size ON size.col_id = cd.id
@@ -35,5 +35,6 @@ FROM col_data cd
        AND dictssz.type = 'CompressEncFileSize'
        AND dictssz.name = 'DICT_LZO_file_size'
 WHERE cd.data_type = 'DOUBLE'
-  AND size.value
-  > 1000000
+  AND size.value > 1000000
+  AND cd.parent_id IS NULL
+  AND cd.id < 15106

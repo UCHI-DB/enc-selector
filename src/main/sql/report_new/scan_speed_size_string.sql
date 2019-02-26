@@ -1,22 +1,22 @@
-SELECT size.value,
-       dict.value,
-       dictsz.value,
-       delta.value,
-       deltasz.value,
-       deltal.value,
-       deltalsz.value,
-       dictg.value,
-       dictgsz.value,
-       deltag.value,
-       deltagsz.value,
-       deltalg.value,
-       deltalgsz.value,
-       dicts.value,
-       dictssz.value,
-       deltas.value,
-       deltassz.value,
-       deltals.value,
-       deltalssz.value
+SELECT size.value      size,
+       dict.value      dict,
+       dictsz.value    dictsz,
+       delta.value     delta,
+       deltasz.value   deltasz,
+       deltal.value    deltal,
+       deltalsz.value  deltalsz,
+       dictg.value     dictg,
+       dictgsz.value   dictgsz,
+       deltag.value    deltag,
+       deltagsz.value  deltagsz,
+       deltalg.value   deltalg,
+       deltalgsz.value deltalgsz,
+       dicts.value     dicts,
+       dictssz.value   dictssz,
+       deltas.value    deltas,
+       deltassz.value  deltassz,
+       deltals.value   deltals,
+       deltalssz.value deltalssz
 FROM col_data cd
        JOIN
      feature size ON size.col_id = cd.id
@@ -96,3 +96,5 @@ FROM col_data cd
        AND deltalssz.name = 'DELTAL_LZO_file_size'
 WHERE cd.data_type = 'STRING'
   AND size.value > 10000000
+  AND cd.parent_id IS NULL
+  AND cd.id < 15106

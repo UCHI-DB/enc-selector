@@ -144,9 +144,6 @@ class VerticalSelect extends Select {
     val (columnMap, projectMap, nonPredictIndices) = columnMapping(p, schema, projectIndices)
 
     ParquetReaderHelper.read(input, new EncReaderProcessor {
-
-      override def expectNumThread(): Int = 30
-
       override def processRowGroup(version: ParsedVersion,
                                    meta: BlockMetaData,
                                    rowGroup: PageReadStore): Unit = {
