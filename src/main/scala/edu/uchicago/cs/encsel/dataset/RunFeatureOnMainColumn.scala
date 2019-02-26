@@ -24,8 +24,8 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.classify._
-import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ScanCompressedTimeUsage, ScanCompressedTimeUsageNoSnappy}
-import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ParquetCompressTimeUsage, ScanCompressedTimeUsage, ScanCompressedTimeUsageNoSnappy}
+import edu.uchicago.cs.encsel.dataset.feature.resource.{EncTimeUsage, ScanTimeUsage}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
@@ -63,7 +63,7 @@ object RunFeatureOnMainColumn extends App {
   }
 
   Features.extractors.clear()
-  Features.extractors ++= Seq(ScanTimeUsage, ScanCompressedTimeUsage)
+  Features.extractors ++= Seq(EncTimeUsage, ParquetCompressTimeUsage, ScanTimeUsage, ScanCompressedTimeUsage)
 
   val persistence = Persistence.get
   val columns = persist.em.createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\n        JOIN\n    " +
