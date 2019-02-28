@@ -26,6 +26,7 @@ package edu.uchicago.cs.encsel.query.tpch
 import java.io.File
 
 import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.query.tpch.EncodeTPCHColumn.{context, schema}
 import org.apache.parquet.column.Encoding
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 
@@ -164,6 +165,13 @@ object EncodeTPCH extends App {
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(13).toString, Encoding.PLAIN_DICTIONARY)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(14).toString, Encoding.PLAIN_DICTIONARY)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(15).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY)
+
+    EncContext.context.get().put(lineitemSchema.getColumns().get(0).toString, Array("28", "180000000"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(1).toString, Array("21", "2000000"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(2).toString, Array("20", "300000"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(3).toString, Array("3", "7"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(4).toString, Array("7", "100"))
+
     ParquetWriterHelper.write(
       new File("%s%s%s".format(folder, lineitemSchema.getName, inputsuffix)).toURI,
       lineitemSchema,
@@ -193,6 +201,13 @@ object EncodeTPCH extends App {
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(13).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY) // GZIP
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(14).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY) // GZIP
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(15).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY) // GZIP
+
+    EncContext.context.get().put(lineitemSchema.getColumns().get(0).toString, Array("28", "180000000"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(1).toString, Array("21", "2000000"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(2).toString, Array("20", "300000"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(3).toString, Array("3", "7"))
+    EncContext.context.get().put(lineitemSchema.getColumns().get(4).toString, Array("7", "100"))
+
     ParquetWriterHelper.write(
       new File("%s%s%s".format(folder, lineitemSchema.getName, inputsuffix)).toURI,
       lineitemSchema,
