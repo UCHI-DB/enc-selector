@@ -33,6 +33,7 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +48,8 @@ public class MemoryFileSystem extends FileSystem {
     private RawLocalFileSystem inner = new RawLocalFileSystem();
 
     private Map<Path, DirectByteArray> files = new HashMap<>();
+
+    private Map<Path, FileDescriptor> fds = new HashMap<>();
 
     private Map<Path, FileStatus> statuses = new HashMap<>();
 
@@ -164,7 +167,12 @@ public class MemoryFileSystem extends FileSystem {
 
     @Override
     public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        return null;
+        getFileStatus(f);
+
+        DirectByteArray content = files.get(f);
+        FileDescriptor fd = fds.get(f);
+        return new FSDataInputStream(new BufferedFSInputStream(
+                new MemoryFSDataInputStream(fd,content), bufferSize));
     }
 
     @Override
@@ -187,9 +195,20 @@ public class MemoryFileSystem extends FileSystem {
         return false;
     }
 
+    /**
+     * Does not support directory for now
+     * @param f
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     @Override
     public FileStatus[] listStatus(Path f) throws FileNotFoundException, IOException {
-        return new FileStatus[0];
+        FileStatus fs = getFileStatus(f);
+        if(fs == null) {
+            throw new FileNotFoundException("File " + f + " does not exist");
+        }
+        return new FileStatus[]{fs};
     }
 
     @Override
@@ -207,8 +226,41 @@ public class MemoryFileSystem extends FileSystem {
         return false;
     }
 
+    private void loadFromLocal(Path memoryPath) throws IOException, URISyntaxException {
+        URI memoryUri = memoryPath.toUri();
+        URI fileUri = new URI("file://"+memoryUri.getPath());
+        Path localPath = new Path(fileUri);
+        if(inner.exists(localPath)) {
+            FileStatus fs = inner.getFileStatus(localPath);
+
+            statuses.put(memoryPath, fs);
+            // Load the file into memory
+            DirectByteArray content = new DirectByteArray(fs.getLen());
+
+            try(FSDataInputStream readStream = inner.open(localPath)) {
+                content.from(readStream, fs.getLen());
+               fds.put(memoryPath,readStream.getFileDescriptor());
+            }
+
+            files.put(memoryPath, content);
+        }
+    }
+
     @Override
     public FileStatus getFileStatus(Path f) throws IOException {
-        return null;
+        if(statuses.containsKey(f)) {
+            return statuses.get(f);
+        }
+        // Check file system to load the file
+        try {
+            loadFromLocal(f);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException();
+        }
+        FileStatus fs = statuses.get(f);
+        if(fs == null) {
+            throw new FileNotFoundException();
+        }
+        return fs;
     }
 }

@@ -25,6 +25,9 @@ package edu.uchicago.cs.encsel.hadoop;
 import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 import sun.misc.Unsafe;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 class DirectByteArray {
 
     Unsafe unsafe = Unsafe.getUnsafe();
@@ -65,5 +68,16 @@ class DirectByteArray {
 
     public long size() {
         return size;
+    }
+
+    public void from(InputStream from, long size) throws IOException {
+        if(size>this.size)
+            throw new ArrayIndexOutOfBoundsException();
+        byte[] buffer = new byte[1000000];
+        long position = 0;
+        int readcount = 0;
+        while((readcount = from.read(buffer))>0) {
+            copy(position, buffer,0,readcount);
+        }
     }
 }
