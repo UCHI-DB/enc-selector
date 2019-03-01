@@ -127,4 +127,4 @@ FROM col_data cd
 WHERE cd.data_type = 'INTEGER'
   AND size.value > 5000000
   AND cd.parent_id is NULL
-  AND cd.id < 15016
+  AND cd.id < 15191

@@ -97,4 +97,4 @@ FROM col_data cd
 WHERE cd.data_type = 'STRING'
   AND size.value > 10000000
   AND cd.parent_id IS NULL
-  AND cd.id < 15106
+  AND cd.id < 15191
