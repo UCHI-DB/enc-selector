@@ -22,10 +22,12 @@
 
 package edu.uchicago.cs.encsel.query.tpch;
 
+import edu.uchicago.cs.encsel.hadoop.MemoryFileSystem;
 import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.query.MemBufferPrimitiveConverter;
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
@@ -40,8 +42,9 @@ public class TPCHColumnMaterialize {
 
     public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration();
-        configuration.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-        configuration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+        configuration.set("fs.hdfs.impl", DistributedFileSystem.class.getName());
+        configuration.set("fs.file.impl", LocalFileSystem.class.getName());
+        configuration.set("fs.memory.impl", MemoryFileSystem.class.getName());
         configuration.set("fs.default.name", "hdfs://192.5.87.20:9000");
         configuration.set("dfs.client.use.datanode.hostname", "true");
 

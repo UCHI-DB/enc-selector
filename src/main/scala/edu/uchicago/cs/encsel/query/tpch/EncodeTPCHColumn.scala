@@ -39,7 +39,9 @@ object EncodeTPCHColumn extends App {
 
   val fileName = inputFile.getName
 
-  val schema = TPCHSchema.lineitemSchema
+//  val schema = TPCHSchema.lineitemSchema
+
+  val schema = TPCHSchema.partSchema
 
   val compressions = Array(CompressionCodecName.UNCOMPRESSED, CompressionCodecName.GZIP)
   //val compressions = Array(CompressionCodecName.SNAPPY)
@@ -47,11 +49,15 @@ object EncodeTPCHColumn extends App {
   val context = new util.HashMap[String, Array[AnyRef]]()
   EncContext.context.set(context)
   // Set number of bits and int bound
-  context.put(schema.getColumns().get(0).toString, Array("28", "180000000"))
-  context.put(schema.getColumns().get(1).toString, Array("21", "2000000"))
-  context.put(schema.getColumns().get(2).toString, Array("20", "300000"))
-  context.put(schema.getColumns().get(3).toString, Array("3", "7"))
-  context.put(schema.getColumns().get(4).toString, Array("7", "100"))
+//  context.put(schema.getColumns().get(0).toString, Array("28", "180000000"))
+//  context.put(schema.getColumns().get(1).toString, Array("21", "2000000"))
+//  context.put(schema.getColumns().get(2).toString, Array("20", "300000"))
+//  context.put(schema.getColumns().get(3).toString, Array("3", "7"))
+//  context.put(schema.getColumns().get(4).toString, Array("7", "100"))
+
+  context.put(schema.getColumns.get(0).toString,Array("18","200000"))
+  context.put(schema.getColumns.get(5).toString,Array("6","64"))
+
   schema.getColumns.asScala.zipWithIndex.foreach(c => {
     val colFile = new File(inputFile.getAbsolutePath + ".col" + String.valueOf(c._2 + 1)).toURI
     c._1.getType match {

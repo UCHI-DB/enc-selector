@@ -155,6 +155,23 @@ object EncodeTPCH extends App {
       false, CompressionCodecName.GZIP)
   }
 
+  def abadi_part(folder:String,inputsuffix:String,outputsuffix:String):Unit = {
+    var partSchema = TPCHSchema
+  }
+
+  def ddes_store_part(folder:String,inputsuffix:String,outputsuffix:String):Unit = {
+    var partSchema = TPCHSchema.partSchema
+    EncContext.encoding.get().put(partSchema.getColumns.get(0).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(1).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(2).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(3).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(4).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(5).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(6).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(7).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(8).toString, Encoding.DELTA_BINARY_PACKED)
+  }
+
   def ddes_store(folder: String, inputsuffix: String, outputsuffix: String): Unit = {
     var lineitemSchema = TPCHSchema.lineitemSchema
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(0).toString, Encoding.DELTA_BINARY_PACKED)
@@ -219,7 +236,7 @@ object EncodeTPCH extends App {
       lineitemSchema,
       new File("%s%s%s".format(folder, lineitemSchema.getName, outputsuffix)).toURI,
       "\\|",
-      false, CompressionCodecName.GZIP)
+      false, CompressionCodecName.UNCOMPRESSED)
   }
 
 
