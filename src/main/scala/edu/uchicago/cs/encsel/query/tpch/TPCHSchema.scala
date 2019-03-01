@@ -40,7 +40,7 @@ object TPCHSchema {
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "comment")
   )
 
-  val partSchema = new MessageType("parts",
+  val partSchema = new MessageType("part",
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "part_key"),
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "name"),
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "mfgr"),
@@ -110,7 +110,24 @@ object TPCHSchema {
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "comment")
   )
 
+  val taxiSchema = new MessageType("taxi",
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "medallion"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "hack_license"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "vendor_id"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "rate_code"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "store_and_fwd_flag"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "pickup_datetime"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "dropoff_datetime"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "passenger_count"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "trip_time_in_secs"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.DOUBLE, "trip_distance"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "pickup_longitude"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "pickup_latitude"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "dropoff_longitude"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "dropoff_latitude"),
+  )
+
   val schemas = Array(customerSchema, nationSchema,
     regionSchema, supplierSchema, partSchema,
-    partsuppSchema, lineitemSchema, orderSchema)
+    partsuppSchema, lineitemSchema, orderSchema,taxiSchema)
 }
