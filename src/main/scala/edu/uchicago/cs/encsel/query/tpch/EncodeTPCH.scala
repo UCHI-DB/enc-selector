@@ -156,20 +156,72 @@ object EncodeTPCH extends App {
   }
 
   def abadi_part(folder:String,inputsuffix:String,outputsuffix:String):Unit = {
-    var partSchema = TPCHSchema
+    var partSchema = TPCHSchema.partSchema
+    EncContext.encoding.get().put(partSchema.getColumns.get(0).toString, Encoding.PLAIN)
+    EncContext.encoding.get().put(partSchema.getColumns.get(1).toString, Encoding.PLAIN)
+    EncContext.encoding.get().put(partSchema.getColumns.get(2).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(3).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(4).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(5).toString, Encoding.PLAIN)
+    EncContext.encoding.get().put(partSchema.getColumns.get(6).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(7).toString, Encoding.PLAIN)
+    EncContext.encoding.get().put(partSchema.getColumns.get(8).toString, Encoding.PLAIN)
+
+    EncContext.context.get().put(schema.getColumns.get(0).toString,Array("18","200000"))
+    EncContext.context.get().put(schema.getColumns.get(5).toString,Array("6","64"))
+
+    ParquetWriterHelper.write(
+      new File("%s%s%s".format(folder, partSchema.getName, inputsuffix)).toURI,
+      partSchema,
+      new File("%s%s%s".format(folder, partSchema.getName, outputsuffix)).toURI,
+      "\\|",
+      false, CompressionCodecName.GZIP)
   }
 
   def ddes_store_part(folder:String,inputsuffix:String,outputsuffix:String):Unit = {
     var partSchema = TPCHSchema.partSchema
     EncContext.encoding.get().put(partSchema.getColumns.get(0).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(1).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(2).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(3).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(4).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(5).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(6).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(7).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(partSchema.getColumns.get(8).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(1).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(2).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(3).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(4).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(5).toString, Encoding.RLE)
+    EncContext.encoding.get().put(partSchema.getColumns.get(6).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(7).toString, Encoding.PLAIN)
+    EncContext.encoding.get().put(partSchema.getColumns.get(8).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY)
+
+    EncContext.context.get().put(schema.getColumns.get(0).toString,Array("18","200000"))
+    EncContext.context.get().put(schema.getColumns.get(5).toString,Array("6","64"))
+
+    ParquetWriterHelper.write(
+      new File("%s%s%s".format(folder, partSchema.getName, inputsuffix)).toURI,
+      partSchema,
+      new File("%s%s%s".format(folder, partSchema.getName, outputsuffix)).toURI,
+      "\\|",
+      false, CompressionCodecName.GZIP)
+  }
+
+  def ddes_speed_part(folder:String,inputsuffix:String,outputsuffix:String):Unit = {
+    var partSchema = TPCHSchema.partSchema
+    EncContext.encoding.get().put(partSchema.getColumns.get(0).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(partSchema.getColumns.get(1).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(2).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(3).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(4).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(5).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(6).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(7).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(partSchema.getColumns.get(8).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY)
+
+    EncContext.context.get().put(schema.getColumns.get(0).toString,Array("18","200000"))
+    EncContext.context.get().put(schema.getColumns.get(5).toString,Array("6","64"))
+
+    ParquetWriterHelper.write(
+      new File("%s%s%s".format(folder, partSchema.getName, inputsuffix)).toURI,
+      partSchema,
+      new File("%s%s%s".format(folder, partSchema.getName, outputsuffix)).toURI,
+      "\\|",
+      false, CompressionCodecName.GZIP)
   }
 
   def ddes_store(folder: String, inputsuffix: String, outputsuffix: String): Unit = {
