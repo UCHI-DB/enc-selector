@@ -40,7 +40,7 @@ object TPCHSchema {
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "comment")
   )
 
-  val partSchema = new MessageType("part",
+  val partSchema = new MessageType("parts",
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "part_key"),
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "name"),
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "mfgr"),

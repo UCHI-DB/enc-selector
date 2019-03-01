@@ -71,6 +71,6 @@ public class TPCHColumnMaterialize {
                     }
                 }
             }
-        }, TPCHSchema.lineitemSchema()).work(args[0]);
+        }, TPCHSchema.partSchema()).work(args[0]);
     }
 }
