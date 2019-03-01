@@ -208,21 +208,21 @@ object EncodeTPCH extends App {
 
   def ddes_speed(folder: String, inputsuffix: String, outputsuffix: String): Unit = {
     var lineitemSchema = TPCHSchema.lineitemSchema
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(0).toString, Encoding.RLE)
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(1).toString, Encoding.BIT_PACKED)
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(0).toString, Encoding.DELTA_BINARY_PACKED)
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(1).toString, Encoding.DELTA_BINARY_PACKED)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(2).toString, Encoding.DELTA_BINARY_PACKED)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(3).toString, Encoding.DELTA_BINARY_PACKED)
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(4).toString, Encoding.PLAIN)
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(4).toString, Encoding.PLAIN_DICTIONARY)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(5).toString, Encoding.PLAIN)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(6).toString, Encoding.PLAIN_DICTIONARY)
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(7).toString, Encoding.PLAIN_DICTIONARY)
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(8).toString, Encoding.PLAIN)
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(9).toString, Encoding.PLAIN)
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(10).toString, Encoding.PLAIN) // GZIP
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(11).toString, Encoding.PLAIN) // GZIP
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(12).toString, Encoding.PLAIN) // GZIP
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(13).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY) // GZIP
-    EncContext.encoding.get().put(lineitemSchema.getColumns().get(14).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY) // GZIP
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(8).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(9).toString, Encoding.PLAIN_DICTIONARY)
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(10).toString, Encoding.PLAIN_DICTIONARY) // GZIP
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(11).toString, Encoding.PLAIN_DICTIONARY) // GZIP
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(12).toString, Encoding.PLAIN_DICTIONARY) // GZIP
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(13).toString, Encoding.PLAIN_DICTIONARY) // GZIP
+    EncContext.encoding.get().put(lineitemSchema.getColumns().get(14).toString, Encoding.PLAIN_DICTIONARY) // GZIP
     EncContext.encoding.get().put(lineitemSchema.getColumns().get(15).toString, Encoding.DELTA_LENGTH_BYTE_ARRAY) // GZIP
 
     EncContext.context.get().put(lineitemSchema.getColumns().get(0).toString, Array("28", "180000000"))
