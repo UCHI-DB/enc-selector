@@ -1,15 +1,20 @@
-SELECT size.value size,
-       plain.value plain,
-       dict.value dict,
+SELECT size.value   size,
+       num.value    num,
+       plain.value  plain,
+       dict.value   dict,
        plaing.value plaing,
-       dictg.value dictg,
+       dictg.value  dictg,
        plains.value plains,
-       dicts.value dicts
+       dicts.value  dicts
 FROM col_data cd
        JOIN
      feature size ON size.col_id = cd.id
        AND size.type = 'EncFileSize'
        AND size.name = 'PLAIN_file_size'
+       JOIN
+     feature num on num.col_id = cd.id
+       AND num.type = 'Sparsity'
+       AND num.name = 'count'
        JOIN
      feature dict ON dict.col_id = cd.id
        AND dict.type = 'EncTimeUsage'

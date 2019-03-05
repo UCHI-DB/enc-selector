@@ -1,28 +1,22 @@
-SELECT size.value      size,
-       num.value       num,
-       plain.value     plain,
-       plaing.value    plaing,
-       plaingsz.value  plaingsz,
-       plains.value    plains,
-       plainssz.value  plainssz,
-       dict.value      dict,
-       dictsz.value    dictsz,
-       delta.value     delta,
-       deltasz.value   deltasz,
-       deltal.value    deltal,
-       deltalsz.value  deltalsz,
-       dictg.value     dictg,
-       dictgsz.value   dictgsz,
-       deltag.value    deltag,
-       deltagsz.value  deltagsz,
-       deltalg.value   deltalg,
-       deltalgsz.value deltalgsz,
-       dicts.value     dicts,
-       dictssz.value   dictssz,
-       deltas.value    deltas,
-       deltassz.value  deltassz,
-       deltals.value   deltals,
-       deltalssz.value deltalssz
+SELECT cd.name,
+       size.value                   size,
+       num.value / dict.value       dictspeed,
+       num.value / delta.value      deltapeed,
+       num.value / deltal.value     deltaspeed,
+       num.value / plain.value      plainspeed,
+       num.value / dictg.value      dictgspeed,
+       num.value / deltag.value     deltagspeed,
+       num.value / deltalg.value    deltalgspeed,
+       num.value / plaing.value     plaingspeed,
+       dictsz.value / size.value    dictsz,
+
+       deltasz.value / size.value   deltasz,
+       deltalsz.value / size.value  deltalsz,
+       dictgsz.value / size.value   dictgsz,
+       deltagsz.value / size.value  deltagsz,
+       deltalgsz.value / size.value deltalgsz,
+       size.value / size.value      plainsz,
+       plaingsz.value / size.value  plaingsz
 FROM col_data cd
        join
      feature num on num.col_id = cd.id
@@ -128,3 +122,4 @@ WHERE cd.data_type = 'STRING'
   AND size.value > 10000000
   AND cd.parent_id IS NULL
   AND cd.id < 15191
+  AND deltalsz.value < dictsz.value

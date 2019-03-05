@@ -1,34 +1,21 @@
-SELECT size.value       size,
-       num.value        num,
-       plain.value      plain,
-       plaing.value     plaing,
-       plaingsz.value   plaingsz,
-       plains.value     plains,
-       plainssz.value   plainssz,
-       bp.value         bp,
-       bpsz.value       bpsz,
-       rle.value        rle,
-       rlesz.value      rlesz,
-       dict.value       dict,
-       dictsz.value     dictsz,
-       deltabp.value    deltabp,
-       deltabpsz.value  deltabpsz,
-       bpg.value        bpg,
-       bpgsz.value      bpgsz,
-       rleg.value       rleg,
-       rlegsz.value     rlegsz,
-       dictg.value      dictg,
-       dictgsz.value    dictgsz,
-       deltabpg.value   deltabpg,
-       deltabpgsz.value deltabpgsz,
-       bps.value        bps,
-       bpssz.value      bpssz,
-       rles.value       rles,
-       rlessz.value     rlessz,
-       dicts.value      dicts,
-       dictssz.value    dictssz,
-       deltabps.value   deltabps,
-       deltabpssz.value deltabpssz
+SELECT cd.name,
+       size.value                   size,
+       num.value / bp.value         bpspeed,
+       num.value / bpg.value         bpgspeed,
+       num.value / rle.value        rlespeed,
+       num.value / rleg.value        rlegspeed,
+       num.value / dict.value       dictspeed,
+       num.value / dictg.value       dictgspeed,
+       num.value / deltabp.value    dbpspeed,
+       num.value / deltabpg.value    dbpgspeed,
+       bpsz.value / size.value      bpsz,
+       rlesz.value / size.value     rlesz,
+       dictsz.value / size.value    dictsz,
+       deltabpsz.value / size.value deltabpsz,
+       bpgsz.value / size.value      bpgsz,
+       rlegsz.value / size.value     rlegsz,
+       dictgsz.value / size.value    dictgsz,
+       deltabpgsz.value / size.value deltabpgsz
 FROM col_data cd
        JOIN
      feature num on num.col_id = cd.id
@@ -158,3 +145,5 @@ WHERE cd.data_type = 'INTEGER'
   AND size.value > 5000000
   AND cd.parent_id is NULL
   AND cd.id < 15191
+  AND deltabpsz.value < rlesz.value
+  and deltabpsz.value < dictsz.value

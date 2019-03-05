@@ -1,4 +1,5 @@
 SELECT size.value size,
+       num.value num,
        plain.value plain,
        dict.value dict,
        bp.value bp,
@@ -19,6 +20,10 @@ FROM col_data cd
      feature size ON size.col_id = cd.id
        AND size.type = 'EncFileSize'
        AND size.name = 'PLAIN_file_size'
+  JOIN
+  feature num on num.col_id = cd.id
+  AND num.type = 'Sparsity'
+  and num.name = 'count'
        JOIN
      feature plain ON plain.col_id = cd.id
        AND plain.type = 'EncTimeUsage'
