@@ -20,7 +20,7 @@ public class ParquetReaderHelperTest {
     public void testRead() throws Exception {
         URI input = new File("src/test/resource/query_select/customer_100.parquet").toURI();
 
-        MemBufferPrimitiveConverter converter = new MemBufferPrimitiveConverter();
+        MemBufferPrimitiveConverter converter = new MemBufferPrimitiveConverter(null);
 
         ParquetReaderHelper.read(input,
                 new EncReaderProcessor() {

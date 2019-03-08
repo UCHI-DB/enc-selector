@@ -27,60 +27,20 @@ import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.io.api.PrimitiveConverter;
 import org.apache.parquet.schema.PrimitiveType;
 
-public class PipePrimitiveConverter extends PrimitiveConverter {
-
-    private Dictionary dictionary;
-
-    private PrimitiveType type;
+public class PipePrimitiveConverter extends DictionaryPrimitiveConverter {
 
     private Object value;
 
     private PrimitiveConverter next = NonePrimitiveConverter.INSTANCE;
 
     public PipePrimitiveConverter(PrimitiveType type) {
-        this.type = type;
+        super(type);
     }
 
     public void setNext(PrimitiveConverter next) {
         if(next == null)
             throw new IllegalArgumentException("Next is null");
         this.next = next;
-    }
-
-    @Override
-    public boolean hasDictionarySupport() {
-        return dictionary != null;
-    }
-
-    @Override
-    public void setDictionary(Dictionary dictionary) {
-        this.dictionary = dictionary;
-    }
-
-    @Override
-    public void addValueFromDictionary(int dictionaryId) {
-        switch (this.type.getPrimitiveTypeName()) {
-            case BINARY:
-                addBinary(this.dictionary.decodeToBinary(dictionaryId));
-                break;
-            case FLOAT:
-                addFloat(this.dictionary.decodeToFloat(dictionaryId));
-                break;
-            case DOUBLE:
-                addDouble(this.dictionary.decodeToDouble(dictionaryId));
-                break;
-            case INT32:
-                addInt(this.dictionary.decodeToInt(dictionaryId));
-                break;
-            case INT64:
-                addLong(this.dictionary.decodeToLong(dictionaryId));
-                break;
-            case BOOLEAN:
-                addBoolean(this.dictionary.decodeToBoolean(dictionaryId));
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 
     @Override

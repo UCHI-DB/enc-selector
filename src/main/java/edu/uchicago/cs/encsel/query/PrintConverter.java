@@ -14,10 +14,11 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
 package edu.uchicago.cs.encsel.query;
@@ -25,35 +26,41 @@ package edu.uchicago.cs.encsel.query;
 import org.apache.parquet.column.Dictionary;
 import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.io.api.PrimitiveConverter;
+import org.apache.parquet.schema.PrimitiveType;
 
-public class NonePrimitiveConverter extends PrimitiveConverter {
+public class PrintConverter extends DictionaryPrimitiveConverter {
 
-    public static NonePrimitiveConverter INSTANCE = new NonePrimitiveConverter();
-
-    public NonePrimitiveConverter() {
+    public PrintConverter(PrimitiveType type) {
+        super(type);
     }
 
     @Override
     public void addBinary(Binary value) {
+        System.out.println(value.toStringUsingUTF8());
     }
 
     @Override
     public void addBoolean(boolean value) {
+        System.out.println(value);
     }
 
     @Override
     public void addDouble(double value) {
+        System.out.println(value);
     }
 
     @Override
     public void addFloat(float value) {
+        System.out.println(value);
     }
 
     @Override
     public void addInt(int value) {
+        System.out.println(value);
     }
 
     @Override
     public void addLong(long value) {
+        System.out.println(value);
     }
 }

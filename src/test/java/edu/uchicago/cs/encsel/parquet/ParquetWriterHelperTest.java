@@ -23,10 +23,16 @@ package edu.uchicago.cs.encsel.parquet;
 
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
+import edu.uchicago.cs.encsel.query.MemBufferPrimitiveConverter;
+import edu.uchicago.cs.encsel.query.PrintConverter;
 import org.apache.parquet.VersionParser;
+import org.apache.parquet.column.ColumnDescriptor;
+import org.apache.parquet.column.impl.ColumnReaderImpl;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.hadoop.Footer;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
+import org.apache.parquet.schema.PrimitiveType;
+import org.apache.parquet.schema.Type;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,7 +74,7 @@ public class ParquetWriterHelperTest {
     }
 
     @Test
-    public void testWriteInt() throws IOException, VersionParser.VersionParseException {
+    public void testWriteInt() throws Exception {
         String file = "src/test/resource/coldata/test_col_int.data";
 
         ParquetWriterHelper.singleColumnInt(new File(file).toURI(), IntEncoding.DICT);
@@ -107,6 +113,34 @@ public class ParquetWriterHelperTest {
                     }
                 });
 
+        MemBufferPrimitiveConverter converter = new MemBufferPrimitiveConverter(
+                new PrimitiveType(Type.Repetition.REQUIRED, PrimitiveType.PrimitiveTypeName.INT32, "value"));
+
+        // Check if data is correct
+        ParquetReaderHelper.read(new File(
+                        "src/test/resource/coldata/test_col_int.data.BP").toURI(),
+                new EncReaderProcessor() {
+
+                    @Override
+                    public void processRowGroup(VersionParser.ParsedVersion version,
+                                                BlockMetaData meta, PageReadStore rowGroup) {
+                        ColumnDescriptor descriptor = this.schema.getColumns().get(0);
+                        ColumnReaderImpl reader = new ColumnReaderImpl(descriptor, rowGroup.getPageReader(descriptor),
+                                converter, version);
+                        for (int i = 0; i < reader.getTotalValueCount(); i++) {
+                            reader.writeCurrentValueToConverter();
+                            reader.consume();
+                        }
+                    }
+
+                    @Override
+                    public int expectNumThread() {
+                        return 0;
+                    }
+                });
+
+        assertEquals(13, converter.getBuffer().size());
+
         ParquetReaderHelper.read(new File(
                         "src/test/resource/coldata/test_col_int.data.RLE").toURI(),
                 new ReaderProcessor() {
@@ -127,6 +161,33 @@ public class ParquetWriterHelperTest {
                         return 1;
                     }
                 });
+
+        MemBufferPrimitiveConverter converter2 = new MemBufferPrimitiveConverter(
+                new PrimitiveType(Type.Repetition.REQUIRED, PrimitiveType.PrimitiveTypeName.INT32, "value"));
+        // Check if data is correct
+        ParquetReaderHelper.read(new File(
+                        "src/test/resource/coldata/test_col_int.data.RLE").toURI(),
+                new EncReaderProcessor() {
+
+                    @Override
+                    public void processRowGroup(VersionParser.ParsedVersion version,
+                                                BlockMetaData meta, PageReadStore rowGroup) {
+                        ColumnDescriptor descriptor = this.schema.getColumns().get(0);
+                        ColumnReaderImpl reader = new ColumnReaderImpl(descriptor, rowGroup.getPageReader(descriptor),
+                                converter2, version);
+                        for (int i = 0; i < reader.getTotalValueCount(); i++) {
+                            reader.writeCurrentValueToConverter();
+                            reader.consume();
+                        }
+                    }
+
+                    @Override
+                    public int expectNumThread() {
+                        return 0;
+                    }
+                });
+
+        assertEquals(13, converter2.getBuffer().size());
     }
 
     @Test

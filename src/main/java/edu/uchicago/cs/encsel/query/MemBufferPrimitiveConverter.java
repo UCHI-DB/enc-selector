@@ -3,12 +3,12 @@ package edu.uchicago.cs.encsel.query;
 import org.apache.parquet.column.Dictionary;
 import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.io.api.PrimitiveConverter;
+import org.apache.parquet.schema.PrimitiveType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemBufferPrimitiveConverter extends PrimitiveConverter {
-    private Dictionary dictionary;
+public class MemBufferPrimitiveConverter extends DictionaryPrimitiveConverter {
 
     private List<Object> buffer = new ArrayList<>();
 
@@ -20,17 +20,8 @@ public class MemBufferPrimitiveConverter extends PrimitiveConverter {
         this.buffer = buffer;
     }
 
-    public MemBufferPrimitiveConverter() {
-    }
-
-    @Override
-    public boolean hasDictionarySupport() {
-        return dictionary != null;
-    }
-
-    @Override
-    public void setDictionary(Dictionary dictionary) {
-        this.dictionary = dictionary;
+    public MemBufferPrimitiveConverter(PrimitiveType type) {
+        super(type);
     }
 
     @Override
