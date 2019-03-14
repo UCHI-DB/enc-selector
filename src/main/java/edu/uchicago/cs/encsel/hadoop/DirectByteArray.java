@@ -22,47 +22,82 @@
 
 package edu.uchicago.cs.encsel.hadoop;
 
-import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
+import sun.misc.Cleaner;
 import sun.misc.Unsafe;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 
 class DirectByteArray {
-
-    Unsafe unsafe = Unsafe.getUnsafe();
 
     private final long startIndex;
 
     private long size;
 
+    private final Cleaner cleaner;
+
+    static Unsafe unsafe = getUnsafe();
+
+    private static Unsafe getUnsafe() {
+        try {
+            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+            f.setAccessible(true);
+            return (Unsafe) f.get(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public DirectByteArray(long size) {
         this.size = size;
         startIndex = unsafe.allocateMemory(size);
-        unsafe.setMemory(startIndex, size, (byte) 0);
+//        unsafe.setMemory(startIndex, size, (byte) 0);
+
+        cleaner = Cleaner.create(this, new Deallocator());
     }
 
     public void set(long index, byte value) {
         if (index >= size)
             throw new ArrayIndexOutOfBoundsException();
-        unsafe.putByte(index, value);
+        unsafe.putByte(startIndex + index, value);
     }
 
     public int get(long index) {
         if (index >= size)
             throw new ArrayIndexOutOfBoundsException();
-        return unsafe.getByte(index);
+        return unsafe.getByte(startIndex + index);
     }
 
     public void destroy() {
         unsafe.freeMemory(startIndex);
     }
 
-    public int copy(long index, byte[] buffer, int offset, int length) {
+    protected int copylen(long index, int length) {
         int copylen = length;
-        if (index + length >= size)
-            copylen = (int) (size - 1 - index);
-        unsafe.copyMemory(null, startIndex + index, buffer, Unsafe.ARRAY_BYTE_BASE_OFFSET + offset, copylen);
+        if (index >= size) {
+            return -1;
+        }
+        if (index + length > size)
+            copylen = (int) (size - index);
+        return copylen;
+    }
+
+    public int read(long index, byte[] buffer, int offset, int length) {
+        int copylen = copylen(index, length);
+        if (copylen <= 0)
+            return copylen;
+        unsafe.copyMemory(null, startIndex + index,
+                buffer, unsafe.arrayBaseOffset(byte[].class) + offset, copylen);
+        return copylen;
+    }
+
+    public int write(long index, byte[] buffer, int offset, int length) {
+        int copylen = copylen(index, length);
+        if (copylen <= 0)
+            return copylen;
+        unsafe.copyMemory(buffer, unsafe.arrayBaseOffset(byte[].class) + offset,
+                null, startIndex + index, copylen);
         return copylen;
     }
 
@@ -71,13 +106,25 @@ class DirectByteArray {
     }
 
     public void from(InputStream from, long size) throws IOException {
-        if(size>this.size)
+        if (size > this.size)
             throw new ArrayIndexOutOfBoundsException();
         byte[] buffer = new byte[1000000];
         long position = 0;
         int readcount = 0;
-        while((readcount = from.read(buffer))>0) {
-            copy(position, buffer,0,readcount);
+        while ((readcount = from.read(buffer)) > 0) {
+            write(position, buffer, 0, readcount);
+            position += readcount;
         }
+    }
+
+    private class Deallocator implements Runnable {
+
+        private Deallocator() {
+        }
+
+        public void run() {
+            DirectByteArray.this.destroy();
+        }
+
     }
 }

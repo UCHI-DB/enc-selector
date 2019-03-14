@@ -26,15 +26,15 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.apache.hadoop.util.Progressable;
-import org.apache.xmlbeans.impl.xb.ltgfmt.FileDesc;
 
 import java.io.EOFException;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.ref.PhantomReference;
+import java.lang.ref.SoftReference;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public class MemoryFileSystem extends FileSystem {
 
     static final URI NAME = URI.create("memory:///");
 
-    private RawLocalFileSystem inner = new RawLocalFileSystem();
+    private RawLocalFileSystem inner;
 
     private Map<Path, DirectByteArray> files = new HashMap<>();
 
@@ -54,14 +54,17 @@ public class MemoryFileSystem extends FileSystem {
     private Map<Path, FileStatus> statuses = new HashMap<>();
 
     public MemoryFileSystem() {
+        inner = new RawLocalFileSystem();
     }
 
     @Override
-    public void initialize(URI uri, Configuration conf) throws IOException {
-        super.initialize(uri, conf);
+    public void initialize(URI name, Configuration conf) throws IOException {
+        super.initialize(name, conf);
         setConf(conf);
+        if (inner.getConf() == null) {
+            inner.initialize(name, conf);
+        }
     }
-
 
     @Override
     public URI getUri() {
@@ -126,7 +129,7 @@ public class MemoryFileSystem extends FileSystem {
         public int read(byte[] b, int off, int len) throws IOException {
             // parameter check
             validatePositionedReadArgs(position, b, off, len);
-            int value = content.copy(position, b, off, len);
+            int value = content.read(position, b, off, len);
             if (value > 0) {
                 this.position += value;
                 statistics.incrementBytesRead(value);
@@ -142,7 +145,7 @@ public class MemoryFileSystem extends FileSystem {
             if (len == 0) {
                 return 0;
             }
-            int value = content.copy(position, b, off, len);
+            int value = content.read(position, b, off, len);
             if (value > 0) {
                 statistics.incrementBytesRead(value);
             }
@@ -172,11 +175,13 @@ public class MemoryFileSystem extends FileSystem {
         DirectByteArray content = files.get(f);
         FileDescriptor fd = fds.get(f);
         return new FSDataInputStream(new BufferedFSInputStream(
-                new MemoryFSDataInputStream(fd,content), bufferSize));
+                new MemoryFSDataInputStream(fd, content), bufferSize));
     }
 
     @Override
-    public FSDataOutputStream create(Path f, FsPermission permission, boolean overwrite, int bufferSize, short replication, long blockSize, Progressable progress) throws IOException {
+    public FSDataOutputStream create(Path f, FsPermission permission, boolean overwrite,
+                                     int bufferSize, short replication, long blockSize,
+                                     Progressable progress) throws IOException {
         return null;
     }
 
@@ -197,6 +202,7 @@ public class MemoryFileSystem extends FileSystem {
 
     /**
      * Does not support directory for now
+     *
      * @param f
      * @return
      * @throws FileNotFoundException
@@ -205,7 +211,7 @@ public class MemoryFileSystem extends FileSystem {
     @Override
     public FileStatus[] listStatus(Path f) throws FileNotFoundException, IOException {
         FileStatus fs = getFileStatus(f);
-        if(fs == null) {
+        if (fs == null) {
             throw new FileNotFoundException("File " + f + " does not exist");
         }
         return new FileStatus[]{fs};
@@ -228,18 +234,18 @@ public class MemoryFileSystem extends FileSystem {
 
     private void loadFromLocal(Path memoryPath) throws IOException, URISyntaxException {
         URI memoryUri = memoryPath.toUri();
-        URI fileUri = new URI("file://"+memoryUri.getPath());
+        URI fileUri = new URI("file://" + memoryUri.getPath());
         Path localPath = new Path(fileUri);
-        if(inner.exists(localPath)) {
+        if (inner.exists(localPath)) {
             FileStatus fs = inner.getFileStatus(localPath);
-
-            statuses.put(memoryPath, fs);
+            FileStatus memFs = new FileStatus(fs.getLen(), fs.isDirectory(),
+                    fs.getReplication(), fs.getBlockSize(), fs.getModificationTime(), memoryPath);
+            statuses.put(memoryPath, memFs);
             // Load the file into memory
             DirectByteArray content = new DirectByteArray(fs.getLen());
-
-            try(FSDataInputStream readStream = inner.open(localPath)) {
+            try (FSDataInputStream readStream = inner.open(localPath)) {
                 content.from(readStream, fs.getLen());
-               fds.put(memoryPath,readStream.getFileDescriptor());
+                fds.put(memoryPath, readStream.getFileDescriptor());
             }
 
             files.put(memoryPath, content);
@@ -248,7 +254,7 @@ public class MemoryFileSystem extends FileSystem {
 
     @Override
     public FileStatus getFileStatus(Path f) throws IOException {
-        if(statuses.containsKey(f)) {
+        if (statuses.containsKey(f)) {
             return statuses.get(f);
         }
         // Check file system to load the file
@@ -258,7 +264,7 @@ public class MemoryFileSystem extends FileSystem {
             throw new RuntimeException();
         }
         FileStatus fs = statuses.get(f);
-        if(fs == null) {
+        if (fs == null) {
             throw new FileNotFoundException();
         }
         return fs;
