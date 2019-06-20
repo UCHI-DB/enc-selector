@@ -31,7 +31,7 @@ object SplitSubDoubleColumn extends App {
 
   val persist = new JPAPersistence
 
-  val dcols = persist.em.createQuery("select col from Column col where col.parentWrapper is not null and col.dataType = :dt and col.id >= 63451",
+  val dcols = persist.em.createQuery("select col from Column col where col.parentWrapper is not null and col.dataType = :dt",
     classOf[ColumnWrapper]).setParameter("dt", DataType.DOUBLE).getResultList.asScala
 
 

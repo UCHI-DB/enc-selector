@@ -343,7 +343,7 @@ object MineColumn {
       })
       val childColumns = (0 to 1).map(pi => {
         val col = new Column(null, start + pi, String.valueOf(start + pi), DataType.INTEGER)
-        col.colFile = FileUtils.addExtension(column.colFile, pi.toString)
+        col.colFile = FileUtils.addExtension(column.colFile, (start + pi).toString)
         col.parent = column
         col
       }).toList
