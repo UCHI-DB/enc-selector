@@ -30,7 +30,8 @@ object SplitDoubleColumn extends App {
 
   val persist = new JPAPersistence
 
-  val dcols = persist.em.createQuery("SELECT d FROM Column d WHERE d.dataType = :dt ORDER BY d.id ASC", classOf[ColumnWrapper]).setParameter("dt", DataType.DOUBLE).getResultList.asScala
+  val dcols = persist.em.createQuery("SELECT d FROM Column d WHERE d.dataType = :dt ORDER BY d.id ASC",
+    classOf[ColumnWrapper]).setParameter("dt", DataType.DOUBLE).getResultList.asScala
 
 
   dcols.foreach(col => {

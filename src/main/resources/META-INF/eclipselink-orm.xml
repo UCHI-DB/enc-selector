@@ -49,6 +49,9 @@
             <basic name="colIndex">
                 <column name="idx"/>
             </basic>
+            <basic name="numChildren">
+                <column name="num_children"/>
+            </basic>
 
             <basic name="colName">
                 <column name="name"/>

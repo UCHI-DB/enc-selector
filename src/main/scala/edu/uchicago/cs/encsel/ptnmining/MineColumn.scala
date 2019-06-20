@@ -296,6 +296,67 @@ object MineColumn {
       outputs.foreach(_.close)
     }
   }
+
+  def splitSubDouble(column: Column): Seq[Column] = {
+    if (column.dataType != DataType.DOUBLE)
+      throw new IllegalArgumentException()
+
+    val start = column.parent.numChildren
+
+    val outputs = (0 to 1).map(pi => FileUtils.addExtension(column.colFile, (start + pi).toString)).toList
+      .map(col => new PrintWriter(new FileOutputStream(new File(col))))
+    val types = Array.fill(2)(DataType.INTEGER)
+
+    val source = Source.fromFile(column.colFile)
+    try {
+      source.getLines().map(_.trim).foreach(line => {
+        if (line.nonEmpty) {
+          // Extract pieces
+          val split = line.split("\\.")
+          val data = (split.length match {
+            case 2 => {
+              (split(0), split(1))
+            }
+            case 1 => {
+              (split(0), "0")
+            }
+            case _ => throw new IllegalArgumentException
+          }).productIterator.toList
+          // Update type
+          for (i <- 0 to 1) {
+            if (types(i) == DataType.INTEGER) {
+              types(i) = try {
+                data(i).toString.toInt
+                DataType.INTEGER
+              } catch {
+                case e: NumberFormatException =>
+                  DataType.LONG
+              }
+            }
+          }
+          outputs(0).println(data(0))
+          outputs(1).println(data(1))
+        } else {
+          // Output empty line for empty line
+          outputs.foreach(_.println(""))
+        }
+      })
+      val childColumns = (0 to 1).map(pi => {
+        val col = new Column(null, start + pi, String.valueOf(start + pi), DataType.INTEGER)
+        col.colFile = FileUtils.addExtension(column.colFile, pi.toString)
+        col.parent = column
+        col
+      }).toList
+
+      column.parent.numChildren += 2
+
+      childColumns
+
+    } finally {
+      source.close
+      outputs.foreach(_.close)
+    }
+  }
 }
 
 /**

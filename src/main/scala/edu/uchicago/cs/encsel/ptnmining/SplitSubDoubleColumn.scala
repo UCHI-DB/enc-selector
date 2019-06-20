@@ -14,36 +14,31 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License,
+ * under the License.
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
- *
  */
 
 package edu.uchicago.cs.encsel.ptnmining
 
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 
 import scala.collection.JavaConverters._
 
-object EncodeAllSubColumn extends App {
+object SplitSubDoubleColumn extends App {
 
   val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL AND c.dataType = :dt",
-    classOf[ColumnWrapper]).setParameter("dt", DataType.BOOLEAN).getResultList.asScala
-  columns.foreach(colw => {
-    println(colw.id)
-    colw.replaceFeatures(ParquetEncFileSize.extract(colw))
-    persist.save(Seq(colw))
+
+  val dcols = persist.em.createQuery("select col from Column col where col.parent is not null and col.dataType = :dt",
+    classOf[ColumnWrapper]).setParameter("dt", DataType.DOUBLE).getResultList.asScala
+
+
+  dcols.foreach(col => {
+    val sub = MineColumn.splitSubDouble(col)
+    if (!sub.isEmpty) {
+      persist.save(sub)
+    }
   })
-}
-
-object EncodeSingleSubColumn extends App {
-  val persist = new JPAPersistence
-  val column = persist.find(args(0).toInt)
-  column.replaceFeatures(ParquetEncFileSize.extract(column))
-  persist.save(Seq(column))
 }
