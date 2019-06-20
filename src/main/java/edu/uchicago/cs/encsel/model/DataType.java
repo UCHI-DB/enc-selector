@@ -28,7 +28,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.Comparator;
 
 /**
- * @author Cathy
  */
 public enum DataType {
     INTEGER, LONG, FLOAT, DOUBLE, STRING, BOOLEAN;

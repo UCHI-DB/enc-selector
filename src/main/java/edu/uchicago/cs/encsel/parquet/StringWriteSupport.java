@@ -38,9 +38,9 @@ import java.util.Map;
 
 public class StringWriteSupport extends WriteSupport<List<String>> {
     Logger logger = LoggerFactory.getLogger(getClass());
-    MessageType schema;
-    RecordConsumer recordConsumer;
-    List<ColumnDescriptor> cols;
+    protected MessageType schema;
+    protected RecordConsumer recordConsumer;
+    protected List<ColumnDescriptor> cols;
 
     public StringWriteSupport(MessageType schema) {
         this.schema = schema;

@@ -59,18 +59,4 @@ object MineSingleColumn extends App {
   println("%d:%s:%s".format(result._1, result._2, result._3))
 }
 
-object MineSingleLocalFile extends App {
-  val file = new File("/home/harper/pattern/test").toURI
-  val pattern = patternFromFile(file)
-  val numc = numChildren(pattern)
-  val valid = numc > 1 && numc <= MAX_COLUMN
-  val regex = new GenRegexVisitor
-  pattern.visit(regex)
-  println("%s:%s".format(regex.get, valid))
-  if (valid) {
-    val col = new Column(null, -1, "demo", DataType.STRING)
-    col.colFile = file
-    val subcols = MineColumn.split(col, pattern)
-    println(subcols.size)
-  }
-}
+
