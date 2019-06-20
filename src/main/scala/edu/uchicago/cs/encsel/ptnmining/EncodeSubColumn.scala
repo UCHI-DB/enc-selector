@@ -23,6 +23,7 @@
 
 package edu.uchicago.cs.encsel.ptnmining
 
+import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
@@ -33,10 +34,11 @@ object EncodeAllSubColumn extends App {
 
   val persist = new JPAPersistence
   val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL AND c.dataType = :dt",
-    classOf[ColumnWrapper]).setParameter("dt", DataType.BOOLEAN).getResultList.asScala
+    classOf[ColumnWrapper]).setParameter("dt", DataType.INTEGER).getResultList.asScala
   columns.foreach(colw => {
     println(colw.id)
     colw.replaceFeatures(ParquetEncFileSize.extract(colw))
+    colw.replaceFeatures(ParquetCompressFileSize.extract(colw))
     persist.save(Seq(colw))
   })
 }
