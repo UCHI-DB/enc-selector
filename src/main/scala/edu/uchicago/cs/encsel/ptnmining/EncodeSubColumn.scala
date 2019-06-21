@@ -33,7 +33,7 @@ import scala.collection.JavaConverters._
 object EncodeAllSubColumn extends App {
 
   val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL AND c.dataType = :dt",
+  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL AND c.dataType = :dt and c.id >= 47970",
     classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
   columns.foreach(colw => {
     println(colw.id)
