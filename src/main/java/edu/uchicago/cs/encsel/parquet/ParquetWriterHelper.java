@@ -184,7 +184,7 @@ public class ParquetWriterHelper {
                             list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
-                            treeSet.add(Binary.fromString(list[index[idx]]));
+                            treeSet.add(Binary.fromString(list[index[idx]].trim()));
                         }
                         br.close();
                     }
@@ -218,7 +218,7 @@ public class ParquetWriterHelper {
                             list = line.split("\\|",-1);
                             if (line.isEmpty())
                                 continue;
-                            FtreeSet.add(Binary.fromString(list[index[idx]]));
+                            FtreeSet.add(Binary.fromString(list[index[idx]].trim()));
                         }
                         br.close();
                     }

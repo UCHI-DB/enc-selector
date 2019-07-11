@@ -110,7 +110,32 @@ object TPCHSchema {
     new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "comment")
   )
 
+  val customeraddSchema = new MessageType("customeradd",
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "ca_address_sk"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "ca_address_id"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "ca_street_number"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_street_name"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_street_type"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_suite_number"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_city"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_county"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_state"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "ca_zip"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_country"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "ca_gmt_offset"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_location_type")
+  )
+
+  val customeraddmergedSchema = new MessageType("customeraddmerged",
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.INT32, "ca_address_sk"),
+    new PrimitiveType(Repetition.REQUIRED, PrimitiveTypeName.BINARY, "ca_address_id"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_add"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "ca_gmt_offset"),
+    new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BINARY, "ca_location_type")
+  )
+
   val schemas = Array(customerSchema, nationSchema,
     regionSchema, supplierSchema, partSchema,
-    partsuppSchema, lineitemSchema, orderSchema)
+    partsuppSchema, lineitemSchema, orderSchema,
+    customeraddSchema, customeraddmergedSchema)
 }

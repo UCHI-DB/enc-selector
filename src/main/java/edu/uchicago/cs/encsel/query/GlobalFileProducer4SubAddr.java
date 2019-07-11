@@ -23,19 +23,19 @@
 
 package edu.uchicago.cs.encsel.query;
 
+
 import edu.uchicago.cs.encsel.parquet.EncContext;
 import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
 import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
+import org.apache.parquet.column.Encoding;
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema;
 import org.apache.parquet.VersionParser;
-import org.apache.parquet.column.Encoding;
-import org.apache.parquet.io.api.Binary;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import java.io.File;
 import java.io.IOException;
 
-public class GlobalFileProducer {
+public class GlobalFileProducer4SubAddr {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
         args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
@@ -49,17 +49,21 @@ public class GlobalFileProducer {
         String order = args[3];
         Boolean ordered = (order.equalsIgnoreCase("true") || order.equals("1"));
 
-        String lineitem = "../tpch-generator/dbgen/lineitem";
+        String addr = "../datasets/tpc-ds/customer_address.dat";
 
-        EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
-        EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{6,12});
-        Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File(lineitem+".tbl").toURI(),col,TPCHSchema.lineitemSchema(),ordered, 0);
-        System.out.println(dictMap);
-        EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), dictMap);
+        int[] indices = {3, 4, 5, 6, 7, 8, 10};
+        for(int index: indices){
 
-        ParquetWriterHelper.write(new File(lineitem+".tbl").toURI(), TPCHSchema.lineitemSchema(),
-                new File(lineitem+".parquet").toURI(), "\\|", false, compre);
-        long colsize = ParquetReaderHelper.getColSize(new File(lineitem+".parquet").toURI(), col);
+            EncContext.encoding.get().put(TPCHSchema.customeraddSchema().getColumns().get(index).toString(), Encoding.valueOf(enc));
+            Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File(addr).toURI(),index,TPCHSchema.customeraddSchema(),ordered, 0);
+            System.out.println(dictMap);
+            EncContext.globalDict.get().put(TPCHSchema.customeraddSchema().getColumns().get(index).toString(), dictMap);
+        }
+
+
+        ParquetWriterHelper.write(new File(addr).toURI(), TPCHSchema.customeraddSchema(),
+                new File(addr+".parquet").toURI(), "\\|", false, compre);
+        long colsize = ParquetReaderHelper.getColSize(new File(addr+".parquet").toURI(), col);
         //System.out.println("col " + col + " size: "+colsize);
     }
 }

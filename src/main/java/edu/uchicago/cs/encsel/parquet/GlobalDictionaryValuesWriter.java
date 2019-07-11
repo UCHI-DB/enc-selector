@@ -96,8 +96,8 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
             int id = binaryDictionaryContent.getInt(v);
             //System.out.println("Local:"+ v.toStringUsingUTF8() + " " +id);
             if (id == -1) {
-                id = binaryDictionaryContent.size();
-                binaryDictionaryContent.put(v.copy(), id);
+                //id = binaryDictionaryContent.size();
+                binaryDictionaryContent.put(v.copy(), globalDict.get(v));
                 // length as int (4 bytes) + actual bytes
                 dictionaryByteSize += 4 + v.length();
             }
@@ -109,13 +109,15 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public DictionaryPage toDictPageAndClose() {
             if (lastUsedDictionarySize > 0) {
                 // return a dictionary only if we actually used it
+                lastUsedDictionarySize = globalDict.size();
                 PlainValuesWriter dictionaryEncoder = new PlainValuesWriter(lastUsedDictionaryByteSize, maxDictionaryByteSize, allocator);
-                Iterator<Binary> binaryIterator = binaryDictionaryContent.keySet().iterator();
+                Iterator<Binary> binaryIterator = globalDict.keySet().iterator();
                 // write only the part of the dict that we used
-                for (int i = 0; i < lastUsedDictionarySize; i++) {
+                for (int i = 0; i < globalDict.size(); i++) {
                     Binary entry = binaryIterator.next();
                     dictionaryEncoder.writeBytes(entry);
                 }
+                System.out.println("lastUsedDictionarySize:\t" + lastUsedDictionarySize);
                 return dictPage(dictionaryEncoder);
             }
             return null;
@@ -123,7 +125,7 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
 
         @Override
         public int getDictionarySize() {
-            return binaryDictionaryContent.size();
+            return globalDict.size();
         }
 
         @Override
@@ -180,11 +182,13 @@ public abstract class GlobalDictionaryValuesWriter extends DictionaryValuesWrite
         public DictionaryPage toDictPageAndClose() {
             if (lastUsedDictionarySize > 0) {
                 // return a dictionary only if we actually used it
+                lastUsedDictionarySize = globalDict.size();
                 FixedLenByteArrayPlainValuesWriter dictionaryEncoder = new FixedLenByteArrayPlainValuesWriter(length, lastUsedDictionaryByteSize, maxDictionaryByteSize, allocator);
-                Iterator<Binary> binaryIterator = binaryDictionaryContent.keySet().iterator();
+                Iterator<Binary> binaryIterator = globalDict.keySet().iterator();
                 // write only the part of the dict that we used
-                for (int i = 0; i < lastUsedDictionarySize; i++) {
+                for (int i = 0; i < globalDict.size(); i++) {
                     Binary entry = binaryIterator.next();
+                    //System.out.print(entry.toStringUsingUTF8()+"\t");
                     dictionaryEncoder.writeBytes(entry);
                 }
                 return dictPage(dictionaryEncoder);
