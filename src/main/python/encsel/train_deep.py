@@ -7,9 +7,9 @@ from tensorflow.contrib.learn.python.learn.datasets.base import load_csv_without
 
 from encsel.dataset import DataSplit, drop, fetch
 
-hidden_dim = 1000;
-hidden_dim2 = 500;
-hidden_dim3 = 100;
+hidden_dim = 1000
+hidden_dim2 = 500
+hidden_dim3 = 100
 
 groups = [[0], [1, 2, 3, 4], [5, 6, 7, 8], [9], [10, 11, 12], [13, 14, 15], [16, 17, 18]]
 
@@ -80,7 +80,7 @@ def train(data_file, model_path, num_class):
             outputs={
                 'output': tf.saved_model.utils.build_tensor_info(prediction)
             },
-            method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME
+            method_name=tf.saved_model.PREDICT_METHOD_NAME
         )
         shutil.rmtree(model_path, ignore_errors=True)
 
@@ -106,9 +106,9 @@ def train(data_file, model_path, num_class):
                         shutil.rmtree(model_path, ignore_errors=True)
                         builder = tf.saved_model.builder.SavedModelBuilder(model_path)
                         builder.add_meta_graph_and_variables(sess,
-                                                             [tf.saved_model.tag_constants.SERVING],
+                                                             [tf.saved_model.SERVING],
                                                              signature_def_map={
-                                                                 tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: signature})
+                                                                 tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY: signature})
                         builder.save()
                         ## Print the value just saved
                 train_step.run(feed_dict={x: batch[0], label: batch[1]})
