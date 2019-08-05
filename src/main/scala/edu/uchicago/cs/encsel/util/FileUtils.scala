@@ -75,7 +75,7 @@ object FileUtils {
 
   def numLine(file: URI): Int = {
     val result: String = ("wc -l %s".format(new File(file).getAbsolutePath)) !!;
-    result.split("\\s+")(0).trim.toInt
+    result.trim.split("\\s+")(0).toInt
   }
 
   def numNonEmptyLine(file: URI): Int = {
