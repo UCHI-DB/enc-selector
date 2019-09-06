@@ -71,12 +71,12 @@ def train(data_file, model_path, num_class):
             outputs={
                 'output': tf.saved_model.utils.build_tensor_info(prediction)
             },
-            method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME
+            method_name=tf.saved_model.PREDICT_METHOD_NAME
         )
         builder.add_meta_graph_and_variables(sess,
-                                             [tf.saved_model.tag_constants.SERVING],
+                                             [tf.saved_model.SERVING],
                                              signature_def_map={
-                                                 tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY:
+                                                 tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY:
                                                      signature})
         builder.save()
 

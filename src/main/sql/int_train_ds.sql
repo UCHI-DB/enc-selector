@@ -22,9 +22,9 @@ SELECT
     (CASE mine.name
         WHEN 'PLAIN_file_size' THEN 0
         WHEN 'DICT_file_size' THEN 1
-        WHEN 'BP_file_size' THEN 2
-        WHEN 'RLE_file_size' THEN 3
-        WHEN 'DELTABP_file_size' THEN 4
+        WHEN 'DELTABP_file_size' THEN 2
+        WHEN 'BP_file_size' THEN 3
+        WHEN 'RLE_file_size' THEN 4
         ELSE 0
     END) AS 'Encoding'
 FROM
