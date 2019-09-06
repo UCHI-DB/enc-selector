@@ -36,6 +36,8 @@ object SplitSubDoubleColumn extends App {
 
 
   dcols.foreach(col => {
+    print(col.id)
+    print(col.parentWrapper)
     val sub = MineColumn.splitSubDouble(col)
     if (!sub.isEmpty) {
       persist.save(sub)
