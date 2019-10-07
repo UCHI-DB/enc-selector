@@ -58,7 +58,7 @@ public class ColumnPrinter {
 
                 for(int i = 0 ; i < reader.getTotalValueCount();i++) {
                     if(reader.getCurrentDefinitionLevel()< descriptor.getMaxDefinitionLevel()) {
-                        reader.skip();
+//                        reader.skip();
                     } else {
                         reader.writeCurrentValueToConverter();
                     }

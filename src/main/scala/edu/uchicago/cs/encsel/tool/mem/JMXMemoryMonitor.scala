@@ -28,56 +28,56 @@ import java.lang.reflect.Field
 import javax.management.ObjectName
 import javax.management.remote.{JMXConnectorFactory, JMXServiceURL}
 
-import com.sun.tools.attach.{AttachNotSupportedException, VirtualMachine}
+//import com.sun.tools.attach.{AttachNotSupportedException, VirtualMachine}
 
 class JMXMemoryMonitor(process: Process) {
 
-  val maxRetry = 5;
-  var pidfield: Field = null
-
-  var retryCount = 0;
-  var vm: VirtualMachine = null;
-  var memoryBean: MemoryMXBean = null;
-
-  if (pidfield == null) {
-    pidfield = process.getClass.getDeclaredField("pid")
-    pidfield.setAccessible(true)
-  }
-  val pid = pidfield.get(process).toString
-  println(pid)
-
-  while (vm == null && retryCount < maxRetry && process.isAlive) {
-    try {
-      vm = VirtualMachine.attach(pid)
-    } catch {
-      case e@(_: AttachNotSupportedException | _: IOException) => {
-        retryCount += 1
-        Thread.sleep(200l)
-      }
-    }
-  }
-  if (null != vm) {
-    var connectorAddr = vm.getAgentProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
-    if (connectorAddr == null) {
-      val agent = vm.getSystemProperties().getProperty("java.home") +
-        File.separator + "lib" + File.separator + "management-agent.jar";
-      vm.loadAgent(agent);
-      connectorAddr = vm.getAgentProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
-    }
-    val serviceURL = new JMXServiceURL(connectorAddr);
-    val connector = JMXConnectorFactory.connect(serviceURL);
-    val mbsc = connector.getMBeanServerConnection();
-    val objName = new ObjectName(ManagementFactory.MEMORY_MXBEAN_NAME);
-    memoryBean = ManagementFactory.newPlatformMXBeanProxy(mbsc, objName.toString(), classOf[MemoryMXBean]);
-  }
-
-  def getHeapMemoryUsage: Option[MemoryUsage] = {
-    try {
-      return Some(memoryBean.getHeapMemoryUsage)
-    } catch {
-      case e: Exception => {
-        return None
-      }
-    }
-  }
+//  val maxRetry = 5;
+//  var pidfield: Field = null
+//
+//  var retryCount = 0;
+//  var vm: VirtualMachine = null;
+//  var memoryBean: MemoryMXBean = null;
+//
+//  if (pidfield == null) {
+//    pidfield = process.getClass.getDeclaredField("pid")
+//    pidfield.setAccessible(true)
+//  }
+//  val pid = pidfield.get(process).toString
+//  println(pid)
+//
+//  while (vm == null && retryCount < maxRetry && process.isAlive) {
+//    try {
+//      vm = VirtualMachine.attach(pid)
+//    } catch {
+//      case e@(_: AttachNotSupportedException | _: IOException) => {
+//        retryCount += 1
+//        Thread.sleep(200l)
+//      }
+//    }
+//  }
+//  if (null != vm) {
+//    var connectorAddr = vm.getAgentProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
+//    if (connectorAddr == null) {
+//      val agent = vm.getSystemProperties().getProperty("java.home") +
+//        File.separator + "lib" + File.separator + "management-agent.jar";
+//      vm.loadAgent(agent);
+//      connectorAddr = vm.getAgentProperties().getProperty("com.sun.management.jmxremote.localConnectorAddress");
+//    }
+//    val serviceURL = new JMXServiceURL(connectorAddr);
+//    val connector = JMXConnectorFactory.connect(serviceURL);
+//    val mbsc = connector.getMBeanServerConnection();
+//    val objName = new ObjectName(ManagementFactory.MEMORY_MXBEAN_NAME);
+//    memoryBean = ManagementFactory.newPlatformMXBeanProxy(mbsc, objName.toString(), classOf[MemoryMXBean]);
+//  }
+//
+//  def getHeapMemoryUsage: Option[MemoryUsage] = {
+//    try {
+//      return Some(memoryBean.getHeapMemoryUsage)
+//    } catch {
+//      case e: Exception => {
+//        return None
+//      }
+//    }
+//  }
 }

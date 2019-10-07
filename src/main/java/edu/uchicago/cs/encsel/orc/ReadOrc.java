@@ -21,38 +21,28 @@
  *
  */
 
-package edu.uchicago.cs.encsel.ptnmining.matching
+package edu.uchicago.cs.encsel.orc;
 
-import edu.uchicago.cs.encsel.ptnmining.{Pattern, PatternVisitor}
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hive.ql.exec.vector.VectorizedRowBatch;
+import org.apache.orc.OrcFile;
+import org.apache.orc.Reader;
+import org.apache.orc.RecordReader;
 
-import scala.collection.mutable
+public class ReadOrc {
 
-/**
-  * Assign unique name to each pattern node
-  */
-class NamingVisitor extends PatternVisitor {
-  private val counter = new mutable.Stack[Int]
-  counter.push(0)
-
-  override def on(ptn: Pattern): Unit = {
-    val parentName = path.isEmpty match {
-      case true => ""
-      case false => //noinspection ZeroIndexToHead
-        path(0).name
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+        Reader reader = OrcFile.createReader(new Path("my-file.orc"),
+                OrcFile.readerOptions(conf));
+        RecordReader rows = reader.rows();
+        VectorizedRowBatch batch = reader.getSchema().createRowBatch();
+        while (rows.nextBatch(batch)) {
+            for (int r = 0; r < batch.size; ++r) {
+                //... process row r from batch
+            }
+        }
+        rows.close();
     }
-    var current = counter.pop
-    ptn.name = "%s_%d".format(parentName, current)
-    current += 1
-    counter.push(current)
-  }
-
-  override def enter(container: Pattern): Unit = {
-    super.enter(container)
-    counter.push(0)
-  }
-
-  override def exit(container: Pattern): Unit = {
-    super.exit(container)
-    counter.pop
-  }
 }

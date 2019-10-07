@@ -130,7 +130,5 @@ object Schema {
       return Schema.fromParquetFile(schemaUri)
     }
     null
-
   }
-
 }

@@ -14,25 +14,14 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License.
+ * under the License,
  *
  * Contributors:
  *     Hao Jiang - initial API and implementation
+ *
  */
 
-package edu.uchicago.cs.encsel.ptnmining
+package edu.uchicago.cs.encsel.carbondata;
 
-import java.nio.file.{Files, Paths}
-
-import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
-import edu.uchicago.cs.encsel.parquet.ParquetTupleReader
-import edu.uchicago.cs.encsel.ptnmining.compose.PatternComposer
-import edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper
-import edu.uchicago.cs.encsel.util.FileUtils
-
-import scala.collection.JavaConverters._
-
-object SubattrEncodeVerify extends App {
-
+public class WriteCarbon {
 }

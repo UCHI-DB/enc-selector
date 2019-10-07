@@ -1,5 +1,5 @@
 import numpy as np
-
+from sklearn.preprocessing import StandardScaler
 
 class DataSet:
     def __init__(self, data, label):
@@ -23,6 +23,7 @@ class DataSet:
 def normalize(data, dim):
     mean = np.mean(data, dim)
     stdvar = np.std(data, dim)
+
     return np.divide(np.subtract(data, mean), stdvar)
 
 

@@ -21,31 +21,22 @@
  *
  */
 
-package edu.uchicago.cs.encsel.ptnmining
+package edu.uchicago.cs.encsel.dataset
 
+import java.io.File
+import java.net.URI
+
+import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
 import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
-import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 
-import scala.collection.JavaConverters._
+object EncodeLocalFile extends App {
 
-object EncodeAllSubColumn extends App {
+  val column = new Column()
 
-  val persist = new JPAPersistence
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NOT NULL AND c.dataType = :dt and c.id >= 47970",
-    classOf[ColumnWrapper]).setParameter("dt", DataType.STRING).getResultList.asScala
-  columns.foreach(colw => {
-    println(colw.id)
-//    colw.replaceFeatures(ParquetEncFileSize.extract(colw))
-    colw.replaceFeatures(ParquetCompressFileSize.extract(colw))
-    persist.save(Seq(colw))
-  })
-}
+  column.colFile = new File(args(0)).toURI
+  column.dataType = DataType.INTEGER
 
-object EncodeSingleSubColumn extends App {
-  val persist = new JPAPersistence
-  val column = persist.find(args(0).toInt)
-  column.replaceFeatures(ParquetEncFileSize.extract(column))
-  persist.save(Seq(column))
+  ParquetCompressFileSize.extract(column)
 }

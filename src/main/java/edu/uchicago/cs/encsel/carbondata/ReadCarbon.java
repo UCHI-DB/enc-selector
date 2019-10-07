@@ -21,28 +21,7 @@
  *
  */
 
-package edu.uchicago.cs.encsel.ptnmining.eval
+package edu.uchicago.cs.encsel.carbondata;
 
-import edu.uchicago.cs.encsel.ptnmining._
-
-/**
-  * Compute the size of a pattern. This includes the followings:
-  * 1. The size of pattern itself
-  * 2. Additional bytes for each records encoded using this pattern
-  */
-class SizeVisitor extends PatternVisitor {
-
-  var size = 0
-
-  def on(ptn: Pattern): Unit = {
-    ptn match {
-      case token: PToken => size += token.token.length
-      case union: PUnion => size += union.content.size + 2
-      case seq: PSeq => size += seq.content.length + 2
-      case any: PAny => size += 1
-      case range: PIntRange => size += 5 // One indicator and 2 32-bit integer
-      case PEmpty => size += 1
-      case _ => Unit
-    }
-  }
+public class ReadCarbon {
 }

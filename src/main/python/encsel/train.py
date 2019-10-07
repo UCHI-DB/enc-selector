@@ -7,7 +7,7 @@ from tensorflow.contrib.learn.python.learn.datasets.base import load_csv_without
 from encsel.dataset import DataSet, DataSplit
 
 num_feature = 19;
-hidden_dim = 1000;
+hidden_dim = 1500;
 
 
 def build_graph(num_class):
@@ -52,7 +52,7 @@ def train(data_file, model_path, num_class):
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
-        for i in range(5000):
+        for i in range(50000):
             batch = dtrain.next_batch(50)
             if batch is None:
                 break
@@ -71,12 +71,12 @@ def train(data_file, model_path, num_class):
             outputs={
                 'output': tf.saved_model.utils.build_tensor_info(prediction)
             },
-            method_name=tf.saved_model.PREDICT_METHOD_NAME
+            method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME
         )
         builder.add_meta_graph_and_variables(sess,
-                                             [tf.saved_model.SERVING],
+                                             [tf.saved_model.tag_constants.SERVING],
                                              signature_def_map={
-                                                 tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY:
+                                                 tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY:
                                                      signature})
         builder.save()
 
@@ -96,8 +96,12 @@ def main():
 
 
 def main2():
-    shutil.rmtree("/home/harper/enc_workspace/int_model/",ignore_errors=True)
-    train("/home/harper/enc_workspace/int_train.csv", '/home/harper/enc_workspace/int_model/', 5)
+    shutil.rmtree("/home/harper/enc_workspace/int_model_pertube/",ignore_errors=True)
+    train("/home/harper/enc_workspace/int_train_pertube.csv", '/home/harper/enc_workspace/int_model_pertube/', 5)
+    '''
+    shutil.rmtree("/home/harper/enc_workspace/string_model/",ignore_errors=True)
+    train("/home/harper/enc_workspace/string_train.csv", '/home/harper/enc_workspace/string_model/', 4)
+    '''
 
 
 if __name__ == "__main__":
