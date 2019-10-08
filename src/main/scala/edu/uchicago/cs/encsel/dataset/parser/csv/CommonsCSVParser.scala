@@ -22,33 +22,34 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser.csv
 
-import java.io.{InputStream, InputStreamReader}
+import java.io.{BufferedReader, File, FileReader, InputStream, InputStreamReader}
+import java.net.URI
+import java.nio.charset.StandardCharsets
 
 import edu.uchicago.cs.encsel.dataset.parser.{Parser, Record}
-import edu.uchicago.cs.encsel.dataset.schema.Schema
+import edu.uchicago.cs.encsel.dataset.schema.{Schema, SchemaGuesser}
+import edu.uchicago.cs.encsel.model.DataType
 import org.apache.commons.csv.{CSVFormat, CSVRecord}
 
 import scala.collection.JavaConversions.asScalaIterator
 
 class CommonsCSVParser extends Parser {
 
+  override def hasHeaderInFile: Boolean = headerInFile
+
+  var headerInFile: Boolean = false
+  var format = CSVFormat.EXCEL
+
   override def parse(input: InputStream, schema: Schema): Iterator[Record] = {
     this.schema = schema
     val reader = new InputStreamReader(input)
-    var format = CSVFormat.EXCEL
     if (schema != null && schema.hasHeader) {
       format = format.withFirstRecordAsHeader()
+    } else {
     }
     val parser = format.parse(reader)
 
     val csvrecords = parser.iterator()
-
-    if (schema == null) {
-      // Fetch a record to guess schema name
-      val firstrec = csvrecords.next()
-      guessedHeader = firstrec.iterator().toArray
-    }
-
     csvrecords.map(new CSVRecordWrapper(_))
   }
 }
@@ -59,12 +60,15 @@ class CSVRecordWrapper(inner: CSVRecord) extends Record {
   def apply(idx: Int): String = {
     inner.get(idx)
   }
+
   def length(): Int = {
     inner.size()
   }
+
   override def toString: String = {
     inner.toString
   }
+
   def iterator(): Iterator[String] = {
     inner.iterator()
   }

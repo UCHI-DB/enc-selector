@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory
 import scala.io.Source
 
 trait Parser {
+  def hasHeaderInFile: Boolean = false
 
   var schema: Schema = _
   protected var headerInline = false
@@ -100,7 +101,7 @@ trait Parser {
 
   protected def guessHeader(line: String): Unit = {}
 
-  protected var guessedHeader: Array[String] = _
+  var guessedHeader: Array[String] = _
 
   def guessHeaderName: Array[String] = guessedHeader
 

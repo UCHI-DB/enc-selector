@@ -43,20 +43,20 @@ class SchemaGuesser {
       return null
     }
     val records = parser.parse(file, null)
-
     val guessedHeader = parser.guessHeaderName
+
     val columns = guessedHeader.map(_.replaceAll("[^\\d\\w_]+", "_"))
       .map((DataType.BOOLEAN, _))
 
     var malformatCount = 0
-    records.foreach(record => {
+    records.take(500).foreach(record => {
       if (record.length == columns.length) {
         for (i <- columns.indices) {
           var value = record(i)
-          if (value != null && value.trim().length() != 0) {
+          if (value != null && value.trim().length() != 0 && !value.equals("null") && !value.equals("NULL")) {
             value = value.trim()
 
-            val expected = testType(value, columns(i)._1)
+            val expected = SchemaGuesser.testType(value, columns(i)._1)
             if (expected != columns(i)._1)
               columns(i) = (expected, columns(i)._2)
           }
@@ -68,8 +68,11 @@ class SchemaGuesser {
     if (malformatCount > 0) {
       logger.warn("Malformatted record counts %d in %s".format(malformatCount, file.toString))
     }
-    new Schema(columns, true)
+    new Schema(columns, parser.hasHeaderInFile)
   }
+}
+
+object SchemaGuesser {
 
   protected val booleanValues = Set("0", "1", "yes", "no", "true", "false")
   protected val numberRegex = """[\-]?[\d,]+""".r
