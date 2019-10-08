@@ -62,11 +62,9 @@ object FileUtils {
     executor.awaitTermination(Long.MaxValue, TimeUnit.SECONDS)
   }
 
-  def scan[T](root: URI, function: (Path => T)): Iterable[T] = {
+  def scan[T](root: URI, function: (Path => Unit)): Unit = {
     val target = Paths.get(root)
-    FileUtils.recursive(target).map {
-      function(_)
-    }
+    FileUtils.recursive(target).foreach(function(_))
   }
 
   def isDone(file: URI, suffix: String): Boolean = {

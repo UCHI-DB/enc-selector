@@ -37,7 +37,7 @@ class ScanCompressedTimeUsageSnappyTest {
 
   @Test
   def testExtractInt: Unit = {
-    val encs = Array("PLAIN", "DICT", "BP", "RLE", "DELTABP")
+    val encs = Array("PLAIN", "DICT", "DELTABP", "BP", "RLE")
 
     val col = new Column(new File("src/test/resource/test_columner.csv").toURI, 0, "id", DataType.INTEGER)
     col.colFile = new File("src/test/resource/scantime/int.data").toURI

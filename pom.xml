@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.uchicago.cs.db</groupId>
-    <artifactId>ddes</artifactId>
+    <artifactId>densestore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Data-Driven Encoding Selector</name>
     <build>
@@ -88,21 +88,21 @@
                                         </execute>
                                     </action>
                                 </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>de.jflex</groupId>
-                                        <artifactId>maven-jflex-plugin</artifactId>
-                                        <versionRange>[1.0,)</versionRange>
-                                        <goals>
-                                            <goal>generate</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute>
-                                            <runOnIncremental>true</runOnIncremental>
-                                        </execute>
-                                    </action>
-                                </pluginExecution>
+<!--                                <pluginExecution>-->
+<!--                                    <pluginExecutionFilter>-->
+<!--                                        <groupId>de.jflex</groupId>-->
+<!--                                        <artifactId>maven-jflex-plugin</artifactId>-->
+<!--                                        <versionRange>[1.0,)</versionRange>-->
+<!--                                        <goals>-->
+<!--                                            <goal>generate</goal>-->
+<!--                                        </goals>-->
+<!--                                    </pluginExecutionFilter>-->
+<!--                                    <action>-->
+<!--                                        <execute>-->
+<!--                                            <runOnIncremental>true</runOnIncremental>-->
+<!--                                        </execute>-->
+<!--                                    </action>-->
+<!--                                </pluginExecution>-->
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
@@ -165,24 +165,24 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>de.jflex</groupId>
-                <artifactId>maven-jflex-plugin</artifactId>
-                <version>1.4.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>src/main/java</outputDirectory>
-                            <lexDefinitions>
-                                <lexDefinition>src/main/jflex</lexDefinition>
-                            </lexDefinitions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>de.jflex</groupId>-->
+<!--                <artifactId>maven-jflex-plugin</artifactId>-->
+<!--                <version>1.4.3</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>src/main/java</outputDirectory>-->
+<!--                            <lexDefinitions>-->
+<!--                                <lexDefinition>src/main/jflex</lexDefinition>-->
+<!--                            </lexDefinitions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

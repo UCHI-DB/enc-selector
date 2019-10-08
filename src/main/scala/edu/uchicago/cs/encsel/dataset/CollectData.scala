@@ -45,7 +45,7 @@ object CollectData extends App {
   val f = new File(args(0)).toURI
   val threadPool = Executors.newFixedThreadPool(Config.collectorThreadCount)
   val dataCollector = new DataCollector
-  FileUtils.multithread_scan(f, dataCollector.collect, threadPool)
+  FileUtils.multithread_scan(f, path => dataCollector.collect(path.toUri), threadPool)
 }
 
 
@@ -53,8 +53,8 @@ class DataCollector {
   var persistence: Persistence = Persistence.get
   val logger = LoggerFactory.getLogger(this.getClass)
 
-  def collect(path: Path): Unit = {
-    val source = path.toUri
+  def collect(source: URI): Unit = {
+    val path = Paths.get(source)
     try {
       if (Files.isDirectory(path)) {
         logger.warn("Running on Directory is undefined")

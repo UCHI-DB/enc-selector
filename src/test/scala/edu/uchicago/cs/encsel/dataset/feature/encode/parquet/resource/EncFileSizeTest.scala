@@ -27,17 +27,17 @@ class EncFileSizeTest {
     assertEquals("DICT_file_size", fa(1).name)
     assertEquals(new File("src/test/resource/coldata/test_col_int.data.DICT").length(), fa(1).value, 0.001)
 
-    assertTrue(fa(2).featureType.equals("EncFileSize"))
-    assertEquals("BP_file_size", fa(2).name)
-    assertEquals(new File("src/test/resource/coldata/test_col_int.data.BP").length(), fa(2).value, 0.001)
-
     assertTrue(fa(3).featureType.equals("EncFileSize"))
-    assertEquals("RLE_file_size", fa(3).name)
-    assertEquals(new File("src/test/resource/coldata/test_col_int.data.RLE").length(), fa(3).value, 0.001)
+    assertEquals("BP_file_size", fa(3).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_int.data.BP").length(), fa(3).value, 0.001)
 
     assertTrue(fa(4).featureType.equals("EncFileSize"))
-    assertEquals("DELTABP_file_size", fa(4).name)
-    assertEquals(new File("src/test/resource/coldata/test_col_int.data.DELTABP").length(), fa(4).value, 0.001)
+    assertEquals("RLE_file_size", fa(4).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_int.data.RLE").length(), fa(4).value, 0.001)
+
+    assertTrue(fa(2).featureType.equals("EncFileSize"))
+    assertEquals("DELTABP_file_size", fa(2).name)
+    assertEquals(new File("src/test/resource/coldata/test_col_int.data.DELTABP").length(), fa(2).value, 0.001)
   }
 
   @Test

@@ -21,7 +21,7 @@ class ParquetCompressFileSizeTest {
     assertEquals(15, feature.size)
     val fa = feature.toArray
 
-    val encs = Array("PLAIN", "DICT", "BP", "RLE", "DELTABP")
+    val encs = Array("PLAIN", "DICT", "DELTABP","BP", "RLE")
 
     val cross = for (i <- encs; j <- codecs) yield (i, j)
 
