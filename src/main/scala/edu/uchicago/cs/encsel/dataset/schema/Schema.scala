@@ -102,14 +102,16 @@ object Schema {
     }
   }
 
+  val SCHEMA_EXTENSION = "schema"
+
   def getSchema(source: URI): Schema = {
     // file_name + .schema
-    var schemaUri = FileUtils.addExtension(source, "schema")
+    var schemaUri = FileUtils.addExtension(source, SCHEMA_EXTENSION)
     if (new File(schemaUri).exists) {
       return Schema.fromParquetFile(schemaUri)
     }
     // file_name.abc => file_name.schema
-    schemaUri = FileUtils.replaceExtension(source, "schema")
+    schemaUri = FileUtils.replaceExtension(source, SCHEMA_EXTENSION)
     if (new File(schemaUri).exists) {
       return Schema.fromParquetFile(schemaUri)
     }
@@ -119,7 +121,7 @@ object Schema {
     val schemas = Files.list(path.getParent).iterator().filter {
       p => {
         val pname = p.getFileName.toString
-        pname.endsWith(".schema") && pathname.contains(pname.replace(".schema", ""))
+        pname.endsWith("." + SCHEMA_EXTENSION) && pathname.contains(pname.replace("." + SCHEMA_EXTENSION, ""))
       }
     }
     if (schemas.nonEmpty) {

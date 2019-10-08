@@ -61,7 +61,7 @@ object GuessSchema extends App {
         if (null != schema) {
           if (logger.isDebugEnabled())
             logger.debug("Generating schema for %s".format(file.toUri.toString))
-          val schemaLocation = FileUtils.replaceExtension(file.toUri, "schemagen")
+          val schemaLocation = FileUtils.replaceExtension(file.toUri, "schema")
           Schema.toParquetFile(schema, schemaLocation)
           if (logger.isDebugEnabled())
             logger.debug("Schema for %s written to %s".format(file.toUri.toString, schemaLocation))
