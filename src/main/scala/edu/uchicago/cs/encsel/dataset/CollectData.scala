@@ -24,7 +24,7 @@ package edu.uchicago.cs.encsel.dataset
 
 import java.io.File
 import java.net.URI
-import java.nio.file.{Files, Paths}
+import java.nio.file.{Files, Path, Paths}
 import java.util.concurrent.{Callable, Executors, TimeUnit}
 
 import edu.uchicago.cs.encsel.Config
@@ -35,40 +35,27 @@ import edu.uchicago.cs.encsel.dataset.schema.Schema
 import edu.uchicago.cs.encsel.util.FileUtils
 import org.slf4j.LoggerFactory
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
+
+
 /**
   * Created by harper on 4/23/17.
   */
 object CollectData extends App {
-  val f = new File(args(0))
-  new DataCollector().scan(f.toURI)
+  val f = new File(args(0)).toURI
+  val threadPool = Executors.newFixedThreadPool(Config.collectorThreadCount)
+  val dataCollector = new DataCollector
+  FileUtils.multithread_scan(f, dataCollector.collect, threadPool)
 }
 
 
 class DataCollector {
-
   var persistence: Persistence = Persistence.get
   val logger = LoggerFactory.getLogger(this.getClass)
-  val threadPool = Executors.newFixedThreadPool(Config.collectorThreadCount)
 
-  def scan(source: URI): Unit = {
-    val target = Paths.get(source)
-    val tasks = scala.collection.immutable.List(target).flatMap(FileUtils.scanFunction(_)).map { p => {
-      new Callable[Unit] {
-        def call: Unit = {
-          collect(p.toUri)
-        }
-      }
-    }
-    }
-    threadPool.invokeAll(tasks)
-    threadPool.shutdown()
-    threadPool.awaitTermination(Long.MaxValue, TimeUnit.SECONDS)
-  }
-
-  def collect(source: URI): Unit = {
+  def collect(path: Path): Unit = {
+    val source = path.toUri
     try {
-      val path = Paths.get(source)
       if (Files.isDirectory(path)) {
         logger.warn("Running on Directory is undefined")
         return
@@ -105,7 +92,7 @@ class DataCollector {
         logger.debug("Scanned " + source.toString)
 
     } catch {
-      case e: Exception =>  logger.error("Exception while scanning " + source.toString, e)
+      case e: Exception => logger.error("Exception while scanning " + source.toString, e)
     }
   }
 
@@ -119,7 +106,7 @@ class DataCollector {
 
   private def extractFeature(col: Column): Unit = {
     try {
-      col.features ++= Features.extract(col).toSet
+      col.features.addAll(Features.extract(col).toSet.asJavaCollection)
     } catch {
       case e: Exception => logger.warn("Exception while processing column:%s@%s".format(col.colName, col.origin), e)
     }
