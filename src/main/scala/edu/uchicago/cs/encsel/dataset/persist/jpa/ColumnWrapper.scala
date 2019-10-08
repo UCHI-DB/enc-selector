@@ -23,24 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset.persist.jpa
 
-import java.net.URI
-
-import scala.collection.JavaConversions._
-
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.model.DataType
-import javax.persistence.CollectionTable
-import javax.persistence.Convert
-import javax.persistence.ElementCollection
-import javax.persistence.Embeddable
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.persistence.GeneratedValue
-import javax.persistence.JoinColumn
-import javax.persistence.GenerationType
-import scala.collection.mutable.ListBuffer
-import javax.persistence.TableGenerator
 
 class ColumnWrapper extends Column {
 

@@ -23,8 +23,8 @@
 
 package edu.uchicago.cs.encsel.query;
 
-import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
-import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
+import edu.uchicago.cs.encsel.adapter.parquet.EncReaderProcessor;
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetReaderHelper;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.impl.ColumnReaderImpl;

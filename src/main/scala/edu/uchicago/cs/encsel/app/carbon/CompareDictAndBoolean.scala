@@ -27,10 +27,10 @@ import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.Config
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.parquet.{ParquetWriterBuilder, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper
 import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.adapter.parquet.{ParquetWriterBuilder, ParquetWriterHelper}
 import org.apache.hadoop.fs.Path
 import org.apache.parquet.hadoop.ParquetWriter
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName

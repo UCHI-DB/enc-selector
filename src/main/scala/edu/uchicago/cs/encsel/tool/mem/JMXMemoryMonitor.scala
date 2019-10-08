@@ -22,12 +22,6 @@
 
 package edu.uchicago.cs.encsel.tool.mem
 
-import java.io.{File, IOException}
-import java.lang.management.{ManagementFactory, MemoryMXBean, MemoryUsage}
-import java.lang.reflect.Field
-import javax.management.ObjectName
-import javax.management.remote.{JMXConnectorFactory, JMXServiceURL}
-
 //import com.sun.tools.attach.{AttachNotSupportedException, VirtualMachine}
 
 class JMXMemoryMonitor(process: Process) {

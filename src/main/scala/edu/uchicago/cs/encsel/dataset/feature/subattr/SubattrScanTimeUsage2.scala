@@ -28,7 +28,7 @@ import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
-import edu.uchicago.cs.encsel.parquet.ParquetTupleReader
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetTupleReader
 import edu.uchicago.cs.encsel.util.FileUtils
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.slf4j.LoggerFactory

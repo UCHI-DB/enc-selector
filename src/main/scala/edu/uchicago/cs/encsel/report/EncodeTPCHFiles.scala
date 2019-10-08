@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.report
 import java.io.{File, FileOutputStream, PrintWriter}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetEncFileSize
 import edu.uchicago.cs.encsel.model.DataType
 
 import scala.io.Source

@@ -22,15 +22,12 @@
  */
 package edu.uchicago.cs.encsel.dataset.column
 
-import java.io.PrintWriter
-import java.io.FileOutputStream
-import java.io.File
+import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
-import org.slf4j.LoggerFactory
+
 import edu.uchicago.cs.encsel.Config
+import edu.uchicago.cs.encsel.dataset.parser.{Parser, Record}
 import edu.uchicago.cs.encsel.dataset.schema.Schema
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
 
 class ParserColumnReader(p: Parser) extends ColumnReader {
   val parser = p

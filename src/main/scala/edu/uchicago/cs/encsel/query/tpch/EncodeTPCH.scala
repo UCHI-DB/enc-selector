@@ -25,8 +25,8 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetWriterHelper}
-import edu.uchicago.cs.encsel.query.tpch.EncodeTPCHColumn.{context, schema}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncContext, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.query.tpch.EncodeTPCHColumn.schema
 import org.apache.parquet.column.Encoding
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 

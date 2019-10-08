@@ -22,22 +22,13 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser.csv
 
-import java.io.File
-import java.io.FileReader
-import java.io.Reader
-import java.net.URI
+import java.io.{InputStream, InputStreamReader}
+
+import edu.uchicago.cs.encsel.dataset.parser.{Parser, Record}
+import edu.uchicago.cs.encsel.dataset.schema.Schema
+import org.apache.commons.csv.{CSVFormat, CSVRecord}
 
 import scala.collection.JavaConversions.asScalaIterator
-import scala.collection.JavaConversions.iterableAsScalaIterable
-
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVRecord
-
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
-import edu.uchicago.cs.encsel.dataset.schema.Schema
-import java.io.InputStream
-import java.io.InputStreamReader
 
 class CommonsCSVParser extends Parser {
 

@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.util
 
-import edu.uchicago.cs.encsel.parquet.EncContext
+import edu.uchicago.cs.encsel.adapter.parquet.EncContext
 import edu.uchicago.cs.encsel.query.tpch.Performance._
 import org.apache.parquet.column.Encoding
 

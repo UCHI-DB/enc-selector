@@ -3,6 +3,7 @@ package edu.uchicago.cs.encsel
 import java.io.File
 import java.util.zip.ZipFile
 
+import edu.uchicago.cs.encsel.util.ZipUtils
 import org.junit.Assert._
 import org.junit.Test
 

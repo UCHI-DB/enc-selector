@@ -25,11 +25,6 @@ package edu.uchicago.cs.encsel.query.simdscan
 
 import java.nio.ByteBuffer
 
-import org.apache.parquet.column.ColumnDescriptor
-import org.apache.parquet.column.impl.ColumnReaderImpl
-import org.apache.parquet.column.page.DataPage.Visitor
-import org.apache.parquet.column.page.{DataPageV1, DataPageV2, PageReader}
-
 class SimdScanner {
   System.loadLibrary("simdscan")
   @native def scanBitpacked(input: ByteBuffer, offset: Int, size: Int, target: Int, entryWidth: Int): ByteBuffer;

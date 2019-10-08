@@ -23,12 +23,10 @@
 package edu.uchicago.cs.encsel.util
 
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
+import java.net.URI
+import java.nio.file.{Files, Path, Paths}
 
 import scala.collection.JavaConverters._
-import java.nio.file.Paths
-import java.net.URI
 import scala.sys.process._
 
 object FileUtils {

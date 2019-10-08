@@ -22,9 +22,8 @@
  */
 package edu.uchicago.cs.encsel.dataset.column.listener
 
-import java.util.EventListener
-import java.util.EventObject
 import java.net.URI
+import java.util.{EventListener, EventObject}
 
 class ColumnReaderEvent(source: URI) extends EventObject(source)
 

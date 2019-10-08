@@ -23,9 +23,8 @@
 package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.classify._
-import edu.uchicago.cs.encsel.dataset.feature.compress.{ParquetCompressFileSize, ParquetCompressTimeUsage, ScanCompressedTimeUsage, ScanCompressedTimeUsageNoSnappy}
-import edu.uchicago.cs.encsel.dataset.feature.resource.{EncTimeUsage, ScanTimeUsage}
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.{ParquetCompressTimeUsage, ScanCompressedTimeUsage}
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.resource.{EncTimeUsage, ScanTimeUsage}
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory

@@ -90,5 +90,5 @@ class JPAPersistence extends Persistence {
 }
 
 object JPAPersistence {
-  val emf = javax.persistence.Persistence.createEntityManagerFactory("enc-selector")
+  val emf = javax.persistence.Persistence.createEntityManagerFactory("dense_store_bi")
 }

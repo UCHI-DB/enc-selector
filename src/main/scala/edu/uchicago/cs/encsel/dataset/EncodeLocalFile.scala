@@ -24,11 +24,9 @@
 package edu.uchicago.cs.encsel.dataset
 
 import java.io.File
-import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetCompressFileSize
 import edu.uchicago.cs.encsel.model.DataType
 
 object EncodeLocalFile extends App {

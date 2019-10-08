@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.{EncContext, EncReaderProcessor, ParquetReaderHelper, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncContext, EncReaderProcessor, ParquetReaderHelper, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import edu.uchicago.cs.encsel.query.tpch.LoadTPCH.{folder, inputsuffix, outputsuffix}
 import org.apache.parquet.VersionParser

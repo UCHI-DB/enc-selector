@@ -22,17 +22,13 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser
 
-import edu.uchicago.cs.encsel.dataset.column.tsv.TSVColumnReader
-import edu.uchicago.cs.encsel.dataset.column.csv.CSVColumnReader2
-import edu.uchicago.cs.encsel.dataset.column.json.JsonColumnReader
-import edu.uchicago.cs.encsel.dataset.column.excel.XLSXColumnReader
 import java.net.URI
-import edu.uchicago.cs.encsel.dataset.column.ColumnReader
-import edu.uchicago.cs.encsel.dataset.parser.csv.CommonsCSVParser
-import edu.uchicago.cs.encsel.dataset.parser.tsv.TSVParser
-import edu.uchicago.cs.encsel.dataset.parser.json.LineJsonParser
-import edu.uchicago.cs.encsel.dataset.parser.excel.XLSXParser
+
 import edu.uchicago.cs.encsel.dataset.parser.col.ColParser
+import edu.uchicago.cs.encsel.dataset.parser.csv.CommonsCSVParser
+import edu.uchicago.cs.encsel.dataset.parser.excel.XLSXParser
+import edu.uchicago.cs.encsel.dataset.parser.json.LineJsonParser
+import edu.uchicago.cs.encsel.dataset.parser.tsv.TSVParser
 
 object ParserFactory {
 

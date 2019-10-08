@@ -24,17 +24,15 @@ package edu.uchicago.cs.encsel.encoding
 
 import java.io.{File, RandomAccessFile}
 import java.net.URI
-import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel.MapMode
 import java.nio.charset.StandardCharsets
 
 import com.google.gson.{Gson, JsonObject}
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.model.{DataType, FloatEncoding, IntEncoding, StringEncoding}
-import org.slf4j.LoggerFactory
 
 import scala.collection.mutable
-import scala.io.{BufferedSource, Source}
+import scala.io.Source
 
 object BitVectorEncoding {
   val DICT_MAX_SIZE = 500 * 1024 * 1024;

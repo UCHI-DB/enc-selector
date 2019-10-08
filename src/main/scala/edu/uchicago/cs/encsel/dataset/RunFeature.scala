@@ -23,14 +23,10 @@
 package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.resource.{EncTimeUsage, ScanTimeUsage}
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.resource.ScanTimeUsage
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
-import edu.uchicago.cs.encsel.encoding.BitVectorEncoding
-import jdk.nashorn.internal.runtime.BitVector
 import org.slf4j.LoggerFactory
-
-import scala.collection.JavaConversions._
 
 /**
   * Created by harper on 4/23/17.

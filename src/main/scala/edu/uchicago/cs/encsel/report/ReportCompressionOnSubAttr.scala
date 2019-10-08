@@ -25,8 +25,7 @@ package edu.uchicago.cs.encsel.report
 import java.io.{FileOutputStream, PrintWriter}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.{ParquetCompressFileSize, ParquetEncFileSize}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model.DataType
 

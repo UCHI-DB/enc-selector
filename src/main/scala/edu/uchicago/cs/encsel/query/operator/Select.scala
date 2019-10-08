@@ -24,13 +24,12 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper, ReaderProcessor}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.util.SchemaUtils
 import edu.uchicago.cs.encsel.query.{RowTempTable, _}
 import org.apache.parquet.VersionParser.ParsedVersion
 import org.apache.parquet.column.impl.ColumnReaderImpl
 import org.apache.parquet.column.page.PageReadStore
-import org.apache.parquet.hadoop.Footer
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 import org.apache.parquet.io.api.Binary
 import org.apache.parquet.schema.MessageType

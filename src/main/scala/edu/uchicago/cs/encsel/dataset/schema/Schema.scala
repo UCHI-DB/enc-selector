@@ -22,19 +22,16 @@
  */
 package edu.uchicago.cs.encsel.dataset.schema
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.PrintWriter
+import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.{Files, Paths}
+
+import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConversions.asScalaIterator
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
-
-import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.util.FileUtils
 
 class Schema(var columns: Array[(DataType, String)], var hasHeader: Boolean = true) {
   def this() = {

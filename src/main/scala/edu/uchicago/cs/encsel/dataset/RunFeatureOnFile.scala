@@ -26,9 +26,9 @@ package edu.uchicago.cs.encsel.dataset
 import java.io.File
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressTimeUsage
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetCompressTimeUsage
 import edu.uchicago.cs.encsel.model.{DataType, StringEncoding}
-import edu.uchicago.cs.encsel.parquet.ParquetCompressedWriterHelper
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetCompressedWriterHelper
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 import org.slf4j.LoggerFactory

@@ -23,7 +23,7 @@
 package edu.uchicago.cs.encsel.report
 
 import edu.uchicago.cs.encsel.dataset.feature._
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSizeAndTime
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetCompressFileSizeAndTime
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
 

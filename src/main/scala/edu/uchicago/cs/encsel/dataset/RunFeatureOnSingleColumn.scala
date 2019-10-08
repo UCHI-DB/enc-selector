@@ -24,8 +24,6 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.classify._
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory

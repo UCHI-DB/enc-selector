@@ -22,12 +22,12 @@
  */
 package edu.uchicago.cs.encsel.dataset.column
 
-import edu.uchicago.cs.encsel.dataset.column.csv.CSVColumnReader
 import java.net.URI
-import edu.uchicago.cs.encsel.dataset.column.tsv.TSVColumnReader
-import edu.uchicago.cs.encsel.dataset.column.json.JsonColumnReader
+
 import edu.uchicago.cs.encsel.dataset.column.csv.CSVColumnReader2
 import edu.uchicago.cs.encsel.dataset.column.excel.XLSXColumnReader
+import edu.uchicago.cs.encsel.dataset.column.json.JsonColumnReader
+import edu.uchicago.cs.encsel.dataset.column.tsv.TSVColumnReader
 
 object ColumnReaderFactory {
 

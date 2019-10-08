@@ -27,7 +27,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import edu.uchicago.cs.encsel.model._
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetWriterHelper
 
 object EncodeColumn {
   def encode(col: Column) = {

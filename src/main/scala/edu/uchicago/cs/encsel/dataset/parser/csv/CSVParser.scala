@@ -22,14 +22,9 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser.csv
 
-import scala.collection.JavaConversions._
-import scala.collection.JavaConverters._
+import edu.uchicago.cs.encsel.dataset.parser.{DefaultRecord, Parser, Record}
+
 import scala.collection.mutable.ArrayBuffer
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
-import edu.uchicago.cs.encsel.dataset.parser.DefaultRecord
 
 class CSVParser extends Parser {
 

@@ -25,10 +25,10 @@ package edu.uchicago.cs.encsel.query.tpch
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncContext, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.VColumnPredicate
 import edu.uchicago.cs.encsel.query.operator.VerticalSelect
-import ScanGenData.{intEncodings, stringEncodings}
+import edu.uchicago.cs.encsel.query.tpch.ScanGenData.{intEncodings, stringEncodings}
 import org.apache.parquet.column.Encoding
 import org.apache.parquet.schema.MessageType
 

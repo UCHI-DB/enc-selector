@@ -27,7 +27,6 @@ import java.io.InputStream
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
-import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.util.FileUtils
 
 object SubattrUnmatchRate extends FeatureExtractor {
