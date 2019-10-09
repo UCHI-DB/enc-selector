@@ -70,7 +70,7 @@ public class ParquetWriterHelper {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty())
+                if (line.isEmpty() || line.equals("null"))
                     continue;
                 int number = Integer.parseInt(line);
                 int bitLength = 32 - Integer.numberOfLeadingZeros(number);
@@ -91,7 +91,7 @@ public class ParquetWriterHelper {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty())
+                if (line.isEmpty() || line.equals("null"))
                     continue;
                 long number = Long.parseLong(line);
                 int bitLength = 64 - Long.numberOfLeadingZeros(number);
