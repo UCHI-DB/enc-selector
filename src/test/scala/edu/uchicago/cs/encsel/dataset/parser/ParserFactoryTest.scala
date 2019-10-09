@@ -28,22 +28,32 @@ class ParserFactoryTest {
 
   @Test
   def testConfigCSVParser: Unit = {
-    val headerParser = ParserFactory.getParser(new File("src/test/resource/filefmt/header.csv").toURI)
+    //    val headerParser = ParserFactory.getParser(new File("src/test/resource/filefmt/header.csv").toURI)
     val headlessParser = ParserFactory.getParser(new File("src/test/resource/filefmt/headerless.csv").toURI)
+    val headwrongParser = ParserFactory.getParser(new File("src/test/resource/filefmt/header_wrong.csv").toURI)
 
-    assertEquals(24, headerParser.guessedHeader.size)
-    for (i <- 0 until 24) {
-      assertEquals(headerParser.guessedHeader(i), "f%d".format(i + 1))
-    }
+    //    assertEquals(24, headerParser.guessedHeader.size)
+    //    for (i <- 0 until 24) {
+    //      assertEquals(headerParser.guessedHeader(i), "f%d".format(i + 1))
+    //    }
 
     assertEquals(24, headlessParser.guessedHeader.size)
     for (i <- 0 until 24) {
       assertEquals(headlessParser.guessedHeader(i), "field_%d".format(i))
     }
 
-    val header = headerParser.parse(new File("src/test/resource/filefmt/header.csv").toURI, null).toArray
-    assertEquals(10, header.size)
+    assertEquals(24, headwrongParser.guessedHeader.size)
+    for (i <- 0 until 24) {
+      assertEquals(headlessParser.guessedHeader(i), "field_%d".format(i))
+    }
+
+    //  val header = headerParser.parse(new File("src/test/resource/filefmt/header.csv").toURI, null).toArray
+    //  assertEquals(10, header.size)
     val headless = headlessParser.parse(new File("src/test/resource/filefmt/headerless.csv").toURI, null).toArray
     assertEquals(10, headless.size)
+
+    val headwrong = headwrongParser.parse(new File("src/test/resource/filefmt/header_wrong.csv").toURI, null).toArray
+    assertEquals(10, headwrong.size)
   }
+
 }

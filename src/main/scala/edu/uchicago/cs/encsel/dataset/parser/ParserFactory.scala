@@ -83,26 +83,26 @@ object ParserFactory {
       })(0)
     }
 
-    // Determine if the column has a header
-    val split1 = firstLine.split(separator).map(s => SchemaGuesser.testType(s, DataType.BOOLEAN))
-
-    val hasHeader = !split1.contains(DataType.INTEGER)
+    // Determine if the file has a header
+    // Determine if the first row need to be read
 
     val commonsCSVParser = new CommonsCSVParser
     commonsCSVParser.format = CSVFormat.DEFAULT.withDelimiter(separator).withIgnoreEmptyLines(true)
-      .withAllowMissingColumnNames(true).withSkipHeaderRecord(hasHeader)
+      .withAllowMissingColumnNames(true)
+
+    val split1 = firstLine.split(separator)
 
     if (separator == '|') {
       commonsCSVParser.format = commonsCSVParser.format.withQuote(0x03.toChar)
     }
-    commonsCSVParser.headerInFile = hasHeader
-    if (!hasHeader) {
-      // Default field name
-      commonsCSVParser.guessedHeader = (0 until split1.size).map(i => "field_%d".format(i)).toArray
-    } else {
-      commonsCSVParser.guessedHeader = firstLine.split(separator).map(_.replaceAll("[^\\d\\w_]+", "_"))
-      commonsCSVParser.format = commonsCSVParser.format.withFirstRecordAsHeader()
+
+    commonsCSVParser.guessedHeader = (0 until split1.size).map(i => "field_%d".format(i)).toArray
+    commonsCSVParser.format = commonsCSVParser.format.withHeader(commonsCSVParser.guessedHeader: _*)
+
+    if (firstLine.contains("null|null|null|null")) { // Invalid header
+      commonsCSVParser.format = commonsCSVParser.format.withSkipHeaderRecord(true)
     }
+    commonsCSVParser.headerInFile = false
     commonsCSVParser
   }
 }
