@@ -72,13 +72,15 @@ class ParserColumnReader(p: Parser) extends ColumnReader {
     if (!Config.columnReaderEnableCheck)
       return true
     if (record.length > schema.columns.length) {
+      logger.warn("Validation: wrong record length")
       return false
     }
     schema.columns.zipWithIndex.foreach(col => {
-      if (col._2 < record.length && !col._1._1.check(record(col._2)))
+      if (col._2 < record.length && !col._1._1.check(record(col._2))) {
+        logger.warn("Validation: column %d failed to match".format(col._2))
         return false
+      }
     })
-
     true
   }
 }

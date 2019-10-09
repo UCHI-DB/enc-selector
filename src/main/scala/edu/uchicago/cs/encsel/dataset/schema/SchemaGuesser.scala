@@ -48,7 +48,7 @@ class SchemaGuesser {
     val columns = header.map((DataType.BOOLEAN, _))
 
     var malformatCount = 0
-    records.take(500).foreach(record => {
+    records.foreach(record => {
       if (record.length == columns.length) {
         for (i <- columns.indices) {
           var value = record(i)
