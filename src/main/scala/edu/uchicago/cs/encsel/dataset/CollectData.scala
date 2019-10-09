@@ -85,7 +85,7 @@ class DataCollector {
 
 //      columns.foreach(extractFeature)
 
-//      persistence.save(columns)
+      persistence.save(columns)
 
       markDone(source)
       if (logger.isDebugEnabled())
