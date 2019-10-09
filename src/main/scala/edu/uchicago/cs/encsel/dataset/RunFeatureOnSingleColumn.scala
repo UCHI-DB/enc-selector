@@ -49,7 +49,7 @@ object RunFeatureOnSingleColumn extends App {
   Features.extractors ++= missed
 
   val persistence = Persistence.get
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL and c.id BETWEEN :a and :b ORDER BY c.id",
+  val columns = persist.ems.get.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL and c.id BETWEEN :a and :b ORDER BY c.id",
     classOf[ColumnWrapper])
     .setParameter("a", from)
     .setParameter("b", to).getResultList.asScala.toList

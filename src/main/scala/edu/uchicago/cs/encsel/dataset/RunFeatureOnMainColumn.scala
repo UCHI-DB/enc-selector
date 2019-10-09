@@ -65,7 +65,7 @@ object RunFeatureOnMainColumn extends App {
   Features.extractors ++= Seq(EncTimeUsage, ParquetCompressTimeUsage, ScanTimeUsage, ScanCompressedTimeUsage)
 
   val persistence = Persistence.get
-  val columns = persist.em.createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\n        JOIN\n    " +
+  val columns = persist.ems.get.createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\n        JOIN\n    " +
     "feature size ON size.col_id = cd.id\n        AND size.type = 'EncFileSize'\n        " +
     "AND size.name = 'PLAIN_file_size'\n        AND size.value > 1000000\nWHERE\n    cd.parent_id IS NULL",
     classOf[ColumnWrapper]).getResultList.asScala.toList.map(_.asInstanceOf[ColumnWrapper])
