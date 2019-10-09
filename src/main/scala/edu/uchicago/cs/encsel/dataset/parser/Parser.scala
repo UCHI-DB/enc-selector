@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory
 import scala.io.Source
 
 trait Parser {
-  def hasHeaderInFile: Boolean = false
 
   var schema: Schema = _
   protected var headerInline = false
@@ -41,7 +40,6 @@ trait Parser {
 
   def parse(input: InputStream, schema: Schema): Iterator[Record] = {
     this.schema = schema
-
 
     val bufferedinput = new BufferedInputStream(input)
     // Guess Encoding
@@ -70,6 +68,8 @@ trait Parser {
   }
 
   def parse(inputFile: URI, schema: Schema): Iterator[Record] = parse(new FileInputStream(new File(inputFile)), schema)
+
+  def hasHeaderInFile: Boolean = false
 
   protected def parseLineIgnoreError(line: String): Record = {
     try {
@@ -103,7 +103,7 @@ trait Parser {
 
   var guessedHeader: Array[String] = _
 
-  def guessHeaderName: Array[String] = guessedHeader
+  def headerNames: Array[String] = guessedHeader
 
   protected def parseLine(line: String): Record = blankRecord
 }

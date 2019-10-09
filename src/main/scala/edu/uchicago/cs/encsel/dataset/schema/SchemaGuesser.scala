@@ -43,10 +43,9 @@ class SchemaGuesser {
       return null
     }
     val records = parser.parse(file, null)
-    val guessedHeader = parser.guessHeaderName
+    val header = parser.headerNames
 
-    val columns = guessedHeader.map(_.replaceAll("[^\\d\\w_]+", "_"))
-      .map((DataType.BOOLEAN, _))
+    val columns = header.map((DataType.BOOLEAN, _))
 
     var malformatCount = 0
     records.take(500).foreach(record => {

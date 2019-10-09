@@ -24,7 +24,7 @@ package edu.uchicago.cs.encsel.dataset.column
 
 import java.net.URI
 
-import edu.uchicago.cs.encsel.dataset.column.csv.CSVColumnReader2
+import edu.uchicago.cs.encsel.dataset.column.csv.{BICSVColumnReader, CSVColumnReader2}
 import edu.uchicago.cs.encsel.dataset.column.excel.XLSXColumnReader
 import edu.uchicago.cs.encsel.dataset.column.json.JsonColumnReader
 import edu.uchicago.cs.encsel.dataset.column.tsv.TSVColumnReader
@@ -36,7 +36,8 @@ object ColumnReaderFactory {
       case "file" => {
         source.getPath match {
           case x if x.toLowerCase().endsWith("csv") => {
-            new CSVColumnReader2
+//            new CSVColumnReader2
+            new BICSVColumnReader
           }
           case x if x.toLowerCase().endsWith("tsv") => {
             new TSVColumnReader

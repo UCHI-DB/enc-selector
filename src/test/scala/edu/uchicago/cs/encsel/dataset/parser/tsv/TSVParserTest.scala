@@ -21,7 +21,7 @@ class SimpleTSVParserTest {
   def testGuessHeader: Unit = {
     val parser = new SimpleTSVParser
     val records = parser.parse(new File("src/test/resource/filefmt/test_tsv_parser.tsv").toURI, null).toArray
-    assertArrayEquals(Array[Object]("M", "W", "N", "O"), parser.guessHeaderName.toArray[Object])
+    assertArrayEquals(Array[Object]("M", "W", "N", "O"), parser.headerNames.toArray[Object])
     assertEquals(5, records.length)
     assertEquals(4, records(0).length())
     assertEquals("3$$3.3$$Good Dog2$$7", records(2).toString())
@@ -41,7 +41,7 @@ class TSVParserTest {
     assertEquals(2, records.size)
     assertEquals(3, records(0).length())
     assertEquals(3, records(1).length)
-    val headers = parser.guessHeaderName
+    val headers = parser.headerNames
     assertEquals(3, headers.length)
     assertEquals("A", headers(0))
     assertEquals("B", headers(1))
@@ -64,7 +64,7 @@ class TSVParserTest {
     assertEquals(2, records.size)
     assertEquals(3, records(0).length())
     assertEquals(3, records(1).length)
-    val headers = parser.guessHeaderName
+    val headers = parser.headerNames
     assertEquals(3, headers.length)
     assertEquals("A", headers(0))
     assertEquals("B", headers(1))
@@ -91,7 +91,7 @@ class TSVParserTest {
     assertEquals(2, records.size)
     assertEquals(4, records(0).length())
     assertEquals(4, records(1).length)
-    val headers = parser.guessHeaderName
+    val headers = parser.headerNames
     assertEquals(4, headers.length)
     assertEquals("A", headers(0))
     assertEquals("B", headers(1))
@@ -119,7 +119,7 @@ class TSVParserTest {
     assertEquals(2, records.size)
     assertEquals(4, records(0).length())
     assertEquals(4, records(1).length)
-    val headers = parser.guessHeaderName
+    val headers = parser.headerNames
     assertEquals(4, headers.length)
     assertEquals("A", headers(0))
     assertEquals("B", headers(1))
@@ -141,7 +141,7 @@ class TSVParserTest {
   def testGuessHeader: Unit = {
     val parser = new TSVParser
     val records = parser.parse(new File("src/test/resource/filefmt/test_tsv_parser.tsv").toURI, null).toArray
-    assertArrayEquals(Array[Object]("M", "W", "N", "O"), parser.guessHeaderName.toArray[Object])
+    assertArrayEquals(Array[Object]("M", "W", "N", "O"), parser.headerNames.toArray[Object])
     assertEquals(5, records.length)
     assertEquals(4, records(0).length())
     assertEquals("3$$3.3$$Good Dog2$$7", records(2).toString())

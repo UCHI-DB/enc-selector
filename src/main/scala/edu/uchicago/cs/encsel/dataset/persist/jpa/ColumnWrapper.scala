@@ -45,7 +45,6 @@ object ColumnWrapper {
     wrapper.colFile = col.colFile
     wrapper.colName = col.colName
     wrapper.colIndex = col.colIndex
-    wrapper.numChildren = col.numChildren
     wrapper.dataType = col.dataType
     wrapper.origin = col.origin
     wrapper.parentWrapper = fromColumn(col.parent)

@@ -22,17 +22,13 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser
 
-import java.io.{BufferedReader, File, FileInputStream, FileReader}
 import java.net.URI
 
 import edu.uchicago.cs.encsel.dataset.parser.col.ColParser
-import edu.uchicago.cs.encsel.dataset.parser.csv.CommonsCSVParser
+import edu.uchicago.cs.encsel.dataset.parser.csv.BICSVParser
 import edu.uchicago.cs.encsel.dataset.parser.excel.XLSXParser
 import edu.uchicago.cs.encsel.dataset.parser.json.LineJsonParser
 import edu.uchicago.cs.encsel.dataset.parser.tsv.TSVParser
-import edu.uchicago.cs.encsel.dataset.schema.SchemaGuesser
-import edu.uchicago.cs.encsel.model.DataType
-import org.apache.commons.csv.{CSVFormat, QuoteMode}
 
 object ParserFactory {
 
@@ -41,10 +37,10 @@ object ParserFactory {
       case "file" => {
         source.getPath match {
           case x if x.toLowerCase().endsWith("csv") => {
-            guessCSVParser(source, Array(',', '|'))
+            new BICSVParser
           }
           case x if x.toLowerCase().endsWith("tsv") => {
-            guessCSVParser(source, Array('\t'))
+            new TSVParser
           }
           case x if x.toLowerCase().endsWith("json") => {
             new LineJsonParser
@@ -62,47 +58,5 @@ object ParserFactory {
       case _ =>
         null
     }
-  }
-
-  def guessCSVParser(source: URI, separators: Array[Char]) = {
-    val reader = new BufferedReader(new FileReader(new File(source)))
-
-    // Sample two lines
-    val firstLine = reader.readLine()
-    val secondLine = reader.readLine()
-    reader.close()
-
-    // Choose a good separator from candidates
-    var separator = separators(0)
-    if (separators.size > 1) {
-      // Choose one
-      separator = separators.filter(sep => {
-        val split1 = firstLine.split(sep)
-        val split2 = secondLine.split(sep)
-        split1.size > 1 && split1.size == split2.size
-      })(0)
-    }
-
-    // Determine if the file has a header
-    // Determine if the first row need to be read
-
-    val commonsCSVParser = new CommonsCSVParser
-    commonsCSVParser.format = CSVFormat.DEFAULT.withDelimiter(separator).withIgnoreEmptyLines(true)
-      .withAllowMissingColumnNames(true)
-
-    val split1 = firstLine.split(separator)
-
-    if (separator == '|') {
-      commonsCSVParser.format = commonsCSVParser.format.withQuote(0x03.toChar)
-    }
-
-    commonsCSVParser.guessedHeader = (0 until split1.size).map(i => "field_%d".format(i)).toArray
-    commonsCSVParser.format = commonsCSVParser.format.withHeader(commonsCSVParser.guessedHeader: _*)
-
-    if (firstLine.contains("null|null|null|null")) { // Invalid header
-      commonsCSVParser.format = commonsCSVParser.format.withSkipHeaderRecord(true)
-    }
-    commonsCSVParser.headerInFile = false
-    commonsCSVParser
   }
 }

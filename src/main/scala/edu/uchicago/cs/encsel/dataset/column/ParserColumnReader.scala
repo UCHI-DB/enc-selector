@@ -46,8 +46,8 @@ class ParserColumnReader(p: Parser) extends ColumnReader {
 
     var parsed = parser.parse(source, schema)
 
-    if (schema.hasHeader)
-      parsed = parsed.drop(1)
+//    if (schema.hasHeader)
+//      parsed = parsed.drop(1)
     parsed.foreach { row =>
       {
         fireReadRecord(source)

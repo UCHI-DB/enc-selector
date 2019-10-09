@@ -36,7 +36,6 @@ class Column(o: URI, ci: Int, cn: String, dt: DataType) extends Serializable {
   var colName: String = cn
   var colFile: URI = _
   var dataType = dt
-  var numChildren: Int = 0
   var features: java.util.Set[Feature] = new util.HashSet[Feature]()
   var infos: java.util.Map[String, java.math.BigDecimal] = new util.HashMap[String, java.math.BigDecimal]();
   private var _parent: Column = null
