@@ -76,9 +76,8 @@ object SchemaGuesser {
 
   protected val booleanValues = Set("0", "1", "yes", "no", "true", "false")
   protected val numberRegex = """[\-]?[\d,]+""".r
-  protected val floatRegex = """[\-]?[,\d]*(\.\d*)?(E\d*)?""".r
+  protected val floatRegex = """[\-]?[,\d]*(\.\d*)?([eE][+\-]?\d*)?""".r
 
-  protected val numberParser = NumberFormat.getInstance
 
   def testType(input: String, expected: DataType): DataType = {
     expected match {
@@ -92,7 +91,7 @@ object SchemaGuesser {
         input match {
           case numberRegex(_*) => {
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               num match {
                 case x if x.longValue() != x.doubleValue() => DataType.STRING // Too Long
                 case x if x.intValue() == x.longValue() => DataType.INTEGER
@@ -100,7 +99,9 @@ object SchemaGuesser {
               }
             }.getOrElse(DataType.STRING)
           }
-          case floatRegex(_*) => testType(input, DataType.DOUBLE)
+          case floatRegex(_*) => {
+            testType(input, DataType.DOUBLE)
+          }
           case _ => DataType.STRING
         }
       }
@@ -108,7 +109,7 @@ object SchemaGuesser {
         input match {
           case numberRegex(_*) => {
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               num match {
                 case x if x.longValue() != x.doubleValue() => DataType.STRING // Too Long
                 case _ => DataType.LONG
@@ -123,7 +124,7 @@ object SchemaGuesser {
         input match {
           case floatRegex(_*) =>
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               num match {
                 case x if x.floatValue() == x.doubleValue() => DataType.FLOAT
                 case _ => DataType.DOUBLE
@@ -136,7 +137,7 @@ object SchemaGuesser {
         input match {
           case floatRegex(_*) =>
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               DataType.DOUBLE
             }.getOrElse(DataType.STRING)
           case _ => DataType.STRING

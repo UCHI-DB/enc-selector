@@ -85,9 +85,8 @@ object ParserFactory {
 
     // Determine if the column has a header
     val split1 = firstLine.split(separator).map(s => SchemaGuesser.testType(s, DataType.BOOLEAN))
-    val split2 = secondLine.split(separator).map(s => SchemaGuesser.testType(s, DataType.BOOLEAN))
 
-    val hasHeader = !split1.zip(split2).map(pair => pair._1 == pair._2).reduce((a, b) => a && b)
+    val hasHeader = !split1.contains(DataType.INTEGER)
 
     val commonsCSVParser = new CommonsCSVParser
     commonsCSVParser.format = CSVFormat.DEFAULT.withDelimiter(separator).withIgnoreEmptyLines(true)
