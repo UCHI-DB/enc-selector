@@ -69,7 +69,7 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
             String val = values.get(i).trim();
             // val.length() == 0 indicates a NULL value.
 
-            if (val.length() > 0) {
+            if (val.length() > 0 && !val.equals("null")) {
                 recordConsumer.startField(cols.get(i).getPath()[0], i);
                 try {
                     switch (cols.get(i).getType()) {

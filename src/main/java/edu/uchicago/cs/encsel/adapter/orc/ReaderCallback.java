@@ -26,6 +26,8 @@ public interface ReaderCallback {
 
     default void init() {}
 
+    default void onNextNull() {};
+
     default void onNextInt(int value) {}
 
     default void onNextDouble(double value) {}

@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static edu.uchicago.cs.encsel.adapter.orc.OrcWriterHelper.NULL;
 import static org.junit.Assert.*;
 
 public class OrcWriterHelperTest {
@@ -50,7 +51,11 @@ public class OrcWriterHelperTest {
         int seed = 4942;
 
         for (int i = 0; i < 10000; i++) {
-            pw.println(String.valueOf(i + seed));
+            if (i % 10 == 0) {
+                pw.println("null");
+            } else {
+                pw.println(String.valueOf(i + seed));
+            }
         }
         pw.close();
 
@@ -63,6 +68,12 @@ public class OrcWriterHelperTest {
             @Override
             public void onNextInt(int value) {
                 assertEquals(value, seed + counter++);
+            }
+
+            @Override
+            public void onNextNull() {
+                assertTrue(counter % 10 == 0);
+                counter++;
             }
         });
     }
@@ -78,9 +89,14 @@ public class OrcWriterHelperTest {
         List<String> content = new ArrayList<>();
 
         for (int i = 0; i < 10000; i++) {
-            String uuid = UUID.randomUUID().toString();
-            pw.println(uuid);
-            content.add(uuid);
+            if (i % 7 == 0) {
+                pw.println(NULL);
+                content.add(null);
+            } else {
+                String uuid = UUID.randomUUID().toString();
+                pw.println(uuid);
+                content.add(uuid);
+            }
         }
         pw.close();
 
@@ -93,6 +109,11 @@ public class OrcWriterHelperTest {
             @Override
             public void onNextString(String value) {
                 assertEquals(content.get(counter++), value);
+            }
+
+            @Override
+            public void onNextNull() {
+                assertNull(content.get(counter++));
             }
         });
     }
@@ -109,21 +130,32 @@ public class OrcWriterHelperTest {
         Random rand = new Random(System.currentTimeMillis());
 
         for (int i = 0; i < 10000; i++) {
-            double value = rand.nextDouble();
-            pw.println(String.valueOf(value));
-            content.add(value);
+            if (i % 19 == 0) {
+                pw.println(NULL);
+                content.add(null);
+            } else {
+                double value = rand.nextDouble();
+                pw.println(String.valueOf(value));
+                content.add(value);
+            }
         }
         pw.close();
 
-        OrcWriterHelper.singleColumnString(file);
+        OrcWriterHelper.singleColumnDouble(file);
 
         URI expectFile = new File("src/test/resource/orc/double_column.ORC").toURI();
-        OrcReaderHelper.readStringColumn(expectFile, 0, new ReaderCallback() {
+        OrcReaderHelper.readDoubleColumn(expectFile, 0, new ReaderCallback() {
             int counter = 0;
 
             @Override
             public void onNextDouble(double value) {
                 assertEquals(content.get(counter++), value, 0.0001);
+            }
+
+            @Override
+            public void onNextNull() {
+                assertTrue(counter % 19 == 0);
+                assertNull(content.get(counter++));
             }
         });
     }

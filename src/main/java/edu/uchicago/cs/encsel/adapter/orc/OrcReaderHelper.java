@@ -47,9 +47,13 @@ public class OrcReaderHelper {
         RecordReader rows = reader.rows();
         VectorizedRowBatch batch = reader.getSchema().createRowBatch();
         while (rows.nextBatch(batch)) {
+            LongColumnVector content = (LongColumnVector) batch.cols[columnIndex];
             for (int r = 0; r < batch.size; ++r) {
-                LongColumnVector content = (LongColumnVector) batch.cols[columnIndex];
-                callback.onNextInt((int) content.vector[r]);
+                if (!content.noNulls && content.isNull[r]) {
+                    callback.onNextNull();
+                } else {
+                    callback.onNextInt((int) content.vector[r]);
+                }
             }
         }
         rows.close();
@@ -65,10 +69,14 @@ public class OrcReaderHelper {
         RecordReader rows = reader.rows();
         VectorizedRowBatch batch = reader.getSchema().createRowBatch();
         while (rows.nextBatch(batch)) {
+            BytesColumnVector content = (BytesColumnVector) batch.cols[columnIndex];
             for (int r = 0; r < batch.size; ++r) {
-                BytesColumnVector content = (BytesColumnVector) batch.cols[columnIndex];
-                callback.onNextString(new String(content.vector[0],
-                        content.start[r], content.length[r], StandardCharsets.UTF_8));
+                if (!content.noNulls && content.isNull[r]) {
+                    callback.onNextNull();
+                } else {
+                    callback.onNextString(new String(content.vector[0],
+                            content.start[r], content.length[r], StandardCharsets.UTF_8));
+                }
             }
         }
         rows.close();
@@ -84,9 +92,13 @@ public class OrcReaderHelper {
         RecordReader rows = reader.rows();
         VectorizedRowBatch batch = reader.getSchema().createRowBatch();
         while (rows.nextBatch(batch)) {
+            DoubleColumnVector content = (DoubleColumnVector) batch.cols[columnIndex];
             for (int r = 0; r < batch.size; ++r) {
-                DoubleColumnVector content = (DoubleColumnVector) batch.cols[columnIndex];
-                callback.onNextDouble(content.vector[r]);
+                if(!content.noNulls && content.isNull[r]) {
+                    callback.onNextNull();
+                } else {
+                    callback.onNextDouble(content.vector[r]);
+                }
             }
         }
         rows.close();

@@ -52,6 +52,8 @@ public class OrcWriterHelper {
         }
     }
 
+    static final String NULL = "null";
+
     public static URI singleColumnBoolean(URI input) throws IOException {
         File output = genOutput(input, "ORC");
         if (output.exists())
@@ -71,7 +73,13 @@ public class OrcWriterHelper {
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
 
-            first.vector[row] = Integer.parseInt(line);
+            line = line.trim();
+            if (line.isEmpty() || line.equals(NULL)) {
+                first.noNulls = false;
+                first.isNull[row] = true;
+            } else {
+                first.vector[row] = Integer.parseInt(line);
+            }
 
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
@@ -107,8 +115,12 @@ public class OrcWriterHelper {
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
 
-            first.vector[row] = Integer.parseInt(line);
-
+            if (line.isEmpty() || line.equals(NULL)) {
+                first.noNulls = false;
+                first.isNull[row] = true;
+            } else {
+                first.vector[row] = Integer.parseInt(line);
+            }
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
                 batch.reset();
@@ -143,8 +155,12 @@ public class OrcWriterHelper {
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
 
-            first.vector[row] = Integer.parseInt(line);
-
+            if (line.isEmpty() || line.equals(NULL)) {
+                first.noNulls = false;
+                first.isNull[row] = true;
+            } else {
+                first.vector[row] = Integer.parseInt(line);
+            }
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
                 batch.reset();
@@ -179,8 +195,12 @@ public class OrcWriterHelper {
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
 
-            first.setVal(row, line.getBytes(StandardCharsets.UTF_8));
-
+            if (line.isEmpty() || line.equals(NULL)) {
+                first.noNulls = false;
+                first.isNull[row] = true;
+            } else {
+                first.setVal(row, line.getBytes(StandardCharsets.UTF_8));
+            }
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
                 batch.reset();
@@ -215,8 +235,12 @@ public class OrcWriterHelper {
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
 
-            first.vector[row] = Double.parseDouble(line);
-
+            if (line.isEmpty() || line.equals(NULL)) {
+                first.noNulls = false;
+                first.isNull[row] = true;
+            } else {
+                first.vector[row] = Double.parseDouble(line);
+            }
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
                 batch.reset();
@@ -251,8 +275,12 @@ public class OrcWriterHelper {
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
 
-            first.vector[row] = Double.parseDouble(line);
-
+            if (line.isEmpty() || line.equals(NULL)) {
+                first.noNulls = false;
+                first.isNull[row] = true;
+            } else {
+                first.vector[row] = Double.parseDouble(line);
+            }
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
                 batch.reset();
