@@ -114,7 +114,7 @@ public class OrcWriterHelper {
         String line;
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
-
+            line = line.trim();
             if (line.isEmpty() || line.equals(NULL)) {
                 first.noNulls = false;
                 first.isNull[row] = true;
@@ -154,7 +154,7 @@ public class OrcWriterHelper {
         String line;
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
-
+            line = line.trim();
             if (line.isEmpty() || line.equals(NULL)) {
                 first.noNulls = false;
                 first.isNull[row] = true;
@@ -234,7 +234,7 @@ public class OrcWriterHelper {
         String line;
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
-
+            line = line.trim();
             if (line.isEmpty() || line.equals(NULL)) {
                 first.noNulls = false;
                 first.isNull[row] = true;
@@ -274,7 +274,7 @@ public class OrcWriterHelper {
         String line;
         while ((line = reader.readLine()) != null) {
             int row = batch.size++;
-
+            line = line.trim();
             if (line.isEmpty() || line.equals(NULL)) {
                 first.noNulls = false;
                 first.isNull[row] = true;
