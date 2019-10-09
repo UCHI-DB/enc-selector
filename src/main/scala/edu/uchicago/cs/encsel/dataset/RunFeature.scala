@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.encode.orc.OrcEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
 import edu.uchicago.cs.encsel.model.DataType
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory
   */
 class FeatureRunner {
 
-  var missed = Seq(OrcEncFileSize)
+  var missed = Set[FeatureExtractor]()
 
   def run(args: Array[String]): Unit = {
     val logger = LoggerFactory.getLogger(getClass)
@@ -96,5 +97,7 @@ class FeatureRunner {
 }
 
 object RunFeature extends App {
-  new FeatureRunner().run(args)
+  val featureRunner = new FeatureRunner()
+  featureRunner.missed = Set(ParquetEncFileSize)
+  featureRunner.run(args)
 }
