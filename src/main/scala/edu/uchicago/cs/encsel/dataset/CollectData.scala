@@ -83,7 +83,7 @@ class DataCollector {
       }
       val columns = columner.readColumn(source, defaultSchema)
 
-      columns.foreach(extractFeature)
+//      columns.foreach(extractFeature)
 
       persistence.save(columns)
 
