@@ -28,11 +28,14 @@ import edu.uchicago.cs.encsel.adapter.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.model._
+import org.slf4j.LoggerFactory
 
 /**
   * Encode files using Parquet
   */
 object ParquetEncFileSize extends FeatureExtractor {
+
+  val logger = LoggerFactory.getLogger(getClass)
 
   def featureType = "EncFileSize"
 
@@ -50,6 +53,7 @@ object ParquetEncFileSize extends FeatureExtractor {
           } catch {
             case ile: IllegalArgumentException => {
               // Unsupported Encoding, ignore
+              logger.warn("Failed to encode %s with %s".format(col.colFile, e.toString), ile)
               null
             }
           }
@@ -57,17 +61,18 @@ object ParquetEncFileSize extends FeatureExtractor {
         }.filter(_ != null)
       }
       case DataType.LONG => {
-        LongEncoding.values().filter(_.parquetEncoding() != null).map { e => {
-          try {
-            val f = ParquetWriterHelper.singleColumnLong(col.colFile, e)
-            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
-          } catch {
-            case ile: IllegalArgumentException => {
-              null
-            }
-          }
-        }
-        }.filter(_ != null)
+        //        LongEncoding.values().filter(_.parquetEncoding() != null).map { e => {
+        //          try {
+        //            val f = ParquetWriterHelper.singleColumnLong(col.colFile, e)
+        //            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
+        //          } catch {
+        //            case ile: IllegalArgumentException => {
+        //              null
+        //            }
+        //          }
+        //        }
+        //        }.filter(_ != null)
+        Iterable()
       }
       case DataType.INTEGER => {
         IntEncoding.values().filter(_.parquetEncoding() != null).map { e => {
@@ -76,6 +81,7 @@ object ParquetEncFileSize extends FeatureExtractor {
             new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
           } catch {
             case ile: IllegalArgumentException => {
+              logger.warn("Failed to encode %s with %s".format(col.colFile, e.toString), ile)
               null
             }
           }
@@ -83,34 +89,37 @@ object ParquetEncFileSize extends FeatureExtractor {
         }.filter(_ != null)
       }
       case DataType.FLOAT => {
-        FloatEncoding.values().filter(_.parquetEncoding() != null).map { e => {
-          try {
-            val f = ParquetWriterHelper.singleColumnFloat(col.colFile, e)
-            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
-          } catch {
-            case ile: IllegalArgumentException => {
-              null
-            }
-          }
-        }
-        }.filter(_ != null)
+        //        FloatEncoding.values().filter(_.parquetEncoding() != null).map { e => {
+        //          try {
+        //            val f = ParquetWriterHelper.singleColumnFloat(col.colFile, e)
+        //            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
+        //          } catch {
+        //            case ile: IllegalArgumentException => {
+        //              null
+        //            }
+        //          }
+        //        }
+        //        }.filter(_ != null)
+        Iterable()
       }
       case DataType.DOUBLE => {
-        FloatEncoding.values().filter(_.parquetEncoding() != null).map { e => {
-          try {
-            val f = ParquetWriterHelper.singleColumnDouble(col.colFile, e)
-            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
-          } catch {
-            case ile: IllegalArgumentException => {
-              null
-            }
-          }
-        }
-        }.filter(_ != null)
+        //        FloatEncoding.values().filter(_.parquetEncoding() != null).map { e => {
+        //          try {
+        //            val f = ParquetWriterHelper.singleColumnDouble(col.colFile, e)
+        //            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
+        //          } catch {
+        //            case ile: IllegalArgumentException => {
+        //              null
+        //            }
+        //          }
+        //        }
+        //        }.filter(_ != null)
+        Iterable()
       }
       case DataType.BOOLEAN =>
-        val f = ParquetWriterHelper.singleColumnBoolean(col.colFile)
-        Iterable(new Feature(fType, "PLAIN_file_size", new File(f).length))
+        //        val f = ParquetWriterHelper.singleColumnBoolean(col.colFile)
+        //        Iterable(new Feature(fType, "PLAIN_file_size", new File(f).length))
+        Iterable()
     }
   }
 
