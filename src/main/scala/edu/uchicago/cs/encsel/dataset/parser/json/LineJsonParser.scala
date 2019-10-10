@@ -22,17 +22,10 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser.json
 
-import scala.annotation.migration
-import scala.collection.JavaConversions.asScalaSet
-
 import com.google.gson.JsonObject
+import edu.uchicago.cs.encsel.dataset.parser.{DefaultRecord, Parser, Record}
 
-import edu.uchicago.cs.encsel.dataset.parser.DefaultRecord
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
-import edu.uchicago.cs.encsel.dataset.schema.Schema
-import scala.io.Source
-import java.net.URI
+import scala.collection.JavaConversions.asScalaSet
 
 /**
  * This Parser parse per-line json object format, which

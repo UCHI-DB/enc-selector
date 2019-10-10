@@ -24,16 +24,14 @@
 package edu.uchicago.cs.encsel.wordvec
 
 import javax.persistence._
-
-import edu.uchicago.cs.encsel.tool.WordVectorQuery.src
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
 
 import scala.beans.BeanProperty
-import scala.collection.{Map, mutable}
-import scala.io.Source
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
+import scala.collection.{Map, mutable}
+import scala.io.Source
 
 trait WordSource {
   def fetch(words: String*): Map[String, INDArray]

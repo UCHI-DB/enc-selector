@@ -24,7 +24,9 @@ package edu.uchicago.cs.encsel.dataset
 
 import java.io.File
 import java.nio.file.{Files, Path, Paths}
+import java.util.concurrent.Executors
 
+import edu.uchicago.cs.encsel.Config
 import edu.uchicago.cs.encsel.dataset.schema.{Schema, SchemaGuesser}
 import edu.uchicago.cs.encsel.util.FileUtils
 import org.slf4j.LoggerFactory
@@ -45,7 +47,8 @@ object GuessSchema extends App {
     System.exit(1)
   }
 
-  FileUtils.scan(new File(source).toURI, guessSchema)
+  val threadPool = Executors.newFixedThreadPool(Config.collectorThreadCount)
+  FileUtils.multithread_scan(new File(source).toURI, guessSchema, threadPool)
 
   def guessSchema(file: Path): Unit = {
     if (logger.isDebugEnabled())
@@ -55,11 +58,10 @@ object GuessSchema extends App {
       try {
         val schema = guesser.guessSchema(file.toUri)
 
-
         if (null != schema) {
           if (logger.isDebugEnabled())
             logger.debug("Generating schema for %s".format(file.toUri.toString))
-          val schemaLocation = FileUtils.replaceExtension(file.toUri, "schemagen")
+          val schemaLocation = FileUtils.replaceExtension(file.toUri, "schema")
           Schema.toParquetFile(schema, schemaLocation)
           if (logger.isDebugEnabled())
             logger.debug("Schema for %s written to %s".format(file.toUri.toString, schemaLocation))

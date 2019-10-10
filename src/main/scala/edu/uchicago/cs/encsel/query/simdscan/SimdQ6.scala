@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.query.simdscan
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema

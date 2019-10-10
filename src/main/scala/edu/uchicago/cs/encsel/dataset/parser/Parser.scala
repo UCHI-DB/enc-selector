@@ -41,7 +41,6 @@ trait Parser {
   def parse(input: InputStream, schema: Schema): Iterator[Record] = {
     this.schema = schema
 
-
     val bufferedinput = new BufferedInputStream(input)
     // Guess Encoding
     val encoding = guessEncoding(bufferedinput)
@@ -69,6 +68,8 @@ trait Parser {
   }
 
   def parse(inputFile: URI, schema: Schema): Iterator[Record] = parse(new FileInputStream(new File(inputFile)), schema)
+
+  def hasHeaderInFile: Boolean = false
 
   protected def parseLineIgnoreError(line: String): Record = {
     try {
@@ -100,9 +101,9 @@ trait Parser {
 
   protected def guessHeader(line: String): Unit = {}
 
-  protected var guessedHeader: Array[String] = _
+  var guessedHeader: Array[String] = _
 
-  def guessHeaderName: Array[String] = guessedHeader
+  def headerNames: Array[String] = guessedHeader
 
   protected def parseLine(line: String): Record = blankRecord
 }

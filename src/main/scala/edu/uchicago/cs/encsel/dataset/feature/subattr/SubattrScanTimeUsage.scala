@@ -27,12 +27,10 @@ import java.io.InputStream
 import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.resource.ScanTimeUsage.featureType
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
-import edu.uchicago.cs.encsel.parquet.{ParquetTupleReader, ParquetTupleVReader}
-import edu.uchicago.cs.encsel.query.operator.VerticalSelect
-import edu.uchicago.cs.encsel.util.perf.Profiler
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetTupleVReader
 import edu.uchicago.cs.encsel.util.FileUtils
+import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.slf4j.LoggerFactory
 
 object SubattrScanTimeUsage extends FeatureExtractor {

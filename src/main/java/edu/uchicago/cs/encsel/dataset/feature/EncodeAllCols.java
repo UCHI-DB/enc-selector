@@ -29,7 +29,7 @@ import edu.uchicago.cs.encsel.model.FloatEncoding;
 import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.LongEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetWriterHelper;
 
 import javax.persistence.EntityManager;
 import java.util.List;

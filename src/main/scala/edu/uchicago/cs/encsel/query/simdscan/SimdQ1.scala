@@ -24,18 +24,15 @@
 package edu.uchicago.cs.encsel.query.simdscan
 
 import java.io.File
-import java.nio.ByteBuffer
 
-import edu.uchicago.cs.encsel.parquet.{EncReaderProcessor, ParquetReaderHelper}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncReaderProcessor, ParquetReaderHelper}
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter
 import edu.uchicago.cs.encsel.query.bitmap.RoaringBitmap
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import edu.uchicago.cs.encsel.util.perf.Profiler
 import org.apache.parquet.VersionParser
-import org.apache.parquet.column.ColumnDescriptor
 import org.apache.parquet.column.impl.ColumnReaderImpl
-import org.apache.parquet.column.page.DataPage.Visitor
-import org.apache.parquet.column.page.{DataPageV1, DataPageV2, PageReadStore}
+import org.apache.parquet.column.page.PageReadStore
 import org.apache.parquet.hadoop.metadata.BlockMetaData
 
 object SimdQ1 extends App {

@@ -23,8 +23,7 @@
 package edu.uchicago.cs.encsel.query.tpch;
 
 import edu.uchicago.cs.encsel.hadoop.MemoryFileSystem;
-import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
-import edu.uchicago.cs.encsel.query.MemBufferPrimitiveConverter;
+import edu.uchicago.cs.encsel.adapter.parquet.EncReaderProcessor;
 import edu.uchicago.cs.encsel.query.NonePrimitiveConverter;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.LocalFileSystem;
@@ -35,8 +34,6 @@ import org.apache.parquet.column.ColumnReader;
 import org.apache.parquet.column.impl.ColumnReaderImpl;
 import org.apache.parquet.column.page.PageReadStore;
 import org.apache.parquet.hadoop.metadata.BlockMetaData;
-
-import java.io.File;
 
 public class TPCHColumnMaterialize {
 

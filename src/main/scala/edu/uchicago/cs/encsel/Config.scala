@@ -22,15 +22,13 @@
  */
 package edu.uchicago.cs.encsel
 
-import java.io.{File, FileOutputStream}
+import java.io.File
 import java.net.URI
 import java.util.Properties
 import java.util.zip.ZipFile
 
-import org.apache.commons.io.IOUtils
+import edu.uchicago.cs.encsel.util.ZipUtils
 import org.slf4j.LoggerFactory
-
-import scala.collection.JavaConverters._
 
 object Config {
 
@@ -101,21 +99,3 @@ object Config {
   }
 }
 
-object ZipUtils {
-  def extractFolder(zipFile: ZipFile, path: String, parent: File): Unit = {
-    zipFile.entries().asScala.foreach(entry => {
-      if (entry.getName.startsWith(path)) {
-        val realPath = entry.getName.replaceFirst("^" + path, parent.getAbsolutePath)
-        if (entry.isDirectory) {
-          new File(realPath).mkdir()
-        } else {
-          val inputstream = zipFile.getInputStream(entry)
-          val outputstream = new FileOutputStream(realPath)
-          IOUtils.copy(inputstream, outputstream)
-          inputstream.close()
-          outputstream.close()
-        }
-      }
-    })
-  }
-}

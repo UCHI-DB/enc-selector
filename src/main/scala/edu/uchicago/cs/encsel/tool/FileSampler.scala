@@ -23,10 +23,10 @@
 
 package edu.uchicago.cs.encsel.tool
 
+import java.io.{FileOutputStream, PrintWriter}
+
 import scala.io.Source
 import scala.util.Random
-import java.io.FileOutputStream
-import java.io.PrintWriter
 
 object FileSampler extends App {
 

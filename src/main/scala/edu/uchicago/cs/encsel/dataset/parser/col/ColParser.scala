@@ -22,9 +22,7 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser.col
 
-import edu.uchicago.cs.encsel.dataset.parser.DefaultRecord
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
+import edu.uchicago.cs.encsel.dataset.parser.{DefaultRecord, Parser, Record}
 
 class ColParser extends Parser {
   this.headerInline = true

@@ -24,7 +24,7 @@ package edu.uchicago.cs.encsel.query.simdscan
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetWriterHelper}
+import edu.uchicago.cs.encsel.adapter.parquet.{EncContext, ParquetWriterHelper}
 import edu.uchicago.cs.encsel.query.tpch.TPCHSchema
 import org.apache.parquet.column.Encoding
 

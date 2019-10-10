@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset.feature;
 
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper;
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetWriterHelper;
 import edu.uchicago.cs.encsel.model.*;
 import edu.uchicago.cs.encsel.tool.mem.MemoryMonitor;
 import edu.uchicago.cs.encsel.tool.mem.MemoryStat;

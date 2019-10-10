@@ -28,7 +28,6 @@
     <persistence-unit name="enc-selector" transaction-type="RESOURCE_LOCAL">
         <mapping-file>META-INF/eclipselink-orm.xml</mapping-file>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper</class>
-        <class>edu.uchicago.cs.encsel.ptnmining.persist.PatternWrapper</class>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.URIConverter</class>
         <class>edu.uchicago.cs.encsel.dataset.persist.jpa.DataTypeConverter</class>
         <properties>
@@ -36,7 +35,23 @@
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://hajiang.cs.uchicago.edu:3306/encsel?serverTimezone=UTC"/>
             <property name="javax.persistence.jdbc.user" value="encsel"/>
-            <property name="javax.persistence.jdbc.password" value="jieninan"/>
+            <property name="javax.persistence.jdbc.password" value="encsel"/>
+            <!-- property name="eclipselink.logging.level" value="FINE" /-->
+        </properties>
+    </persistence-unit>
+
+    <!-- Connection for the BI dataset -->
+    <persistence-unit name="dense_store_bi" transaction-type="RESOURCE_LOCAL">
+        <mapping-file>META-INF/eclipselink-orm.xml</mapping-file>
+        <class>edu.uchicago.cs.encsel.dataset.persist.jpa.ColumnWrapper</class>
+        <class>edu.uchicago.cs.encsel.dataset.persist.jpa.URIConverter</class>
+        <class>edu.uchicago.cs.encsel.dataset.persist.jpa.DataTypeConverter</class>
+        <properties>
+            <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://hajiang.cs.uchicago.edu:3306/dense_store_bi?serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.user" value="encsel"/>
+            <property name="javax.persistence.jdbc.password" value="encsel"/>
             <!-- property name="eclipselink.logging.level" value="FINE" /-->
         </properties>
     </persistence-unit>

@@ -22,14 +22,6 @@
  */
 package edu.uchicago.cs.encsel.dataset.column.tsv
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.PrintWriter
-import java.net.URI
-import edu.uchicago.cs.encsel.dataset.parser.csv.CSVParser
-import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.column.ColumnReader
-import edu.uchicago.cs.encsel.dataset.schema.Schema
 import edu.uchicago.cs.encsel.dataset.column.ParserColumnReader
 import edu.uchicago.cs.encsel.dataset.parser.tsv.TSVParser
 

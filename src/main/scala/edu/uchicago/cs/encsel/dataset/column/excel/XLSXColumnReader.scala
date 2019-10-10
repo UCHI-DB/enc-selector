@@ -22,25 +22,16 @@
  */
 package edu.uchicago.cs.encsel.dataset.column.excel
 
-import scala.collection.JavaConversions._
-
-import edu.uchicago.cs.encsel.dataset.column.ColumnReader
-import org.apache.commons.csv.CSVRecord
-import edu.uchicago.cs.encsel.dataset.column.Column
+import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
+
 import edu.uchicago.cs.encsel.Config
-import edu.uchicago.cs.encsel.dataset.schema.Schema
-import org.slf4j.LoggerFactory
-import java.io.File
-import java.io.FileOutputStream
-import java.io.PrintWriter
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.ss.usermodel.CellType
-import org.apache.poi.ss.usermodel.DataFormatter
+import edu.uchicago.cs.encsel.dataset.column.{Column, ColumnReader}
 import edu.uchicago.cs.encsel.dataset.parser.excel.XSSFRowRecord
+import edu.uchicago.cs.encsel.dataset.schema.Schema
+import org.apache.poi.xssf.usermodel.{XSSFRow, XSSFWorkbook}
+
+import scala.collection.JavaConversions._
 
 class XLSXColumnReader extends ColumnReader {
 

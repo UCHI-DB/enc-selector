@@ -23,8 +23,8 @@
 
 package edu.uchicago.cs.encsel.query;
 
-import edu.uchicago.cs.encsel.parquet.EncReaderProcessor;
-import edu.uchicago.cs.encsel.parquet.ParquetReaderHelper;
+import edu.uchicago.cs.encsel.adapter.parquet.EncReaderProcessor;
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetReaderHelper;
 import org.apache.parquet.VersionParser;
 import org.apache.parquet.column.ColumnDescriptor;
 import org.apache.parquet.column.impl.ColumnReaderImpl;
@@ -58,7 +58,7 @@ public class ColumnPrinter {
 
                 for(int i = 0 ; i < reader.getTotalValueCount();i++) {
                     if(reader.getCurrentDefinitionLevel()< descriptor.getMaxDefinitionLevel()) {
-                        reader.skip();
+//                        reader.skip();
                     } else {
                         reader.writeCurrentValueToConverter();
                     }

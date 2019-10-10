@@ -15,11 +15,10 @@
   ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   ~ KIND, either express or implied. See the License for the
   ~ specific language governing permissions and limitations
-  ~ under the License,
+  ~ under the License.
   ~
   ~ Contributors:
   ~     Hao Jiang - initial API and implementation
-  ~
   -->
 
 <entity-mappings
@@ -49,9 +48,9 @@
             <basic name="colIndex">
                 <column name="idx"/>
             </basic>
-            <basic name="numChildren">
-                <column name="num_children"/>
-            </basic>
+<!--            <basic name="numChildren">-->
+<!--                <column name="num_children"/>-->
+<!--            </basic>-->
 
             <basic name="colName">
                 <column name="name"/>
@@ -79,14 +78,14 @@
                 <batch-fetch type="JOIN"/>
             </element-collection>
 
-            <element-collection name="infos" fetch="LAZY" target-class="java.lang.String">
-                <map-key-column name="name"/>
-                <column name="value"/>
-                <collection-table name="col_info">
-                    <join-column name="col_id"/>
-                </collection-table>
-                <batch-fetch type="JOIN"/>
-            </element-collection>
+<!--            <element-collection name="infos" fetch="LAZY" target-class="java.lang.String">-->
+<!--                <map-key-column name="name"/>-->
+<!--                <column name="value"/>-->
+<!--                <collection-table name="col_info">-->
+<!--                    <join-column name="col_id"/>-->
+<!--                </collection-table>-->
+<!--                <batch-fetch type="JOIN"/>-->
+<!--            </element-collection>-->
 
         </attributes>
 

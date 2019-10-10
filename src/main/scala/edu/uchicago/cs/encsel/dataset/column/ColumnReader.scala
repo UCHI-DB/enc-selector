@@ -23,19 +23,13 @@
 package edu.uchicago.cs.encsel.dataset.column
 
 import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-
-import org.apache.commons.lang3.event.EventListenerSupport
-import org.slf4j.LoggerFactory
+import java.nio.file.{Files, Path, Paths}
 
 import edu.uchicago.cs.encsel.Config
-import edu.uchicago.cs.encsel.dataset.column.listener.ColumnReaderListener
-import edu.uchicago.cs.encsel.dataset.column.listener.ColumnReaderEvent
-import edu.uchicago.cs.encsel.dataset.column.listener.FailureMonitor
+import edu.uchicago.cs.encsel.dataset.column.listener.{ColumnReaderEvent, ColumnReaderListener, FailureMonitor, FailureStopper}
 import edu.uchicago.cs.encsel.dataset.schema.Schema
-import edu.uchicago.cs.encsel.dataset.column.listener.FailureStopper
+import org.apache.commons.lang3.event.EventListenerSupport
+import org.slf4j.LoggerFactory
 
 trait ColumnReader {
 

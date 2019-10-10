@@ -26,6 +26,7 @@ package edu.uchicago.cs.encsel.dataset.persist.jpa
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.model.DataType
+import javax.persistence.EntityManager
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConversions.asScalaBuffer
@@ -33,9 +34,14 @@ import scala.collection.JavaConversions.asScalaBuffer
 class JPAPersistence extends Persistence {
   val logger = LoggerFactory.getLogger(getClass)
 
-  val em = JPAPersistence.emf.createEntityManager()
+  val ems = new ThreadLocal[EntityManager] {
+    override def initialValue(): EntityManager = JPAPersistence.emf.createEntityManager()
+  }
+
+  def em = ems.get
 
   def save(datalist: Traversable[Column]) = {
+    val em = ems.get()
     em.getTransaction.begin()
     try {
       datalist.map(ColumnWrapper.fromColumn).foreach { data => {
@@ -57,12 +63,14 @@ class JPAPersistence extends Persistence {
   }
 
   def load(): Iterator[Column] = {
+    val em = ems.get()
     val query = em.createQuery("SELECT c FROM Column c ORDER BY c.id", classOf[ColumnWrapper])
     val res = query.getResultList.map(_.asInstanceOf[Column]).toIterator
     res
   }
 
   def clean() = {
+    val em = ems.get()
     em.getTransaction.begin()
     try {
       val query = em.createQuery("DELETE FROM Column c", classOf[ColumnWrapper])
@@ -77,12 +85,14 @@ class JPAPersistence extends Persistence {
   }
 
   def find(id: Int): Column = {
+    val em = ems.get
     val res = em.createQuery("SELECT c FROM Column c where c.id = :id",
       classOf[ColumnWrapper]).setParameter("id", id).getSingleResult
     res
   }
 
   def lookup(dataType: DataType): Iterator[Column] = {
+    val em = ems.get()
     val result = em.createQuery("SELECT c FROM Column c where c.dataType = :dt", classOf[ColumnWrapper])
       .setParameter("dt", dataType).getResultList.map(_.asInstanceOf[Column]).toIterator
     result
@@ -90,5 +100,5 @@ class JPAPersistence extends Persistence {
 }
 
 object JPAPersistence {
-  val emf = javax.persistence.Persistence.createEntityManagerFactory("enc-selector")
+  val emf = javax.persistence.Persistence.createEntityManagerFactory("dense_store_bi")
 }

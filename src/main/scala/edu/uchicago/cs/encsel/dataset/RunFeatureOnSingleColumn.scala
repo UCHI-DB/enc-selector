@@ -24,8 +24,6 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.feature._
 import edu.uchicago.cs.encsel.dataset.feature.classify._
-import edu.uchicago.cs.encsel.dataset.feature.compress.ParquetCompressFileSize
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 import org.slf4j.LoggerFactory
@@ -51,7 +49,7 @@ object RunFeatureOnSingleColumn extends App {
   Features.extractors ++= missed
 
   val persistence = Persistence.get
-  val columns = persist.em.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL and c.id BETWEEN :a and :b ORDER BY c.id",
+  val columns = persist.ems.get.createQuery("SELECT c FROM Column c WHERE c.parentWrapper IS NULL and c.id BETWEEN :a and :b ORDER BY c.id",
     classOf[ColumnWrapper])
     .setParameter("a", from)
     .setParameter("b", to).getResultList.asScala.toList

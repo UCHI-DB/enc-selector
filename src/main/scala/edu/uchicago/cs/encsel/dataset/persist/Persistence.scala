@@ -23,7 +23,6 @@
 package edu.uchicago.cs.encsel.dataset.persist
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.persist.file.FilePersistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
 import edu.uchicago.cs.encsel.model.DataType
 

@@ -24,7 +24,7 @@ package edu.uchicago.cs.encsel.query.operator
 
 import java.io.File
 
-import edu.uchicago.cs.encsel.parquet.ParquetWriterHelper
+import edu.uchicago.cs.encsel.adapter.parquet.ParquetWriterHelper
 
 object SourceGen extends App {
 

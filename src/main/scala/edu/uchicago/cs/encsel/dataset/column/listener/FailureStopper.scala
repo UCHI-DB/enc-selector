@@ -22,8 +22,8 @@
  */
 package edu.uchicago.cs.encsel.dataset.column.listener
 
-import org.slf4j.LoggerFactory
 import edu.uchicago.cs.encsel.Config
+import org.slf4j.LoggerFactory
 
 class FailureStopper extends ColumnReaderListener {
 

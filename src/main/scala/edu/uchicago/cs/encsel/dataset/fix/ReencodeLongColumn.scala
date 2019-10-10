@@ -23,7 +23,7 @@
 
 package edu.uchicago.cs.encsel.dataset.fix
 
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 
 import scala.collection.JavaConverters._

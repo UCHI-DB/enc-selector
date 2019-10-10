@@ -26,8 +26,7 @@ import java.io.File
 import java.util
 
 import edu.uchicago.cs.encsel.model.{FloatEncoding, IntEncoding, StringEncoding}
-import edu.uchicago.cs.encsel.parquet.{EncContext, ParquetCompressedWriterHelper, ParquetWriterHelper}
-import edu.uchicago.cs.encsel.query.tpch.ScanGenData.schema
+import edu.uchicago.cs.encsel.adapter.parquet.{EncContext, ParquetCompressedWriterHelper, ParquetWriterHelper}
 import org.apache.parquet.hadoop.metadata.CompressionCodecName
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 

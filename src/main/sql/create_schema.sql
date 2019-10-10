@@ -23,13 +23,16 @@ DROP TABLE IF EXISTS `col_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `col_data` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT primary key ,
   `name` varchar(150) DEFAULT NULL,
   `idx` int(11) DEFAULT NULL,
   `file_uri` varchar(1024) DEFAULT NULL,
   `data_type` varchar(20) DEFAULT NULL,
   `origin_uri` varchar(1024) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  parent_id  int           null,
+  constraint fk_col_data_parent_id
+      foreign key (parent_id) references col_data (id)
+          on delete cascade
 ) ENGINE=InnoDB AUTO_INCREMENT=8564 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

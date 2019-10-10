@@ -21,7 +21,7 @@ class XLSXParserTest {
     val parser = new XLSXParser()
     val records = parser.parse(new File("src/test/resource/filefmt/test_xlsx_parser.xlsx").toURI,
       null).toArray
-    val guessedHeader = parser.guessHeaderName
+    val guessedHeader = parser.headerNames
     assertArrayEquals(Array[Object]("X", "Y", "Z", "W"), guessedHeader.toArray[Object])
     assertEquals(6, records.length)
     assertEquals(4, records(0).length())

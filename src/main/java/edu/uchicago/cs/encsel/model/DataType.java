@@ -37,6 +37,9 @@ public enum DataType {
         // Do not check empty
         if (StringUtils.isEmpty(input))
             return true;
+        if(input.equals("null")) {
+            return true;
+        }
         try {
             switch (this) {
                 case INTEGER:

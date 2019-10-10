@@ -25,7 +25,7 @@ package edu.uchicago.cs.encsel.classify
 
 import java.nio.{ByteBuffer, ByteOrder, FloatBuffer}
 
-import org.tensorflow.{SavedModelBundle, Tensor, TensorFlow}
+import org.tensorflow.{SavedModelBundle, Tensor}
 
 import scala.collection.JavaConversions._
 

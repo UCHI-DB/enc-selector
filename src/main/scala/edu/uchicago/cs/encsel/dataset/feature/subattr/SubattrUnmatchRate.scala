@@ -27,7 +27,6 @@ import java.io.InputStream
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
-import edu.uchicago.cs.encsel.model.DataType
 import edu.uchicago.cs.encsel.util.FileUtils
 
 object SubattrUnmatchRate extends FeatureExtractor {
@@ -54,7 +53,7 @@ object SubattrUnmatchRate extends FeatureExtractor {
   def getUnmatchChild(col: Column): Column = {
     val sql = "SELECT c FROM Column c WHERE c.parentWrapper =:parent AND c.colIndex = -1"
     try {
-      persist.em.createQuery(sql, classOf[ColumnWrapper]).setParameter("parent", col).getSingleResult
+      persist.ems.get.createQuery(sql, classOf[ColumnWrapper]).setParameter("parent", col).getSingleResult
     } catch {
       case e: Exception => {
         null

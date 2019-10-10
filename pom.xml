@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.uchicago.cs.db</groupId>
-    <artifactId>ddes</artifactId>
+    <artifactId>densestore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Data-Driven Encoding Selector</name>
     <build>
@@ -88,21 +88,21 @@
                                         </execute>
                                     </action>
                                 </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>de.jflex</groupId>
-                                        <artifactId>maven-jflex-plugin</artifactId>
-                                        <versionRange>[1.0,)</versionRange>
-                                        <goals>
-                                            <goal>generate</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute>
-                                            <runOnIncremental>true</runOnIncremental>
-                                        </execute>
-                                    </action>
-                                </pluginExecution>
+<!--                                <pluginExecution>-->
+<!--                                    <pluginExecutionFilter>-->
+<!--                                        <groupId>de.jflex</groupId>-->
+<!--                                        <artifactId>maven-jflex-plugin</artifactId>-->
+<!--                                        <versionRange>[1.0,)</versionRange>-->
+<!--                                        <goals>-->
+<!--                                            <goal>generate</goal>-->
+<!--                                        </goals>-->
+<!--                                    </pluginExecutionFilter>-->
+<!--                                    <action>-->
+<!--                                        <execute>-->
+<!--                                            <runOnIncremental>true</runOnIncremental>-->
+<!--                                        </execute>-->
+<!--                                    </action>-->
+<!--                                </pluginExecution>-->
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
@@ -165,24 +165,24 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>de.jflex</groupId>
-                <artifactId>maven-jflex-plugin</artifactId>
-                <version>1.4.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>src/main/java</outputDirectory>
-                            <lexDefinitions>
-                                <lexDefinition>src/main/jflex</lexDefinition>
-                            </lexDefinitions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>de.jflex</groupId>-->
+<!--                <artifactId>maven-jflex-plugin</artifactId>-->
+<!--                <version>1.4.3</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>src/main/java</outputDirectory>-->
+<!--                            <lexDefinitions>-->
+<!--                                <lexDefinition>src/main/jflex</lexDefinition>-->
+<!--                            </lexDefinitions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -390,24 +390,40 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.14</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.28.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/de.jflex/jflex -->
         <dependency>
             <groupId>de.jflex</groupId>
             <artifactId>jflex</artifactId>
             <version>1.6.1</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-client -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-client</artifactId>
             <version>5.14.5</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.orc/orc-core -->
         <dependency>
             <groupId>org.apache.orc</groupId>
             <artifactId>orc-core</artifactId>
-            <version>1.4.0</version>
+            <version>1.6.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.carbondata/carbondata-core -->
+        <dependency>
+            <groupId>org.apache.carbondata</groupId>
+            <artifactId>carbondata-core</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>tensorflow</artifactId>
@@ -455,6 +471,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

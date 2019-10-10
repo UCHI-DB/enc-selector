@@ -27,9 +27,9 @@ import java.io.{File, InputStream}
 import java.nio.file.{Files, Paths}
 
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.resource.ParquetEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetEncFileSize
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
-import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
+import edu.uchicago.cs.encsel.dataset.persist.jpa.JPAPersistence
 import edu.uchicago.cs.encsel.util.FileUtils
 
 object SubattrEncodeBenefit extends FeatureExtractor {

@@ -1,6 +1,6 @@
 package org.apache.parquet.column;
 
-import edu.uchicago.cs.encsel.parquet.EncContext;
+import edu.uchicago.cs.encsel.adapter.parquet.EncContext;
 import org.apache.parquet.bytes.BytesUtils;
 import org.apache.parquet.column.page.DictionaryPage;
 import org.apache.parquet.column.values.ValuesReader;
@@ -199,7 +199,7 @@ public enum Encoding {
     /**
      * For RLE, BIT-PACKED, max level is equivalent to max integer bound
      * Read this information from EncContext, which can be loaded by EncReaderProcessor
-     * @see edu.uchicago.cs.encsel.parquet.EncReaderProcessor
+     * @see edu.uchicago.cs.encsel.adapter.parquet.EncReaderProcessor
      * @param descriptor
      * @param valuesType
      * @return

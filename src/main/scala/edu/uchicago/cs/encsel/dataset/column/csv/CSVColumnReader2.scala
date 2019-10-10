@@ -22,22 +22,15 @@
  */
 package edu.uchicago.cs.encsel.dataset.column.csv
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileReader
-import java.io.PrintWriter
+import java.io.{File, FileOutputStream, FileReader, PrintWriter}
 import java.net.URI
 
-import scala.collection.JavaConversions.asScalaIterator
-
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVRecord
-import org.slf4j.LoggerFactory
-
 import edu.uchicago.cs.encsel.Config
-import edu.uchicago.cs.encsel.dataset.column.ColumnReader
+import edu.uchicago.cs.encsel.dataset.column.{Column, ColumnReader}
 import edu.uchicago.cs.encsel.dataset.schema.Schema
-import edu.uchicago.cs.encsel.dataset.column.Column
+import org.apache.commons.csv.{CSVFormat, CSVRecord}
+
+import scala.collection.JavaConversions.asScalaIterator
 
 class CSVColumnReader2 extends ColumnReader {
 

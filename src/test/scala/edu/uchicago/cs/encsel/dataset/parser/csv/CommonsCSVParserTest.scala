@@ -4,9 +4,10 @@ import java.io.File
 
 import org.junit.Test
 import org.junit.Assert._
-
 import edu.uchicago.cs.encsel.dataset.schema.Schema
 import java.util.Arrays
+
+import edu.uchicago.cs.encsel.dataset.parser.ParserFactory
 
 class CommonsCSVParserTest {
 
@@ -18,18 +19,13 @@ class CommonsCSVParserTest {
     assertEquals("""What a said "Not Good"""", records(0)(1))
   }
 
+
   @Test
-  def testGuessHeader: Unit = {
-    val parser = new CommonsCSVParser()
-    val records = parser.parse(new File("src/test/resource/filefmt/test_csv_parser.csv").toURI,
-      null).toArray
-    val guessedHeader = parser.guessHeaderName
-    assertArrayEquals(Array[Object]("A", "B", "C", "D", "E"), guessedHeader.toArray[Object])
-    assertEquals("A", guessedHeader(0))
-    assertEquals(7, records.length)
-    assertEquals(5, records(0).length())
-    assertEquals("""What a said "Not Good"""", records(0)(1))
-    assertEquals("CSVRecord [comment=null, mapping=null, recordNumber=4, values=[23, asdf4, 32.42, 3, 0]]", records(2).toString())
-    assertArrayEquals(Array[Object]("23", "asdf4", "32.42", "3", "0"), records(2).iterator().toArray[Object])
+  def testHeader:Unit = {
+    val headerParser = ParserFactory.getParser(new File("src/test/resource/filefmt/header.csv").toURI)
+    val headlessParser = ParserFactory.getParser(new File("src/test/resource/filefmt/headerless.csv").toURI)
+
+    assertTrue(headerParser.hasHeaderInFile)
+    assertFalse(headlessParser.hasHeaderInFile)
   }
 }

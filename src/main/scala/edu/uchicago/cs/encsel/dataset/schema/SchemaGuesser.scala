@@ -43,20 +43,19 @@ class SchemaGuesser {
       return null
     }
     val records = parser.parse(file, null)
+    val header = parser.headerNames
 
-    val guessedHeader = parser.guessHeaderName
-    val columns = guessedHeader.map(_.replaceAll("[^\\d\\w_]+", "_"))
-      .map((DataType.BOOLEAN, _))
+    val columns = header.map((DataType.BOOLEAN, _))
 
     var malformatCount = 0
     records.foreach(record => {
       if (record.length == columns.length) {
         for (i <- columns.indices) {
           var value = record(i)
-          if (value != null && value.trim().length() != 0) {
+          if (value != null && value.trim().length() != 0 && !value.equals("null") && !value.equals("NULL")) {
             value = value.trim()
 
-            val expected = testType(value, columns(i)._1)
+            val expected = SchemaGuesser.testType(value, columns(i)._1)
             if (expected != columns(i)._1)
               columns(i) = (expected, columns(i)._2)
           }
@@ -68,14 +67,16 @@ class SchemaGuesser {
     if (malformatCount > 0) {
       logger.warn("Malformatted record counts %d in %s".format(malformatCount, file.toString))
     }
-    new Schema(columns, true)
+    new Schema(columns, parser.hasHeaderInFile)
   }
+}
+
+object SchemaGuesser {
 
   protected val booleanValues = Set("0", "1", "yes", "no", "true", "false")
   protected val numberRegex = """[\-]?[\d,]+""".r
-  protected val floatRegex = """[\-]?[,\d]*(\.\d*)?(E\d*)?""".r
+  protected val floatRegex = """[\-]?[,\d]*(\.\d*)?([eE][+\-]?\d*)?""".r
 
-  protected val numberParser = NumberFormat.getInstance
 
   def testType(input: String, expected: DataType): DataType = {
     expected match {
@@ -89,7 +90,7 @@ class SchemaGuesser {
         input match {
           case numberRegex(_*) => {
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               num match {
                 case x if x.longValue() != x.doubleValue() => DataType.STRING // Too Long
                 case x if x.intValue() == x.longValue() => DataType.INTEGER
@@ -97,7 +98,9 @@ class SchemaGuesser {
               }
             }.getOrElse(DataType.STRING)
           }
-          case floatRegex(_*) => testType(input, DataType.DOUBLE)
+          case floatRegex(_*) => {
+            testType(input, DataType.DOUBLE)
+          }
           case _ => DataType.STRING
         }
       }
@@ -105,7 +108,7 @@ class SchemaGuesser {
         input match {
           case numberRegex(_*) => {
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               num match {
                 case x if x.longValue() != x.doubleValue() => DataType.STRING // Too Long
                 case _ => DataType.LONG
@@ -120,7 +123,7 @@ class SchemaGuesser {
         input match {
           case floatRegex(_*) =>
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               num match {
                 case x if x.floatValue() == x.doubleValue() => DataType.FLOAT
                 case _ => DataType.DOUBLE
@@ -133,7 +136,7 @@ class SchemaGuesser {
         input match {
           case floatRegex(_*) =>
             Try {
-              val num = numberParser.parse(input)
+              val num = BigDecimal(input)
               DataType.DOUBLE
             }.getOrElse(DataType.STRING)
           case _ => DataType.STRING

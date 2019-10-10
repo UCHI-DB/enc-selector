@@ -27,10 +27,11 @@ import java.net.URI
 
 import edu.uchicago.cs.encsel.model.DataType
 import javax.persistence.AttributeConverter
-import scala.util.Try
 import org.eclipse.persistence.mappings.DatabaseMapping
-import org.eclipse.persistence.sessions.Session
 import org.eclipse.persistence.mappings.converters.Converter
+import org.eclipse.persistence.sessions.Session
+
+import scala.util.Try
 
 class URIConverter extends AttributeConverter[URI, String] with Converter {
   def convertToDatabaseColumn(objectValue: URI): String = Try(objectValue.asInstanceOf[URI].toString).getOrElse("")

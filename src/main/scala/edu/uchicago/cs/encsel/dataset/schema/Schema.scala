@@ -22,19 +22,16 @@
  */
 package edu.uchicago.cs.encsel.dataset.schema
 
-import java.io.File
-import java.io.FileOutputStream
-import java.io.PrintWriter
+import java.io.{File, FileOutputStream, PrintWriter}
 import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.{Files, Paths}
+
+import edu.uchicago.cs.encsel.model.DataType
+import edu.uchicago.cs.encsel.util.FileUtils
 
 import scala.collection.JavaConversions.asScalaIterator
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
-
-import edu.uchicago.cs.encsel.model.DataType
-import edu.uchicago.cs.encsel.util.FileUtils
 
 class Schema(var columns: Array[(DataType, String)], var hasHeader: Boolean = true) {
   def this() = {
@@ -105,14 +102,16 @@ object Schema {
     }
   }
 
+  val SCHEMA_EXTENSION = "schema"
+
   def getSchema(source: URI): Schema = {
     // file_name + .schema
-    var schemaUri = FileUtils.addExtension(source, "schema")
+    var schemaUri = FileUtils.addExtension(source, SCHEMA_EXTENSION)
     if (new File(schemaUri).exists) {
       return Schema.fromParquetFile(schemaUri)
     }
     // file_name.abc => file_name.schema
-    schemaUri = FileUtils.replaceExtension(source, "schema")
+    schemaUri = FileUtils.replaceExtension(source, SCHEMA_EXTENSION)
     if (new File(schemaUri).exists) {
       return Schema.fromParquetFile(schemaUri)
     }
@@ -122,7 +121,7 @@ object Schema {
     val schemas = Files.list(path.getParent).iterator().filter {
       p => {
         val pname = p.getFileName.toString
-        pname.endsWith(".schema") && pathname.contains(pname.replace(".schema", ""))
+        pname.endsWith("." + SCHEMA_EXTENSION) && pathname.contains(pname.replace("." + SCHEMA_EXTENSION, ""))
       }
     }
     if (schemas.nonEmpty) {
@@ -130,7 +129,5 @@ object Schema {
       return Schema.fromParquetFile(schemaUri)
     }
     null
-
   }
-
 }

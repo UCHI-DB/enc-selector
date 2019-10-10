@@ -22,14 +22,13 @@
  */
 package edu.uchicago.cs.encsel.app
 
+import java.io.{FileOutputStream, PrintWriter}
+
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
-
-import scala.collection.mutable.HashSet
-import java.io.PrintWriter
-import java.io.FileOutputStream
-
 import edu.uchicago.cs.encsel.util.word.WordSplit
 import org.slf4j.LoggerFactory
+
+import scala.collection.mutable.HashSet
 
 object GatherColumnWord extends App {
   val cols = Persistence.get.load()

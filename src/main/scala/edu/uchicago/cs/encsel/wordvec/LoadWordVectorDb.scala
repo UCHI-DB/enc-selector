@@ -24,12 +24,7 @@ package edu.uchicago.cs.encsel.wordvec
 
 import java.nio.charset.StandardCharsets
 import java.sql._
-import java.util.Properties
-import java.{sql, util}
-import java.util.concurrent.Executor
-import javax.persistence.Persistence
 
-import scala.collection.mutable.ArrayBuffer
 import scala.io.{Codec, Source}
 
 object LoadWordVectorDb extends App {

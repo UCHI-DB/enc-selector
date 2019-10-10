@@ -22,20 +22,14 @@
  */
 package edu.uchicago.cs.encsel.dataset.parser.excel
 
-import java.io.File
-import java.net.URI
+import java.io.InputStream
+
+import edu.uchicago.cs.encsel.dataset.parser.{Parser, Record}
+import edu.uchicago.cs.encsel.dataset.schema.Schema
+import org.apache.poi.ss.usermodel.DataFormatter
+import org.apache.poi.xssf.usermodel.{XSSFCell, XSSFRow, XSSFWorkbook}
 
 import scala.collection.JavaConversions.asScalaIterator
-
-import org.apache.poi.ss.usermodel.DataFormatter
-import org.apache.poi.xssf.usermodel.XSSFCell
-import org.apache.poi.xssf.usermodel.XSSFRow
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
-
-import edu.uchicago.cs.encsel.dataset.parser.Parser
-import edu.uchicago.cs.encsel.dataset.parser.Record
-import edu.uchicago.cs.encsel.dataset.schema.Schema
-import java.io.InputStream
 
 class XLSXParser extends Parser {
 

@@ -15,15 +15,18 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.BeforeClass
 import edu.uchicago.cs.encsel.dataset.persist.DummyPersistence
+import edu.uchicago.cs.encsel.util.FileUtils
 
 class DataCollectorForTest extends DataCollector {
 
   def isDoneForTest(source: URI) = {
     isDone(source)
   }
+
   def markDoneForTest(source: URI) = {
     markDone(source)
   }
+
   override def collect(source: URI) = {
     this.synchronized {
       scanned += source
@@ -68,10 +71,9 @@ class DataCollectorTest {
 
     val columns = dp.load()
     assertEquals(5, columns.size)
-    columns.foreach { col =>
-      {
-        assertEquals(7, Source.fromFile(col.colFile).getLines().size)
-      }
+    columns.foreach { col => {
+      assertEquals(7, Source.fromFile(col.colFile).getLines().size)
+    }
     }
   }
 
@@ -79,7 +81,7 @@ class DataCollectorTest {
   def testScan(): Unit = {
     val dc = new DataCollectorForTest
 
-    dc.scan(new File("src/test/resource/scan_folder").toURI)
+    FileUtils.scan(new File("src/test/resource/scan_folder").toURI, path => dc.collect(path.toUri))
 
     assertEquals(5, dc.scanned.size)
     val fileNames = dc.scanned.map {

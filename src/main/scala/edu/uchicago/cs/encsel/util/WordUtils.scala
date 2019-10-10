@@ -23,11 +23,6 @@
 
 package edu.uchicago.cs.encsel.util
 
-import org.apache.commons.lang.StringUtils
-import org.nd4j.linalg.api.ndarray.INDArray
-import scala.collection.mutable.ArrayBuffer
-import org.nd4j.linalg.ops.transforms.Transforms
-
 object WordUtils {
 
   def levDistance(a: String, b: String): Int = {
