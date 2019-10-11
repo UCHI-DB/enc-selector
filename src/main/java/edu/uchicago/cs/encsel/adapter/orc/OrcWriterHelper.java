@@ -159,7 +159,7 @@ public class OrcWriterHelper {
                 first.noNulls = false;
                 first.isNull[row] = true;
             } else {
-                first.vector[row] = Integer.parseInt(line);
+                first.vector[row] = Long.parseLong(line);
             }
             if (row == BATCH_SIZE - 1) {
                 writer.addRowBatch(batch);
