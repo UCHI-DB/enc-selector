@@ -98,6 +98,6 @@ class FeatureRunner {
 
 object RunFeature extends App {
   val featureRunner = new FeatureRunner()
-  featureRunner.missed = Set(ParquetEncFileSize)
+  featureRunner.missed = Set(OrcEncFileSize)
   featureRunner.run(args)
 }
