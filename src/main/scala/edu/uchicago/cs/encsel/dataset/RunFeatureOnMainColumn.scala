@@ -38,7 +38,7 @@ object RunFeatureOnMainColumn extends App {
   val featureRunner = new FeatureRunner {
     override def getColumns(persistence: Persistence) = {
       val data = persistence.asInstanceOf[JPAPersistence].ems.get
-        .createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\nWHERE\n    cd.parent_id IS NULL AND NOT EXISTS (SELECT 1 FROM feature f where f.col_id = cd.id and f.name = 'ORC_file_size')",
+        .createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\nWHERE\n  cd.data_type in ('INTEGER','STRING') AND cd.parent_id IS NULL AND NOT EXISTS (SELECT 1 FROM feature f where f.col_id = cd.id and f.name = 'ORC_file_size')",
           classOf[ColumnWrapper]).getResultList
       data.asScala.map(_.asInstanceOf[Column]).toList
     }

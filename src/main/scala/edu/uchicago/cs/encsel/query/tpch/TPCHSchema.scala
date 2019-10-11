@@ -129,5 +129,5 @@ object TPCHSchema {
 
   val schemas = Array(customerSchema, nationSchema,
     regionSchema, supplierSchema, partSchema,
-    partsuppSchema, lineitemSchema, orderSchema,taxiSchema)
+    partsuppSchema, lineitemSchema, orderSchema)
 }
