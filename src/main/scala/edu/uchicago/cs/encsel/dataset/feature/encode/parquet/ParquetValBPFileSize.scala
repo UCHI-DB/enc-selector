@@ -48,8 +48,8 @@ object ParquetValBPFileSize extends FeatureExtractor {
           val f = ParquetWriterHelper.singleColumnInt(col.colFile, Encoding.VARLEN_BIT_PACKED)
           Iterable(new Feature(fType, "VLBP_file_size", new File(f).length))
         } catch {
-          case ile: IllegalArgumentException => {
-            logger.warn("Failed to encode %s with %s".format(col.colFile, "VARLEN_BIT_PACKED"), ile)
+          case e: Exception => {
+            logger.warn("Failed to encode %s with %s".format(col.colFile, "VARLEN_BIT_PACKED"), e)
             null
           }
         }
