@@ -16,6 +16,7 @@ import org.apache.parquet.column.values.plain.FixedLenByteArrayPlainValuesReader
 import org.apache.parquet.column.values.plain.PlainValuesReader;
 import org.apache.parquet.column.values.rle.RunLengthBitPackingHybridValuesReader;
 import org.apache.parquet.column.values.rle.ZeroIntegerValuesReader;
+import org.apache.parquet.column.values.vbp.VarlenBitPackingValuesReader;
 import org.apache.parquet.io.ParquetDecodingException;
 
 import java.io.IOException;
@@ -101,7 +102,12 @@ public enum Encoding {
             return new ByteBitPackingValuesReader(getMaxLevel(descriptor, valuesType), BIG_ENDIAN);
         }
     },
-
+    VARLEN_BIT_PACKED {
+        @Override
+        public ValuesReader getValuesReader(ColumnDescriptor descriptor, ValuesType valuesType) {
+            return new VarlenBitPackingValuesReader();
+        }
+    },
     /**
      * @deprecated now replaced by RLE_DICTIONARY for the data page encoding and PLAIN for the dictionary page encoding
      */

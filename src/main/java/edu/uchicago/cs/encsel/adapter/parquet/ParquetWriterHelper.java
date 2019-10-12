@@ -27,6 +27,7 @@ import edu.uchicago.cs.encsel.model.IntEncoding;
 import edu.uchicago.cs.encsel.model.LongEncoding;
 import edu.uchicago.cs.encsel.model.StringEncoding;
 import org.apache.hadoop.fs.Path;
+import org.apache.parquet.column.Encoding;
 import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.apache.parquet.schema.MessageType;
@@ -141,6 +142,37 @@ public class ParquetWriterHelper {
 
         MessageType schema = new MessageType("record",
                 new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.BOOLEAN, "value"));
+
+        ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
+
+        String line;
+        List<String> holder = new ArrayList<>();
+        while ((line = reader.readLine()) != null) {
+            holder.add(line.trim());
+            writer.write(holder);
+            holder.clear();
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
+    public static URI singleColumnInt(URI input, Encoding encoding) throws IOException {
+        File output = genOutput(input, encoding.name());
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        MessageType schema = new MessageType("record",
+                new PrimitiveType(Repetition.OPTIONAL, PrimitiveTypeName.INT32, "value"));
+
+        String type = schema.getColumns().get(0).toString();
+        EncContext.encoding.get().put(type, encoding);
+        int bitLength = scanIntBitLength(input);
+        int bound = (1 << bitLength) - 1;
+        EncContext.context.get().put(type, new Object[]{String.valueOf(bitLength), String.valueOf(bound)});
 
         ParquetWriter<List<String>> writer = ParquetWriterBuilder.buildDefault(new Path(output.toURI()), schema);
 

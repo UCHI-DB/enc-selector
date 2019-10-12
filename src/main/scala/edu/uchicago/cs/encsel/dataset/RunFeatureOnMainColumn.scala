@@ -25,6 +25,7 @@ package edu.uchicago.cs.encsel.dataset
 import edu.uchicago.cs.encsel.dataset.RunFeature.featureRunner
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.encode.orc.OrcEncFileSize
+import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetValBPFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.dataset.persist.jpa.{ColumnWrapper, JPAPersistence}
 
@@ -38,12 +39,12 @@ object RunFeatureOnMainColumn extends App {
   val featureRunner = new FeatureRunner {
     override def getColumns(persistence: Persistence) = {
       val data = persistence.asInstanceOf[JPAPersistence].ems.get
-        .createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\nWHERE\n  cd.data_type in ('INTEGER','STRING') AND cd.parent_id IS NULL AND NOT EXISTS (SELECT 1 FROM feature f where f.col_id = cd.id and f.name = 'ORC_file_size')",
+        .createNativeQuery("SELECT \n    cd.*\nFROM\n    col_data cd\nWHERE\n  cd.data_type in ('INTEGER','STRING') AND cd.parent_id IS NULL",
           classOf[ColumnWrapper]).getResultList
       data.asScala.map(_.asInstanceOf[Column]).toList
     }
   }
 
-  featureRunner.missed = Set(OrcEncFileSize)
+  featureRunner.missed = Set(ParquetValBPFileSize)
   featureRunner.run(args)
 }

@@ -27,13 +27,11 @@ import java.io.{File, InputStream}
 import edu.uchicago.cs.encsel.adapter.parquet.ParquetWriterHelper
 import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.feature.{Feature, FeatureExtractor}
-import edu.uchicago.cs.encsel.model._
+import edu.uchicago.cs.encsel.model.{DataType, IntEncoding, StringEncoding}
+import org.apache.parquet.column.Encoding
 import org.slf4j.LoggerFactory
 
-/**
-  * Encode files using Parquet
-  */
-object ParquetEncFileSize extends FeatureExtractor {
+object ParquetValBPFileSize extends FeatureExtractor {
 
   val logger = LoggerFactory.getLogger(getClass)
 
@@ -45,49 +43,20 @@ object ParquetEncFileSize extends FeatureExtractor {
     // Ignore filter
     val fType = "%s%s".format(prefix, featureType)
     col.dataType match {
-      case DataType.STRING => {
-        StringEncoding.values().filter(_.parquetEncoding() != null).map { e => {
-          try {
-            val f = ParquetWriterHelper.singleColumnString(col.colFile, e)
-            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
-          } catch {
-            case ile: IllegalArgumentException => {
-              // Unsupported Encoding, ignore
-              logger.warn("Failed to encode %s with %s".format(col.colFile, e.toString), ile)
-              null
-            }
-          }
-        }
-        }.filter(_ != null)
-      }
-      case DataType.LONG => {
-        Iterable()
-      }
       case DataType.INTEGER => {
-        IntEncoding.values().filter(_.parquetEncoding() != null).map { e => {
-          try {
-            val f = ParquetWriterHelper.singleColumnInt(col.colFile, e)
-            new Feature(fType, "%s_file_size".format(e.name()), new File(f).length)
-          } catch {
-            case ile: IllegalArgumentException => {
-              logger.warn("Failed to encode %s with %s".format(col.colFile, e.toString), ile)
-              null
-            }
+        try {
+          val f = ParquetWriterHelper.singleColumnInt(col.colFile, Encoding.VARLEN_BIT_PACKED)
+          Iterable(new Feature(fType, "VLBP_file_size", new File(f).length))
+        } catch {
+          case ile: IllegalArgumentException => {
+            logger.warn("Failed to encode %s with %s".format(col.colFile, "VARLEN_BIT_PACKED"), ile)
+            null
           }
         }
         }.filter(_ != null)
-      }
-      case DataType.FLOAT => {
+      case _ => {
         Iterable()
       }
-      case DataType.DOUBLE => {
-        Iterable()
-      }
-      case DataType.BOOLEAN =>
-        //        val f = ParquetWriterHelper.singleColumnBoolean(col.colFile)
-        //        Iterable(new Feature(fType, "PLAIN_file_size", new File(f).length))
-        Iterable()
     }
   }
-
 }
