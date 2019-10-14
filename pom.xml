@@ -423,11 +423,11 @@
             <artifactId>carbondata-core</artifactId>
             <version>1.6.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.carbondata</groupId>-->
-<!--            <artifactId>carbondata-parent</artifactId>-->
-<!--            <version>1.6.0</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.carbondata</groupId>
+            <artifactId>carbondata-parent</artifactId>
+            <version>1.6.0</version>
+        </dependency>
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>tensorflow</artifactId>
