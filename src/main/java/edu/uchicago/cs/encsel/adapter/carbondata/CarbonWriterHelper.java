@@ -23,4 +23,6 @@
 package edu.uchicago.cs.encsel.adapter.carbondata;
 
 public class CarbonWriterHelper {
+
+
 }
