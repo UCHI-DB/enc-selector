@@ -27,6 +27,7 @@ import edu.uchicago.cs.encsel.dataset.column.Column
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
 import edu.uchicago.cs.encsel.model.DataType
 import javax.persistence.EntityManager
+import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConversions.asScalaBuffer
@@ -100,5 +101,10 @@ class JPAPersistence extends Persistence {
 }
 
 object JPAPersistence {
-  val emf = javax.persistence.Persistence.createEntityManagerFactory("enc-selector")
+  val per = System.getProperty("densestore.persistence")
+  val emf = javax.persistence.Persistence.createEntityManagerFactory(
+    StringUtils.isEmpty(per) match {
+      case true => "dense_store_bi"
+      case _ => per
+    })
 }

@@ -38,6 +38,7 @@ import org.apache.parquet.column.values.factory.DefaultV2ValuesWriterFactory;
 import org.apache.parquet.column.values.factory.ValuesWriterFactory;
 import org.apache.parquet.column.values.plain.PlainValuesWriter;
 import org.apache.parquet.column.values.rle.RunLengthBitPackingHybridValuesWriter;
+import org.apache.parquet.column.values.vbp.VarlenBitPackingValuesWriter;
 
 import static org.apache.parquet.column.Encoding.PLAIN;
 import static org.apache.parquet.column.Encoding.RLE_DICTIONARY;
@@ -148,6 +149,9 @@ public class EncValuesWriterFactory implements ValuesWriterFactory {
                         parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
             case PLAIN:
                 return new PlainValuesWriter(parquetProperties.getInitialSlabSize(),
+                        parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
+            case VARLEN_BIT_PACKED:
+                return new VarlenBitPackingValuesWriter(parquetProperties.getInitialSlabSize(),
                         parquetProperties.getPageSizeThreshold(), parquetProperties.getAllocator());
             default:
                 throw new IllegalArgumentException("Unsupported type " + path.getType());

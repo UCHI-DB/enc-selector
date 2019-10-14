@@ -96,7 +96,7 @@ public class StringWriteSupport extends WriteSupport<List<String>> {
                             throw new ParquetEncodingException("Unsupported column type: " + cols.get(i).getType());
                     }
                 } catch (Exception e) {
-                    logger.warn("Malformated data encountered and skipping:" + val, e);
+                    throw new RuntimeException(e);
                 }
                 recordConsumer.endField(cols.get(i).getPath()[0], i);
             }
