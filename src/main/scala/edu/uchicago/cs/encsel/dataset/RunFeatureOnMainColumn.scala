@@ -24,7 +24,7 @@ package edu.uchicago.cs.encsel.dataset
 
 import edu.uchicago.cs.encsel.dataset.RunFeature.featureRunner
 import edu.uchicago.cs.encsel.dataset.column.Column
-import edu.uchicago.cs.encsel.dataset.feature.encode.carbon.CarbonEncFileSize
+//import edu.uchicago.cs.encsel.dataset.feature.encode.carbon.CarbonEncFileSize
 import edu.uchicago.cs.encsel.dataset.feature.encode.orc.OrcEncFileSize
 import edu.uchicago.cs.encsel.dataset.feature.encode.parquet.ParquetValBPFileSize
 import edu.uchicago.cs.encsel.dataset.persist.Persistence
@@ -46,6 +46,6 @@ object RunFeatureOnMainColumn extends App {
     }
   }
 
-  featureRunner.missed = Set(CarbonEncFileSize)
+  //featureRunner.missed = Set(CarbonEncFileSize)
   featureRunner.run(args)
 }

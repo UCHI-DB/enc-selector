@@ -118,5 +118,67 @@ public class CarbonWriterHelper {
 
     }
 
+    public static void writeSubAttr2IndexFile(String indexFileName) throws IOException {
+        Map<String, String[]> data = ProcessingContext.context;
+        //System.out.println(data.toString()+ Arrays.toString(data.keySet().toArray()));
+
+        // Convert Map to byte array
+        FileOutputStream byteOut = new FileOutputStream(indexFileName,true);
+        ObjectOutputStream out = new ObjectOutputStream(byteOut);
+        out.writeObject(data);
+        out.close();
+    }
+
+    public static String[] parseByRegex(String line, String regex, int cols){
+        if (line != null){
+            String[] arr = line.split(regex, -1);
+            if (arr.length<cols){
+                String[] ret = new String[cols];
+                for (int i=0; i<arr.length; i++){
+                    ret[i] = arr[i];
+                }
+                for (int i=arr.length; i<cols; i++){
+                    ret[i] = "";
+                }
+                return ret;
+            }
+            else
+                return arr;
+        }
+        return null;
+    }
+
+    public static String[] mergeArr (String[] line, int cols, String[] sub){
+        String[] com = new String[line.length + sub.length-1];
+        int i=0;
+        for (; i< cols; i++){
+            com[i] = line[i];
+        }
+        for (int j=0; j< sub.length; j++){
+            com[cols+j] = sub[j];
+        }
+        i++;
+        for (; i< line.length; i++){
+            com[i+sub.length-1] = line[i];
+        }
+        return com;
+    }
+
+    public static Field[] mergeArr (Field[] line, int cols, Field[] sub){
+        Field[] com = new Field[line.length + sub.length-1];
+        int i=0;
+        for (; i< cols; i++){
+            com[i] = line[i];
+        }
+        for (int j=0; j< sub.length; j++){
+            com[cols+j] = sub[j];
+        }
+        i++;
+        for (; i< line.length; i++){
+            com[i+sub.length-1] = line[i];
+        }
+        return com;
+    }
+
 
 }
