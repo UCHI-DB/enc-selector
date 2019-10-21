@@ -44,7 +44,6 @@ public class CarbonWriterReaderHelperTest{
     }
 
 
-
     @Test
     public void testSingleCarbonScan() throws IOException {
         //String inputFile = "./src/test/resource/carbonFile";
