@@ -9,7 +9,11 @@ import org.apache.carbondata.core.scan.expression.logical.AndExpression;
 import org.apache.carbondata.sdk.file.Field;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  \* initial API and implementation.
  \* contributors: Chunwei Liu
@@ -30,6 +34,28 @@ public class CarbonWriterReaderHelperTest{
         fields[3] = new Field("Address", DataTypes.STRING);
         fields[4] = new Field("Email", DataTypes.STRING);
         CarbonWriterHelper.CSVParseAndWrite(inputFile,outputPath,fields,",");
+    }
+
+    @Test
+    public void testSingleWrite() throws IOException {
+        String inputFile = "src/test/resources/CarbonIntSample.csv";
+        URI outputPath = CarbonWriterHelper.singleColumnInt(new File(inputFile).toURI());
+        System.out.println(outputPath.toString());
+    }
+
+
+
+    @Test
+    public void testSingleCarbonScan() throws IOException {
+        //String inputFile = "./src/test/resource/carbonFile";
+        String inputFile = "/Users/chunwei/research/enc-selector/src/test/resources/CarbonIntSample.csv.Carbon/";
+        Expression expression = new EqualToExpression(new ColumnExpression("Email", DataTypes.STRING),
+                new LiteralExpression("aibrahim@gmail.com", DataTypes.STRING));
+        Expression expCity = new EqualToExpression(new ColumnExpression("City", DataTypes.STRING),
+                new LiteralExpression("Chicago", DataTypes.STRING));
+        Expression exp = new AndExpression(expression,expCity);
+        String[] stringPos = new String[]{"value"};
+        CarbonReaderHelper.readCarbonfile(inputFile,stringPos,null);
     }
 
     @Test

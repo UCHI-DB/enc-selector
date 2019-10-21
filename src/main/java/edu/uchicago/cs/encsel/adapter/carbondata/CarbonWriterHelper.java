@@ -30,13 +30,259 @@ import java.util.Map;
 
 import org.apache.carbondata.common.exceptions.sql.InvalidLoadOptionException;
 import org.apache.carbondata.core.metadata.datatype.DataType;
+import org.apache.carbondata.core.metadata.datatype.DataTypes;
 import org.apache.commons.io.FileUtils;
 //
 import org.apache.carbondata.sdk.file.CarbonWriter;
 import org.apache.carbondata.sdk.file.Field;
 import org.apache.carbondata.sdk.file.Schema;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class CarbonWriterHelper {
+
+    public static File genOutput(URI input, String suffix) {
+        try {
+            if (input.getPath().endsWith("\\.data")) {
+                return new File(new URI(input.toString().replaceFirst("data$", suffix)));
+            }
+            return new File(new URI(input.toString() + "." + suffix));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static URI singleColumnString(URI input) throws IOException {
+        File output = genOutput(input, "Carbon");
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        Field[] fields = new Field[1];
+        fields[0] = new Field("value", DataTypes.STRING);
+
+        FileUtils.deleteDirectory(output);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("complex_delimiter_level_1", "#");
+        CarbonWriter writer = null;
+        try {
+            writer = CarbonWriter.builder()
+                    .outputPath(output.getAbsolutePath())
+                    .withLoadOptions(map)
+                    .buildWriterForCSVInput(new Schema(fields));
+        } catch (InvalidLoadOptionException e) {
+            e.printStackTrace();
+        }
+        String line;
+        boolean skipHeader = true;
+        // Skip header line
+        line = skipHeader ? reader.readLine() : null;
+        while ((line = reader.readLine()) != null) {
+            // Handle the empty entry for each line
+            String[] dataArray = new String[]{line.trim()};
+            writer.write(dataArray);
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
+    public static URI singleColumnBoolean(URI input) throws IOException {
+        File output = genOutput(input, "Carbon");
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        Field[] fields = new Field[1];
+        fields[0] = new Field("value", DataTypes.BOOLEAN);
+
+        FileUtils.deleteDirectory(output);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("complex_delimiter_level_1", "#");
+        CarbonWriter writer = null;
+        try {
+            writer = CarbonWriter.builder()
+                    .outputPath(output.getAbsolutePath())
+                    .withLoadOptions(map)
+                    .buildWriterForCSVInput(new Schema(fields));
+        } catch (InvalidLoadOptionException e) {
+            e.printStackTrace();
+        }
+        String line;
+        boolean skipHeader = true;
+        // Skip header line
+        line = skipHeader ? reader.readLine() : null;
+        while ((line = reader.readLine()) != null) {
+            // Handle the empty entry for each line
+            String[] dataArray = new String[]{line.trim()};
+            writer.write(dataArray);
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
+    public static URI singleColumnLong(URI input) throws IOException {
+        File output = genOutput(input, "Carbon");
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        Field[] fields = new Field[1];
+        fields[0] = new Field("value", DataTypes.LONG);
+
+        FileUtils.deleteDirectory(output);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("complex_delimiter_level_1", "#");
+        CarbonWriter writer = null;
+        try {
+            writer = CarbonWriter.builder()
+                    .outputPath(output.getAbsolutePath())
+                    .withLoadOptions(map)
+                    .buildWriterForCSVInput(new Schema(fields));
+        } catch (InvalidLoadOptionException e) {
+            e.printStackTrace();
+        }
+        String line;
+        boolean skipHeader = true;
+        // Skip header line
+        line = skipHeader ? reader.readLine() : null;
+        while ((line = reader.readLine()) != null) {
+            // Handle the empty entry for each line
+            String[] dataArray = new String[]{line.trim()};
+            writer.write(dataArray);
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
+    public static URI singleColumnInt(URI input) throws IOException {
+        File output = genOutput(input, "Carbon");
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        Field[] fields = new Field[1];
+        fields[0] = new Field("value", DataTypes.INT);
+
+        FileUtils.deleteDirectory(output);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("complex_delimiter_level_1", "#");
+        CarbonWriter writer = null;
+        try {
+            writer = CarbonWriter.builder()
+                    .outputPath(output.getAbsolutePath())
+                    .withLoadOptions(map)
+                    .buildWriterForCSVInput(new Schema(fields));
+        } catch (InvalidLoadOptionException e) {
+            e.printStackTrace();
+        }
+        String line;
+        boolean skipHeader = true;
+        // Skip header line
+        line = skipHeader ? reader.readLine() : null;
+        while ((line = reader.readLine()) != null) {
+            // Handle the empty entry for each line
+            String[] dataArray = new String[]{line.trim()};
+            writer.write(dataArray);
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
+    public static URI singleColumnFloat(URI input) throws IOException {
+        File output = genOutput(input, "Carbon");
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        Field[] fields = new Field[1];
+        fields[0] = new Field("value", DataTypes.FLOAT);
+
+        FileUtils.deleteDirectory(output);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("complex_delimiter_level_1", "#");
+        CarbonWriter writer = null;
+        try {
+            writer = CarbonWriter.builder()
+                    .outputPath(output.getAbsolutePath())
+                    .withLoadOptions(map)
+                    .buildWriterForCSVInput(new Schema(fields));
+        } catch (InvalidLoadOptionException e) {
+            e.printStackTrace();
+        }
+        String line;
+        boolean skipHeader = true;
+        // Skip header line
+        line = skipHeader ? reader.readLine() : null;
+        while ((line = reader.readLine()) != null) {
+            // Handle the empty entry for each line
+            String[] dataArray = new String[]{line.trim()};
+            writer.write(dataArray);
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
+
+    public static URI singleColumnDouble(URI input) throws IOException {
+        File output = genOutput(input, "Carbon");
+        if (output.exists())
+            output.delete();
+        BufferedReader reader = new BufferedReader(new FileReader(new File(input)));
+
+        Field[] fields = new Field[1];
+        fields[0] = new Field("value", DataTypes.DOUBLE);
+
+        FileUtils.deleteDirectory(output);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("complex_delimiter_level_1", "#");
+        CarbonWriter writer = null;
+        try {
+            writer = CarbonWriter.builder()
+                    .outputPath(output.getAbsolutePath())
+                    .withLoadOptions(map)
+                    .buildWriterForCSVInput(new Schema(fields));
+        } catch (InvalidLoadOptionException e) {
+            e.printStackTrace();
+        }
+        String line;
+        boolean skipHeader = true;
+        // Skip header line
+        line = skipHeader ? reader.readLine() : null;
+        while ((line = reader.readLine()) != null) {
+            // Handle the empty entry for each line
+            String[] dataArray = new String[]{line.trim()};
+            writer.write(dataArray);
+        }
+
+        reader.close();
+        writer.close();
+
+        return output.toURI();
+    }
+
 
     public static void CSVParseAndWrite(String inputPath, String outputDir, Field[] originalFields, String regex){
         Field[] fields = originalFields;
