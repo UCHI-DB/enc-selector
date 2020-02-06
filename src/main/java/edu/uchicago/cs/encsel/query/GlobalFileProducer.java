@@ -38,23 +38,23 @@ import java.io.IOException;
 public class GlobalFileProducer {
 
     public static void main(String[] args) throws IOException, VersionParser.VersionParseException {
-        args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
+        //args = new String[]{"10","PLAIN_DICTIONARY", "UNCOMPRESSED","true"};
         if (args.length == 0) {
-            System.out.println("ScanFileProducer pos enc compression order");
+            System.out.println("ScanFileProducer file col enc compression order");
             return;
         }
-        int col = Integer.parseInt(args[0]);
-        String enc = args[1];
-        String compre = args[2];
-        String order = args[3];
+        int col = Integer.parseInt(args[1]);
+        String enc = args[2];
+        String compre = args[3];
+        String order = args[4];
         Boolean ordered = (order.equalsIgnoreCase("true") || order.equals("1"));
 
-        String lineitem = "../tpch-generator/dbgen/lineitem";
+        String lineitem = args[0]; //"../tpch-generator/dbgen/lineitem";
 
         EncContext.encoding.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), Encoding.valueOf(enc));
         EncContext.context.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), new Integer[]{6,12});
         Object2IntMap dictMap = ParquetWriterHelper.buildGlobalDict(new File(lineitem+".tbl").toURI(),col,TPCHSchema.lineitemSchema(),ordered, 0);
-        System.out.println(dictMap);
+        //System.out.println(dictMap);
         EncContext.globalDict.get().put(TPCHSchema.lineitemSchema().getColumns().get(col).toString(), dictMap);
 
         ParquetWriterHelper.write(new File(lineitem+".tbl").toURI(), TPCHSchema.lineitemSchema(),
